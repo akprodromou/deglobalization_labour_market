@@ -1,0 +1,18 @@
+# Virtual environment -- large, machine-specific, never commit
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+
+# Collected data: contains real personal information (names, LinkedIn URLs,
+# locations) scraped from third-party platforms. Never commit this,
+# regardless of repo visibility -- this is a privacy and likely a terms-of-
+# service concern, not just a size concern.
+data/raw/*.jsonl
+
+# Credentials, if ever stored in a file instead of env vars
+.env
