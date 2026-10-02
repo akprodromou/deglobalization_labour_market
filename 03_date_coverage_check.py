@@ -1,41 +1,44 @@
 """
 Month 2, Week 2: dedicated posting date-coverage check.
 
-CORRECTED (v4): an earlier version theorized that failures were caused by
-request pacing / cumulative server load, and added delays + long cooldown
-retries. That theory was tested and FAILED: a fresh run (with pacing
-already added) reproduced the EXACT same failures on the EXACT same years
-(eures: 2018/2019/2020) immediately, before any cumulative load could have
-built up. The pattern that actually fits BOTH runs: years with confirmed
-real data succeed reliably, even huge ones (eures-escox 2026, 828,524
-rows); years before a source's real data begins consistently fail. This
-looks like a backend issue proving "zero/near-zero matching rows" cheaply
-(e.g. no usable index on the date column), not a client pacing problem.
+REDESIGNED (v5), based on everything confirmed across this whole project:
 
-CONSEQUENCE: this version does NOT retry a (source, year) pair that has
-already failed on a previous run (loaded from the results file) -- if it
-failed consistently before, retrying again is very unlikely to help and
-only costs time (each attempt costs up to 3x45s plus backoff). A year
-failing for the FIRST time in a given run gets one quick, short retry
-(in case of a genuine transient blip), but no long deferred-cooldown loop.
-A year that still fails is recorded as "no_data_inferred": True -- an
-explicit INFERENCE, clearly distinguished from a confirmed positive count.
+1. page_size matters. Every query using the full page_size=100 pagination
+   pattern (iter_postings / the big 01_fetch_sample.py runs) has succeeded
+   reliably across ALL 16 posting sources. Every query using a lightweight
+   page_size=1 count-only probe (the previous version of this script) has
+   been unreliable -- including failing TWICE on eures-escox 2023, a date
+   range independently CONFIRMED to have 417 real records via the
+   page_size=100 pattern on an earlier run. count_postings() in
+   skillab_client.py now defaults to page_size=100 to match the one
+   pattern that has actually worked.
 
-RESUMABLE: loads existing results and skips sources already fully
-resolved (including sources resolved via inference, not just confirmed
-positive counts), so prior runs' time is never wasted.
+2. Scope reduced from checking all 12 years individually (192 requests,
+   multiple failed multi-hour runs) to just TWO wide-range checks per
+   source, which is all the brief actually asks for ("does coverage reach
+   2019 onward?"):
+     - "recent" = 2019-01-01 .. today  -> confirms data exists in-or-after 2019
+     - "historical" = 2010-01-01 .. 2018-12-31 -> confirms data exists before 2019
+   16 sources x 2 probes = 32 requests total, not 192.
+
+3. A failed probe is reported as UNRESOLVED, not as evidence of "no data" --
+   a repeated-failure-implies-emptiness inference was tried and directly
+   DISPROVEN by the eures-escox 2023 contradiction, so this version makes
+   no such claim. Each source's own existing client-level retry (3x, with
+   backoff) is the only retry; no additional long cooldown loop.
+
+4. Resumable: skips sources already present in the results file.
 """
 
 import json
-import time
+from datetime import date
 from pathlib import Path
 
 from skillab_client import SkillabClient
 
-YEARS = list(range(2015, 2027))
-COVERAGE_CUTOFF_YEAR = 2019
-RATE_LIMIT_DELAY = 1
-SHORT_RETRY_DELAY = 10
+TODAY = date.today().isoformat()
+RECENT_RANGE = ("2019-01-01", TODAY)
+HISTORICAL_RANGE = ("2010-01-01", "2018-12-31")
 
 JOB_SOURCES = [
     "brightminds", "eures", "eures-escox",
@@ -65,55 +68,48 @@ def save_results(results):
         json.dump(results, f, indent=2, ensure_ascii=False)
 
 
-def check_year(client, source, year):
+def probe(client, source, min_date, max_date):
+    """One probe, page_size=100 (the proven-reliable pattern). Returns
+    (count, error) -- error is None on success, count is None on failure."""
     try:
-        count = client.count_postings(
-            source, min_upload_date=f"{year}-01-01", max_upload_date=f"{year}-12-31"
-        )
+        count = client.count_postings(source, min_upload_date=min_date, max_upload_date=max_date)
         return count, None
     except Exception as exc:
         return None, str(exc)
-    finally:
-        time.sleep(RATE_LIMIT_DELAY)
 
 
 def process_source(client, source):
-    print(f"Checking year-by-year coverage for source='{source}'...")
-    year_counts = {}
+    print(f"Checking source='{source}'...")
 
-    for year in YEARS:
-        count, error = check_year(client, source, year)
-        if error:
-            print(f"  {year}: failed once ({error}); one short retry in {SHORT_RETRY_DELAY}s...")
-            time.sleep(SHORT_RETRY_DELAY)
-            count, error = check_year(client, source, year)
-            if error:
-                print(f"  {year}: failed again -> inferring no/negligible data")
-            else:
-                print(f"  {year}: succeeded on retry -> {count} postings")
-        elif count > 0:
-            print(f"  {year}: {count} postings")
+    recent_count, recent_err = probe(client, source, *RECENT_RANGE)
+    if recent_err:
+        print(f"  recent (2019-{TODAY[:4]}): FAILED ({recent_err})")
+    else:
+        print(f"  recent (2019-{TODAY[:4]}): {recent_count} postings")
 
-        year_counts[year] = count
+    hist_count, hist_err = probe(client, source, *HISTORICAL_RANGE)
+    if hist_err:
+        print(f"  historical (2010-2018): FAILED ({hist_err})")
+    else:
+        print(f"  historical (2010-2018): {hist_count} postings")
 
-    resolved_with_data = [y for y, c in year_counts.items() if c and c > 0]
-    inferred_empty = [y for y, c in year_counts.items() if c is None]
-    earliest = min(resolved_with_data) if resolved_with_data else None
-    latest = max(resolved_with_data) if resolved_with_data else None
-    reaches_cutoff = earliest is not None and earliest <= COVERAGE_CUTOFF_YEAR
+    confirmed_since_2019 = (recent_count is not None) and (recent_count > 0)
+    confirmed_before_2019 = (hist_count is not None) and (hist_count > 0)
 
-    print(f"  -> earliest confirmed: {earliest}, latest confirmed: {latest}, "
-          f"reaches {COVERAGE_CUTOFF_YEAR} or earlier: {reaches_cutoff}"
-          f"{' (' + str(len(inferred_empty)) + ' year(s) inferred empty, not directly confirmed)' if inferred_empty else ''}")
-
-    return {
+    result = {
         "source": source,
-        "year_counts": {str(k): v for k, v in year_counts.items()},
-        "earliest_confirmed_year": earliest,
-        "latest_confirmed_year": latest,
-        "reaches_2019_or_earlier": reaches_cutoff,
-        "years_with_inferred_no_data": inferred_empty,
+        "recent_2019_onward": {
+            "count": recent_count, "error": recent_err, "confirmed_has_data": confirmed_since_2019,
+        },
+        "historical_pre_2019": {
+            "count": hist_count, "error": hist_err, "confirmed_has_data": confirmed_before_2019,
+        },
     }
+    print(f"  -> confirmed data 2019+: {confirmed_since_2019}"
+          f"{' (UNRESOLVED -- probe failed)' if recent_err else ''}; "
+          f"confirmed data pre-2019: {confirmed_before_2019}"
+          f"{' (UNRESOLVED -- probe failed)' if hist_err else ''}")
+    return result
 
 
 def main():
@@ -122,8 +118,7 @@ def main():
     done_sources = {r["source"] for r in results}
 
     if done_sources:
-        print(f"Resuming: {len(done_sources)} source(s) already processed, skipping: "
-              f"{sorted(done_sources)}\n")
+        print(f"Resuming: skipping already-processed sources: {sorted(done_sources)}\n")
 
     for source in JOB_SOURCES:
         if source in done_sources:
@@ -132,13 +127,14 @@ def main():
         results.append(result)
         save_results(results)
 
-    print(f"\nFinal results saved to {OUT_PATH}")
-    not_reaching = [r for r in results if not r["reaches_2019_or_earlier"]]
-    print(f"\n{len(not_reaching)} of {len(JOB_SOURCES)} sources do NOT confirm coverage back to "
-          f"{COVERAGE_CUTOFF_YEAR}:")
-    for r in not_reaching:
-        print(f"  {r['source']}: earliest confirmed year = {r['earliest_confirmed_year']}, "
-              f"years with inferred no data = {r['years_with_inferred_no_data']}")
+    print(f"\nFinal results saved to {OUT_PATH}\n")
+    print("=== Summary ===")
+    for r in results:
+        since = r["recent_2019_onward"]
+        hist = r["historical_pre_2019"]
+        since_label = "YES" if since["confirmed_has_data"] else ("UNRESOLVED" if since["error"] else "NO")
+        hist_label = "YES" if hist["confirmed_has_data"] else ("UNRESOLVED" if hist["error"] else "NO")
+        print(f"  {r['source']}: data 2019+ = {since_label}, data pre-2019 = {hist_label}")
 
 
 if __name__ == "__main__":

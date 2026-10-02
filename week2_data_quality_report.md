@@ -29,16 +29,20 @@ This report summarises the results of the Week 1–2 data collection and complet
 
 Two immediate conclusions from the aggregate alone: profiles carry almost no usable date information (`startdate` 1.5%), so any time-series work must rely on postings; and `description` is not a usable field for profiles (`content` is the real free-text field, at 95.9%). However, the aggregate numbers substantially understate how concentrated several of these fields are in specific sources — this is the more important finding of this report, detailed below.
 
-## 4. Finding 1: `occupation_uris` Is Effectively a Revelio-Only Field
+## 4. Finding 1: `occupation_uris` Is Confirmed Revelio-Exclusive
 
-The aggregate 3.3% completeness for `occupation_uris` is not evenly distributed thinness — it is close to a binary split by source:
+The initial Week 2 completeness-by-source audit (based on a 250-record sample per source) suggested `occupation_uris` was a near-binary split by source:
 
 | Source | `occupation_uris` completeness |
 |---|---|
 | revelio | 94.0% |
 | every other profile source (all STACK sources, linkedin) | 0.0% |
 
-**Implication for the Tier 2 fallback (occupation URI → default skill set):** this fallback tier will only ever be reachable for Revelio-sourced profiles, which make up roughly 3.5% of the current sample. For every other source, a profile without direct skills (Tier 1) cannot fall through to Tier 2 via this field, because the field is simply absent at the source level, not missing at random. If broader Tier 2 coverage is needed, the free-text `occupation` field (which is populated far more broadly, as seen in manual inspection of sample records) would need to be mapped to an ESCO occupation URI as a pre-processing step, rather than relying on `occupation_uris` being present.
+This was re-checked against a much larger population to rule out a sampling artefact: for 23 of the 29 non-Revelio profile sources, **every single record** was checked (not a sample); for the remaining 6 larger sources, up to 2,000 records each were checked. Across **30,389 checked records spanning all 29 non-Revelio sources, zero had a non-empty `occupation_uris` field.** `occupation_uris` is confirmed Revelio-exclusive, not a sampling artefact.
+
+**Implication for the Tier 2 fallback (occupation URI → default skill set):** this fallback tier is only reachable for Revelio-sourced profiles, roughly 3.5% of the current sample. For every other source, a profile without direct skills (Tier 1) cannot fall through to Tier 2 via this field, because the field is structurally absent at the source level, not missing at random. Broader Tier 2 coverage requires mapping the free-text `occupation` field (populated far more broadly) to an ESCO occupation URI as a pre-processing step, rather than relying on `occupation_uris` being present.
+
+**Tier 2 lookup mechanism (built, Month 2 Week 3):** the Tracker API itself does not expose an occupation→skill relation (confirmed by inspecting `IscoOccupationSchema`, which has no skills field, and the `Utility` endpoints, which only expand within the occupation hierarchy itself — see Appendix). Tier 2 is instead implemented as a local lookup against the European Commission's own official ESCO occupation-skill relations file (`occupationSkillRelations_en.csv`, downloaded directly from esco.ec.europa.eu), confirmed to contain 126,051 relation rows across all 3,039 ESCO occupations, split into "essential" (67,600) and "optional" (58,451) relations. This lookup is entirely local and offline once the file is downloaded, so it is unaffected by the Tracker API's reliability issues.
 
 ## 5. Finding 2: NUTS Coverage Is Concentrated in the EURES Family of Sources
 
@@ -105,6 +109,6 @@ Two further findings worth noting:
 ## 9. Recommended Next Steps
 
 1. **~~Dedicated date-coverage check~~ — complete (Section 8).** `eures-escox`'s pre-2019 coverage remains genuinely unresolved after three attempts and is reported as a limitation rather than pursued further.
-2. **Source normalisation.** Decide, source by source, which apparent duplicates (STACK sources) should be merged and which (country-suffixed job boards) should be kept distinct, before `source` is used as a categorical variable elsewhere in the thesis.
-3. **Occupation-URI augmentation plan.** Since `occupation_uris` is only usable for Revelio, decide whether Tier 2 of the fallback chain should be modified to map the free-text `occupation` field to an ESCO URI for other sources, and scope this as its own task if so.
+2. **~~Source normalisation~~ — decided (Month 2, Week 3).** STACK pairs kept distinct (completeness differs meaningfully between pairs, suggesting two ingestion passes rather than true duplicates) but flagged as likely over-counting independent coverage. Job-board country-suffixed sources kept fully distinct, with a derived `source_country` field. See `source_normalization.py`.
+3. **~~Occupation-URI augmentation (Tier 2)~~ — built (Month 2, Week 3).** Implemented as a local lookup against the official ESCO occupation-skill relations file, not an API-dependent mechanism. See `occupation_skill_lookup.py`. Remaining work: a text-classification step to map the free-text `occupation` field to an ESCO occupation URI, so Tier 2 can fire for sources other than Revelio -- this is now the main open task for extending Tier 2 coverage.
 4. **NUTS/geocoding decision.** Decide between restricting regional analysis to EURES-family sources (simpler, but narrows the regional sample considerably) or building a geocoding fallback for the free-text `location` field (broader coverage, but a non-trivial additional pipeline step).

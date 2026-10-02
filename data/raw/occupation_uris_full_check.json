@@ -1,0 +1,205 @@
+[
+  {
+    "source": "linkedin",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-biology",
+    "total_checked": 614,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Biology",
+    "total_checked": 1240,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-chemistry",
+    "total_checked": 436,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Chemistry",
+    "total_checked": 1120,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-earthscience",
+    "total_checked": 204,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Earth Science",
+    "total_checked": 499,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Electrical Engineering",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-electronics",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-interpersonal",
+    "total_checked": 263,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Interpersonal Skills",
+    "total_checked": 1090,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-law",
+    "total_checked": 556,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Law",
+    "total_checked": 1058,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-linguistics",
+    "total_checked": 299,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Linguistics",
+    "total_checked": 667,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-literature",
+    "total_checked": 123,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Literature",
+    "total_checked": 344,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-math",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Mathematics",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-philosophy",
+    "total_checked": 460,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Philosophy",
+    "total_checked": 1228,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-physics",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Physics",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-politics",
+    "total_checked": 456,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Politics",
+    "total_checked": 1194,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-sports",
+    "total_checked": 145,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Sports",
+    "total_checked": 393,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "stack-stackoverflow",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  },
+  {
+    "source": "STACK-Stack Overflow",
+    "total_checked": 2000,
+    "non_empty_count": 0,
+    "error": null,
+    "examples": []
+  }
+]
