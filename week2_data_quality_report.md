@@ -73,18 +73,38 @@ Both the profile and posting source lists contain what appear to be duplicate or
 
 Some of these (e.g. the `.se`/`.co.uk`/`.fr` suffixed postings sources) plausibly represent genuine country-specific variants of the same underlying job board rather than true duplicates, and should be treated as such rather than merged. The STACK profile sources are more likely genuine duplicates introduced at the ingestion stage, since the paired completeness figures (e.g. `stack-math` 60.4% vs. `STACK-Mathematics` 96.8% skills completeness) differ enough to suggest they are not simply case variants of an identical dataset, but may instead reflect two separate scrapes or processing passes of the same topic area. This should be resolved with a source-normalisation step before `source` is treated as a clean categorical variable in any analysis (e.g. the DGI's labour-market sub-index), and is flagged here rather than resolved silently.
 
-## 8. Caveat: Posting Date Ranges in This Sample Are Not Yet Reliable Evidence of True Source Coverage
+## 8. Dedicated Date-Coverage Check: Confirmed Results
 
-An initial check of `upload_date` ranges by source suggested that most sources' data only begins in 2023–2024, with the exception of `OJA`, which appeared to span only five days in 2019. This is very likely a sampling artefact, not a true reflection of source coverage, for two reasons:
+An initial completeness-notebook check of `upload_date` ranges by source was found to be unreliable: it reflected wherever in an arbitrarily-ordered or date-chunked sample the fetch happened to land, not each source's true coverage (e.g. it initially suggested `OJA` spanned only five days in 2019, which turned out to be a sampling artefact). A dedicated check was built to resolve this properly, querying each source directly via the API's `min_upload_date`/`max_upload_date` filters rather than inferring coverage from an incidentally-ordered sample.
 
-1. For the three chunked sources (`eures`, `eures-escox`, `OJA`), the fetch script stops pulling from a given date-range chunk as soon as it has enough records to meet its target, so the apparent date range reflects wherever in the chunk the API happened to return records from first, not the chunk's true span.
-2. For all other sources, only the first ~468 records returned by the API (in whatever default order it uses, not necessarily chronological) were sampled, so the observed date range reflects an arbitrary slice, not the source's actual temporal coverage.
+**Method note:** the first version of this dedicated check used a lightweight, `page_size=1` "count-only" query, on the reasoning that fewer returned records would mean a lighter request. This was empirically wrong: these lightweight queries failed unreliably and unpredictably — including, on one run, failing twice on a date range (`eures-escox`, 2023) that had been independently confirmed via a different method to contain 417 real records. The working pattern, consistent with every successful data-pull across this project, turned out to be the full `page_size=100` paginated request shape. Once the check was rebuilt around that pattern, and narrowed from checking all 12 individual years to two wide-range probes per source (2019-onward, and 2010–2018), it completed cleanly in about 22 minutes.
 
-**This caveat means the "which sources reach back to 2019" check in the current notebook should not be relied upon as-is.** A dedicated check — querying each source's true `min_upload_date`/`max_upload_date` directly via the API's date filters, without relying on an incidentally-ordered sample — is needed before any claim about temporal coverage is made in the thesis. This is proposed as the next concrete task (Section 9).
+**Results:**
+
+| Source | Confirmed data 2019+ | Confirmed data pre-2019 |
+|---|---|---|
+| brightminds | Yes (1 posting, 2024 only) | No |
+| eures | Yes (401,511) | Unresolved |
+| eures-escox | Yes (891,613) | Unresolved (failed 3 attempts across 2 sessions) |
+| jobbguru / jobbguru.se | Yes (319 each) | No |
+| jobbland | Yes (68,092) | Yes (3) |
+| jobbland.se | Yes (694,823) | Unresolved |
+| jobmedic / jobmedic.co.uk | Yes (1,010 / 1,448) | No |
+| jobscentral | Yes (6,284) | No |
+| jobs.de | Yes (34,230) | No |
+| kariera.fr / kariera.gr | Yes (86,468 / 87,766) | No |
+| lesjeudis / lesjeudis.com | Yes (18,404 / 55,375) | No |
+| OJA | Yes (2,924,235) | **Yes (123,200)** |
+
+**Conclusion: 15 of 16 posting sources confirm coverage from 2019 onward.** `brightminds` is the only source confirmed *not* to reach 2019 (it has a single posting, dated 2024). Whether `eures-escox` has any data before 2019 remains genuinely unresolved — the recent-range probe succeeded (891,613 postings confirmed from 2019 onward), but the pre-2019 probe failed consistently across three independent attempts on two separate days. Given this specific probe has never once succeeded despite the source's own recent-range data being large and reliably retrievable, this is reported as an open limitation rather than assumed to mean "no pre-2019 data" either way.
+
+Two further findings worth noting:
+- **`OJA` is the deepest historical source found**, with 123,200 confirmed pre-2019 postings — the opposite of the original (artefact-driven) impression that it was a narrow, recent-only source.
+- **`eures`'s total count (401,511) differs from an earlier count of this source (362,902) taken on an earlier date.** This is not an error; it reflects that the underlying dataset is live and continues to grow. Any exact counts reported in this thesis should be understood as a snapshot taken on a specific date, not a fixed figure.
 
 ## 9. Recommended Next Steps
 
-1. **Dedicated date-coverage check.** For each posting source, issue two lightweight queries (`page_size=1`, sorted or filtered toward the earliest and latest plausible dates) to establish genuine `min`/`max` upload dates, rather than inferring coverage from this sample.
+1. **~~Dedicated date-coverage check~~ — complete (Section 8).** `eures-escox`'s pre-2019 coverage remains genuinely unresolved after three attempts and is reported as a limitation rather than pursued further.
 2. **Source normalisation.** Decide, source by source, which apparent duplicates (STACK sources) should be merged and which (country-suffixed job boards) should be kept distinct, before `source` is used as a categorical variable elsewhere in the thesis.
 3. **Occupation-URI augmentation plan.** Since `occupation_uris` is only usable for Revelio, decide whether Tier 2 of the fallback chain should be modified to map the free-text `occupation` field to an ESCO URI for other sources, and scope this as its own task if so.
 4. **NUTS/geocoding decision.** Decide between restricting regional analysis to EURES-family sources (simpler, but narrows the regional sample considerably) or building a geocoding fallback for the free-text `location` field (broader coverage, but a non-trivial additional pipeline step).

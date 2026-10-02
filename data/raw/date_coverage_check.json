@@ -1,0 +1,210 @@
+[
+  {
+    "source": "brightminds",
+    "recent_2019_onward": {
+      "count": 1,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "eures",
+    "recent_2019_onward": {
+      "count": 401511,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": null,
+      "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)",
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobbguru",
+    "recent_2019_onward": {
+      "count": 319,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobbguru.se",
+    "recent_2019_onward": {
+      "count": 319,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobbland",
+    "recent_2019_onward": {
+      "count": 68092,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 3,
+      "error": null,
+      "confirmed_has_data": true
+    }
+  },
+  {
+    "source": "jobbland.se",
+    "recent_2019_onward": {
+      "count": 694823,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": null,
+      "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)",
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobmedic",
+    "recent_2019_onward": {
+      "count": 1010,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobmedic.co.uk",
+    "recent_2019_onward": {
+      "count": 1448,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobscentral",
+    "recent_2019_onward": {
+      "count": 6284,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "jobs.de",
+    "recent_2019_onward": {
+      "count": 34230,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "kariera.fr",
+    "recent_2019_onward": {
+      "count": 86468,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "kariera.gr",
+    "recent_2019_onward": {
+      "count": 87766,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "lesjeudis",
+    "recent_2019_onward": {
+      "count": 18404,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "lesjeudis.com",
+    "recent_2019_onward": {
+      "count": 55375,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 0,
+      "error": null,
+      "confirmed_has_data": false
+    }
+  },
+  {
+    "source": "OJA",
+    "recent_2019_onward": {
+      "count": 2924235,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": 123200,
+      "error": null,
+      "confirmed_has_data": true
+    }
+  },
+  {
+    "source": "eures-escox",
+    "recent_2019_onward": {
+      "count": 891613,
+      "error": null,
+      "confirmed_has_data": true
+    },
+    "historical_pre_2019": {
+      "count": null,
+      "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)",
+      "confirmed_has_data": false
+    }
+  }
+]
