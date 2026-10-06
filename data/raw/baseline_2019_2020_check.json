@@ -1,0 +1,98 @@
+[
+  {
+    "source": "brightminds",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "jobbguru",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "jobbguru.se",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "jobbland.se",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 90,
+    "error": null
+  },
+  {
+    "source": "jobmedic",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "jobmedic.co.uk",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "jobscentral",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 0,
+    "error": null
+  },
+  {
+    "source": "OJA",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": 407545,
+    "error": null
+  },
+  {
+    "source": "eures",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "eures-escox",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "jobbland",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "jobs.de",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "kariera.fr",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "kariera.gr",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "lesjeudis",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  },
+  {
+    "source": "lesjeudis.com",
+    "window": "2019-01-01 to 2020-12-31",
+    "count": null,
+    "error": "HTTPSConnectionPool(host='skillab-tracker.csd.auth.gr', port=443): Read timed out. (read timeout=45)"
+  }
+]

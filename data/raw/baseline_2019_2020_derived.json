@@ -1,0 +1,58 @@
+[
+  {
+    "source": "eures",
+    "count_2019_onward": 401511,
+    "count_post_2021": 401511,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "eures-escox",
+    "count_2019_onward": 891613,
+    "count_post_2021": 891613,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "jobbland",
+    "count_2019_onward": 68092,
+    "count_post_2021": 68083,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 9
+  },
+  {
+    "source": "jobs.de",
+    "count_2019_onward": 34230,
+    "count_post_2021": 34230,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "kariera.fr",
+    "count_2019_onward": 86468,
+    "count_post_2021": 86468,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "kariera.gr",
+    "count_2019_onward": 87766,
+    "count_post_2021": 87766,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "lesjeudis",
+    "count_2019_onward": 18404,
+    "count_post_2021": 18404,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  },
+  {
+    "source": "lesjeudis.com",
+    "count_2019_onward": 55375,
+    "count_post_2021": 55375,
+    "post_2021_error": null,
+    "derived_2019_2020_count": 0
+  }
+]
