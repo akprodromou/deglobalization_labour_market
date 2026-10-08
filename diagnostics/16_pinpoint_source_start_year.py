@@ -1,18 +1,24 @@
 """
-15_derive_2019_2020_by_subtraction.py found that 7 sources have IDENTICAL
-counts for '2019 onward' and 'post-2021 onward' -- strong evidence their
-real data starts somewhere at or after 2021-01-01, not 2019 as the
-original coverage check's "2019 onward: Yes" label implied (that label
-was technically true but misleading for the brief's specific 2019-2020
-baseline-window purpose).
+Per-source posting counts by time interval, derived from open-ended
+count queries (min_upload_date=<year>-01-01, max_upload_date=today) -- the
+query shape that has been reliable on this API, unlike closed historical
+windows.
 
-This pins down the actual start year for every source using the SAME
-reliable open-ended query pattern (min_upload_date=X-01-01, max=today),
-by checking each year boundary 2019-2023 individually. Once two
-consecutive years give the same count, that's the floor -- no need to
-probe further back.
+count(Y onward) never increases as Y increases, so the number of postings
+in the interval [Y_i, Y_{i+1}) is count(Y_i) - count(Y_{i+1}). If the counts
+for consecutive checkpoints are IDENTICAL, there are no postings between
+those checkpoints; e.g. count(2019) == count(2021) == count(2023) means every
+posting is dated 2023 or later.
+
+Usage, from the repo root:
+    python -m diagnostics.16_pinpoint_source_start_year
+    python -m diagnostics.16_pinpoint_source_start_year --sources OJA --years 2019 2020 2021 2022 2023 2024 2025
+
+Only successful counts are saved, so re-running retries just the probes that
+failed or were never made.
 """
 
+import argparse
 import json
 from datetime import date
 from pathlib import Path
@@ -20,14 +26,8 @@ from pathlib import Path
 from skillab_client import SkillabClient
 
 TODAY = date.today().isoformat()
-# 3 checkpoints rather than 5: enough to triangulate roughly when data
-# starts without doubling the number of API calls. OJA, jobbland, and
-# jobbland.se are excluded -- 15_derive_2019_2020_by_subtraction.py
-# already confirmed they have real 2019-2020 data, so there's nothing to
-# pinpoint for them.
-CANDIDATE_YEARS = [2019, 2021, 2023]
-
-ALL_JOB_SOURCES = [
+DEFAULT_YEARS = [2019, 2021, 2023]
+DEFAULT_SOURCES = [
     "brightminds", "eures", "eures-escox",
     "jobbguru", "jobbguru.se",
     "jobmedic", "jobmedic.co.uk",
@@ -35,20 +35,29 @@ ALL_JOB_SOURCES = [
     "kariera.fr", "kariera.gr",
     "lesjeudis", "lesjeudis.com",
 ]
-
 OUT_PATH = Path("data/raw/source_start_year.json")
 
 
-def load_existing():
-    if OUT_PATH.exists():
-        with open(OUT_PATH, encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+def load_counts():
+    """{source: {year(int): count}} -- successful probes only."""
+    if not OUT_PATH.exists():
+        return {}
+    with open(OUT_PATH, encoding="utf-8") as f:
+        raw = json.load(f)
+    counts = {}
+    for source, entry in raw.items():
+        year_counts = entry.get("year_counts", {})
+        counts[source] = {int(y): c for y, c in year_counts.items() if c is not None}
+    return counts
 
 
-def save(results):
+def save_counts(counts):
+    raw = {
+        source: {"year_counts": {str(y): c for y, c in sorted(year_map.items())}}
+        for source, year_map in counts.items()
+    }
     with open(OUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(results, f, indent=2, ensure_ascii=False)
+        json.dump(raw, f, indent=2, ensure_ascii=False)
 
 
 def probe_from_year(client, source, year):
@@ -59,55 +68,67 @@ def probe_from_year(client, source, year):
         return None, str(exc)
 
 
+def interval_counts(year_map, years):
+    """[(label, count_or_None)] for [y_i, y_{i+1}) plus the open last interval."""
+    ys = sorted(years)
+    out = []
+    for i, y in enumerate(ys):
+        this_count = year_map.get(y)
+        if i + 1 < len(ys):
+            next_count = year_map.get(ys[i + 1])
+            label = f"{y}-{ys[i + 1] - 1}"
+            value = None if this_count is None or next_count is None else this_count - next_count
+        else:
+            label = f"{y}+"
+            value = this_count
+        out.append((label, value))
+    return out
+
+
+def format_value(value):
+    if value is None:
+        return "?"
+    if value < 0:
+        return f"{value:,} (!)"  # dataset grew between two queries
+    return f"{value:,}"
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--sources", nargs="+", default=DEFAULT_SOURCES)
+    parser.add_argument("--years", nargs="+", type=int, default=DEFAULT_YEARS)
+    args = parser.parse_args()
+    years = sorted(set(args.years))
+
+    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     client = SkillabClient()
-    results = load_existing()
+    counts = load_counts()
 
-    for source in ALL_JOB_SOURCES:
-        if source in results and results[source].get("resolved"):
-            print(f"Skipping '{source}' (already resolved: starts {results[source]['earliest_year_with_data']}).")
+    for source in args.sources:
+        year_map = counts.setdefault(source, {})
+        missing = [y for y in years if y not in year_map]
+        if not missing:
+            print(f"{source}: all requested checkpoints already measured.")
             continue
-
         print(f"\n=== {source} ===")
-        year_counts = {}
-        for year in CANDIDATE_YEARS:
+        for year in missing:
             count, error = probe_from_year(client, source, year)
             if error:
                 print(f"  {year}-01-01 onward: FAILED ({error})")
-                year_counts[year] = None
             else:
                 print(f"  {year}-01-01 onward: {count:,}")
-                year_counts[year] = count
+                year_map[year] = count
+                save_counts(counts)
 
-        # Determine the earliest year where the count differs from the
-        # NEXT year checked (i.e. where real data starts accumulating).
-        resolved_counts = {y: c for y, c in year_counts.items() if c is not None}
-        earliest_year_with_data = None
-        sorted_years = sorted(resolved_counts.keys())
-        for i, year in enumerate(sorted_years):
-            if i == 0:
-                continue
-            prev_year = sorted_years[i - 1]
-            if resolved_counts[year] != resolved_counts[prev_year]:
-                earliest_year_with_data = prev_year
-                break
-        if earliest_year_with_data is None and sorted_years:
-            # No plateau found within the probed years -- data may start
-            # before the earliest year checked (2019) or we simply
-            # couldn't tell from this range.
-            if len(sorted_years) >= 2 and resolved_counts[sorted_years[0]] > 0:
-                earliest_year_with_data = f"<={sorted_years[0]}"
-
-        results[source] = {
-            "year_counts": year_counts,
-            "earliest_year_with_data": earliest_year_with_data,
-            "resolved": len(resolved_counts) == len(CANDIDATE_YEARS),
-        }
-        save(results)
-
-    print("\n=== Summary: earliest year each source has real data ===")
-    for source, r in results.items():
-        print(f"  {source:<20} earliest year with data: {r['earliest_year_with_data']}")
+    print(f"\n=== Postings per interval (first checkpoint: {years[0]}; earlier postings are not counted) ===")
+    for source in args.sources:
+        year_map = counts.get(source, {})
+        parts = [f"{label}: {format_value(value)}" for label, value in interval_counts(year_map, years)]
+        total = year_map.get(years[0])
+        total_text = f"{total:,}" if total is not None else "?"
+        print(f"  {source:<16} since {years[0]}: {total_text:>10}  |  " + "  ".join(parts))
+    print("\n'?' = a needed probe failed or is missing; re-run to retry. '(!)' = negative interval "
+          "(the live dataset grew between two queries).")
 
 
 if __name__ == "__main__":
