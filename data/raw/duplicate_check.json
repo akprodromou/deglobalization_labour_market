@@ -1,0 +1,60 @@
+{
+  "id": {
+    "usable": 6723,
+    "repeats_within_source": {},
+    "shared_between_sources": {}
+  },
+  "content": {
+    "usable": 6255,
+    "repeats_within_source": {
+      "jobbguru": 1,
+      "jobbguru.se": 1,
+      "jobbland": 2,
+      "jobbland.se": 2,
+      "jobmedic": 13,
+      "jobmedic.co.uk": 13,
+      "jobscentral": 15,
+      "jobs.de": 13,
+      "kariera.fr": 13,
+      "kariera.gr": 8,
+      "lesjeudis": 26,
+      "lesjeudis.com": 26,
+      "eures": 9,
+      "eures-escox": 19
+    },
+    "shared_between_sources": {
+      "jobbguru / jobbguru.se": 318,
+      "jobbland / jobbland.se": 451,
+      "kariera.fr / lesjeudis": 9,
+      "kariera.fr / lesjeudis.com": 9,
+      "lesjeudis / lesjeudis.com": 436
+    }
+  },
+  "description": {
+    "usable": 6138,
+    "repeats_within_source": {
+      "jobbguru": 18,
+      "jobbguru.se": 18,
+      "jobbland": 32,
+      "jobbland.se": 32,
+      "jobmedic": 50,
+      "jobmedic.co.uk": 50,
+      "jobscentral": 79,
+      "jobs.de": 119,
+      "kariera.fr": 26,
+      "kariera.gr": 81,
+      "lesjeudis": 155,
+      "lesjeudis.com": 155,
+      "eures": 17,
+      "eures-escox": 38
+    },
+    "shared_between_sources": {
+      "jobbguru / jobbguru.se": 301,
+      "jobbland / jobbland.se": 434,
+      "jobmedic / jobmedic.co.uk": 418,
+      "kariera.fr / lesjeudis": 7,
+      "kariera.fr / lesjeudis.com": 7,
+      "lesjeudis / lesjeudis.com": 309
+    }
+  }
+}

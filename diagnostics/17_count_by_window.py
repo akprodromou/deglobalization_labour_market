@@ -11,6 +11,7 @@ Usage, from the repo root:
     python -m diagnostics.17_count_by_window
     python -m diagnostics.17_count_by_window --source OJA --years 2019 2020 2021 2022 2023 2024 2025
     python -m diagnostics.17_count_by_window --granularity month --years 2020 2021
+    python -m diagnostics.17_count_by_window --source eures --granularity month --years 2026 --months 1 2
 
 Only successful counts are saved (data/raw/window_counts.json), so a re-run
 retries just the windows that failed. Each window is a separate probe, so a
@@ -29,9 +30,10 @@ OUT_PATH = Path("data/raw/window_counts.json")
 DEFAULT_YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025]
 
 
-def build_windows(years, granularity, today=None):
+def build_windows(years, granularity, today=None, months=None):
     """[(label, start, end)] closed windows; windows after `today` are dropped
-    and the window containing `today` ends at `today`."""
+    and the window containing `today` ends at `today`. `months` (1-12) limits
+    month granularity to those months of each year."""
     today = today or date.today()
     windows = []
     for y in sorted(set(years)):
@@ -40,7 +42,7 @@ def build_windows(years, granularity, today=None):
         else:
             spans = [
                 (f"{y}-{m:02d}", date(y, m, 1), date(y, m, calendar.monthrange(y, m)[1]))
-                for m in range(1, 13)
+                for m in (months or range(1, 13))
             ]
         for label, start, end in spans:
             if start > today:
@@ -67,9 +69,11 @@ def main():
     parser.add_argument("--source", default="OJA")
     parser.add_argument("--years", nargs="+", type=int, default=DEFAULT_YEARS)
     parser.add_argument("--granularity", choices=["year", "month"], default="year")
+    parser.add_argument("--months", nargs="+", type=int, choices=range(1, 13), metavar="M",
+                        help="with --granularity month: only these months (1-12), e.g. --months 1 2")
     args = parser.parse_args()
 
-    windows = build_windows(args.years, args.granularity)
+    windows = build_windows(args.years, args.granularity, months=args.months)
     data = load_all()
     source_counts = data.setdefault(args.source, {})
     client = SkillabClient()

@@ -1,0 +1,1394 @@
+{
+ "2023-12": {
+  "pages": {
+   "1": {
+    "n": 100,
+    "first_id": 2978628,
+    "last_id": 2978783,
+    "dates": {
+     "2023-12-20": 13,
+     "2023-12-01": 10,
+     "2023-12-06": 10
+    },
+    "isco4": {
+     "3116": 100
+    },
+    "codes": {
+     "IT": 43,
+     "UK": 25,
+     "FR": 12,
+     "SE": 12
+    },
+    "with_code": 100,
+    "mean_skills": 9.45,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 50,
+     "From 1 to 2 years": 16,
+     "Less than 1 year": 14
+    }
+   },
+   "3": {
+    "n": 100,
+    "first_id": 3068442,
+    "last_id": 3068541,
+    "dates": {
+     "2023-12-13": 20,
+     "2023-12-14": 14,
+     "2023-12-12": 12
+    },
+    "isco4": {
+     "7124": 100
+    },
+    "codes": {
+     "SE": 26,
+     "PL": 25,
+     "NL": 16,
+     "DK": 9
+    },
+    "with_code": 100,
+    "mean_skills": 3.25,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 54,
+     "From 2 to 4 years": 17,
+     "Less than 1 year": 12
+    }
+   },
+   "6": {
+    "n": 100,
+    "first_id": 3209722,
+    "last_id": 3209830,
+    "dates": {
+     "2023-12-08": 25,
+     "2023-12-06": 18,
+     "2023-12-07": 16
+    },
+    "isco4": {
+     "2113": 100
+    },
+    "codes": {
+     "DE": 25,
+     "UK": 17,
+     "SE": 17,
+     "IT": 13
+    },
+    "with_code": 100,
+    "mean_skills": 8.07,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 67,
+     "Less than 1 year": 14,
+     "Over 10 years": 8
+    }
+   },
+   "8": {
+    "n": 100,
+    "first_id": 3209934,
+    "last_id": 3210034,
+    "dates": {
+     "2023-12-15": 40,
+     "2023-12-18": 31,
+     "2023-12-14": 10
+    },
+    "isco4": {
+     "2113": 100
+    },
+    "codes": {
+     "ES": 36,
+     "IT": 20,
+     "UK": 12,
+     "SE": 11
+    },
+    "with_code": 100,
+    "mean_skills": 5.23,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 62,
+     "From 2 to 4 years": 21,
+     "Over 10 years": 8
+    }
+   },
+   "10": {
+    "n": 100,
+    "first_id": 3210135,
+    "last_id": 3210235,
+    "dates": {
+     "2023-12-22": 40,
+     "2023-12-21": 24,
+     "2023-12-15": 15
+    },
+    "isco4": {
+     "2113": 100
+    },
+    "codes": {
+     "ES": 24,
+     "FR": 23,
+     "DE": 11,
+     "UK": 11
+    },
+    "with_code": 100,
+    "mean_skills": 4.86,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 63,
+     "Less than 1 year": 18,
+     "From 2 to 4 years": 8
+    }
+   },
+   "12": {
+    "n": 100,
+    "first_id": 3210664,
+    "last_id": 3645837,
+    "dates": {
+     "2023-12-01": 13,
+     "2023-12-31": 11,
+     "2023-12-05": 9
+    },
+    "isco4": {
+     "8114": 87,
+     "7124": 11,
+     "2113": 2
+    },
+    "codes": {
+     "BE": 40,
+     "DE": 19,
+     "NL": 15,
+     "FR": 11
+    },
+    "with_code": 100,
+    "mean_skills": 2.7,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 81,
+     "From 2 to 4 years": 5,
+     "Over 10 years": 4
+    }
+   },
+   "15": {
+    "n": 100,
+    "first_id": 3738068,
+    "last_id": 3738179,
+    "dates": {
+     "2023-12-01": 69,
+     "2023-12-03": 13,
+     "2023-12-04": 10
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "NL": 38,
+     "DE": 27,
+     "UK": 17,
+     "BE": 16
+    },
+    "with_code": 100,
+    "mean_skills": 3.24,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 71,
+     "Less than 1 year": 13,
+     "From 2 to 4 years": 8
+    }
+   },
+   "17": {
+    "n": 100,
+    "first_id": 3738289,
+    "last_id": 3738391,
+    "dates": {
+     "2023-12-05": 30,
+     "2023-12-06": 26,
+     "2023-12-07": 19
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "DE": 42,
+     "BE": 14,
+     "NL": 9,
+     "HR": 8
+    },
+    "with_code": 100,
+    "mean_skills": 3.02,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 78,
+     "Less than 1 year": 11,
+     "From 2 to 4 years": 6
+    }
+   },
+   "19": {
+    "n": 100,
+    "first_id": 3738504,
+    "last_id": 3738619,
+    "dates": {
+     "2023-12-10": 19,
+     "2023-12-07": 16,
+     "2023-12-08": 16
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "DE": 62,
+     "UK": 18,
+     "BE": 5,
+     "AT": 4
+    },
+    "with_code": 100,
+    "mean_skills": 4.19,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 69,
+     "Less than 1 year": 18,
+     "From 2 to 4 years": 6
+    }
+   },
+   "21": {
+    "n": 100,
+    "first_id": 3738720,
+    "last_id": 3738820,
+    "dates": {
+     "2023-12-13": 28,
+     "2023-12-14": 21,
+     "2023-12-12": 16
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "DE": 57,
+     "NL": 21,
+     "UK": 16,
+     "HR": 3
+    },
+    "with_code": 100,
+    "mean_skills": 3.98,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 76,
+     "Less than 1 year": 14,
+     "Over 10 years": 6
+    }
+   },
+   "24": {
+    "n": 100,
+    "first_id": 3739021,
+    "last_id": 3739120,
+    "dates": {
+     "2023-12-16": 39,
+     "2023-12-15": 38,
+     "2023-12-14": 16
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "DE": 47,
+     "NL": 40,
+     "UK": 12,
+     "BE": 1
+    },
+    "with_code": 100,
+    "mean_skills": 4.31,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 50,
+     "From 1 to 2 years": 27,
+     "Less than 1 year": 11
+    }
+   },
+   "26": {
+    "n": 100,
+    "first_id": 3739223,
+    "last_id": 3739322,
+    "dates": {
+     "2023-12-19": 58,
+     "2023-12-20": 15,
+     "2023-12-18": 12
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "NL": 43,
+     "DE": 40,
+     "UK": 11,
+     "BE": 5
+    },
+    "with_code": 100,
+    "mean_skills": 3.65,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 56,
+     "From 1 to 2 years": 28,
+     "Less than 1 year": 10
+    }
+   },
+   "28": {
+    "n": 100,
+    "first_id": 3739424,
+    "last_id": 3739523,
+    "dates": {
+     "2023-12-22": 91,
+     "2023-12-21": 5,
+     "2023-12-19": 2
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "NL": 87,
+     "UK": 9,
+     "DE": 2,
+     "BE": 1
+    },
+    "with_code": 100,
+    "mean_skills": 4.42,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "From 1 to 2 years": 78,
+     "Less than 1 year": 13,
+     "None": 5
+    }
+   },
+   "30": {
+    "n": 100,
+    "first_id": 3739624,
+    "last_id": 3739723,
+    "dates": {
+     "2023-12-22": 100
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "NL": 100
+    },
+    "with_code": 100,
+    "mean_skills": 3.04,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "From 1 to 2 years": 98,
+     "Less than 1 year": 2
+    }
+   },
+   "33": {
+    "n": 100,
+    "first_id": 3739924,
+    "last_id": 3740024,
+    "dates": {
+     "2023-12-25": 34,
+     "2023-12-22": 23,
+     "2023-12-24": 12
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "DE": 53,
+     "NL": 33,
+     "UK": 5,
+     "HR": 3
+    },
+    "with_code": 100,
+    "mean_skills": 3.27,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 57,
+     "From 1 to 2 years": 19,
+     "Less than 1 year": 13
+    }
+   },
+   "35": {
+    "n": 100,
+    "first_id": 3740127,
+    "last_id": 3740228,
+    "dates": {
+     "2023-12-30": 33,
+     "2023-12-27": 18,
+     "2023-12-29": 16
+    },
+    "isco4": {
+     "8131": 100
+    },
+    "codes": {
+     "BE": 36,
+     "NL": 30,
+     "DE": 16,
+     "UK": 16
+    },
+    "with_code": 100,
+    "mean_skills": 3.19,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 45,
+     "From 2 to 4 years": 30,
+     "Less than 1 year": 10
+    }
+   },
+   "37": {
+    "n": 100,
+    "first_id": 4365247,
+    "last_id": 4365382,
+    "dates": {
+     "2023-12-01": 37,
+     "2023-12-04": 27,
+     "2023-12-02": 16
+    },
+    "isco4": {
+     "3141": 100
+    },
+    "codes": {
+     "DE": 41,
+     "FR": 18,
+     "IT": 14,
+     "UK": 14
+    },
+    "with_code": 100,
+    "mean_skills": 8.04,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 58,
+     "Less than 1 year": 22,
+     "From 1 to 2 years": 11
+    }
+   },
+   "39": {
+    "n": 100,
+    "first_id": 4365491,
+    "last_id": 4365602,
+    "dates": {
+     "2023-12-07": 29,
+     "2023-12-06": 22,
+     "2023-12-08": 16
+    },
+    "isco4": {
+     "3141": 100
+    },
+    "codes": {
+     "DE": 46,
+     "IT": 23,
+     "UK": 21,
+     "NL": 3
+    },
+    "with_code": 100,
+    "mean_skills": 8.43,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 72,
+     "Less than 1 year": 14,
+     "Over 10 years": 7
+    }
+   },
+   "42": {
+    "n": 100,
+    "first_id": 4365816,
+    "last_id": 4365916,
+    "dates": {
+     "2023-12-14": 28,
+     "2023-12-13": 21,
+     "2023-12-12": 13
+    },
+    "isco4": {
+     "3141": 100
+    },
+    "codes": {
+     "DE": 43,
+     "UK": 19,
+     "IT": 18,
+     "DK": 6
+    },
+    "with_code": 100,
+    "mean_skills": 7.42,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 81,
+     "Less than 1 year": 10,
+     "From 2 to 4 years": 5
+    }
+   },
+   "44": {
+    "n": 100,
+    "first_id": 4366017,
+    "last_id": 4366118,
+    "dates": {
+     "2023-12-19": 28,
+     "2023-12-18": 23,
+     "2023-12-20": 20
+    },
+    "isco4": {
+     "3141": 100
+    },
+    "codes": {
+     "DE": 52,
+     "UK": 14,
+     "IT": 11,
+     "ES": 8
+    },
+    "with_code": 100,
+    "mean_skills": 7.5,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 72,
+     "Less than 1 year": 14,
+     "Over 10 years": 7
+    }
+   },
+   "46": {
+    "n": 100,
+    "first_id": 4366222,
+    "last_id": 4366322,
+    "dates": {
+     "2023-12-22": 37,
+     "2023-12-19": 13,
+     "2023-12-21": 13
+    },
+    "isco4": {
+     "3141": 100
+    },
+    "codes": {
+     "DE": 53,
+     "IT": 20,
+     "NL": 5,
+     "UK": 4
+    },
+    "with_code": 100,
+    "mean_skills": 7.94,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 68,
+     "Less than 1 year": 11,
+     "From 2 to 4 years": 8
+    }
+   },
+   "48": {
+    "n": 100,
+    "first_id": 4366427,
+    "last_id": 4409098,
+    "dates": {
+     "2023-12-01": 27,
+     "2023-12-29": 12,
+     "2023-12-02": 12
+    },
+    "isco4": {
+     "2133": 51,
+     "3141": 49
+    },
+    "codes": {
+     "DE": 42,
+     "FR": 20,
+     "UK": 14,
+     "SE": 12
+    },
+    "with_code": 100,
+    "mean_skills": 8.4,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 51,
+     "From 2 to 4 years": 12,
+     "From 1 to 2 years": 12
+    }
+   },
+   "51": {
+    "n": 100,
+    "first_id": 4409318,
+    "last_id": 4409418,
+    "dates": {
+     "2023-12-15": 22,
+     "2023-12-14": 13,
+     "2023-12-18": 12
+    },
+    "isco4": {
+     "2133": 100
+    },
+    "codes": {
+     "DE": 35,
+     "UK": 22,
+     "SE": 14,
+     "FR": 13
+    },
+    "with_code": 100,
+    "mean_skills": 8.45,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 49,
+     "Less than 1 year": 26,
+     "From 2 to 4 years": 14
+    }
+   },
+   "53": {
+    "n": 100,
+    "first_id": 4409525,
+    "last_id": 4409626,
+    "dates": {
+     "2023-12-22": 42,
+     "2023-12-20": 10,
+     "2023-12-23": 9
+    },
+    "isco4": {
+     "2133": 100
+    },
+    "codes": {
+     "DE": 52,
+     "SE": 18,
+     "UK": 12,
+     "FR": 8
+    },
+    "with_code": 100,
+    "mean_skills": 7.77,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 63,
+     "From 2 to 4 years": 12,
+     "Less than 1 year": 9
+    }
+   }
+  },
+  "count": 5391,
+  "grid": [
+   1,
+   3,
+   6,
+   8,
+   10,
+   12,
+   15,
+   17,
+   19,
+   21,
+   24,
+   26,
+   28,
+   30,
+   33,
+   35,
+   37,
+   39,
+   42,
+   44,
+   46,
+   48,
+   51,
+   53
+  ]
+ },
+ "2024-01": {
+  "pages": {
+   "58": {
+    "n": 100,
+    "first_id": 196170,
+    "last_id": 196269,
+    "dates": {
+     "2024-01-22": 100
+    },
+    "isco4": {
+     "2511": 51,
+     "2512": 46,
+     "2514": 2,
+     "2513": 1
+    },
+    "codes": {
+     "FR": 80,
+     "UK": 13,
+     "LV": 7
+    },
+    "with_code": 100,
+    "mean_skills": 17.35,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "From 1 to 2 years": 22,
+     "Over 10 years": 19,
+     "None": 19
+    }
+   },
+   "173": {
+    "n": 100,
+    "first_id": 222218,
+    "last_id": 222317,
+    "dates": {
+     "2024-01-10": 100
+    },
+    "isco4": {
+     "2512": 42,
+     "2511": 41,
+     "2513": 8,
+     "2519": 7,
+     "2514": 2
+    },
+    "codes": {
+     "DE": 37,
+     "CZ": 31,
+     "PL": 23,
+     "ES": 3
+    },
+    "with_code": 100,
+    "mean_skills": 17.06,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 46,
+     "Less than 1 year": 26,
+     "Over 10 years": 11
+    }
+   },
+   "288": {
+    "n": 100,
+    "first_id": 242291,
+    "last_id": 242390,
+    "dates": {
+     "2024-01-30": 100
+    },
+    "isco4": {
+     "2511": 88,
+     "2512": 12
+    },
+    "codes": {
+     "DE": 100
+    },
+    "with_code": 100,
+    "mean_skills": 17.35,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "Less than 1 year": 98,
+     "From 2 to 4 years": 2
+    }
+   },
+   "403": {
+    "n": 100,
+    "first_id": 265791,
+    "last_id": 265890,
+    "dates": {
+     "2024-01-26": 100
+    },
+    "isco4": {
+     "2511": 71,
+     "2512": 24,
+     "2519": 3,
+     "2513": 2
+    },
+    "codes": {
+     "DE": 53,
+     "FR": 47
+    },
+    "with_code": 100,
+    "mean_skills": 21.42,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 52,
+     "Over 10 years": 34,
+     "No experience": 13
+    }
+   },
+   "518": {
+    "n": 100,
+    "first_id": 284887,
+    "last_id": 284986,
+    "dates": {
+     "2024-01-08": 100
+    },
+    "isco4": {
+     "2511": 41,
+     "2512": 41,
+     "2514": 11,
+     "2513": 4,
+     "2519": 3
+    },
+    "codes": {
+     "DE": 66,
+     "FR": 18,
+     "RO": 7,
+     "SK": 6
+    },
+    "with_code": 100,
+    "mean_skills": 13.25,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 63,
+     "Less than 1 year": 16,
+     "Over 10 years": 7
+    }
+   },
+   "633": {
+    "n": 100,
+    "first_id": 313111,
+    "last_id": 313210,
+    "dates": {
+     "2024-01-29": 100
+    },
+    "isco4": {
+     "2512": 53,
+     "2511": 30,
+     "2513": 10,
+     "2519": 7
+    },
+    "codes": {
+     "SE": 42,
+     "BE": 24,
+     "DE": 17,
+     "IT": 8
+    },
+    "with_code": 100,
+    "mean_skills": 17.74,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "Less than 1 year": 30,
+     "None": 25,
+     "From 2 to 4 years": 21
+    }
+   },
+   "748": {
+    "n": 100,
+    "first_id": 338608,
+    "last_id": 338707,
+    "dates": {
+     "2024-01-24": 100
+    },
+    "isco4": {
+     "2511": 58,
+     "2512": 28,
+     "2519": 10,
+     "2513": 3,
+     "2514": 1
+    },
+    "codes": {
+     "FR": 75,
+     "DE": 11,
+     "PL": 11,
+     "ES": 3
+    },
+    "with_code": 100,
+    "mean_skills": 16.66,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "Less than 1 year": 60,
+     "Over 10 years": 16,
+     "None": 14
+    }
+   },
+   "863": {
+    "n": 100,
+    "first_id": 350108,
+    "last_id": 350207,
+    "dates": {
+     "2024-01-31": 100
+    },
+    "isco4": {
+     "2512": 47,
+     "2511": 38,
+     "2513": 11,
+     "2519": 2,
+     "2514": 2
+    },
+    "codes": {
+     "DE": 96,
+     "PL": 2,
+     "UK": 1,
+     "FR": 1
+    },
+    "with_code": 100,
+    "mean_skills": 21.73,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 40,
+     "Less than 1 year": 33,
+     "Over 10 years": 10
+    }
+   },
+   "979": {
+    "n": 100,
+    "first_id": 361708,
+    "last_id": 361807,
+    "dates": {
+     "2024-01-25": 100
+    },
+    "isco4": {
+     "2511": 38,
+     "2512": 32,
+     "2513": 25,
+     "2514": 5
+    },
+    "codes": {
+     "NL": 82,
+     "FR": 16,
+     "DE": 1,
+     "PL": 1
+    },
+    "with_code": 100,
+    "mean_skills": 14.13,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "From 1 to 2 years": 47,
+     "Over 10 years": 32,
+     "Less than 1 year": 15
+    }
+   },
+   "1094": {
+    "n": 100,
+    "first_id": 373208,
+    "last_id": 373307,
+    "dates": {
+     "2024-01-16": 100
+    },
+    "isco4": {
+     "2511": 53,
+     "2512": 38,
+     "2513": 4,
+     "2519": 3,
+     "2514": 2
+    },
+    "codes": {
+     "FR": 38,
+     "DE": 18,
+     "UK": 13,
+     "AT": 7
+    },
+    "with_code": 100,
+    "mean_skills": 12.01,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 72,
+     "Over 10 years": 11,
+     "From 2 to 4 years": 7
+    }
+   },
+   "1209": {
+    "n": 100,
+    "first_id": 384708,
+    "last_id": 384807,
+    "dates": {
+     "2024-01-04": 100
+    },
+    "isco4": {
+     "2512": 60,
+     "2511": 24,
+     "2513": 11,
+     "2519": 5
+    },
+    "codes": {
+     "SE": 50,
+     "UK": 27,
+     "DE": 19,
+     "BE": 2
+    },
+    "with_code": 100,
+    "mean_skills": 21.02,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 36,
+     "Less than 1 year": 26,
+     "Over 10 years": 17
+    }
+   },
+   "1324": {
+    "n": 100,
+    "first_id": 396208,
+    "last_id": 396307,
+    "dates": {
+     "2024-01-18": 100
+    },
+    "isco4": {
+     "2512": 56,
+     "2511": 32,
+     "2513": 6,
+     "2514": 5,
+     "2519": 1
+    },
+    "codes": {
+     "ES": 51,
+     "PT": 25,
+     "IT": 11,
+     "IE": 4
+    },
+    "with_code": 100,
+    "mean_skills": 21.79,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 35,
+     "Less than 1 year": 26,
+     "From 2 to 4 years": 20
+    }
+   },
+   "1439": {
+    "n": 100,
+    "first_id": 407708,
+    "last_id": 407807,
+    "dates": {
+     "2024-01-02": 100
+    },
+    "isco4": {
+     "2511": 46,
+     "2512": 44,
+     "2513": 6,
+     "2519": 2,
+     "2514": 2
+    },
+    "codes": {
+     "NL": 28,
+     "UK": 28,
+     "DE": 15,
+     "FR": 13
+    },
+    "with_code": 100,
+    "mean_skills": 16.07,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "Less than 1 year": 44,
+     "Over 10 years": 27,
+     "None": 20
+    }
+   },
+   "1554": {
+    "n": 100,
+    "first_id": 419208,
+    "last_id": 419307,
+    "dates": {
+     "2024-01-03": 100
+    },
+    "isco4": {
+     "2511": 51,
+     "2512": 45,
+     "2513": 4
+    },
+    "codes": {
+     "FR": 97,
+     "DE": 3
+    },
+    "with_code": 100,
+    "mean_skills": 25.25,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 49,
+     "Less than 1 year": 30,
+     "Over 10 years": 11
+    }
+   },
+   "1669": {
+    "n": 100,
+    "first_id": 430708,
+    "last_id": 430807,
+    "dates": {
+     "2024-01-12": 100
+    },
+    "isco4": {
+     "2511": 49,
+     "2512": 36,
+     "2513": 11,
+     "2519": 2,
+     "2514": 2
+    },
+    "codes": {
+     "PT": 21,
+     "FR": 20,
+     "DE": 14,
+     "IT": 10
+    },
+    "with_code": 100,
+    "mean_skills": 19.9,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 35,
+     "Less than 1 year": 22,
+     "Over 10 years": 18
+    }
+   },
+   "1784": {
+    "n": 100,
+    "first_id": 442208,
+    "last_id": 442307,
+    "dates": {
+     "2024-01-13": 100
+    },
+    "isco4": {
+     "2512": 49,
+     "2511": 46,
+     "2514": 5
+    },
+    "codes": {
+     "FR": 56,
+     "DE": 41,
+     "PL": 1,
+     "IT": 1
+    },
+    "with_code": 100,
+    "mean_skills": 16.98,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "Over 10 years": 47,
+     "None": 34,
+     "No experience": 10
+    }
+   },
+   "1900": {
+    "n": 100,
+    "first_id": 2128724,
+    "last_id": 2128823,
+    "dates": {
+     "2024-01-05": 54,
+     "2024-01-06": 17,
+     "2024-01-07": 15
+    },
+    "isco4": {
+     "2330": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 14.11,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 44,
+     "Less than 1 year": 32,
+     "No experience": 8
+    }
+   },
+   "2015": {
+    "n": 100,
+    "first_id": 2432492,
+    "last_id": 2432591,
+    "dates": {
+     "2024-01-02": 79,
+     "2024-01-01": 21
+    },
+    "isco4": {
+     "2431": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 15.8,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 62,
+     "Less than 1 year": 14,
+     "Over 10 years": 8
+    }
+   },
+   "2130": {
+    "n": 100,
+    "first_id": 2443992,
+    "last_id": 2444091,
+    "dates": {
+     "2024-01-10": 68,
+     "2024-01-08": 11,
+     "2024-01-09": 10
+    },
+    "isco4": {
+     "2431": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 11.43,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 64,
+     "Less than 1 year": 14,
+     "From 2 to 4 years": 8
+    }
+   },
+   "2245": {
+    "n": 100,
+    "first_id": 2455492,
+    "last_id": 2455591,
+    "dates": {
+     "2024-01-18": 40,
+     "2024-01-19": 17,
+     "2024-01-17": 16
+    },
+    "isco4": {
+     "2431": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 25.17,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 34,
+     "Less than 1 year": 28,
+     "No experience": 12
+    }
+   },
+   "2360": {
+    "n": 100,
+    "first_id": 2466992,
+    "last_id": 2467091,
+    "dates": {
+     "2024-01-26": 46,
+     "2024-01-27": 23,
+     "2024-01-25": 21
+    },
+    "isco4": {
+     "2431": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 15.89,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 66,
+     "Less than 1 year": 13,
+     "No experience": 9
+    }
+   },
+   "2475": {
+    "n": 100,
+    "first_id": 2517039,
+    "last_id": 2517138,
+    "dates": {
+     "2024-01-12": 33,
+     "2024-01-11": 28,
+     "2024-01-10": 15
+    },
+    "isco4": {
+     "3312": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 15.36,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 42,
+     "Less than 1 year": 27,
+     "Over 10 years": 9
+    }
+   },
+   "2590": {
+    "n": 100,
+    "first_id": 2721003,
+    "last_id": 2721102,
+    "dates": {
+     "2024-01-18": 37,
+     "2024-01-17": 36,
+     "2024-01-22": 10
+    },
+    "isco4": {
+     "1211": 100
+    },
+    "codes": {
+     "None": 100
+    },
+    "with_code": 0,
+    "mean_skills": 13.85,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 32,
+     "Less than 1 year": 22,
+     "From 1 to 2 years": 15
+    }
+   },
+   "2705": {
+    "n": 100,
+    "first_id": 3847413,
+    "last_id": 3847512,
+    "dates": {
+     "2024-01-22": 33,
+     "2024-01-19": 25,
+     "2024-01-17": 15
+    },
+    "isco4": {
+     "2133": 100
+    },
+    "codes": {
+     "DE": 34,
+     "UK": 26,
+     "FR": 21,
+     "SE": 16
+    },
+    "with_code": 100,
+    "mean_skills": 9.78,
+    "title_nonempty": 0,
+    "desc_nonempty": 0,
+    "experience": {
+     "None": 49,
+     "Less than 1 year": 23,
+     "From 1 to 2 years": 10
+    }
+   }
+  },
+  "count": 276271,
+  "grid": [
+   58,
+   173,
+   288,
+   403,
+   518,
+   633,
+   748,
+   863,
+   979,
+   1094,
+   1209,
+   1324,
+   1439,
+   1554,
+   1669,
+   1784,
+   1900,
+   2015,
+   2130,
+   2245,
+   2360,
+   2475,
+   2590,
+   2705
+  ]
+ }
+}
