@@ -1,0 +1,4 @@
+export SKILLAB_USERNAME='skillab_staff'
+export SKILLAB_PASSWORD='skillroadtrip00'
+TOKEN=$(curl -s -X POST https://skillab-tracker.csd.auth.gr/api/login -H "Content-Type: application/json" -d "{\"username\":\"$SKILLAB_USERNAME\",\"password\":\"$SKILLAB_PASSWORD\"}" | tr -d '"')
+echo "Token: $TOKEN"
