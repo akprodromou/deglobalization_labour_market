@@ -91,6 +91,8 @@ As a secondary check, the free-text `content` bio field was scanned for multiple
 
 **Implication:** any thesis analysis that depends on tracking an individual's role-to-role transitions over time cannot be built from this API's profile data as currently exposed. This is a scope-level finding that should be raised with the supervising team directly, rather than something resolvable through better querying or additional fallback logic — the data simply isn't there. Depending on how central multi-role transition tracking is to the thesis's planned analysis, this may require either restructuring that part of the analysis to rely on postings-level signals (e.g. aggregate occupation/skill shifts across the corpus over time, rather than individual career trajectories) or seeking a supplementary data source.
 
+**Role start dates (`startdate`) exist only in Revelio.** In a sample of 250 profiles per profile source (`diagnostics/29`, Part B), `startdate` was filled for 105 of 250 Revelio profiles (42%) and for none of the LinkedIn and STACK profiles. Revelio start years run back to the 1970s; 6 of the 105 fall in 2019–2020, all in Germany. A role start date marks when the person's current role began, so it could give a hiring-by-date series for people still in that role, with survivorship bias (people who left are absent). `ProfileFilter` has no date field, so a population-level count would require paging through the Revelio profiles; the size of that source and the year distribution of start dates have not been measured.
+
 ## 9. Date Coverage and the Pre-Shock Baseline
 
 This section replaces an earlier version that concluded "15 of 16 posting sources confirm coverage from 2019 onward". That statement was true but misleading for the thesis: "has data from 2019 onward" is not the same as "has data in the brief's 2019–2020 baseline window". Most sources pass the first test and fail the second.
@@ -295,6 +297,15 @@ What this establishes:
    - The EURES family is about 100 postings a month until August 2025, then grows steeply: 937 (September 2025), 1,523, 15,811, 21,926, 99,039 (January 2026) and 260,792 (February 2026) for `eures`; `eures-escox` follows the same pattern at 2.7 times the size in February 2026. It stops after February 2026.
 7. **Country totals double-count duplicate pairs.** Swedish postings in 2024 (235,285) are `jobbland.se` 167,678 + `jobbland` 66,969 + `jobbguru` and `jobbguru.se` 319 each, and the French and British figures are inflated in the same way. Section 13.4 describes the merge used in the sample; the population-level overlap of the pairs is still unconfirmed.
 
+8. **Postings with no `upload_date` exist in the EURES family and are invisible to every date-windowed query.** Comparing the count with no date filter to the count in a 1900–2100 window (`diagnostics/29`, Part A):
+
+   | Source | All-time count | With an `upload_date` | No `upload_date` |
+   |---|---|---|---|
+   | eures | 560,200 | 401,511 | 158,689 (28%) |
+   | eures-escox | 1,539,386 | 891,613 | 647,773 (42%) |
+
+   For the other 13 non-OJA sources the two counts are identical, so no postings are hidden. All yearly and monthly EURES-family figures in this report (Sections 9.3 and 9.6, `docs/coverage_population.md`) therefore describe only the dated 72% and 58%. 806,462 postings in the EURES family have no date at all; `diagnostics/30` sampled 40 evenly spaced pages of each source's unfiltered result set (`docs/undated_postings_grid.md`). Findings: (i) the undated postings are not an archive of older records. They lie in the same id range (about 6.25M to 8.35M) as the dated postings, whose dates are almost all 2025–2026 (a few 2023–2024 on the first pages), and the sampled undated postings are live-looking vacancies (for example a 2026 summer-substitute post). Their text mentions 2026 far more often than any other year (113 of 156 year mentions in eures, 148 of 218 in eures-escox); mentions of 2019 or 2020 are a handful (eures: 4 for 2020; eures-escox: 5 and 4) and occur at about the same rate in dated postings, i.e. incidental references such as years of experience. (ii) Missing dates are a feed property: many pages are 100% undated and come from a single country (DE, FR, NL, AT, ES), while other pages of the same countries are fully dated, so whole ingestion batches arrive without `upload_date`. This is consistent with the supervisor's remark that empty fields follow the source data structure. (iii) Share in the sample: 31% (eures) and 51% (eures-escox) of grid postings; the population figures above (28%, 42%) are the authoritative ones, the grid is for locating them. Conclusion: the undated EURES postings are not a source of 2019–2020 data. Consequence for 2026 analysis: dated-only counts under-represent FR, NL, ES and AT feeds, so country composition computed from dated postings alone is biased. This conclusion rests on sampled text and id position, not on a known publication date. `diagnostics/31` (`docs/field_audit.md`; 35 pages, 3,500 `eures` postings, of which 31% undated; `eures-escox` sampled separately, see Section 9.7) adds three points. (a) The API returns no field beyond the documented JobSchema, and `upload_date` is its only date, so no collection or insertion date can be recovered for the undated postings through the API; whether the database holds one that the API does not expose is a question for the tracker's maintainers. (b) Undated records are thinner than dated ones: non-empty `skills` 13% versus 60%, `location` 55% versus 97%, `organization` 77% versus 96%, `description` 91% versus 98%, `type` 93% versus 100%, which fits a different feed format. (c) Test of the id as a clock: predicting a dated posting's `upload_date` from the nearest dated posting on a different page gives a median absolute error of 10 days (75th percentile 26, 90th 69, maximum 293), with 45% of predictions within 7 days and 78% within 31 days; 14 of 31 neighbouring page pairs run backwards (dates do not rise strictly with id). Id-based dating would therefore be coarse, at best usable for quarterly placement and always labelled as imputed. It would also be extrapolation in the newest ids, where the sampled pages 4762, 4948, 5322 and 5509 are 96–100% undated. In any case it could only place these postings in 2025–2026.
+
 Population-level coverage tables by source, year, country and month are in `docs/coverage_population.md` (generated by `diagnostics/27`). They cover postings with a country code only.
 
 ### 9.5 Consequences for the research design
@@ -307,6 +318,42 @@ Population-level coverage tables by source, year, country and month are in `docs
 - **OJA's occupation coverage changes over time and is narrow** (Sections 9.4c and 9.4d), so the monthly total must not be used as a series. Only eight ISCO codes (chemical and process industries, laboratory, environment) run from 2019 to March 2025; ten others exist only in 2024.
 - **Provisional recommendation (to be agreed with the supervisor):** restrict any OJA series to the eight core codes. The earlier plan (2019–2023 OJA as the primary series, 2024 to March 2025 as a second regime, post-March 2025 sources as a separate supplementary analysis) no longer holds for OJA as a whole, because the 2024 regime is a different set of occupations. The post-March 2025 supplementary analysis is unaffected. All of this must be reconciled with the brief's timeline (monthly data to 2026).
 - Profiles carry almost no usable dates (`startdate` 1.5%), so all time-series work rests on postings.
+
+### 9.7 Fields returned by every source, and how complete they are
+
+`diagnostics/31` (`docs/field_audit.md`) fetched evenly spaced pages of each source (5 pages, about 500 postings, per board; `jobbguru`/`jobbguru.se` 3 pages, `brightminds` its single posting; `eures` 35 pages, 3,500 postings) and recorded every key in the raw JSON, including keys that are always null. `eures-escox` (200 postings, 8 pages of 25 rows) was fetched in a separate run because the server dropped every request of 100 rows for that source. Findings:
+
+1. **No field is missing from our schema.** Every source returns exactly the documented JobSchema keys: no undocumented key appears anywhere, and no documented key is absent. `upload_date` is the only date.
+2. **What differs is how often the fields are filled.** Share of sampled postings with a non-empty value (dated postings only for `eures` and `eures-escox`; "0%" means no non-empty value in the sample):
+
+| Source | Sampled | description | exp. level | type | location | location_code | nuts1 | occupations | sectors | skills | organization |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| kariera.gr | 500 | 100% | 99% | 100% | 100% | 100% | 11% | 58% | 52% | 57% | 0% |
+| kariera.fr | 500 | 98% | 2% | 100% | 100% | 100% | 0% | 88% | 74% | 92% | 0% |
+| jobs.de | 500 | 100% | 2% | 100% | 100% | 100% | 0% | 83% | 77% | 80% | 0% |
+| lesjeudis | 500 | 100% | 100% | 100% | 100% | 100% | 0% | 98% | 96% | 99% | 0% |
+| lesjeudis.com | 500 | 100% | 44% | 100% | 100% | 100% | 3% | 96% | 93% | 99% | 0% |
+| jobbguru | 219 | 100% | 100% | 100% | 100% | 100% | 0% | 19% | 18% | 16% | 0% |
+| jobbguru.se | 219 | 100% | 1% | 100% | 100% | 100% | 0% | 19% | 18% | 16% | 0% |
+| jobmedic | 500 | 100% | 100% | 100% | 100% | 100% | 0% | 95% | 90% | 81% | 0% |
+| jobmedic.co.uk | 500 | 100% | 100% | 100% | 100% | 100% | 0% | 95% | 91% | 77% | 0% |
+| jobbland | 500 | 100% | 100% | 100% | 100% | 100% | 0% | 92% | 86% | 93% | 0% |
+| jobbland.se | 500 | 100% | 0% | 0% | 100% | 100% | 40% | 39% | 38% | 38% | 0% |
+| jobscentral | 500 | 100% | 100% | 100% | 100% | 0% | 0% | 94% | 89% | 96% | 0% |
+| brightminds | 1 | 100% | 100% | 100% | 100% | 0% | 0% | 100% | 100% | 100% | 0% |
+| eures | 3,500 | 98% | 0% | 100% | 97% | 100% | 93% | 86% | 71% | 60% | 96% |
+| eures-escox | 200 | 100% | 0% | 100% | 76% | 100% | 84% | 42% | 40% | 100% | 86% |
+
+3. **Full text is available for every non-OJA source** (`description` 98–100%), which the lexicon work in Month 3 needs and which OJA lacks.
+4. **`organization` is empty in every scraped board (0%)** and filled only in `eures` (96% of dated postings). Employer-level analysis is therefore possible only with `eures`.
+5. **`location_code` is empty in `jobscentral` and `brightminds`**, which is why the trend endpoint returns no rows for them. `nuts1`–`nuts3` are mostly empty outside `eures` (0–11%, `jobbland.se` 40%).
+6. **`experience_level` and `type` depend on the source.** `jobbland.se` has neither; `experience_level` is nearly empty in `kariera.fr` (2%), `jobs.de` (2%) and `eures` (0%); `lesjeudis.com` has 44%.
+7. **Occupation, skill and sector tags are patchy.** `kariera.gr` carries ESCO occupations for 58% of postings, skills for 57% and sectors for 52%; `jobbguru`/`jobbguru.se` only 16–19%; `jobbland.se` 38–39%. Any occupation-based analysis on these sources has to cope with unlabelled postings.
+8. **`jobbguru` and `jobbguru.se` look like the same postings** (same sampled dates and the same fill rates), but `experience_level` is 100% in one and 1% in the other, so they are not exact copies.
+9. **`eures-escox` returns the same keys as `eures`, with a different fill pattern.** `skills` is 100% for dated and undated postings alike (against 60% and 13% in `eures`). For occupations and sectors the order is reversed: undated postings are better tagged than dated ones (`occupations` 98% versus 42%, `sectors` 89% versus 40%). `organization` is 86% (dated) and 66% (undated), `nuts1` 84% and 75%, `location` 76% and 51%. The sample is small (92 dated, 108 undated), so these figures are good to roughly ten percentage points; 54% of the sampled postings were undated against 42% in the population. In this sample the id predicts the date of a dated posting with a median error of 14 days (75th percentile 54, 90th 89, maximum 119; 1 of 5 neighbouring page pairs backwards), the same coarse picture as for `eures`.
+10. **Access note.** For `eures-escox`, requests of 100 rows (also with a one-day date window) were dropped with "Remote end closed connection without response", while requests of 1, 5 and 25 rows succeeded; each took 65 to 71 seconds, and two of the eight 25-row pages needed a retry after a 504. The cause is not known; the pattern suggests a per-request cost of about a minute plus a time limit in front of the server. Large pulls from this source should use small pages and expect about a minute per request.
+
+Limits: five pages per source (200 postings for `eures-escox`) describe fill rates roughly, to within a few to ten percentage points, not exactly; only the first element of list fields was inspected, and value distributions (for example the categories of `type`) were not tabulated.
 
 ## 10. Week 3: Tier 1–4 Fallback Chain — Results
 
