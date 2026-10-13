@@ -385,20 +385,55 @@ Limits: five pages per source (200 postings for `eures-escox`) describe fill rat
 
 ### 9.9 Candidate events from 2024 onwards and what the data can support
 
-Events supplied on 13 October 2026 (dates and descriptions as supplied; the 2026 items were not independently verified). Coverage is taken from Sections 9.3 and 9.6. "Pre" and "post" mean months of data on either side of the event in sources that have them. Sources: `kariera.gr` (Greece, August 2024 to April 2026; only 61 and 37 postings in October and November 2025), `lesjeudis.com` (France, August 2024 to March 2026; volumes swing between 250 and 4,191 a month), `jobbland.se` (Sweden, effectively May 2024 to September 2026, last month incomplete; volumes swing from 132 to over 50,000 a month), `kariera.fr` (to March 2025), `jobs.de` (to April 2025), and the EURES family (about 100 a month until August 2025, then a steep ramp to February 2026, nothing dated later; insertion dates).
+Events supplied on 13 October 2026 (dates and descriptions as supplied; the 2026 items were not independently verified), plus two events added at the author's initiative: the US "Liberation Day" tariffs of 2 April 2025 (announced 2 April; an additional 20% on EU imports, 10% baseline from 5 April) and the oil-price shock after the US-Israeli strikes on Iran of 28 February 2026 (Brent $71.32 at the 27 February close, peak $138 on 7 April, conditional ceasefire on 8 April; prices from press reports). The test applied is whether a source has stable monthly volume on both sides of the event. Volume in the scraped boards follows collection runs more than the labour market, and a volume break at the event date cannot be told apart from the event. Monthly counts come from `diagnostics/32` (`docs/event_window_counts.md`).
 
-| Event | Date | Pre | Post | Assessment |
-|---|---|---|---|---|
-| EU Critical Raw Materials Act in force | 23 May 2024 | none outside OJA (boards start August 2024; `jobbland.se` starts May 2024 at 191 to 410 a month) | all sources | No usable pre-period; descriptive use only |
-| EU tariffs on Chinese electric vehicles | 30 Oct 2024 | about 12 weeks (August to October 2024) in `kariera.gr`, `kariera.fr`, `jobs.de`, `lesjeudis(.com)`, `jobmedic`, `jobbland(.se)` | long in `kariera.gr`, `lesjeudis.com`, `jobbland.se`; to March or April 2025 in `kariera.fr`, `jobs.de` | Feasible but with a short pre-period; Germany and France (car producers) are covered only until early 2025 |
-| China rare-earth export controls (decrees 61 and 62) | 9 Oct 2025 | long (August 2024 to September 2025) | October 2025 to March or April 2026 in `kariera.gr` (thin), `lesjeudis.com`, `jobbland.se`; EURES family to February 2026 | Feasible; treat with the 8 November 2025 extension as one episode |
-| China adds five rare earths to controls | 8 Nov 2025 | long | as above | As above |
-| EU CBAM definitive phase | 1 Jan 2026 | about 17 months | January to April 2026 (`kariera.gr` to April, `lesjeudis.com` to March, `jobbland.se`, EURES to February) | Feasible; a short post-period of two to four months, and the EURES bulk load (99,039 and 260,792 postings in January and February 2026) coincides with it |
-| NATO Ankara summit, defence spending | 7 Jul 2026 | long | `jobbland.se` only (and it is incomplete) | Not testable beyond Sweden |
-| EU 21st sanctions package on Russia | 23 Jul 2026 | long | `jobbland.se` only | Not testable beyond Sweden |
-| EU public procurement proposal, European preference | 9 Sep 2026 | long | `jobbland.se`, September 2026 (595, incomplete) | Not testable |
+Dated postings per calendar month:
 
-Notes: (i) the April 2025 US tariffs, used earlier in this report as the main event, are not in the supplied list; they have the best-covered pre-period (August 2024 to March 2025, about eight months). (ii) Any comparison must use shares or composition within a source and country, only after the stability check in Section 9.8, and pooled windows (for example three months before and after) rather than monthly values, since postings matching an event-specific lexicon will be few per month. (iii) The sectors named by the events (critical raw materials and mining, automotive and batteries, steel, aluminium, cement, fertilisers, defence, energy, public procurement) should drive the Month 3 lexicon and the sector filters.
+| Month | `kariera.gr` (GR) | `lesjeudis.com` (FR) | `jobbland.se` (SE) |
+|---|---:|---:|---:|
+| 2024-08 | 2,738 | 5,660 | 4,184 |
+| 2024-09 | 5,629 | 6,649 | 10,034 |
+| 2024-10 | 5,480 | 4,935 | 48,018 |
+| 2024-11 | 5,593 | 3,986 | 50,097 |
+| 2024-12 | 4,866 | 3,511 | 47,151 |
+| 2025-01 | 7,065 | 4,191 | 53,139 |
+| 2025-02 | 3,174 | 1,548 | 23,017 |
+| 2025-03 | 2,884 | 450 | 10,959 |
+| 2025-04 | 1,458 | 581 | 4,139 |
+| 2025-05 | 4,219 | 2,336 | 6,210 |
+| 2025-06 | 4,678 | 3,887 | 132 |
+| 2025-07 | 4,097 | 800 | 460 |
+| 2025-08 | 3,510 | 3,383 | 3,066 |
+| 2025-09 | 1,703 | 3,279 | 3,968 |
+| 2025-10 | 61 | 1,476 | 1,520 |
+| 2025-11 | 37 | 738 | 3,618 |
+| 2025-12 | 3,308 | 386 | 28,639 |
+| 2026-01 | 7,112 | 250 | 48,511 |
+| 2026-02 | 6,542 | 6,561 | 55,457 |
+| 2026-03 | 6,953 | 768 | 62,392 |
+| 2026-04 | 6,659 | 0 | 47,721 |
+| 2026-05 | 0 | 0 | 53,794 |
+| 2026-06 | 0 | 0 | 46,127 |
+| 2026-07 | 0 | 0 | 31,166 |
+| 2026-08 | 0 | 0 | 40,875 |
+| 2026-09 | 0 | 0 | 595 |
+| 2026-10 | 0 | 0 | 0 |
+
+`kariera.gr` is stable at 5,000 to 5,600 a month from September to December 2024 and at 6,500 to 7,100 from January to April 2026, with a collection gap in between (61 and 37 postings in October and November 2025) and a 2:1 swing in early 2025. `jobbland.se` runs in two regimes: about 48,000 to 62,000 a month from October 2024 to January 2025 and from January to June 2026, and 130 to 10,000 in between; it then falls to 31,166 (July), 40,875 (August) and 595 (September 2026). `lesjeudis.com` declines through late 2024, is erratic in 2025 and has a one-month spike in February 2026 (6,561). `kariera.fr` (to March 2025), `jobs.de` (to April 2025) and the EURES family (about 100 a month until August 2025, then a bulk load of 99,040 in January and 260,801 in February 2026, nothing dated later; insertion dates) do not offer a stable window around any event below.
+
+| Event | Date | What the data show | Assessment |
+|---|---|---|---|
+| EU Critical Raw Materials Act in force | 23 May 2024 | No source before August 2024 outside OJA (`jobbland.se` 191 to 410 a month before May 2024) | Not testable: no pre-period |
+| EU tariffs on Chinese electric vehicles | 30 Oct 2024 | `kariera.gr` is stable from September to December 2024 (4,866 to 5,629 a month). `lesjeudis.com` has about three pre-months (August to October) and a downward trend (6,649 to 3,511). `jobbland.se` changes regime in October 2024 (10,034 to 48,018), so it has no pre-period. | **Testable in Greece and France**; pre-period about two months (France three, with a trend) |
+| US "Liberation Day" tariffs | 2 Apr 2025 | `kariera.gr` falls from 7,065 (January) to 3,174 and 2,884, hits 1,458 in April, then recovers to 4,219 to 4,678. `lesjeudis.com` runs 450, 581, 2,336, 3,887, 800. `jobbland.se` falls from 53,139 to 132. `kariera.fr` and `jobs.de` end in March and April. | **Doubtful**: volume moves by a factor of two or more within the window in every source; at most Greece, with April excluded and a stability check |
+| China rare-earth export controls | 9 Oct and 8 Nov 2025 | `kariera.gr` 61 and 37 postings; `jobbland.se` 1,520 and 3,618; `lesjeudis.com` 1,476 and 738. All sources are in a collection trough. | Not testable |
+| EU CBAM definitive phase | 1 Jan 2026 | `kariera.gr` outage in October and November, 3,308 in December; `jobbland.se` ramps from 3,618 to 28,639 to 48,511; `lesjeudis.com` declines to 250; the EURES bulk load starts in January. Every source is in transition at the event date. | Not testable (revised from "feasible" in the first version of this section) |
+| Iran war and oil-price shock | 28 Feb 2026 | `kariera.gr`: 7,112, 6,542 before and 6,953, 6,659 after (April is its last month). `jobbland.se`: 48,511 and 55,457 before, 62,392, 47,721, 53,794 and 46,127 after (March to June), then 31,166 and 40,875 in July and August. `lesjeudis.com`: 6,561 in February, 768 in March and 0 afterwards. | **Testable in Greece and Sweden**; two months before, two (Greece) or four to six (Sweden) after; the peak of 7 April is inside both |
+| NATO Ankara summit, defence spending | 7 Jul 2026 | `jobbland.se` only: 46,127 in June, then 31,166 in July and 40,875 in August, 11% and 32% below June's 46,127, the lowest month of March to June, then 595 in September | Doubtful: Sweden only, two post-months, and the drop cannot be told apart from a change in collection |
+| EU 21st sanctions package on Russia | 23 Jul 2026 | As above; the NATO date is 16 days earlier, so the two cannot be separated | Doubtful, as above; at most one combined July 2026 episode in Sweden |
+| EU public procurement proposal, European preference | 9 Sep 2026 | `jobbland.se` September 2026 holds 595 (partial month) and October 0 | Not testable |
+
+Notes: (i) Two events are testable: the EU tariffs on Chinese electric vehicles (Greece, France) and the Iran war and oil-price shock (Greece, Sweden). The US tariffs of April 2025 stay in as a doubtful, Greece-only case. The remaining events have no usable window, because the event falls in a collection gap or ramp, or because no source has data after it. (ii) Stable volume is a necessary condition only. A source can have a constant monthly count and a changing composition of postings (a different scraped category or country mix), so any comparison must use shares within a source and country, pooled windows (for example eight weeks before and after) with confidence intervals, and the stability check of Section 9.8, which has not been run. (iii) Results from one source per country are results for that board's postings, not for the national labour market. (iv) The sectors named by the events (automotive and batteries, energy-intensive manufacturing, energy and fuels, transport and chemicals as oil-price-exposed sectors) should drive the Month 3 lexicon and the sector filters. (v) Open questions for the supervisor: whether the scrapers still run, since `kariera.gr` and `lesjeudis.com` have no postings after April and March 2026 and `jobbland.se` falls to 595 in September 2026; whether the April 2025 tariffs and the Iran war can be added to the official event list.
 
 ## 10. Week 3: Tier 1–4 Fallback Chain — Results
 
