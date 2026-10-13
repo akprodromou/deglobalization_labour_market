@@ -2,7 +2,7 @@
 
 ## 1. Scope
 
-This report summarises the results of the Week 1–2 data collection and completeness audit against the Skillab tracker API, covering profiles and job postings across all available sources. It documents the sample collected, the completeness of the fields the thesis depends on, and several structural data-quality issues that affect how the Tier 1–4 skill-fallback chain and the regional (NUTS-based) analysis should be designed in Chapter 2.
+This report summarises the results of the Week 1–2 data collection and completeness audit against the Skillab tracker API, covering profiles and job postings across all available sources. It documents the sample collected, the completeness of the fields the thesis depends on, and several structural data-quality issues that affect how the Tier 1–4 skill-fallback chain and the regional (NUTS-based) analysis should be designed in Chapter 2. Section 9.8 records the study-period decision that followed from the date-coverage findings (case study from 2024 to date) and gives draft thesis text for it.
 
 ## 2. Sample Collected
 
@@ -114,21 +114,23 @@ For the scraped job boards, `upload_date` was first understood to be the posting
 
 Postings by period, derived from open-ended counts (identical counts at consecutive checkpoints mean an empty interval). The pre-2024 columns combine counts taken on different days, so small differences between snapshots are possible.
 
-| Source | 2019–2020 | 2021–2023 | 2024 | 2025 | 2026 to date |
-|---|---|---|---|---|---|
-| brightminds | 0 | 0 | 1 | 0 | 0 |
-| jobbguru, jobbguru.se | 0 | 0 | 319 each | 0 | 0 |
-| jobmedic / jobmedic.co.uk | 0 | 0 | 1,010 / 1,448 | 0 | 0 |
-| jobscentral | 0 | 0 | 6,284 | 0 | 0 |
-| lesjeudis | 0 | 0 | 18,404 | 0 | 0 |
-| lesjeudis.com | 0 | 0 | 24,741 | 23,055 | 7,579 |
-| kariera.gr | 0 | 0 | 24,306 | 36,194 | 27,266 |
-| kariera.fr | 0 | 0 | 74,975 | 11,493 | 0 (derived) |
-| jobs.de | 0 | 0 | 27,680 | 6,550 | 0 (derived) |
-| eures | 0 | 444 | 136 | 41,090 | 359,841 |
-| eures-escox | 0 | 426 | 151 | 62,512 | 828,524 |
-| jobbland.se | 90 | about 1,550 | 167,678 | 138,867 | 386,638 |
-| jobbland | 9 | about 1,114 | 66,969 | 0 | 0 (derived) |
+| Source | 2019–2020 | 2021–2023 | 2024 | 2025 | 2026 to date | No `upload_date` |
+|---|---|---|---|---|---|---|
+| brightminds | 0 | 0 | 1 | 0 | 0 | 0 |
+| jobbguru, jobbguru.se | 0 | 0 | 319 each | 0 | 0 | 0 |
+| jobmedic / jobmedic.co.uk | 0 | 0 | 1,010 / 1,448 | 0 | 0 | 0 |
+| jobscentral | 0 | 0 | 6,284 | 0 | 0 | 0 |
+| lesjeudis | 0 | 0 | 18,404 | 0 | 0 | 0 |
+| lesjeudis.com | 0 | 0 | 24,741 | 23,055 | 7,579 | 0 |
+| kariera.gr | 0 | 0 | 24,306 | 36,194 | 27,266 | 0 |
+| kariera.fr | 0 | 0 | 74,975 | 11,493 | 0 (derived) | 0 |
+| jobs.de | 0 | 0 | 27,680 | 6,550 | 0 (derived) | 0 |
+| eures | 0 | 444 | 136 | 41,090 | 359,841 | **158,689** |
+| eures-escox | 0 | 426 | 151 | 62,512 | 828,524 | **647,773** |
+| jobbland.se | 90 | about 1,550 | 167,678 | 138,867 | 386,638 | 0 |
+| jobbland | 9 | about 1,114 | 66,969 | 0 | 0 (derived) | 0 |
+
+The last column is the all-time count (no date filter) minus the count inside a 1900–2100 date window (`diagnostics/29`, Part A; see Section 9.6, item 8). The period columns count only postings that have an `upload_date`. For the EURES family the two together give the full source: `eures` 401,511 dated + 158,689 undated = 560,200, and `eures-escox` 891,613 + 647,773 = 1,539,386, i.e. 2,099,586 postings in the two sources. Without the last column the table shows only 62% of them.
 
 (The 417 `eures-escox` postings for 2023 match an independent check made earlier in the project. Pre-2019 coverage of `eures-escox` and `jobbland.se` remains unresolved.)
 
@@ -310,6 +312,8 @@ Population-level coverage tables by source, year, country and month are in `docs
 
 ### 9.5 Consequences for the research design
 
+**Update, 13 October 2026:** the supervisor has decided that the case study covers 2024 to date (Section 9.8). The bullets below record the options that were considered while a 2019–2020 baseline was still being sought; those that rely on OJA or on a 2019–2020 baseline no longer apply, the others (shares instead of counts, no pooling of sources, event-study within sources) carry over.
+
 - **No source spans the whole period.** The baseline (2019–2020) exists only in OJA, which ends in March 2025. Everything after March 2025 comes from other sources that have almost nothing before 2024 or 2025. Pooling them would confound any change in deglobalisation language with a change in source and country mix.
 - **Raw counts are driven by ingestion** and cannot measure labour demand, in OJA (the January 2024 step) or in the EURES family (the 2026 ramp-up). Analyses should use **shares and rates within each period**, with composition (country via `location_code`, occupation group, sector) checked.
 - **The brief's validation windows are covered unevenly.** The 2022 energy-crisis and 2023 Chips Act windows fall inside the 2019–2023 OJA regime. The 2025 tariff window can be examined only (a) in OJA for January–March 2025, which precedes the main April measures, and (b) in within-source series for `eures-escox`, `jobbland.se` and `kariera.gr`, analysed separately and never pooled with OJA without calibration.
@@ -355,6 +359,47 @@ Population-level coverage tables by source, year, country and month are in `docs
 
 Limits: five pages per source (200 postings for `eures-escox`) describe fill rates roughly, to within a few to ten percentage points, not exactly; only the first element of list fields was inspected, and value distributions (for example the categories of `type`) were not tabulated.
 
+### 9.8 Study period decision: 2024 to date
+
+**Decision (supervisor, 13 October 2026).** No source other than OJA holds data for 2019, 2020 or earlier, and OJA is not to be used. The case study therefore covers **2024 to date**, and the thesis report must state the data-availability findings and that the study period follows from them.
+
+**Evidence behind the decision** (details in the sections cited):
+
+1. All 16 posting sources and all counts were checked with three independent methods: filtered counts (9.3), the server-side trend endpoint (9.6, agreement exact or within a few dozen postings for 13 of 16 sources) and a complete source list (16 sources, `kariera.group` and other guessed names return nothing). The empty years are in the data, not a querying error.
+2. The only non-OJA postings dated 2019–2020 are 90 (`jobbland.se`) and 9 (`jobbland`). Before 2024 the other sources hold about 1,550 (`jobbland.se`), about 1,114 (`jobbland`) and about 1,160 across `eures` and `eures-escox` (580 and 577).
+3. OJA has the only sizeable 2019–2023 data (407,545 postings in 2019–2020, 395,077 in 2021–2023, plus 123,200 earlier), but its records carry no title, description or organization, its occupation coverage changes (ten occupation codes exist only in 2024 and cause the January 2024 step), and it ends in March 2025 (9.4a–9.4d).
+4. The scraped boards start in August 2024 (`kariera.gr`, `jobs.de`, `kariera.fr`, `lesjeudis`, `lesjeudis.com`, `jobmedic`, `jobmedic.co.uk`, `jobbguru`, `jobbguru.se`; `jobbland.se` effectively in May 2024). Most stop within months: `jobbguru` September 2024, `lesjeudis`, `jobmedic` and `jobbland` November–December 2024, `kariera.fr` March 2025, `jobs.de` April 2025. Only `lesjeudis.com` (to March 2026), `kariera.gr` (to April 2026) and `jobbland.se` (to September 2026, last month incomplete) run on. `jobscentral` and `brightminds` are one-year snapshots of 2024 (9.3, 9.6).
+5. The EURES family has about 100 postings a month until August 2025, then rises steeply and appears to have been loaded in bulk: 99,039 (January 2026) and 260,792 (February 2026) for `eures`, nothing dated later. Its `upload_date` is an insertion date (supervisor, 11 item 10). 806,462 of its 2,099,586 postings have no `upload_date` at all and fall outside every date-based count (9.6 item 8).
+6. Monthly volumes in every source follow data collection, not the labour market (9.6 item 6). Counts cannot be compared over time. Shares and composition within a source are less exposed to this, but not immune: if collection changes which postings are captured (as in OJA, where new occupation codes appeared in January 2024), shares shift too. Whether the shares of the 2024-onwards sources are stable when their volumes jump (for example `jobbland.se`, 53,139 in January 2025 and 132 in June 2025) has not been tested.
+
+**What this means for the study (to be reflected in the thesis).**
+
+- January to April 2024 is effectively uncovered outside OJA, so the usable window starts in August 2024 for most sources.
+- The reference period before the April 2025 tariff measures is about eight months long (August 2024 to March 2025) and exists only in `kariera.gr` (Greece), `lesjeudis.com` (France), `jobbland.se` (Sweden), and, ending earlier, `kariera.fr`, `jobs.de` and `jobbland`. Country coverage differs by source and the sources cannot be pooled without a calibration.
+- The 2022 energy-crisis and 2023 Chips Act validation windows from the brief cannot be tested.
+- Analyses should use shares and composition within a source and country, never raw counts, and only after a stability check: compare the composition (occupation group, sector) of high-volume and low-volume months within the same source. Where composition moves with volume, the source cannot support a trend in shares either. The undated EURES postings should be treated as a separate cross-sectional group.
+
+**Draft thesis text (Data and limitations).**
+
+> *Data availability and study period.* The research design originally assumed a pre-shock reference window of 2019–2020 and monthly data up to 2026. An audit of all sixteen job-posting sources in the Skillab Tracker showed that this window cannot be built from the sources that may be used. Only one source, the Eurostat Online Job Advertisement (OJA) collection, holds postings from 2019–2020 (407,545) and earlier (123,200). Its records contain no title, description or employer, its occupation coverage changes during the series (ten occupation codes appear only in 2024, producing a break in January 2024), and it ends in March 2025; following the advice of the project supervisor it is not used. Every other source starts later. The scraped job boards begin in August 2024, and the EURES sources hold about 1,160 postings before 2025, then rise sharply in 2025 and early 2026. Their dates, moreover, are not publication dates: for the EURES sources `upload_date` is the insertion date, and 806,462 of their 2,099,586 postings carry no date at all. Monthly posting volumes in each source follow data collection and not labour demand, so counts are not comparable over time, and within-source shares and composition can be compared only where they prove stable when collection volume changes. The case study therefore covers the period from 2024 to date, with a reference period before the April 2025 tariff measures of about eight months, available for Greece, France and Sweden. Results are interpreted within, not across, sources, and this limitation is the reason the study does not test the earlier validation episodes (the 2022 energy crisis and the 2023 Chips Act).
+
+### 9.9 Candidate events from 2024 onwards and what the data can support
+
+Events supplied on 13 October 2026 (dates and descriptions as supplied; the 2026 items were not independently verified). Coverage is taken from Sections 9.3 and 9.6. "Pre" and "post" mean months of data on either side of the event in sources that have them. Sources: `kariera.gr` (Greece, August 2024 to April 2026; only 61 and 37 postings in October and November 2025), `lesjeudis.com` (France, August 2024 to March 2026; volumes swing between 250 and 4,191 a month), `jobbland.se` (Sweden, effectively May 2024 to September 2026, last month incomplete; volumes swing from 132 to over 50,000 a month), `kariera.fr` (to March 2025), `jobs.de` (to April 2025), and the EURES family (about 100 a month until August 2025, then a steep ramp to February 2026, nothing dated later; insertion dates).
+
+| Event | Date | Pre | Post | Assessment |
+|---|---|---|---|---|
+| EU Critical Raw Materials Act in force | 23 May 2024 | none outside OJA (boards start August 2024; `jobbland.se` starts May 2024 at 191 to 410 a month) | all sources | No usable pre-period; descriptive use only |
+| EU tariffs on Chinese electric vehicles | 30 Oct 2024 | about 12 weeks (August to October 2024) in `kariera.gr`, `kariera.fr`, `jobs.de`, `lesjeudis(.com)`, `jobmedic`, `jobbland(.se)` | long in `kariera.gr`, `lesjeudis.com`, `jobbland.se`; to March or April 2025 in `kariera.fr`, `jobs.de` | Feasible but with a short pre-period; Germany and France (car producers) are covered only until early 2025 |
+| China rare-earth export controls (decrees 61 and 62) | 9 Oct 2025 | long (August 2024 to September 2025) | October 2025 to March or April 2026 in `kariera.gr` (thin), `lesjeudis.com`, `jobbland.se`; EURES family to February 2026 | Feasible; treat with the 8 November 2025 extension as one episode |
+| China adds five rare earths to controls | 8 Nov 2025 | long | as above | As above |
+| EU CBAM definitive phase | 1 Jan 2026 | about 17 months | January to April 2026 (`kariera.gr` to April, `lesjeudis.com` to March, `jobbland.se`, EURES to February) | Feasible; a short post-period of two to four months, and the EURES bulk load (99,039 and 260,792 postings in January and February 2026) coincides with it |
+| NATO Ankara summit, defence spending | 7 Jul 2026 | long | `jobbland.se` only (and it is incomplete) | Not testable beyond Sweden |
+| EU 21st sanctions package on Russia | 23 Jul 2026 | long | `jobbland.se` only | Not testable beyond Sweden |
+| EU public procurement proposal, European preference | 9 Sep 2026 | long | `jobbland.se`, September 2026 (595, incomplete) | Not testable |
+
+Notes: (i) the April 2025 US tariffs, used earlier in this report as the main event, are not in the supplied list; they have the best-covered pre-period (August 2024 to March 2025, about eight months). (ii) Any comparison must use shares or composition within a source and country, only after the stability check in Section 9.8, and pooled windows (for example three months before and after) rather than monthly values, since postings matching an event-specific lexicon will be few per month. (iii) The sectors named by the events (critical raw materials and mining, automotive and batteries, steel, aluminium, cement, fertilisers, defence, energy, public procurement) should drive the Month 3 lexicon and the sector filters.
+
 ## 10. Week 3: Tier 1–4 Fallback Chain — Results
 
 The fallback chain (brief Section 4, Table 3) was implemented as a single integrated function (`assign_data_completeness_tier.py`) combining:
@@ -397,7 +442,9 @@ Applied to the full 7,222-profile working sample:
 
     **Supervisor's answers (October 2026).** (a) `upload_date` does not necessarily correspond to the original posting date; its meaning depends on the source. (b) Do not use Eurostat's OJA source in the analysis. (c) Use the other available sources. (d) The January 2024 change and the March 2025 interruption are due to the data retrieval sources. (e) For the EURES family it is the insertion date. (f) To cover up to 2026, use the remaining sources in the Tracker instead of OJA, after checking their time coverage. (g) The empty fields likely relate to the structure of the data received from that source. The supervisor's overall recommendation is to avoid OJA and rely on the other sources, which hold millions of records and data for 2026.
 
-    **Consequence and open question.** The time-coverage check the supervisor asks for has been done (Sections 9.3 and 9.6): no other source holds data for 2019–2020, the scraped boards begin in August 2024, and the EURES family is concentrated in 2025–2026. With OJA excluded the thesis has no 2019–2020 pre-shock baseline in Skillab. The question to put back is which source the supervisor expects to cover the baseline, or whether the reference period should change.
+    **Consequence and open question.** The time-coverage check the supervisor asks for has been done (Sections 9.3 and 9.6): no other source holds data for 2019–2020, the scraped boards begin in August 2024, and the EURES family is concentrated in 2025–2026. With OJA excluded the thesis has no 2019–2020 pre-shock baseline in Skillab. The question to put back was which source the supervisor expects to cover the baseline, or whether the reference period should change.
+
+    **Supervisor's decision (13 October 2026).** Since no other data source exists for 2019, 2020 and earlier, the case study is done from 2024 to date, and the report must state the data-availability findings and that the limitation led to focusing on 2024 onwards. Recorded in Section 9.8.
 11. **~~Week 4 deliverable~~ - complete** (`week4_data_quality_policy.md`).
 
 ## 12. Month 2 Deliverables Status (against the brief)
@@ -406,7 +453,7 @@ Applied to the full 7,222-profile working sample:
 |---|---|
 | Connect to the API; pull postings and profiles | Done (7,222 profiles, 6,723 postings, all sources) |
 | Audit field completeness | Done (Sections 3-8); occupation-group tabulation pending |
-| Baseline window (2019-2020) and coverage | Done (Section 9): OJA only, restricted to eight ISCO codes; 2024 adds ten codes that exist only that year; OJA ends March 2025; later data only from other sources |
+| Baseline window (2019-2020) and coverage | Done (Section 9); outcome: no usable 2019-2020 baseline outside OJA, which is not to be used. Study period changed to 2024 to date by the supervisor (Section 9.8); reference period before April 2025 about eight months (August 2024 to March 2025) |
 | Four-tier fallback chain, tested on 5,000+ profiles | Done (Section 10; applied to 7,222) |
 | Career-history depth | Done: negative (Section 8) |
 | Data coverage report (by year, country, sector) | Done at population level for postings with a country code: by source, year, country and month in `docs/coverage_population.md` (Section 9.6); sector is not available from the aggregate endpoint, so the sector table remains the working-sample one (Section 13.3) |

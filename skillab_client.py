@@ -1,3 +1,5 @@
+﻿from dotenv import load_dotenv
+load_dotenv()
 """
 Reusable client for the Skillab tracker API.
 
@@ -293,3 +295,4 @@ class SkillabClient:
             form_fields["keywords"] = keywords
         form_fields.update(kwargs)
         yield from self._paginate("/skills", form_fields=form_fields)
+

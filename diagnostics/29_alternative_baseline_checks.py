@@ -97,7 +97,7 @@ def part_b():
         n1920 = yrs["2019"] + yrs["2020"]
         total_with += d["with"]
         total_1920 += n1920
-        top = ", ".join(f"{y}: {c}" for y, c in sorted(yrs.items())[:12]) or "none"
+        top = ", ".join(f"{y}: {c}" for y, c in sorted(yrs.items()) if y >= "2010") or "none from 2010 on"
         print(f"  {s}: {d['n']:,} profiles, {d['with']:,} with startdate ({100 * d['with'] / d['n']:.1f}%); "
               f"2019-2020: {n1920}")
         print(f"      years: {top}")
