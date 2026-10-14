@@ -10,6 +10,7 @@ for collection reasons and could be mistaken for an event effect.
 Cases (source, months used, first month counted as "after"):
     ev-gr   kariera.gr     2024-09 .. 2024-12   after = 2024-11   (EU tariffs on Chinese EVs, 30 Oct 2024)
     ev-fr   lesjeudis.com  2024-08 .. 2025-01   after = 2024-11
+    ev-de   jobs.de        2024-08 .. 2025-01   after = 2024-11
     oil-gr  kariera.gr     2026-01 .. 2026-04   after = 2026-03   (Iran war / oil shock, 28 Feb 2026)
     oil-se  jobbland.se    2026-01 .. 2026-05   after = 2026-03
 
@@ -43,6 +44,7 @@ import calendar
 import json
 import math
 import random
+import re
 import time
 from collections import Counter
 from datetime import date
@@ -59,6 +61,8 @@ CASES = {
     "ev-gr": ("kariera.gr", ["2024-09", "2024-10", "2024-11", "2024-12"], "2024-11",
               "EU tariffs on Chinese EVs, 30 Oct 2024"),
     "ev-fr": ("lesjeudis.com", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01"], "2024-11",
+              "EU tariffs on Chinese EVs, 30 Oct 2024"),
+    "ev-de": ("jobs.de", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01"], "2024-11",
               "EU tariffs on Chinese EVs, 30 Oct 2024"),
     "oil-gr": ("kariera.gr", ["2026-01", "2026-02", "2026-03", "2026-04"], "2026-03",
                "Iran war / oil shock, 28 Feb 2026"),
@@ -249,6 +253,49 @@ def perm_null(vals_a, vals_b, keep, perms, rng):
     return sum(res) / len(res), res[int(0.95 * (len(res) - 1))]
 
 
+TOKEN = re.compile(r"\w{3,}", re.UNICODE)
+
+
+def title_tokens(r):
+    return TOKEN.findall((r.get("t") or "").lower())
+
+
+def title_row(samples, pre_m, post_m, perms, rng, top=300):
+    """Divergence of the title-word distribution (text, so it works when tags are empty)."""
+    pre_docs = [title_tokens(r) for m in pre_m for r in samples[m]]
+    post_docs = [title_tokens(r) for m in post_m for r in samples[m]]
+    pooled = Counter(t for d in pre_docs + post_docs for t in d)
+    keep = {t for t, _ in pooled.most_common(top)}
+
+    def agg(docs):
+        c = Counter()
+        for d in docs:
+            for t in d:
+                c[t if t in keep else "(other)"] += 1
+        return c
+
+    def div(a_docs, b_docs):
+        ca, cb = agg(a_docs), agg(b_docs)
+        return jsd(ca, cb, set(ca) | set(cb))
+
+    d_event = div(pre_docs, post_docs)
+    drifts = []
+    for side in (pre_m, post_m):
+        for a, b in zip(side, side[1:]):
+            drifts.append(div([title_tokens(r) for r in samples[a]], [title_tokens(r) for r in samples[b]]))
+    drift = max(drifts) if drifts else float("nan")
+    pool, na, null = pre_docs + post_docs, len(pre_docs), []
+    for _ in range(perms):
+        rng.shuffle(pool)
+        null.append(div(pool[:na], pool[na:]))
+    null.sort()
+    null95 = null[int(0.95 * (len(null) - 1))]
+    ref = max([x for x in (drift, null95) if x == x] or [0])
+    reading = "within normal drift" if d_event <= ref else "shift beyond drift"
+    return (f"| title words (top {top}) | {d_event:.3f} | {'n/a' if drift != drift else f'{drift:.3f}'} | "
+            f"{null95:.3f} | {reading} |")
+
+
 def analyse_case(case, store, perms, rng):
     source, months, after, ev = CASES[case]
     samples = {ym: sample_for(store, source, ym) for ym in months}
@@ -267,6 +314,16 @@ def analyse_case(case, store, perms, rng):
         lines += ["Not enough sampled months on both sides yet; run the collection step.", ""]
         return lines
 
+    lines += ["Share of sampled postings with a non-empty tag, by month (a month-to-month change here is a change "
+              "in the data, not in the labour market):", "",
+              "| month | occupations | sectors | skills |", "|---|---:|---:|---:|"]
+    for ym in have:
+        n = len(samples[ym])
+        lines.append(f"| {ym} | {100 * sum(1 for r in samples[ym] if r['occ']) / n:.0f}% | "
+                     f"{100 * sum(1 for r in samples[ym] if r['sec']) / n:.0f}% | "
+                     f"{100 * sum(1 for r in samples[ym] if r['nsk'] > 0) / n:.0f}% |")
+    lines.append("")
+
     pre = [r for m in pre_m for r in samples[m]]
     post = [r for m in post_m for r in samples[m]]
     lines += ["Jensen-Shannon divergence (0 = identical, 1 = disjoint). `drift` = largest divergence between two "
@@ -284,9 +341,13 @@ def analyse_case(case, store, perms, rng):
         drift = max(drifts) if drifts else float("nan")
         _mean, null95 = perm_null(vpre, vpost, keep, perms, rng)
         ref = max([x for x in (drift, null95) if x == x] or [0])
-        reading = "within normal drift" if d_event <= ref else "shift beyond drift"
+        if len(set(vpre) | set(vpost)) == 1:
+            reading = "NO VARIATION: one value in every sampled posting, not testable"
+        else:
+            reading = "within normal drift" if d_event <= ref else "shift beyond drift"
         lines.append(f"| {name} | {d_event:.3f} | {'n/a' if drift != drift else f'{drift:.3f}'} | {null95:.3f} | {reading} |")
         moves[name] = (vpre, vpost)
+    lines.append(title_row(samples, pre_m, post_m, perms, rng))
     lines.append("")
 
     for name in ("occupation (first tag)", "sector (first tag)"):
