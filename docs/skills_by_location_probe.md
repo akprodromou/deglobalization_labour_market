@@ -4,7 +4,7 @@
 
 Parameters: `{"limit": 100, "source": "kariera.gr", "from_date": "2025-03-01", "to_date": "2025-03-31"}`
 
-HTTP 200, 8 s.
+HTTP 200, 1 s.
 
 Rows: **100**.
 Fields of the first row: `['location_code', 'Var1', 'label', 'Freq']`.
@@ -83,7 +83,7 @@ First 10 rows as returned:
 
 Parameters: `{"limit": 1000, "source": "kariera.gr", "from_date": "2025-03-01", "to_date": "2025-03-31"}`
 
-HTTP 200, 11 s.
+HTTP 200, 6 s.
 
 Rows: **1,000**.
 Fields of the first row: `['location_code', 'Var1', 'label', 'Freq']`.
@@ -162,7 +162,7 @@ First 10 rows as returned:
 
 Parameters: `{"limit": 100, "source": "kariera.gr", "location_code": "GR", "from_date": "2025-03-01", "to_date": "2025-03-31"}`
 
-HTTP 200, 1 s.
+HTTP 200, 0 s.
 
 Rows: **0**.
 
