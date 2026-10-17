@@ -81,6 +81,16 @@ EVENTS = {
                "lesjeudis.com": ("2024-12", "2025-06"),
                "jobbland.se": ("2024-12", "2025-06"),
                "jobs.de": ("2024-12", "2025-04")}),
+    # EU steel import regulation (replaces the safeguard). Two possible test dates,
+    # both fixed here before any 2026 sector result exists: the Parliament vote
+    # (anticipation) and the application date. The regulation applies from 1 Jul 2026,
+    # so July is wholly after it; the event date is set to 30 Jun so that June is the
+    # event month that is left out and July and August count as post-window.
+    "steelvote": ("EU steel import regulation, Parliament vote, 19 May 2026", date(2026, 5, 19),
+                  {"jobbland.se": ("2026-01", "2026-08")}),
+    "steelapply": ("EU steel import regulation, applies 1 Jul 2026 (June left out as event month)",
+                   date(2026, 6, 30),
+                   {"jobbland.se": ("2026-01", "2026-08")}),
     "accelerate": ("AccelerateEU, 22 Apr 2026", date(2026, 4, 22),
                    {"kariera.gr": ("2026-01", "2026-04"),
                     "jobbland.se": ("2026-01", "2026-07")}),
@@ -209,10 +219,10 @@ def fetch_page(client, source, ym, page, attempts=3):
     raise last
 
 
-# Monthly totals already published in the report (Section 9.3): jobbland.se,
-# January to May 2024. Used only when the live probe fails.
+# Monthly totals already published in the report (Sections 9.3 and 9.9): jobbland.se,
+# January to May 2024 and August 2026. Used only when the live probe fails.
 KNOWN_COUNTS = {"jobbland.se": {"2024-01": 191, "2024-02": 246, "2024-03": 292,
-                                "2024-04": 410, "2024-05": 2116}}
+                                "2024-04": 410, "2024-05": 2116, "2026-08": 40875}}
 
 
 def probe_count(client, source, ym, attempts=3):
