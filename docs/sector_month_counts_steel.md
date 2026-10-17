@@ -33,6 +33,13 @@ Rule: a sector is usable for an event in a source only if its estimated number o
 
 Sectors meeting the rule: **1** of the 12 most frequent labels (`*` marks the event month).
 
+**Pre-specified groups** (all labels of the group added up, same rule):
+
+| Group | 2024-12 | 2025-01 | 2025-02 | 2025-03* | 2025-04 | 2025-05 | 2025-06 | Rule met? |
+|---|---|---|---|---|---|---|---|---|
+| Exposed manufacturing (primary): all 'Manufactur... | 454 | 942 | 317 | 288 | 180 | 464 | 312 | **yes** (pooled pre 1,714, post 956) |
+| Narrow metals (secondary, descriptive only) | 32! | 118~ | 21! | 10! | 29! | 14! | 0! | no (pooled pre 171, post 43) |
+
 ### lesjeudis.com  (pre: 2024-12, 2025-01, 2025-02; event month: 2025-03; post: 2025-04, 2025-05, 2025-06)
 
 | Month | Postings | Sampled | With sector tag | With text | Est. tagged | Est. with text |
@@ -61,6 +68,13 @@ Sectors meeting the rule: **1** of the 12 most frequent labels (`*` marks the ev
 | Other education n.e.c. | 94! | 14! | 21! | 8! | 4! | 31! | 65! | no (pooled pre 128, post 100) |
 
 Sectors meeting the rule: **0** of the 12 most frequent labels (`*` marks the event month).
+
+**Pre-specified groups** (all labels of the group added up, same rule):
+
+| Group | 2024-12 | 2025-01 | 2025-02 | 2025-03* | 2025-04 | 2025-05 | 2025-06 | Rule met? |
+|---|---|---|---|---|---|---|---|---|
+| Exposed manufacturing (primary): all 'Manufactur... | 550 | 433 | 170 | 28! | 45! | 195 | 376 | no (pooled pre 1,153, post 615) |
+| Narrow metals (secondary, descriptive only) | 59! | 0! | 5! | 3! | 4! | 39! | 39! | no (pooled pre 64, post 82) |
 
 ### jobbland.se  (pre: 2024-12, 2025-01, 2025-02; event month: 2025-03; post: 2025-04, 2025-05, 2025-06)
 
@@ -91,6 +105,13 @@ Sectors meeting the rule: **0** of the 12 most frequent labels (`*` marks the ev
 
 Sectors meeting the rule: **0** of the 12 most frequent labels (`*` marks the event month).
 
+**Pre-specified groups** (all labels of the group added up, same rule):
+
+| Group | 2024-12 | 2025-01 | 2025-02 | 2025-03* | 2025-04 | 2025-05 | 2025-06 | Rule met? |
+|---|---|---|---|---|---|---|---|---|
+| Exposed manufacturing (primary): all 'Manufactur... | 3,772 | 4,074 | 1,381 | 584 | 428 | 435 | 0! | no (pooled pre 9,227, post 862) |
+| Narrow metals (secondary, descriptive only) | 472 | 531 | 153~ | 37! | 110~ | 62! | 0! | no (pooled pre 1,156, post 172) |
+
 ### jobs.de  (pre: 2024-12, 2025-01, 2025-02; event month: 2025-03; post: 2025-04)
 
 | Month | Postings | Sampled | With sector tag | With text | Est. tagged | Est. with text |
@@ -117,4 +138,11 @@ Sectors meeting the rule: **0** of the 12 most frequent labels (`*` marks the ev
 | Activities of religious organisations | 0! | 0! | 0! | 141~ | 2! | no (pooled pre 0, post 2) |
 
 Sectors meeting the rule: **0** of the 12 most frequent labels (`*` marks the event month).
+
+**Pre-specified groups** (all labels of the group added up, same rule):
+
+| Group | 2024-12 | 2025-01 | 2025-02 | 2025-03* | 2025-04 | Rule met? |
+|---|---|---|---|---|---|---|
+| Exposed manufacturing (primary): all 'Manufactur... | 551 | 118~ | 352 | 180 | 64! | no (pooled pre 1,020, post 64) |
+| Narrow metals (secondary, descriptive only) | 94! | 23! | 43! | 17! | 4! | no (pooled pre 159, post 4) |
 
