@@ -63,6 +63,9 @@ def main():
     for label, stats in dist.items():
         print(f"  {label:<9}: {stats['count']:>6} profiles ({stats['fraction']:.1%})")
 
+    # A quick breakdown by source for Tier 2, since that's the tier most
+    # affected by the Revelio-vs-other-sources split documented in the
+    # Week 2 report -- worth seeing at a glance here too.
     tier2_by_mechanism = {}
     for p in tagged_profiles:
         if p["tier"] == 2:
