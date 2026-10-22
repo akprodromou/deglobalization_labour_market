@@ -28,6 +28,8 @@ Output
     data/lexicon/candidates_embedding.csv   term, nearest_seed, channel, sim,
         n_seeds, df, example, keep (fill 1), channel_assigned (fill)
 
+Another corpus: add --tag NAME so that the sheet is written to candidates_embedding_NAME.csv.
+
 Run on Google Colab (GPU runtime), after putting the repo, the corpus file and
 lexicon/seed_lexicon.csv in place:
     !pip install -q sentence-transformers faiss-cpu scikit-learn
@@ -116,10 +118,19 @@ def nearest(seed_vecs, cand_vecs, k):
         return np.array(out_i), np.array(out_s)
 
 
+def _tag_outputs(tag):
+    """Give the output files a suffix so that a second corpus does not overwrite the first."""
+    global OUT_CSV
+    OUT_CSV = OUT_CSV.with_name(f"{OUT_CSV.stem}_{tag}{OUT_CSV.suffix}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--corpus", default=str(CORPUS))
     ap.add_argument("--seeds", default=str(SEEDS))
+    ap.add_argument("--tag", default=None,
+                    help="name for another corpus: outputs get this suffix instead of overwriting the main ones "
+                         "(for example --tag kariera_fr writes candidates_..._kariera_fr.csv)")
     ap.add_argument("--model", default="intfloat/multilingual-e5-base")
     ap.add_argument("--prefix", default="query: ")
     ap.add_argument("--encoder", default="model", choices=["model", "debug"])
@@ -130,6 +141,8 @@ def main():
     ap.add_argument("--k", type=int, default=30, help="neighbours retrieved per seed term")
     ap.add_argument("--top", type=int, default=1500, help="rows in the review sheet")
     args = ap.parse_args()
+    if args.tag:
+        _tag_outputs(args.tag)
 
     rows, dropped = load_corpus(Path(args.corpus))
     texts = [posting_text(r["item"], MAX_CHARS) for r in rows]

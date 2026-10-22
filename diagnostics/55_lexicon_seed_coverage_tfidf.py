@@ -85,16 +85,29 @@ def edge_ok(g):
     return toks[0] not in STOP and toks[-1] not in STOP and len(toks[0]) > 1 and len(toks[-1]) > 1
 
 
+def _tag_outputs(tag):
+    """Give the output files a suffix so that a second corpus does not overwrite the first."""
+    global OUT_CSV
+    global OUT_MD
+    OUT_MD = OUT_MD.with_name(f"{OUT_MD.stem}_{tag}{OUT_MD.suffix}")
+    OUT_CSV = OUT_CSV.with_name(f"{OUT_CSV.stem}_{tag}{OUT_CSV.suffix}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--corpus", default=str(CORPUS))
     ap.add_argument("--seeds", default=str(SEEDS))
+    ap.add_argument("--tag", default=None,
+                    help="name for another corpus: outputs get this suffix instead of overwriting the main ones "
+                         "(for example --tag kariera_fr writes candidates_..._kariera_fr.csv)")
     ap.add_argument("--min-flagged-df", type=int, default=3,
                     help="an n-gram must occur in this many flagged postings")
     ap.add_argument("--min-titles", type=int, default=2,
                     help="... under this many distinct titles")
     ap.add_argument("--top", type=int, default=1000, help="rows kept in the review sheet")
     args = ap.parse_args()
+    if args.tag:
+        _tag_outputs(args.tag)
 
     rows, dropped = load_corpus(Path(args.corpus))
     N = len(rows)

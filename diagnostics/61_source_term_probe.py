@@ -43,6 +43,7 @@ Usage, from the repo root:
     python -m diagnostics.61_source_term_probe --sources jobbland.se lesjeudis.com
     python -m diagnostics.61_source_term_probe --window eures-escox=2025-12-01:2025-12-31
     python -m diagnostics.61_source_term_probe --report-only     # rebuild the report from the saved answers
+    python -m diagnostics.61_source_term_probe --check-only --sources eures-escox --window eures-escox=2025-09-01:2025-09-30
 
 Output: docs/source_term_probe.md (no posting text; can be committed)
 """
@@ -131,6 +132,8 @@ def run(args, windows, terms):
     RAW.parent.mkdir(parents=True, exist_ok=True)
     data = json.loads(RAW.read_text(encoding="utf-8")) if RAW.exists() else {}
     reqs = plan(terms)
+    if args.check_only:
+        reqs = [r for r in reqs if r[0] in ("lang", "stem")]
     for source, (lo, hi) in windows.items():
         print(f"\n=== {source}  {lo} .. {hi}")
         todo = [("total", "total", [], None)] + reqs
@@ -276,6 +279,9 @@ def main():
     ap.add_argument("--retries", type=int, default=2)
     ap.add_argument("--pause", type=float, default=0.3)
     ap.add_argument("--report-only", action="store_true")
+    ap.add_argument("--check-only", action="store_true",
+                    help="only the total, the language words and the index check (about 10 requests per source): "
+                         "answers 'what language is this source in' cheaply, e.g. in a small window of a slow source")
     args = ap.parse_args()
 
     windows = dict(WINDOWS)

@@ -28,8 +28,9 @@ from pathlib import Path
 CHANNELS = {"reshoring", "defense", "critical materials", "energy security",
             "trade compliance", "diversification"}
 SEEDS = Path("lexicon/seed_lexicon.csv")
-SHEETS = [(Path("data/lexicon/candidates_tfidf.csv"), "channel", "tfidf"),
-          (Path("data/lexicon/candidates_embedding.csv"), "channel_assigned", "embedding")]
+# every reviewed sheet: candidates_tfidf.csv, candidates_tfidf_<tag>.csv, candidates_embedding*.csv ...
+SHEETS = ([(p, "channel", "tfidf") for p in sorted(Path("data/lexicon").glob("candidates_tfidf*.csv"))] +
+          [(p, "channel_assigned", "embedding") for p in sorted(Path("data/lexicon").glob("candidates_embedding*.csv"))])
 OUT = Path("lexicon/lexicon.csv")
 SUMMARY = Path("docs/lexicon_summary.md")
 LOW, HIGH = 300, 500
