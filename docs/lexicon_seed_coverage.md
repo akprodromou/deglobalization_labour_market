@@ -2,7 +2,7 @@
 
 Corpus: corpus_jobbland.se_2026-01_2026-08.jsonl. 21,398 distinct postings after dropping 1,240 exact duplicates; day-weighted population 386,043. Text searched: title plus the first 6,000 characters of the description.
 
-Postings containing at least one seed term: **258** (1.2% of the sample; 1.2% weighted).
+Postings containing at least one seed term: **181** (0.8% of the sample; 0.9% weighted).
 
 ## Seed terms
 
@@ -20,12 +20,10 @@ Postings containing at least one seed term: **258** (1.2% of the sample; 1.2% we
 | defence procurement | defense | 0 | 0 | 0 | sparse |
 | defence supply chain | defense | 0 | 0 | 0 | sparse |
 | military equipment | defense | 8 | 137 | 4 |  |
-| de-risking | diversification | 1 | 2 | 1 | sparse |
-| dumping | diversification | 1 | 22 | 1 | sparse |
 | free trade agreement | diversification | 5 | 87 | 3 |  |
 | market diversification | diversification | 0 | 0 | 0 | sparse |
 | trade diversification | diversification | 0 | 0 | 0 | sparse |
-| critical infrastructure protection | energy security | 84 | 1,270 | 8 |  |
+| critical infrastructure protection | energy security | 0 | 0 | 0 | sparse |
 | energy security | energy security | 0 | 0 | 0 | sparse |
 | gas supply diversification | energy security | 0 | 0 | 0 | sparse |
 | grid resilience | energy security | 0 | 0 | 0 | sparse |
@@ -58,51 +56,51 @@ Postings containing at least one seed term: **258** (1.2% of the sample; 1.2% we
 | telemigration | trade compliance | 0 | 0 | 0 | sparse |
 | trade compliance | trade compliance | 5 | 103 | 4 |  |
 
-39 of the seed terms occur in fewer than 5 postings (marked `sparse`). They stay in the lexicon, but they cannot anchor an expansion.
+38 of the seed terms occur in fewer than 5 postings (marked `sparse`). They stay in the lexicon, but they cannot anchor an expansion.
 
 ## Flagged share by month
 
 | Month | Postings | Flagged | Weighted share flagged |
 |---|---:|---:|---:|
-| 2026-01 | 2,788 | 28 | 0.72% |
-| 2026-02 | 2,555 | 28 | 0.98% |
-| 2026-03 | 2,651 | 31 | 1.27% |
-| 2026-04 | 2,533 | 29 | 0.96% |
-| 2026-05 | 2,684 | 30 | 1.25% |
-| 2026-06 | 2,550 | 31 | 1.25% |
-| 2026-07 | 2,798 | 40 | 1.93% |
-| 2026-08 | 2,839 | 41 | 1.35% |
+| 2026-01 | 2,788 | 18 | 0.49% |
+| 2026-02 | 2,555 | 20 | 0.75% |
+| 2026-03 | 2,651 | 19 | 0.74% |
+| 2026-04 | 2,533 | 17 | 0.67% |
+| 2026-05 | 2,684 | 26 | 1.09% |
+| 2026-06 | 2,550 | 25 | 0.97% |
+| 2026-07 | 2,798 | 27 | 1.53% |
+| 2026-08 | 2,839 | 29 | 0.96% |
 
 ## TF-IDF expansion
 
-Flagged postings 258, other postings 21,140. 1,000 candidate n-grams written to `data/lexicon/candidates_tfidf.csv` (found in at least 3 flagged postings under at least 2 distinct titles; ranked by z-score). Top 25:
+Flagged postings 181, other postings 21,217. 1,000 candidate n-grams written to `data/lexicon/candidates_tfidf.csv` (found in at least 3 flagged postings under at least 2 distinct titles; ranked by z-score). Top 25:
 
 | Term | Flagged | Other | z | Mean TF-IDF | Titles |
 |---|---:|---:|---:|---:|---:|
-| technology | 174 | 4194 | 15.87 | 2.924 | 165 |
-| technical | 150 | 3922 | 14.2 | 3.029 | 143 |
-| complex | 118 | 2612 | 14.14 | 1.97 | 113 |
-| systems | 152 | 4213 | 13.73 | 2.862 | 146 |
-| armed forces | 29 | 158 | 13.42 | 1.12 | 29 |
-| secrecy | 22 | 68 | 13.42 | 0.568 | 22 |
-| advanced | 81 | 1476 | 13.27 | 1.513 | 80 |
-| engineering | 91 | 1837 | 13.21 | 1.812 | 88 |
-| english | 166 | 5153 | 13.16 | 1.633 | 158 |
-| attaching your cv | 33 | 234 | 13.15 | 0.688 | 32 |
-| swedish and english | 112 | 2675 | 13.13 | 1.36 | 105 |
-| fmv | 17 | 23 | 12.96 | 1.25 | 17 |
-| citizenship | 69 | 1149 | 12.91 | 1.075 | 67 |
-| classified | 39 | 384 | 12.61 | 0.931 | 35 |
-| rights regardless | 20 | 69 | 12.56 | 0.502 | 19 |
-| defense secrecy | 17 | 38 | 12.46 | 0.458 | 17 |
-| opportunities and rights | 20 | 74 | 12.38 | 0.497 | 19 |
-| requirements management | 17 | 45 | 12.18 | 0.505 | 16 |
-| materiel | 16 | 34 | 12.18 | 0.82 | 16 |
-| verification | 35 | 337 | 12.08 | 0.999 | 33 |
-| convinced that diversity | 21 | 96 | 12.06 | 0.505 | 20 |
-| projects | 120 | 3398 | 12.01 | 2.023 | 113 |
-| certain citizenship | 17 | 52 | 11.89 | 0.443 | 17 |
-| diversity contributes | 19 | 80 | 11.74 | 0.469 | 18 |
-| apply quickly | 19 | 84 | 11.6 | 0.466 | 17 |
+| citizenship | 62 | 1156 | 13.87 | 1.383 | 61 |
+| technology | 126 | 4242 | 13.65 | 3.128 | 119 |
+| defense secrecy | 17 | 38 | 13.62 | 0.652 | 17 |
+| armed forces | 25 | 162 | 13.4 | 1.425 | 25 |
+| verification | 33 | 339 | 13.22 | 1.318 | 31 |
+| engineering | 75 | 1853 | 13.14 | 2.143 | 72 |
+| complex | 91 | 2639 | 13.11 | 2.167 | 88 |
+| certain citizenship | 17 | 52 | 13.1 | 0.631 | 17 |
+| requirements management | 16 | 46 | 12.85 | 0.682 | 15 |
+| technically advanced | 22 | 137 | 12.76 | 0.811 | 21 |
+| advanced | 64 | 1493 | 12.6 | 1.733 | 63 |
+| saab | 20 | 117 | 12.4 | 1.218 | 20 |
+| swedish and english | 86 | 2701 | 12.18 | 1.49 | 81 |
+| systems | 112 | 4253 | 12.15 | 3.176 | 108 |
+| fmv | 13 | 27 | 12.08 | 1.274 | 13 |
+| technical | 106 | 3966 | 11.98 | 3.251 | 100 |
+| engineering education | 18 | 114 | 11.57 | 0.605 | 17 |
+| swedish citizenship | 36 | 577 | 11.55 | 0.905 | 35 |
+| technically | 38 | 658 | 11.44 | 1.129 | 36 |
+| english | 120 | 5199 | 11.41 | 1.692 | 114 |
+| aviation | 17 | 118 | 10.98 | 0.772 | 17 |
+| defense materiel | 10 | 10 | 10.87 | 0.438 | 10 |
+| create innovation | 16 | 111 | 10.68 | 0.541 | 11 |
+| karlskoga | 13 | 63 | 10.61 | 0.668 | 12 |
+| complex technical | 18 | 158 | 10.51 | 0.621 | 17 |
 
 Read the list as candidates, not as findings. In a corpus dominated by a few employers, an n-gram can be frequent in flagged postings because of who posts them (boilerplate of one defence employer, say) and not because of the concept. The `titles` column and the example snippet are there to help you tell the difference.

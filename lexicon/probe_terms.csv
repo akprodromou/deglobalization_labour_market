@@ -1,0 +1,103 @@
+term,language,channel,note
+reshoring,any,reshoring,
+nearshoring,any,reshoring,
+onshoring,any,reshoring,
+friend-shoring,any,reshoring,hyphenated token
+friendshoring,any,reshoring,
+de-risking,any,reshoring,ambiguous: finance and clinical-trial usage
+decoupling,en,reshoring,ambiguous: also software
+supply chain resilience,en,reshoring,
+supply chain security,en,reshoring,
+strategic autonomy,en,reshoring,
+industrial policy,en,reshoring,
+sovereignty,en,reshoring,
+geopolitical,en,context,likely to over-flag
+tariffs,en,trade compliance,
+export controls,en,trade compliance,
+export control,en,trade compliance,
+dual-use,any,trade compliance,hyphenated token
+sanctions,any,trade compliance,
+embargo,any,trade compliance,
+customs,en,trade compliance,generic in logistics postings
+CBAM,any,trade compliance,
+EUDR,any,trade compliance,
+anti-dumping,en,trade compliance,
+rules of origin,en,trade compliance,
+critical raw materials,en,critical materials,
+rare earths,en,critical materials,
+lithium,any,critical materials,
+semiconductor,en,critical materials,
+semiconductors,en,critical materials,
+chips act,en,critical materials,
+defence,en,defense,
+defense,en,defense,
+armed forces,en,defense,
+ammunition,en,defense,
+munitions,any,defense,
+energy security,en,energy security,
+security of supply,en,energy security,
+free trade agreement,en,diversification,
+Rückverlagerung,de,reshoring,
+Lieferkettengesetz,de,trade compliance,
+Lieferkettensicherheit,de,reshoring,
+Lieferkette,de,context,generic: supply chain
+Lieferketten,de,context,generic: supply chains
+Exportkontrolle,de,trade compliance,
+Exportkontrollen,de,trade compliance,
+Ausfuhrkontrolle,de,trade compliance,
+Außenwirtschaft,de,trade compliance,
+Zoll,de,trade compliance,generic: customs
+Zollabwicklung,de,trade compliance,
+Zollrecht,de,trade compliance,
+Zölle,de,trade compliance,tariffs
+Sanktionen,de,trade compliance,
+Rüstung,de,defense,
+Rüstungsindustrie,de,defense,
+Verteidigung,de,defense,
+Verteidigungsindustrie,de,defense,
+Munition,de,defense,
+Halbleiter,de,critical materials,
+seltene Erden,de,critical materials,phrase
+kritische Rohstoffe,de,critical materials,phrase
+Energiesicherheit,de,energy security,
+Versorgungssicherheit,de,energy security,
+Handelsabkommen,de,diversification,
+Industriepolitik,de,reshoring,
+relocalisation,fr,reshoring,
+réindustrialisation,fr,reshoring,
+souveraineté,fr,reshoring,
+souveraineté numérique,fr,reshoring,phrase
+autonomie stratégique,fr,reshoring,phrase
+douane,fr,trade compliance,generic: customs
+douanes,fr,trade compliance,
+douanier,fr,trade compliance,
+droits de douane,fr,trade compliance,phrase: tariffs
+contrôle des exportations,fr,trade compliance,phrase
+double usage,fr,trade compliance,phrase: dual-use
+devoir de vigilance,fr,trade compliance,phrase: due diligence
+défense,fr,defense,
+armement,fr,defense,
+semi-conducteurs,fr,critical materials,hyphenated token
+terres rares,fr,critical materials,phrase
+matières premières critiques,fr,critical materials,phrase
+exportcontrole,nl,trade compliance,
+douane,nl,trade compliance,same token as French
+douaneafhandeling,nl,trade compliance,
+sancties,nl,trade compliance,
+invoerrechten,nl,trade compliance,tariffs
+defensie,nl,defense,
+halfgeleiders,nl,critical materials,
+zeldzame aardmetalen,nl,critical materials,phrase
+toeleveringsketen,nl,context,generic: supply chain
+leveringszekerheid,nl,energy security,
+energiezekerheid,nl,energy security,
+strategische autonomie,nl,reshoring,phrase
+exportkontroll,sv,trade compliance,
+tull,sv,trade compliance,generic: customs
+tullhantering,sv,trade compliance,
+sanktioner,sv,trade compliance,
+försvarsindustri,sv,defense,
+totalförsvar,sv,defense,
+halvledare,sv,critical materials,
+sällsynta jordartsmetaller,sv,critical materials,phrase
+försörjningstrygghet,sv,energy security,
