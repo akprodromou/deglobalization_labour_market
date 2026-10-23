@@ -6,7 +6,7 @@ Month 3, step 3a: tag every lexicon-flagged posting by channel and intensity wit
    The flagged set is written once to data/tagged/flagged_<corpus>.jsonl, so
    that later changes to the lexicon cannot silently change which postings
    the tags and the annotation sample refer to (use --refresh to rebuild it).
-2. Tag: for each flagged posting the prompt of prompts/tagging_v1.txt
+2. Tag: for each flagged posting the prompt of prompts/tagging_v2.txt
    (a system part with the channel and intensity definitions and a user part with
    the title, the matched terms and the text) is sent to the model, which
    answers with JSON: channel, intensity, evidence. Temperature 0, fixed seed.
@@ -17,6 +17,16 @@ Month 3, step 3a: tag every lexicon-flagged posting by channel and intensity wit
    that stops (a Colab session that disconnects, say) is resumed by running the
    same command again: postings already in the file are skipped. Answers that
    are not valid are retried once and then stored with ok = false.
+
+Pilot (--pilot N): before the full run, tag N flagged postings (default idea: 20)
+   drawn with a fixed seed, round-robin over the channel of the first lexicon term found,
+   so that every channel is represented. It writes
+       data/tagging/pilot_sheet.csv   what you annotate BLIND (channel, intensity, note empty;
+                                      an existing sheet is never overwritten)
+       data/tagged/tags_<model>_<prompt>_pilot.jsonl   the model's tags
+       docs/tagging_pilot.md          each posting with the model's tag; if pilot_sheet.csv
+                                      has been filled, your tag beside it and the agreement
+   Use it to check that the channel and intensity definitions work before tagging everything.
 
 Backends (--backend)
     ollama      a local Ollama server (the brief names Mistral 7B or Qwen 2.5):
@@ -57,7 +67,7 @@ except ImportError:
 CORPUS = Path("data/raw/corpus_jobbland.se_2026-01_2026-08.jsonl")
 LEXICON = Path("lexicon/lexicon.csv")
 SEEDS = Path("lexicon/seed_lexicon.csv")
-PROMPT = Path("prompts/tagging_v1.txt")
+PROMPT = Path("prompts/tagging_v2.txt")
 OUT_DIR = Path("data/tagged")
 CHANNELS = ["reshoring", "defense", "critical materials", "energy security",
             "trade compliance", "diversification", "none"]
@@ -149,6 +159,84 @@ def make_caller(backend, model, url, timeout):
     return call
 
 
+def pick_pilot(flagged, ch_of, n, seed=0):
+    """n flagged postings, round-robin over the channel of the first matched lexicon term."""
+    import random
+    rng = random.Random(seed)
+    groups = {}
+    for r in flagged:
+        first = next((ch_of[t] for t in r["terms"] if t in ch_of), "other")
+        groups.setdefault(first, []).append(r)
+    for g in groups.values():
+        rng.shuffle(g)
+    order = sorted(groups)
+    picked = []
+    while len(picked) < n and any(groups.values()):
+        for ch in order:
+            if groups[ch] and len(picked) < n:
+                picked.append(groups[ch].pop())
+    return picked
+
+
+def pilot_sheet(picked, by_id, path):
+    import csv
+    if path.exists():
+        print(f"{path} exists; left unchanged (it may hold your annotations)")
+        return
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8-sig", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["posting_id", "title", "terms_found", "text", "channel", "intensity", "note"])
+        for fl in picked:
+            it = by_id[fl["posting_id"]]["item"]
+            w.writerow([fl["posting_id"], (it.get("title") or "").strip(), "; ".join(fl["terms"]),
+                        build_text(it, fl["matched"], 1800), "", "", ""])
+    print(f"Pilot sheet for blind annotation: {path}")
+
+
+def pilot_report(picked, by_id, tags_path, sheet_path, report_path):
+    import csv
+    tags = {}
+    for line in open(tags_path, encoding="utf-8"):
+        if line.strip():
+            d = json.loads(line)
+            tags[d["posting_id"]] = d
+    mine = {}
+    if sheet_path.exists():
+        for r in csv.DictReader(open(sheet_path, encoding="utf-8-sig")):
+            if r["channel"].strip():
+                mine[r["posting_id"]] = (r["channel"].strip().lower(), r["intensity"].strip().lower())
+    lines = ["# Tagging pilot", "",
+             f"{len(picked)} flagged postings; model tags from `{tags_path.name}`.", ""]
+    same_ch = same_both = n_mine = 0
+    body = []
+    for k, fl in enumerate(picked, 1):
+        it = by_id[fl["posting_id"]]["item"]
+        t = tags.get(fl["posting_id"], {})
+        mt = f"{t.get('channel')} / {t.get('intensity')}" if t.get("ok") else "invalid answer"
+        you = ""
+        if fl["posting_id"] in mine:
+            n_mine += 1
+            c, i = mine[fl["posting_id"]]
+            you = f" · **you:** {c} / {i or '-'}"
+            same_ch += c == t.get("channel")
+            same_both += (c == t.get("channel") and (i or "none") == t.get("intensity"))
+        body += [f"## {k}. {(it.get('title') or '').strip()}", "",
+                 f"Terms: {', '.join(fl['terms'])}  ", f"**model:** {mt}{you}  ",
+                 f"Evidence: {t.get('evidence', '')}", "",
+                 "> " + re.sub(r"\s+", " ", build_text(it, fl["matched"], 600)), ""]
+    if n_mine:
+        lines += [f"Your tags for {n_mine} postings: same channel {same_ch} ({same_ch / n_mine:.0%}); "
+                  f"same channel and intensity {same_both} ({same_both / n_mine:.0%}).", "",
+                  "Read the disagreements: they show which definition in the prompt or the guide is unclear.", ""]
+    else:
+        lines += ["No annotations found in the pilot sheet yet; annotate it blind, then rerun the same command "
+                  "to add the comparison.", ""]
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text("\n".join(lines + body), encoding="utf-8")
+    print(f"Wrote {report_path}")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--corpus", default=str(CORPUS))
@@ -161,6 +249,8 @@ def main():
     ap.add_argument("--max-chars", type=int, default=3000)
     ap.add_argument("--limit", type=int, default=0, help="tag at most this many (for tests)")
     ap.add_argument("--refresh", action="store_true", help="rebuild the flagged set")
+    ap.add_argument("--pilot", type=int, default=0,
+                    help="tag only a stratified pilot of this many postings and write the pilot sheet and report")
     args = ap.parse_args()
 
     lex_path = Path(args.lexicon) if args.lexicon else (LEXICON if LEXICON.exists() else SEEDS)
@@ -195,7 +285,14 @@ def main():
     system, user_t = load_prompt(Path(args.prompt))
     prompt_name = Path(args.prompt).stem
     model_tag = re.sub(r"[^\w.-]+", "_", args.model if args.backend != "mock" else "mock")
-    out_path = OUT_DIR / f"tags_{model_tag}_{prompt_name}.jsonl"
+    out_path = OUT_DIR / f"tags_{model_tag}_{prompt_name}{'_pilot' if args.pilot else ''}.jsonl"
+    by_id = {str(r["item"]["id"]): r for r in rows}
+    picked = None
+    if args.pilot:
+        ch_of = {r["term"]: r["channel"] for r in read_lexicon(lex_path)}
+        picked = pick_pilot(flagged, ch_of, args.pilot)
+        flagged = picked
+        pilot_sheet(picked, by_id, Path("data/tagging/pilot_sheet.csv"))
     done = set()
     if out_path.exists():
         for line in open(out_path, encoding="utf-8"):
@@ -207,9 +304,10 @@ def main():
     print(f"{len(done):,} already tagged in {out_path}; {len(todo):,} to do "
           f"(backend {args.backend}, model {args.model}, prompt {prompt_name})")
     if not todo:
+        if picked:
+            pilot_report(picked, by_id, out_path, Path("data/tagging/pilot_sheet.csv"), Path("docs/tagging_pilot.md"))
         return
 
-    by_id = {str(r["item"]["id"]): r for r in rows}
     call = make_caller(args.backend, args.model, args.url, args.timeout)
     t0, bad = time.time(), 0
     with open(out_path, "a", encoding="utf-8") as out:
@@ -241,6 +339,8 @@ def main():
                 print(f"  {n:,} / {len(todo):,}  ({el / n:.1f} s each, about "
                       f"{el / n * (len(todo) - n) / 60:.0f} min left; {bad} invalid)")
     print(f"Done. {out_path}")
+    if picked:
+        pilot_report(picked, by_id, out_path, Path("data/tagging/pilot_sheet.csv"), Path("docs/tagging_pilot.md"))
 
 
 if __name__ == "__main__":

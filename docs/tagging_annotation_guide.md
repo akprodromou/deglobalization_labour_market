@@ -1,6 +1,6 @@
 # Annotation guide: channel and intensity of lexicon-flagged postings
 
-For `docs/tagging_annotation_guide.md`. Draft of 20 October 2026, to be fixed before the first posting is annotated. It uses the same definitions as the prompt the model receives (`prompts/tagging_v1.txt`), so that the annotator and the model are asked the same question.
+For `docs/tagging_annotation_guide.md`. Draft of 22 October 2026 (revised after the lexicon build), to be fixed before the first posting is annotated. It uses the same definitions as the prompt the model receives (`prompts/tagging_v2.txt`), so that the annotator and the model are asked the same question.
 
 ## What you are annotating
 
@@ -47,6 +47,14 @@ If a posting fits several channels, choose the one most central to the work.
 | Posting mentions "security of supply" for a grid operator's planning role | energy security | high or medium by the duties |
 | Boilerplate list of a company's values that includes "responsible sourcing" | trade compliance | low |
 | A term appears but you cannot tell from the text what the job is | unclear | empty |
+| Catering assistant or secretary at an armed forces body; the text describes the ministry's defence mission | defense | low |
+| Procurement officer buying weapons or munitions for a defence body or company | defense | medium or high by the duties |
+| Customs clearance clerk: customs declarations, shipping documents, freight forwarding, nothing about export controls or sanctions | trade compliance | low |
+| The same clerk, with export-control or sanctions screening as a named duty | trade compliance | medium or high by the duties |
+| Staffing firm posting for a client "in the aerospace and defence sector"; the role is a CNC machinist | defense | low |
+| "Weapons" in a police or security-guard posting; "batteries" in a general battery role; "nuclear" in a boilermaker posting | none | empty |
+
+When unsure between two intensities, choose the lower one. A sector or customer industry named in the company description is `low` at most. Working for a defence employer does not make the role `high`; judge by the duties.
 
 The rule for `none` against `low`: if the term is used in the sense of the channel, even only in passing, the channel applies with intensity `low`. `none` is for a term used in another sense, or one that has nothing to do with the work.
 
