@@ -6,7 +6,7 @@ Month 3, step 3a: tag every lexicon-flagged posting by channel and intensity wit
    The flagged set is written once to data/tagged/flagged_<corpus>.jsonl, so
    that later changes to the lexicon cannot silently change which postings
    the tags and the annotation sample refer to (use --refresh to rebuild it).
-2. Tag: for each flagged posting the prompt of prompts/tagging_v2.txt
+2. Tag: for each flagged posting the prompt of prompts/tagging_v6.txt
    (a system part with the channel and intensity definitions and a user part with
    the title, the matched terms and the text) is sent to the model, which
    answers with JSON: channel, intensity, evidence. Temperature 0, fixed seed.
@@ -58,21 +58,27 @@ import time
 from pathlib import Path
 
 try:
-    from diagnostics.corpus_io import load_corpus, posting_text
+    from diagnostics.corpus_io import load_corpus, posting_text, strip_boilerplate
     from diagnostics.lexicon_io import read_lexicon, compile_lexicon, match_terms, context
 except ImportError:
-    from corpus_io import load_corpus, posting_text
+    from corpus_io import load_corpus, posting_text, strip_boilerplate
     from lexicon_io import read_lexicon, compile_lexicon, match_terms, context
 
 CORPUS = Path("data/raw/corpus_jobbland.se_2026-01_2026-08.jsonl")
 LEXICON = Path("lexicon/lexicon.csv")
 SEEDS = Path("lexicon/seed_lexicon.csv")
-PROMPT = Path("prompts/tagging_v2.txt")
+PROMPT = Path("prompts/tagging_v6.txt")
 OUT_DIR = Path("data/tagged")
 CHANNELS = ["reshoring", "defense", "critical materials", "energy security",
             "trade compliance", "diversification", "none"]
 INTENSITY = ["high", "medium", "low", "none"]
 SEARCH_CHARS = 6000
+# Answers that name a sector from the channel definitions instead of a channel are mapped to the channel
+# the definition puts the sector in (recorded as mapped_from in the tag).
+SECTOR_CHANNEL = {"aerospace": "reshoring", "space": "reshoring", "semiconductors": "reshoring",
+                  "semiconductor": "reshoring", "batteries": "reshoring", "battery": "reshoring",
+                  "satellites": "reshoring", "nuclear": "energy security", "nuclear power": "energy security",
+                  "electricity grid": "energy security", "mining": "critical materials"}
 
 
 def load_prompt(path):
@@ -85,7 +91,7 @@ def load_prompt(path):
 
 def build_text(item, matched, max_chars):
     """First max_chars of the description plus passages around terms that lie beyond it."""
-    desc = re.sub(r"[ \t]+", " ", item.get("description") or "").strip()
+    desc = re.sub(r"[ \t]+", " ", strip_boilerplate(item.get("description") or "")).strip()
     body = desc[:max_chars]
     extra = []
     for m in matched:
@@ -109,6 +115,9 @@ def parse_answer(raw):
     except json.JSONDecodeError:
         return None
     ch = str(d.get("channel", "")).strip().lower().replace("_", " ").replace("defence", "defense")
+    mapped = None
+    if ch not in CHANNELS and ch in SECTOR_CHANNEL:     # the model named the sector instead of the channel
+        mapped, ch = ch, SECTOR_CHANNEL[ch]
     it = str(d.get("intensity", "")).strip().lower()
     if ch not in CHANNELS or it not in INTENSITY:
         return None
@@ -116,7 +125,10 @@ def parse_answer(raw):
         it = "none"
     elif it == "none":
         return None
-    return {"channel": ch, "intensity": it, "evidence": str(d.get("evidence", ""))[:300]}
+    out = {"channel": ch, "intensity": it, "evidence": str(d.get("evidence", ""))[:300]}
+    if mapped:
+        out["mapped_from"] = mapped
+    return out
 
 
 def make_caller(backend, model, url, timeout):

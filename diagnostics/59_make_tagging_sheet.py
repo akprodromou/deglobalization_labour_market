@@ -32,7 +32,8 @@ Files (data/tagging/ is not tracked by git: it holds employer text)
 Run (project root):
     python -m diagnostics.59_make_tagging_sheet --tags data/tagged/tags_qwen2.5_7b_tagging_v1.jsonl
     python -m diagnostics.59_make_tagging_sheet --pass2 50          # later
-Options: --n 300  --unflagged 0   (--unflagged N adds N postings WITHOUT a lexicon
+Options: --n 300  --take-all-terms "customs agency,customs service" (annotate every flagged posting with
+one of these terms, as an extra stratum outside the 300)  --unflagged 0   (--unflagged N adds N postings WITHOUT a lexicon
 term, outside the 300, to estimate how much the lexicon misses; they are scored
 by script 60 as lexicon recall.)
 """
@@ -92,6 +93,11 @@ def main():
     ap.add_argument("--flagged", default=None)
     ap.add_argument("--n", type=int, default=300)
     ap.add_argument("--unflagged", type=int, default=0)
+    ap.add_argument("--take-all-terms", default="",
+                    help="comma-separated lexicon terms; every flagged posting containing one of them is "
+                         "annotated (a stratum taken whole, outside the --n sample, weight 1 per posting's "
+                         "day weight), e.g. the customs-authority postings")
+    ap.add_argument("--take-all-label", default="take_all")
     ap.add_argument("--pass2", type=int, default=0)
     args = ap.parse_args()
 
@@ -124,10 +130,14 @@ def main():
         if l.strip():
             r = json.loads(l)
             pred[r["posting_id"]] = r["channel"] if r["ok"] else "unparsed"
-    strata = defaultdict(list)
+    forced_terms = {t.strip().lower() for t in args.take_all_terms.split(",") if t.strip()}
+    strata, forced = defaultdict(list), []
     for pid in flagged:
         if pid in by_id and pid in pred:
-            strata[pred[pid]].append(by_id[pid])
+            if forced_terms & {t.lower() for t in terms[pid]}:
+                forced.append(by_id[pid])
+            else:
+                strata[pred[pid]].append(by_id[pid])
     missing = [p for p in flagged if p not in pred]
     if missing:
         print(f"WARNING: {len(missing):,} flagged postings have no tag in {args.tags} and are left out. "
@@ -148,6 +158,12 @@ def main():
             keys.append({"posting_id": str(r["item"]["id"]), "stratum": s, "day": r["day"],
                          "weight": r["w"] * len(pool) / n, "flagged": True,
                          "terms": terms[str(r["item"]["id"])]})
+    if forced:
+        for r in forced:
+            chosen.append(r)
+            keys.append({"posting_id": str(r["item"]["id"]), "stratum": args.take_all_label, "day": r["day"],
+                         "weight": r["w"], "flagged": True, "terms": terms[str(r["item"]["id"])]})
+        print(f"  {args.take_all_label} (taken whole, outside the {args.n}) | {len(forced):>5,} postings")
     if args.unflagged:
         pool = [r for r in rows if str(r["item"]["id"]) not in flagged]
         take = rng.sample(pool, min(args.unflagged, len(pool)))
