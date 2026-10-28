@@ -6,7 +6,7 @@ Month 3, step 3a: tag every lexicon-flagged posting by channel and intensity wit
    The flagged set is written once to data/tagged/flagged_<corpus>.jsonl, so
    that later changes to the lexicon cannot silently change which postings
    the tags and the annotation sample refer to (use --refresh to rebuild it).
-2. Tag: for each flagged posting the prompt of prompts/tagging_v6.txt
+2. Tag: for each flagged posting the prompt of prompts/tagging_v7.txt
    (a system part with the channel and intensity definitions and a user part with
    the title, the matched terms and the text) is sent to the model, which
    answers with JSON: channel, intensity, evidence. Temperature 0, fixed seed.
@@ -67,7 +67,7 @@ except ImportError:
 CORPUS = Path("data/raw/corpus_jobbland.se_2026-01_2026-08.jsonl")
 LEXICON = Path("lexicon/lexicon.csv")
 SEEDS = Path("lexicon/seed_lexicon.csv")
-PROMPT = Path("prompts/tagging_v6.txt")
+PROMPT = Path("prompts/tagging_v7.txt")
 OUT_DIR = Path("data/tagged")
 CHANNELS = ["reshoring", "defense", "critical materials", "energy security",
             "trade compliance", "diversification", "none"]
@@ -113,7 +113,14 @@ def parse_answer(raw):
     try:
         d = json.loads(m.group(0))
     except json.JSONDecodeError:
-        return None
+        # Some models put unescaped quotes inside "evidence"; the two short fields can still be read
+        c = re.search(r'"channel"\s*:\s*"([^"]+)"', raw)
+        i = re.search(r'"intensity"\s*:\s*"([^"]+)"', raw)
+        if not (c and i):
+            return None
+        e = re.search(r'"evidence"\s*:\s*"(.*)', raw, re.S)
+        d = {"channel": c.group(1), "intensity": i.group(1),
+             "evidence": (e.group(1) if e else "").strip(' "}`\n')}
     ch = str(d.get("channel", "")).strip().lower().replace("_", " ").replace("defence", "defense")
     mapped = None
     if ch not in CHANNELS and ch in SECTOR_CHANNEL:     # the model named the sector instead of the channel
@@ -148,11 +155,19 @@ def make_caller(backend, model, url, timeout):
         import anthropic
 
         client = anthropic.Anthropic()
+        no_temp = []
 
         def call(system, user):
-            msg = client.messages.create(model=model, max_tokens=200, temperature=0, system=system,
-                                         messages=[{"role": "user", "content": user}])
-            return msg.content[0].text
+            kw = dict(model=model, max_tokens=200, system=system,
+                      messages=[{"role": "user", "content": user}])
+            if not no_temp:
+                try:
+                    return client.messages.create(temperature=0, **kw).content[0].text
+                except TypeError:   # this SDK version does not accept `temperature`
+                    no_temp.append(1)
+                    print("  note: this anthropic version has no `temperature` argument; "
+                          "using the model's default sampling (state this in the thesis)")
+            return client.messages.create(**kw).content[0].text
         return call
 
     def call(system, user):                     # mock
@@ -307,9 +322,18 @@ def main():
         pilot_sheet(picked, by_id, Path("data/tagging/pilot_sheet.csv"))
     done = set()
     if out_path.exists():
+        kept, dropped = [], 0
         for line in open(out_path, encoding="utf-8"):
             if line.strip():
-                done.add(json.loads(line)["posting_id"])
+                r = json.loads(line)
+                if not r.get("ok") and str(r.get("raw", "")).startswith("ERROR:"):
+                    dropped += 1            # the call itself failed (credit, network ...): do it again
+                    continue
+                kept.append(line if line.endswith("\n") else line + "\n")
+                done.add(r["posting_id"])
+        if dropped:
+            out_path.write_text("".join(kept), encoding="utf-8")
+            print(f"{dropped} earlier answers were API errors; they are removed and tagged again")
     todo = [r for r in flagged if r["posting_id"] not in done]
     if args.limit:
         todo = todo[:args.limit]
@@ -321,7 +345,7 @@ def main():
         return
 
     call = make_caller(args.backend, args.model, args.url, args.timeout)
-    t0, bad = time.time(), 0
+    t0, bad, streak = time.time(), 0, 0
     with open(out_path, "a", encoding="utf-8") as out:
         for n, fl in enumerate(todo, 1):
             item = by_id[fl["posting_id"]]["item"]
@@ -341,6 +365,15 @@ def main():
                     break
             if not ans:
                 bad += 1
+                streak += 1
+                if raw.startswith("ERROR:") and bad <= 3:
+                    print(f"  error: {raw[:400]}")
+                if streak >= 10:
+                    raise SystemExit(f"Stopped: {streak} answers in a row failed. Last: {raw[:400]}\n"
+                                     "Fix the cause (key, credit, model name, server) and run again; "
+                                     "the answers already written are kept and the run resumes.")
+            else:
+                streak = 0
             rec = {"posting_id": fl["posting_id"], "ok": bool(ans), "model": args.model if args.backend != "mock" else "mock",
                    "backend": args.backend, "prompt": prompt_name, "terms": fl["terms"],
                    "raw": raw[:600], **(ans or {"channel": None, "intensity": None, "evidence": ""})}

@@ -3,11 +3,15 @@ Month 3, step 1: how many postings does each sector have in each month around
 the three primary events? (Estimated from page samples, optimistic: only
 postings that carry a sector tag, or have text, can be used.)
 
-Primary events (author's choice, report Section 9.9):
+Primary events (author's choice, report Section 9.9; updated 27 October 2026):
   crma        EU Critical Raw Materials Act, 23 May 2024      jobbland.se
-  steel       EU Steel and Metals Action Plan, 19 Mar 2025    kariera.gr, lesjeudis.com,
-                                                              jobbland.se, jobs.de
+  steelapply  EU steel import regulation, applies 1 Jul 2026  jobbland.se   (primary, reshoring)
+  steelvote   same regulation, Parliament vote 19 May 2026    jobbland.se   (secondary: anticipation)
   accelerate  AccelerateEU, 22 Apr 2026                       kariera.gr, jobbland.se
+
+The EU Steel and Metals Action Plan (19 Mar 2025) was removed by the author on
+27 October 2026 and is no longer an event here. Its earlier run is kept in
+docs/sector_month_counts_steel.md for the record.
 
 THE RULE (supervisor, 17 October 2026: "a minimum of postings per sector-month,
 fixed before the results are seen"): a sector counts as usable for an event in
@@ -76,11 +80,6 @@ REPORT_PATH = Path("docs/sector_month_counts.md")
 EVENTS = {
     "crma": ("EU Critical Raw Materials Act, 23 May 2024", date(2024, 5, 23),
              {"jobbland.se": ("2024-01", "2024-08")}),
-    "steel": ("EU Steel and Metals Action Plan, 19 Mar 2025", date(2025, 3, 19),
-              {"kariera.gr": ("2024-12", "2025-06"),
-               "lesjeudis.com": ("2024-12", "2025-06"),
-               "jobbland.se": ("2024-12", "2025-06"),
-               "jobs.de": ("2024-12", "2025-04")}),
     # EU steel import regulation (replaces the safeguard). Two possible test dates,
     # both fixed here before any 2026 sector result exists: the Parliament vote
     # (anticipation) and the application date. The regulation applies from 1 Jul 2026,
@@ -96,7 +95,9 @@ EVENTS = {
                     "jobbland.se": ("2026-01", "2026-07")}),
 }
 
-# Target groups fixed on 17 Oct 2026 from the pooled label inventory
+# Target groups fixed on 17 Oct 2026 from the pooled label inventory (for the Action Plan, removed
+# 27 Oct 2026; no event uses them now, since 2026 has no sector tags, and they are kept so that the
+# pre-specification stays on record)
 # (sector_labels_steel.md), before any monthly count of the groups was looked at.
 # The narrow metals group is expected to fail the rule and is reported
 # descriptively only; the exposed group is the primary Steel test.

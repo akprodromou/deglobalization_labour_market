@@ -32,6 +32,12 @@ Files (data/tagging/ is not tracked by git: it holds employer text)
 Run (project root):
     python -m diagnostics.59_make_tagging_sheet --tags data/tagged/tags_qwen2.5_7b_tagging_v1.jsonl
     python -m diagnostics.59_make_tagging_sheet --pass2 50          # later
+    # round 2: draw AFTER the revised prompt has tagged everything, with that run's tags as the strata;
+    # other seed, round-1 postings left out, own folder
+    python -m diagnostics.59_make_tagging_sheet --tags data/tagged/tags_qwen2.5_7b_tagging_v7.jsonl \\
+        --seed 20261028 --exclude-key data/tagging/annotation_key.jsonl --out-dir data/tagging_r2 \\
+        --n 300 --unflagged 0
+    python -m diagnostics.59_make_tagging_sheet --pass2 50 --out-dir data/tagging_r2   # round-2 pass 2
 Options: --n 300  --take-all-terms "customs agency,customs service" (annotate every flagged posting with
 one of these terms, as an extra stratum outside the 300)  --unflagged 0   (--unflagged N adds N postings WITHOUT a lexicon
 term, outside the 300, to estimate how much the lexicon misses; they are scored
@@ -99,7 +105,17 @@ def main():
                          "day weight), e.g. the customs-authority postings")
     ap.add_argument("--take-all-label", default="take_all")
     ap.add_argument("--pass2", type=int, default=0)
+    ap.add_argument("--seed", type=int, default=SEED, help="random seed (use another one for a second sample)")
+    ap.add_argument("--exclude-key", action="append", default=[],
+                    help="annotation_key.jsonl of an earlier sample: its postings are left out, so a new "
+                         "sample (e.g. for testing a revised prompt) is fresh. Repeatable.")
+    ap.add_argument("--out-dir", default=str(OUT_DIR), help="folder for the sheet and key (default data/tagging)")
     args = ap.parse_args()
+    out_dir = Path(args.out_dir)
+    seed = args.seed
+    excluded = set()
+    for kp in args.exclude_key:
+        excluded |= {json.loads(l)["posting_id"] for l in open(kp, encoding="utf-8") if l.strip()}
 
     rows, dropped = load_corpus(Path(args.corpus))
     by_id = {str(r["item"]["id"]): r for r in rows}
@@ -111,15 +127,15 @@ def main():
             r = json.loads(l)
             flagged[r["posting_id"]] = r
     terms = {k: v["terms"] for k, v in flagged.items()}
-    key_path = OUT_DIR / "annotation_key.jsonl"
+    key_path = out_dir / "annotation_key.jsonl"
 
     if args.pass2:
         keys = [json.loads(l) for l in open(key_path, encoding="utf-8") if l.strip()]
-        pick = random.Random(SEED + 1).sample(keys, min(args.pass2, len(keys)))
+        pick = random.Random(seed + 1).sample(keys, min(args.pass2, len(keys)))
         pick = [by_id[k["posting_id"]] for k in pick if k["posting_id"] in by_id]
-        random.Random(SEED + 2).shuffle(pick)
-        write_sheet(OUT_DIR / "annotation_sheet_pass2.csv", pick, terms)
-        print(f"Wrote {OUT_DIR / 'annotation_sheet_pass2.csv'} ({len(pick)} postings). Annotate it at "
+        random.Random(seed + 2).shuffle(pick)
+        write_sheet(out_dir / "annotation_sheet_pass2.csv", pick, terms)
+        print(f"Wrote {out_dir / 'annotation_sheet_pass2.csv'} ({len(pick)} postings). Annotate it at "
               "least three days after pass 1, without looking at pass 1.")
         return
     if not args.tags:
@@ -132,7 +148,11 @@ def main():
             pred[r["posting_id"]] = r["channel"] if r["ok"] else "unparsed"
     forced_terms = {t.strip().lower() for t in args.take_all_terms.split(",") if t.strip()}
     strata, forced = defaultdict(list), []
+    if excluded:
+        print(f"Leaving out {len(excluded):,} postings from the earlier sample(s).")
     for pid in flagged:
+        if pid in excluded:
+            continue
         if pid in by_id and pid in pred:
             if forced_terms & {t.lower() for t in terms[pid]}:
                 forced.append(by_id[pid])
@@ -144,7 +164,7 @@ def main():
               "Finish script 58 first.")
     sizes = {s: len(v) for s, v in strata.items()}
     alloc = allocate(sizes, args.n)
-    rng = random.Random(SEED)
+    rng = random.Random(seed)
     chosen, keys = [], []
     tw = sum(r["w"] for v in strata.values() for r in v)
     print("stratum (sampling model's channel) | flagged postings | weighted share | annotated")
@@ -165,7 +185,7 @@ def main():
                          "weight": r["w"], "flagged": True, "terms": terms[str(r["item"]["id"])]})
         print(f"  {args.take_all_label} (taken whole, outside the {args.n}) | {len(forced):>5,} postings")
     if args.unflagged:
-        pool = [r for r in rows if str(r["item"]["id"]) not in flagged]
+        pool = [r for r in rows if str(r["item"]["id"]) not in flagged and str(r["item"]["id"]) not in excluded]
         take = rng.sample(pool, min(args.unflagged, len(pool)))
         for r in take:
             chosen.append(r)
@@ -173,12 +193,12 @@ def main():
                          "weight": r["w"] * len(pool) / len(take), "flagged": False, "terms": []})
         print(f"  unflagged (outside the {args.n})  | {len(pool):>8,} |        | {len(take)}")
     rng.shuffle(chosen)
-    write_sheet(OUT_DIR / "annotation_sheet.csv", chosen, terms)
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    write_sheet(out_dir / "annotation_sheet.csv", chosen, terms)
+    out_dir.mkdir(parents=True, exist_ok=True)
     with open(key_path, "w", encoding="utf-8") as f:
         for k in keys:
             f.write(json.dumps(k, ensure_ascii=False) + "\n")
-    print(f"\nWrote {OUT_DIR / 'annotation_sheet.csv'} ({len(chosen)} postings) and {key_path}")
+    print(f"\nWrote {out_dir / 'annotation_sheet.csv'} ({len(chosen)} postings) and {key_path}")
     print("Fill `channel` and `intensity` per docs/tagging_annotation_guide.md. Do not open the key.")
 
 
