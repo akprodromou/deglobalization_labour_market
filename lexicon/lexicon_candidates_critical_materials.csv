@@ -1,0 +1,29 @@
+﻿term,channel,lang,variants,from_brief,source,note
+aluminium,critical materials,en,aluminum|alumina|bauxite,0,expansion_2026-10_candidate,S: strategic list (bauxite/alumina/aluminium)
+bismuth,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list
+boron,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list (metallurgy grade); also chemistry and borehole noise
+cobalt,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list
+copper,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list; also cabling and electrical noise
+gallium,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list
+germanium,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list
+magnesium metal,critical materials,en,magnesium alloy,0,expansion_2026-10_candidate,S: strategic list
+manganese,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list (battery grade)
+graphite,critical materials,en,natural graphite,0,expansion_2026-10_candidate,S: strategic list (battery grade)
+nickel,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list (battery grade); also alloys and plating
+platinum group metals,critical materials,en,PGM|platinum group|palladium|rhodium,0,expansion_2026-10_candidate,S: strategic list
+rare earth magnets,critical materials,en,permanent magnets|neodymium|magnet production,0,expansion_2026-10_candidate,S: rare earth elements for permanent magnets
+silicon metal,critical materials,en,metallurgical silicon,0,expansion_2026-10_candidate,S: strategic list
+titanium,critical materials,en,titanium metal,0,expansion_2026-10_candidate,S: strategic list; also aerospace parts and implants
+tungsten,critical materials,en,,0,expansion_2026-10_candidate,S: strategic list
+antimony,critical materials,en,,0,expansion_2026-10_candidate,C: critical list only
+niobium,critical materials,en,,0,expansion_2026-10_candidate,C: critical list only
+tantalum,critical materials,en,,0,expansion_2026-10_candidate,C: critical list only
+vanadium,critical materials,en,,0,expansion_2026-10_candidate,C: critical list only
+fluorspar,critical materials,en,fluorite,0,expansion_2026-10_candidate,C: critical list only
+phosphate rock,critical materials,en,phosphorus,0,expansion_2026-10_candidate,C: critical list only; also fertiliser and chemistry
+battery recycling,critical materials,en,recycling of batteries,0,expansion_2026-10_candidate,P: process term
+metal recycling,critical materials,en,recycling of metals|scrap metal|secondary raw materials|urban mining,0,expansion_2026-10_candidate,P: process term
+smelter,critical materials,en,smelting|smelting plant,0,expansion_2026-10_candidate,P: process term; also iron and steel smelters (not on the lists)
+metal refining,critical materials,en,refining of metals|hydrometallurgy|pyrometallurgy,0,expansion_2026-10_candidate,P: process term
+mineral exploration,critical materials,en,exploration drilling|ore body|mineral resources,0,expansion_2026-10_candidate,P: process term
+mining industry,critical materials,en,mining company|open-pit|underground mine,0,expansion_2026-10_candidate,P: process term; most Swedish mining postings are iron ore (not on the lists)

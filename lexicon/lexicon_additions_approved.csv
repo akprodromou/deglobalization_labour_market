@@ -1,0 +1,11 @@
+﻿term,channel,lang,variants,from_brief,source,note
+wind power,energy security,en,wind turbine|wind farm|offshore wind|onshore wind|wind energy,0,expansion_2026-10,ambiguous: also general wind-energy sales and consulting
+solar power,energy security,en,solar energy|solar cells|solar panels|solar module|photovoltaic|solar park,0,expansion_2026-10,ambiguous: residential solar sales postings are common and not about the channel
+hydrogen,energy security,en,green hydrogen|hydrogen production|hydrogen storage,0,expansion_2026-10,ambiguous: also chemicals and fuel-cell roles in general
+electrolyser,energy security,en,electrolyzer|electrolysis,0,expansion_2026-10,ambiguous: also laboratory electrochemistry
+carbon capture,energy security,en,CCS|CCUS|carbon capture and storage|bio-CCS,0,expansion_2026-10,heavy-industry decarbonisation technology; the tagger decides the channel
+energy storage,energy security,en,grid-scale storage|battery energy storage|BESS,0,expansion_2026-10,overlaps battery storage (critical materials)
+smart grid,energy security,en,grid expansion|grid components,0,expansion_2026-10,ambiguous: IT and metering roles
+solar cell manufacturing,energy security,en,solar panel production|solar module manufacturing|photovoltaic manufacturing,0,expansion_2026-10,"clean-tech manufacturing; guide v8: wind and solar equipment is energy security, never reshoring"
+wind turbine manufacturing,energy security,en,wind turbine production|blade manufacturing|wind turbine components,0,expansion_2026-10,"clean-tech manufacturing; guide v8: energy security, never reshoring"
+battery manufacturing,reshoring,en,battery production|battery cell production|gigafactory|battery factory|cell manufacturing,0,expansion_2026-10,guide v8: battery production is reshoring; CISAF clean-tech outcome must include it
