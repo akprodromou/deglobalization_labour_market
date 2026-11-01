@@ -153,3 +153,17 @@ carbon capture,energy security,en,CCS|CCUS|carbon capture and storage|bio-CCS,0,
 energy storage,energy security,en,grid-scale storage|battery energy storage|BESS,0,expansion_2026-10,overlaps battery storage (critical materials)
 battery manufacturing,reshoring,en,battery production|battery cell production|gigafactory|battery factory|cell manufacturing,0,expansion_2026-10,guide v8: battery production is reshoring; CISAF clean-tech outcome must include it
 battery recycling,critical materials,en,recycling of batteries,0,expansion_2026-10_candidate,P: process term
+sovereign cloud,diversification,en,sovereign cloud provider,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+digital sovereignty,diversification,en,sovereign digital|digital autonomy,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign ai,diversification,en,sovereign artificial intelligence,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+ai gigafactory,diversification,en,AI gigafactories|AI factory|AI factories,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign solutions,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign capabilities,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign capacities,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign and sustainable,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+guarantee the sovereignty,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+challenges of sovereignty,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+national sovereignty,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+alternative to american,diversification,en,alternative to US|alternative to the american,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+european cloud,diversification,en,european cloud provider|EU cloud,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+secure sovereign cloud security,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)

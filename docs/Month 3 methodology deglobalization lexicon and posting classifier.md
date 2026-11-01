@@ -373,3 +373,47 @@ This install recipe is the usual one but has not been run for this project. If i
 | 14 | python -m diagnostics.60\_score\_tagging --tags \<tags file> (repeat --tags per model) |
 
 Step 9 saves after every posting. If the session disconnects, run the same command again and it continues where it stopped.
+
+### Details on the code
+
+#### TF-IDF pipeline
+
+The TF-IDF pipeline is 55_lexicon_seed_coverage_tfidf.py. You run it as python -m diagnostics.55_lexicon_seed_coverage_tfidf, and its docstring has the usage notes.
+
+1. It reads the corpus (from script 52) and drops exact duplicates.
+2. Postings that contain a seed term form the “flagged” set, and the rest form the “other” set.
+3. It counts 1- to 3-grams with scikit-learn’s CountVectorizer (ngram_range=(1, 3), line 177). A second pass at line 181 adds the TF-IDF weights: sublinear tf, idf computed over the whole corpus.
+4. It ranks each n-gram by how much more often it appears in flagged postings than in the others. The score is the z-score of the log odds ratio, using a +0.5 correction in every cell. The mean TF-IDF weight in the flagged postings is shown next to it.
+
+Candidates are filtered to those that:
+* appear in at least --min-flagged-df flagged postings;
+* appear under at least --min-titles distinct titles, so one employer’s repeated advert can’t dominate;
+* don’t start or end with a stop word, and don’t contain a seed term;
+* aren’t a shorter n-gram sitting wholly inside a longer candidate with almost the same count.
+
+Outputs
+
+docs/lexicon_seed_coverage.md shows the count for each seed term and the counts by month.
+data/lexicon/candidates_tfidf.csv is the review sheet you filled in, with the columns term, n, df_flagged, df_other, z, mean_tfidf, titles, example, keep, channel. The sheet contains posting snippets, so keep it out of version control.
+
+#### Expand lexicon using sentence-embedding similarity 
+
+1. Candidate phrases are considered all 1- to 4-word phrases that occur in at least --min-df postings (Apriori counting, corpus_io.frequent_ngrams. We don't allow phrases to cross a sentence, comma or bracket; no stop word at either end). If there are more than --max-candidates, the most frequent are kept.
+2. Each seed term and each of its variants are encoded into a numerical vector (a list of numbers). Both the seed terms and candidates receive the same "query: " prefix, in line with symmetric similarity. This is defined in the E5 (Embeddings from Bidirectional Encoder Representations) model, an open-source family of text-embedding models developed by Microsoft Research designed to convert text into dense vector representations for semantic search and retrieval (in line with the project brief). Therefore, both texts are encoded using the same convention because we want to compare two phrases on equal terms. Finally, they are L2-normalised, so each vector is adjusted to have a length (Euclidean norm) of exactly 1.
+3. For every seed term the --k nearest candidates by cosine similarity are retrieved (FAISS inner-product index).
+(Reference: @misc{johnson2017billionscalesimilaritysearchgpus, title={Billion-scale similarity search with GPUs}, author={Jeff Johnson and Matthijs Douze and Hervé Jégou}, year={2017}, eprint={1702.08734}, archivePrefix={arXiv}, primaryClass={cs.CV}, url={https://arxiv.org/abs/1702.08734},})
+4. A candidate is dropped if it is, contains, or is part of a seed term (i.e. we use the same overlap rule as script 55). The rest go to a review sheet, ordered by the best similarity, with the seed it was closest to and the number of different seeds that retrieved it.
+
+It's important to note that nothing is added automatically. In practice, similarity is a reason to look at a phrase, but doesn't not constitute the reason for it to belong to a channel; for example, "customs clearance" will be close to "customs compliance" but doesn't belong to the lexicon.
+
+#### LLM-based classifier to tag each flagged posting by channel and intensity (low / medium / high).
+
+The prompts are built with the following structure:
+
+1. A decision order with the questions asked in sequence.
+2. The model must quote its evidence.
+3. A fixed JSON output.
+4. Temperature 0. At temperature 0 the model always picks its most likely next token, so rerunning the same posting will give the same answer. It is therefore important for reproducibility, and is the default choice for classification. 
+5. The lexicon term is described as “a reason to look, never a reason to assign a channel”.
+
+To build the prompt, we used references such as "Törnberg (2023), ChatGPT-4 outperforms experts and crowd workers in annotating political Twitter messages with zero-shot learning", which describes the approach of using an LLM as a classifier against human-labelled data, as well as OpenAI, Prompt engineering guide (https://developers.openai.com/api/docs/guides/prompt-engineering?api-mode=responses).
