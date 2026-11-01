@@ -98,17 +98,150 @@ The corpus holds 53,959 postings after exact duplicates are removed; 2,792 (5.2%
 
 No change is distinguishable from zero except critical materials around AccelerateEU, which moves from 0.08% to 0.00% of postings. That is a handful of postings tagged by the least validated channel, and one interval in 60 excluding zero is what chance would give, so it is not evidence of an effect. The window before the Critical Raw Materials Act is thin (1,447 postings taken, about 2,100 in the population), which is why those intervals are wide. The result is that this tagger and this sample show no measurable shift in any channel around either event; the intervals on defense (about half a percentage point on a 2% share) would show a change of roughly a quarter or more of the share, and smaller changes cannot be ruled out. December 2025 stands out for defense (6.4%, interval 4.9 to 8.2), outside both event windows, and its postings should be checked for a single employer or campaign before the monthly series is described.
 
+**Skill Surge Index** (script 65; 29 October)
+
+The index is the weighted share of postings in a quarter that contain a skill, divided by the same share in a baseline period. The brief's 2019 baseline does not exist in this corpus, which starts in 2024, so two baselines are reported. The pre-shock baseline, January to April 2024 (before the Critical Raw Materials Act), holds 1,018 postings taken, of which 72 contain a lexicon term. The robustness baseline, September to December 2024, holds 10,359 postings taken and 520 with a term, but falls after the first shock.
+
+Index in 2026Q2, lexicon channels (any posting with at least one term of the channel), with 95% intervals:
+
+| Series | Baseline postings: Jan to Apr 2024 / Sep to Dec 2024 | Index vs Jan to Apr 2024 | Index vs Sep to Dec 2024 |
+| --- | --- | --- | --- |
+| Any lexicon term | 72 / 520 | 0.67 (0.52 to 0.85) | 0.91 (0.78 to 1.05) |
+| Defense | 32 / 340 | 1.03 (0.71 to 1.56) | 0.90 (0.75 to 1.06) |
+| Critical materials | 16 / 72 | 0.25 (0.14 to 0.54) | 0.63 (0.38 to 1.01) |
+| Energy security | 5 / 69 | 1.41 (0.66 to 5.16) | 1.18 (0.77 to 1.78) |
+| Trade compliance | 8 / 44 | 0.69 (0.35 to 1.87) | 1.11 (0.67 to 1.82) |
+| Reshoring | 12 / 17 | 0.29 (0.15 to 0.71) | 2.62 (1.25 to 6.29) |
+
+The January to April 2024 baseline is too thin to support most of the series: only defense and the any-term total have more than 16 baseline postings, and the model-tagged series have 14 or fewer in every channel. Its "any term" index below 1 may reflect a change in the corpus, not falling demand: posting volume rose from 190 to 410 a month to over 2,000 from May 2024, and the baseline's flagged share (7.6%) is above the corpus average (5.2%). The composition check (script 33) has not yet been run on these months.
+
+Against the September to December 2024 baseline, defense is flat at about 0.85 to 1.2 from 2025Q1 to 2026Q3 (model-tagged defense 0.88 in 2026Q2), with one exception: 2025Q4 reaches 1.76 for lexicon defense (1.36 to 2.25) and 2.16 for tagged defense (1.63 to 2.84), which is the December 2025 spike. In the first half of 2024 defense stood at 0.55 to 0.61 of the late-2024 level, so the rise happened before the baseline. Critical materials sits below the late-2024 level after 2025Q1 (0.26 to 0.69), led by battery terms, a decline that has not been checked against any outside source. Energy security and trade compliance show no consistent pattern from 2025Q1 on: two of 28 intervals (lexicon energy security in 2025Q1 and 2025Q3, at 1.58 and 1.73) exclude 1, close to what chance produces. Both channels were lower in the first half of 2024, in the quarters before the baseline (lexicon trade compliance 0.22 to 0.40 of the late-2024 level). Reshoring terms stand at 2.6 to 2.9 times the late-2024 level in 2026Q2 and 2026Q3, but the baseline holds 17 postings and the model-tagged series (4 baseline postings, a tagger that misses most reshoring) cannot confirm it, so this is a lead to check by reading the postings, not a finding.
+
+Two cautions apply to every term-level result. Terms that occur together in the same postings move together (for example, the defense terms all dip in 2025Q2), so the term indices are not independent evidence. Quarters that contain baseline days are close to 1.00 by construction and are marked in the report.
+
 - One annotator; round-1 labels precede the final definitions.
 - Claude Haiku ran with default sampling, not temperature 0.
 - Rare channels have 15 to 20 annotated postings, so their intervals are wide.
 - The corpus is an English-language slice of jobbland.se and the lexicon is English only.
 
+## Update, 31 October 2026: v9 tagging, lexicon v2 and other job boards
+
+Defense is the only channel with enough validated volume for an event analysis; energy security is indicative only (human-only F1 0.62, interval 0.43 to 0.80), and reshoring, trade compliance and critical materials stay descriptive. The decisions below replace the 28 and 29 October statements where they differ.
+
+- Critical materials follows the EU definition (supervisor-approved): materials on the lists of Regulation (EU) 2024/1252, strategic (Annex I) and critical (Annex II). Platinum-group metals count; gold and silver do not. Steel and general mining (iron ore, base-metal mining) are outside it. The Critical Raw Materials Act (23 May 2024) is therefore reported as descriptive only: the metal terms of the definition are almost empty in the corpus.
+- Lexicon v2: 154 terms (158 before 31 October, see the energy-security paragraph below), the original 150 plus seven energy and battery terms and "battery recycling". "Smart grid", "solar cell manufacturing" and "wind turbine manufacturing" were considered and dropped.
+- Tagger: Qwen 2.5 7B with prompt v9, plus one rule (script 71). A critical-materials tag is removed unless the posting contains an EU-anchored term (critical raw materials, rare earths, strategic raw materials, battery materials, lithium, raw materials security, critical metals, strategic resource, battery recycling). The prompt alone did not stop the model from labelling LKAB and Boliden postings as critical materials. A mining sector now maps to none. The tags file is tags\_qwen2.5\_7b\_tagging\_v9r.
+- Skill Surge Index baseline: September to December 2024. January to April 2024 is too thin (see the 29 October paragraph, which reports both).
+- Tracker tags (skills, sectors) stop in autumn 2025 on jobbland.se, so no comparison crosses that boundary. Skills extracted locally with the ESCO skill extractor (one threshold, 0.6, for all months) are never mixed with Tracker skills. The extractor is accepted as a diagnostic; the sector classifier is rejected.
+- Scope of sources: any job board that can help, not only jobbland.se.
+
+**Scores of the v9 tags (Qwen 2.5 7B, prompt v9 with the script 71 rule) against v8.** The channels that carry the analysis did not move: defense stays at 0.83 to 0.85 and the relevant-or-not decision at 0.79 to 0.82. Weighted F1, scored on the same annotated postings as before (round 1: 472; round 2: 300 rows):
+
+| Measure | Qwen v8 | Qwen v9 |
+| --- | --- | --- |
+| Round 1, defense | 0.87 | 0.85 |
+| Round 1, energy security | 0.76 | 0.68 |
+| Round 1, reshoring | 0.44 | 0.52 |
+| Round 1, critical materials | 0.72 | 0.18 |
+| Round 1, macro-F1 | 0.53 | 0.44 |
+| Round 1, any channel vs none | 0.82 | 0.79 |
+| Round 2, defense | 0.84 | 0.83 |
+| Round 2, energy security | 0.68 | 0.74 |
+| Round 2, reshoring | 0.03 | 0.03 |
+| Round 2, macro-F1 | 0.48 | 0.40 |
+| Round 2, any channel vs none | 0.82 | 0.82 |
+| Intensity, quadratic-weighted kappa (round 1, round 2) |  | 0.60, 0.52 |
+
+Energy security moves in opposite directions in the two rounds, inside wide intervals (round 1: 0.56 to 0.78; round 2: 0.58 to 0.87), so it is noise, not an effect of the prompt. The reshoring samples are 18 and 8 postings. The fall in macro-F1 comes mainly from the critical-materials row and from channels with one or no annotated posting in round 2.
+
+**Critical materials, re-judged.** The 20 annotated critical-materials postings of round 1 were labelled under the old definition, which counted LKAB and Boliden. The re-judgement under the EU definition covers 14 of them: the v9 tags give 2 true positives, 0 false positives, 2 false negatives and 10 true negatives. Five Boliden postings were left unjudged (all tagged none) and one is unclear. The two misses contain only the term "precious metals", which does not by itself make a posting critical-materials. With 14 judged postings the channel is reported as counts, not as an F1. It needs a new human sample under the EU definition before it gets a score.
+
+**Critical materials, new human sample (31 October).** The author labelled 98 postings under the EU definition: all 58 flagged postings with an EU-anchored term and 40 drawn at random from the other 276 postings that carry a critical-materials term of lexicon v2 (334 in all). Twelve are critical materials (10 anchored, 2 other), 6 are unclear. The v9 tags with the term rule mark 11 postings as critical materials, all in the anchored stratum: 6 agree with the author, 5 do not (two none, two reshoring and one energy security by the author's label). Of the author's 12, the tagger finds 6; the 2 in the other stratum (both with battery terms: a control and automation engineer and a process engineer) are both missed. Read as counts: in the anchored stratum precision is 6 of 11 and recall 6 of 10, and the estimate for all 334 postings rests on two postings in the unanchored stratum. Half of the 6 misses are doctoral or postdoctoral positions in battery and geochemistry research, where the channel is a judgement call. The same postings also show the older-label problem: of 14 postings labelled in round 1, 5 now carry a different label (three critical materials became unclear, two none became reshoring).
+
+**Full corpus with the v9 tags (lexicon v2, baseline September to December 2024).** No channel shifts significantly around either event; every interval spans zero. Change in the weighted share of postings, 90 days before to 90 days after, in percentage points:
+
+| Channel | Critical Raw Materials Act (23 May 2024) | AccelerateEU (22 April 2026) |
+| --- | --- | --- |
+| Defense | -0.41 (-1.34 to +0.51) | +0.40 (-0.21 to +0.98) |
+| Energy security | +0.33 (-0.64 to +1.16) | +0.03 (-0.25 to +0.29) |
+| Reshoring | -0.12 (-0.61 to +0.33) | +0.04 (-0.02 to +0.11) |
+| Trade compliance | -0.16 (-0.35 to +0.00) | -0.03 (-0.18 to +0.13) |
+| Critical materials | -0.10 (-0.29 to +0.06) | -0.03 (-0.09 to +0.00) |
+
+Critical materials is essentially zero in every month (0.15% or less) after the EU definition and the term rule, which is the expected result; the channel is too rare for a time series.
+
+**December 2025.** Defense reaches 6.67% of postings in December 2025, against 2.1% to 3.3% in the neighbouring months. The diagnostics cannot attribute it to the European Defence Industry Programme (adopted 8 December 2025): collection restarts around 10 to 18 December 2025, and mid-December is seasonally high. The difference-in-differences against 2024 is +1.04 points (-0.53 to +2.64), not significant; mid-December 2025 against mid-December 2024 is +3.38 points (1.23 to 5.49).
+
+**Skill Surge Index (September to December 2024 = 1.00).** Model-tagged defense is 2.21 (1.64 to 2.94) in 2025Q4, the December effect, and 0.89 to 0.99 in 2026Q1 to Q3. Model-tagged energy security falls to 0.38 (0.24 to 0.57) in 2026Q1 and 0.63 (0.40 to 0.94) in 2026Q3, while the lexicon series for energy security reads 1.56 (0.98 to 2.49) in 2026Q3. The two disagree, which fits the tagger's weak energy-security recall (0.55 in round 1). The model-tagged reshoring and critical-materials series before September 2024 rest on baselines of 6 and 2 postings and are not interpreted. The index tables above that use the January to April 2024 baseline are superseded by this baseline.
+
+**Skills per channel (script 70).** ESCO skills extracted locally from every posting at one threshold (0.6, all months; about 5 to 6 skills per posting, the same volume as the Tracker tags). For each channel the report gives the skills with the highest lift (share of the channel's postings carrying the skill divided by its share in all postings), and the share of that skill's postings that sit in the channel ("specific"). Skills with fewer than 5 postings are not listed.
+
+| Channel (postings taken) | Most specific skills | Reading |
+| --- | --- | --- |
+| Defense (1,239) | develop defence policies, manage military logistics, military drill, manage troop deployment, unmanned air systems, signals intelligence | 62% to 100% of the postings with these skills are in the channel; a clean profile |
+| Energy security (447) | nuclear plant safety precautions, wind turbine maintenance, nuclear energy, wind energy, solar products and energy | 26% to 63% specific; common skills are generic (Swedish, project management) |
+| Trade compliance (126) | customs compliance for cargo (80%), international trade (36%), check shipments | the most specific skills match the channel definition |
+| Reshoring (63) | battery design (39%), aerospace engineering (25%) | matches the fixed sectors; too few postings for more |
+| Critical materials (11) | none reaches 5 postings | no table |
+
+The before and after tables around AccelerateEU rest on 5 to 10 postings per skill (for example defense, "identify digital competence gaps": 5 before, 5 after, shares 0.1% and 2.1%), so they are signals to follow up, not results.
+
+**Other job boards: three events checked, none shows an effect.** Both boards were downloaded with script 52 (day-stratified, full text). The jobs.de event is reported as a finding about the data; the two lesjeudis.com events are monthly comparisons with a control (the AI Act result follows the table).
+
+| Event and board | Data coverage | Finding |
+| --- | --- | --- |
+| EU definitive tariffs on Chinese electric vehicles, 30 October 2024 (timeline id 29), jobs.de | Daily postings from 16 August 2024 to 17 March 2025; gaps from 18 March 2025 and nothing after April | Not interpretable. The composition screen is weak: postings fall from 8,175 in October 2024 to 1,690 in January 2025, tag fill dips to 71% for sectors in January and February, and one sector (postal activities) goes from 11.6% to 0.6% of the sample. Health and education postings rise from 5.8% to 10.8% (24.7% in March) while vehicle, transport and manufacturing titles fall together. An exploratory count of German electric-vehicle terms inside automotive and manufacturing postings (care excluded) falls from 7.5% to 2.1%, but the cohort itself grows from about 2% to 8% to 10% of postings around 8 November 2024 and the pre-event share rests on 93 postings. Dropped as an event analysis, as agreed. |
+| EU InvestAI initiative, 11 February 2025 (timeline id 63, added 31 October 2026), lesjeudis.com | Daily postings from 11 August 2024 to 16 February 2025; then 7 days with postings (7, 16 and 17 March; 5 to 8 April) and none on the other days until 30 April | No effect distinguishable from the trend. Only 13 days follow the event (11 February to 30 April; 954 postings sampled), against 5,912 sampled in November to January. The full-text share of AI and machine-learning terms is 19.5% before and 24.9% after (+5.4 points, 95% interval -1.2 to +11.8; cloud and data centre +9.4, control +5.0). The same rise appears before the event: January to 10 February against November to December is +5.9 points (+1.9 to +9.9). So the post-event step is no larger than the pre-existing trend. An earlier title-only test that counted all of February as after the event was wrong and is withdrawn. After the gap the board's mix changes (control and cloud shares also rise), so March and April alone are not comparable with the months before. Tag fill is 93% to 100% throughout. |
+
+InvestAI is a digital-sovereignty measure (EUR 200 billion of AI investment announced at the Paris AI Action Summit, including EUR 20 billion for AI gigafactories), not a trade-policy measure. The timeline lists it under diversification, the nearest of the six channels, and the author accepted that label on 31 October 2026.
+
+The AI Act obligations for general-purpose AI models (2 August 2025) were tested on lesjeudis.com as a monthly comparison, May and June 2025 against August and September 2025 (July has 8 days with postings and is left out; there are no postings from 29 July to 7 August). The full text of 5,879 sampled postings was searched for AI and machine-learning terms (including the standalone words AI and IA) and, separately, for cloud and data-centre terms; the control is developer and project-role titles. The share of postings with AI terms is 33.3% before and 32.8% after (difference -0.5 points, 95% interval -4.6 to +3.7); cloud and data centre 41.3% to 35.9% (-5.3, -13.0 to +1.0); control 27.0% to 27.2% (+0.3, -3.5 to +3.7). No change is detectable, and the intervals would show a shift of about 4 points or more in the AI share. The AI share is stable at 32% to 34% in every month from May to September 2025, so the restart on 8 August did not move it. The composition check (script 33, May to July against August and September) passes: occupation, sector, experience level, description length and title words are all within normal month-to-month drift, and that drift is low (0.007 to 0.061); tag fill is 96% to 100% in every month. Only posting type shifts beyond drift (0.018 against 0.010), a small change. The result is a clean null on this board. Comparisons that cross the February to April 2025 collection gap are not valid: the AI share jumps from 17% to 24% before the gap to 33% after it, a change of board mix, not of demand.
+
+**Human-only scores of round 2 (31 October 2026).** Scoring only rows labelled by the author removes the circularity of the Claude-labelled rows. On the first 59 human rows the scores equal v8 (defense 0.82, energy security 0.75). On 155 human rows (the 59, plus rows 60 to 150 and five from the critical-materials sheet; v9 tags with the script 71 rule) defense holds and energy security falls:
+
+| Channel | n | Precision | Recall | F1 |
+| --- | --: | --: | --: | --: |
+| Defense | 55 | 0.75 (0.63 to 0.86) | 0.89 | 0.81 (0.73 to 0.89) |
+| Energy security | 21 | 0.47 (0.26 to 0.73) | 0.59 | 0.52 (0.32 to 0.75) |
+| Reshoring | 6 | 1.00 | 0.04 | 0.07 |
+| Critical materials, trade compliance, diversification | 1 each | not estimable |  |  |
+| Any channel vs none |  | 0.73 | 0.83 | 0.78 (0.70 to 0.85) |
+
+Lexicon precision (flagged postings about a channel at all) is 0.62. Intensity agreement where channel agrees: exact 0.60, quadratic-weighted kappa 0.35; the tagger rates 17 of 55 postings the author rated high as low. The macro-F1 of 0.23 is an artifact of channels with one to six postings and is not reported as a result; those channels are reported as counts. Energy security scored 0.74 on the Claude-labelled round 2 rows, so that number was optimistic.
+
+**Energy security: false positives and the lexicon change.** In the human-labelled sample the tagger assigned energy security to 29 postings (unweighted): 17 correct and 12 wrong, all 12 labelled none by the author. Nine of the 12 are Vattenfall Eldistribution and Skanska grid-operation roles matched by "secure electricity", "safe electricity", "stable electricity" and "safe and stable electricity", which describe running the ordinary grid; the others are nuclear decommissioning at Ringhals, "produced in Sweden" in an asset-manager ad, and an electrician matched on "batteries". Four postings the author labelled energy security were missed (nuclear in medical, radiation-measurement and marketing roles, and a solar and battery seller). The four electricity terms were removed from lexicon v2 (158 to 154 terms, change log in lexicon\_v2/CHANGELOG.md). The decision uses the same rows that were scored, so the corrected score will be reported beside the 0.52 and checked on rows 151 to 300. Channel shares and the Skill Surge Index for energy security were computed with the 158-term lexicon and are indicative until the corpus is re-flagged.
+
+**Labelling rules fixed during annotation.** Cyber-sovereignty (for example AI-driven cybersecurity to reduce dependence on the US) is labelled none, or defense where the ad is defense work, with the note cyber-sovereignty; one such posting was first labelled reshoring and corrected. Reshoring means firms moving production back from abroad, in the fixed sectors (space, aerospace, semiconductors and electronic components, battery production). Ads for precious metals are critical materials only when the ad concerns a metal on the EU lists (platinum-group metals yes; gold and silver no). Critical-materials sample (98 postings, stratified by EU-anchored term): anchored stratum precision 6/11 and recall 6/10; two critical-materials postings in the other stratum were missed (battery-term roles). The sample design differs from rounds 1 and 2 and the five rows used in the 155 are counted once; its figures are counts, not population estimates.
+
+**All 300 round-2 rows, and the text the annotator saw (1 November 2026).** The annotation sheets showed the first 1,800 characters of each description; the tagger reads 3,000 plus passages around matched terms further in. For 158 of the 300 rows at least one matched term lies only after character 1,800 (script 74), so the author could have labelled without seeing why the lexicon flagged the posting. Those 158 rows were re-read with the full text and relabelled where the text changed the judgement. Scores of the v9 tags with the 154-term lexicon and the script 71 rule:
+
+| Measure | As first labelled (1,800 characters, 300 rows) | After the full-text check (300 rows) | Rows that were fully visible only (142 rows) |
+| --- | --: | --: | --: |
+| Defense F1 (precision, recall) | 0.82 (0.76, 0.88) | 0.88 (0.88, 0.87) | 0.84 (0.83, 0.85) |
+| Energy security F1 (precision, recall) | 0.66 (0.75, 0.58) | 0.62 (0.75, 0.52) | 0.67 (0.77, 0.59) |
+| Any channel vs none, F1 | 0.81 | 0.85 | 0.79 |
+| Lexicon precision | 0.61 | 0.71 | 0.60 |
+| Intensity, quadratic-weighted kappa | 0.36 | 0.31 | 0.28 |
+
+The figures after the full-text check are the ones to report; the first column shows what the shorter view cost (defense precision 0.76 against 0.88, lexicon precision 0.61 against 0.71). The 142 fully visible rows are not a random subset, so that column is a check and not an estimate. Intervals: defense 0.84 to 0.92 after the check; energy security 0.43 to 0.80 (n = 43), so the channel stays indicative. Reshoring is found almost never (recall 0.01, n = 11); critical materials, trade compliance and diversification have 0 to 2 postings and are counts. The energy-security F1 of 0.52 (155 rows, lexicon of 158 terms) and the 0.62 to 0.66 above are not like for like: the rows differ, and the removal of the four electricity terms also changed the result; the two effects are not separated. Intensity remains weak: the tagger rates many high-intensity postings as low (33 of 110 after the check).
+
+**"Defense" in doctoral contexts (rule applied 1 November 2026).** The bare term "defense" also matches the academic defense of a doctoral thesis ("has documented research work after a defense", "for the position of chief physician, a public defense is also required"), mostly in university and hospital ads and usually late in the text. Among the 155 labelled rows of the earlier sample, 56 were flagged by "defense" alone; of the 26 of those that carry a label, 15 are none. Script 75 now ignores "defense" when every occurrence in a posting is academic (preceded by public, doctoral, thesis, dissertation, PhD or "after a", or followed by "of thesis", or next to a doctoral word and not followed by a sector noun). It affects 27 postings in the whole corpus, all postdoc, doctoral-student, physician and university-administration ads, and all 27 were read and are correct; none had another lexicon term, so all left the flagged set. The effect on the series is therefore negligible. The rule does not explain most of the false flags of the bare term: the other labelled none rows flagged by "defense" alone are not academic and are handled by the tagger, not the lexicon. The scores of the sample do not move because the sample rows stay on the sheet; the flagged-set precision after the rule has not been estimated.
+
+**Round 1 rescored with the final tags (1 November 2026).** Tags: v9 with the script 71 rule, lexicon of 154 terms, PhD-defense rule; 472 postings labelled under annotation guide v6 and lexicon v1. Defense F1 0.85 (0.76 to 0.92; precision 0.79, recall 0.93), reshoring 0.52, critical materials 0.18 (precision 1.00, recall 0.10), trade compliance 0.42 (precision 0.27, recall 0.95, n = 15), any channel vs none 0.78, macro-F1 0.43, intensity kappa 0.61. These match the v9 scores of 31 October except energy security, which falls from 0.68 to 0.61 (precision 0.85, recall 0.47, n = 74). The likely cause is the removal of the four electricity terms: round 1 was labelled under guide v6, which may count grid-operation roles as energy security, while the round-2 labels (current guide) do not. This has not been checked. Three model answers in round 1 are invalid and are scored as wrong. Energy security therefore stays indicative: round 1 gives 0.61 and round 2 (full-text labels) 0.62.
+
+**Limits added by this update**
+
+- The 618 annotated postings were drawn under lexicon v1; the v9 scores reuse them, so they say nothing about the seven terms added in v2.
+- Under the v9 tags the critical-materials channel holds 11 postings in the whole corpus (about 100 in the population). It is reported as counts, and its time series is not interpreted.
+- Local skill extraction uses one threshold (0.6), chosen to match the volume of the Tracker tags in the probe months. Skill-level results (skills per channel, before and after tables) rest on 5 to 10 postings per skill.
+- The jobs.de and lesjeudis.com downloads have collection gaps (lesjeudis.com almost empty after 16 February 2025), and their composition screens show high month-to-month drift in experience level and title words. Shares across these gaps are not comparable.
+
 **Next**
 
-1. Round 2 is annotated and scored (59 human rows, 241 Claude rows); a further human pass on the Claude rows would remove the circularity
-2. Full corpus tagged with Qwen v8 and channel shares computed (script 64); next, check the December 2025 defense spike and choose the sector split, if the thesis needs one
-3. Sector classifier (manufacturing, metals) for the steel regulation and AccelerateEU events, from the 400-posting validation sheet.
-4. ESCOX at 0.45 as an outage diagnostic only if needed.
+1. Round 2: all 300 rows are human-labelled and scored under lexicon v2 with 154 terms, with and without the full-text check (see the 1 November paragraph); the PhD-defense rule is applied (27 postings)
+2. Full corpus tagged with Qwen v9 and the script 71 rule, channel shares computed (script 64); the December 2025 defense spike cannot be attributed to the Defence Industry Programme (see the 31 October update)
+3. Sector classifier: rejected by the author; it is not built.
+4. ESCOX accepted as a diagnostic; local skills at threshold 0.6 are used for skills per channel and never mixed with Tracker skills. Open: a new human sample for critical materials under the EU definition, the InvestAI framing for the supervisor, and the supervisor wording for the two dropped board events.
 
 ## Data and what it supports
 

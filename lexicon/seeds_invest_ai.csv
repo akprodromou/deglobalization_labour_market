@@ -1,0 +1,16 @@
+term,channel,lang,variants,from_brief,note
+sovereign AI,diversification,en,AI sovereignty,0,InvestAI seed: proposed; channel definition to be extended (see guide)
+AI gigafactory,diversification,en,AI gigafactories|AI factory|AI factories,0,InvestAI seed: the EU programme's own term
+digital sovereignty,diversification,en,technological sovereignty|tech sovereignty,0,InvestAI seed
+sovereign cloud,diversification,en,trusted cloud|SecNumCloud|Gaia-X|GAIA-X,0,InvestAI seed: French and EU trusted-cloud labels
+European AI,diversification,en,AI made in Europe|European AI ecosystem,0,InvestAI seed
+EuroHPC,diversification,en,EuroHPC JU|European supercomputer,0,InvestAI seed
+supercomputing,diversification,en,high-performance computing|HPC cluster|AI supercomputer,0,InvestAI seed: generic tech term, expect noise
+AI compute,diversification,en,AI computing capacity|GPU cluster|GPU infrastructure,0,InvestAI seed: generic tech term, expect noise
+AI infrastructure,diversification,en,AI data centre|AI data center|hyperscale data centre,0,InvestAI seed: generic tech term, expect noise
+dependence on non-European providers,diversification,en,reduce dependence on US cloud|dependency on US hyperscalers,0,InvestAI seed
+supplier diversification,diversification,en,diversify suppliers|diversified supplier base|diversification of suppliers,0,supplier seed (from the thesis definition)
+dual sourcing,diversification,en,multi-sourcing|multiple sourcing|second source,0,supplier seed
+alternative suppliers,diversification,en,alternative sources|supplier alternatives,0,supplier seed
+reduce dependence,diversification,en,reducing dependence|dependency reduction|reduce dependency on,0,supplier seed: generic phrase, expect noise
+single supplier,diversification,en,single source|sole supplier|single-source dependency,0,supplier seed

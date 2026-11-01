@@ -20,6 +20,8 @@ Groups (all pilot lists in English, German, French, Swedish and Greek):
     tourism            hotels, restaurants, tourism                        (oil shock, indirect)
     manufacturing      chemicals, plastics, metals, production, industry   (oil shock, energy-intensive)
     control_health_edu nurses, doctors, teachers, care                     (candidate control group)
+    ai_cloud           AI, machine learning, data science, cloud, data centres (InvestAI, 11 Feb 2025; added 31 Oct 2026)
+    it_other_control   developers, DevOps, project managers, SAP, security     (IT postings without AI terms; control for ai_cloud)
 
 A posting can fall into more than one group. Matching ignores case and accents
 (so Greek capitals without tonos match). The lists are a first guess: read the
@@ -30,7 +32,8 @@ postings in the month (share x the month's total from script 32). A second table
 pools the months before and after each event with a Wilson 95% interval for the
 share. These are PILOT counts to size the groups, not results.
 
-Usage, from the repo root:
+Usage, from the repo root (there is no --case option: every case in CASES whose pages are in the pages file is
+counted; a case is run with script 33 first):
     python -m diagnostics.35_exposure_keyword_counts
     python -m diagnostics.35_exposure_keyword_counts --pages-file data/raw/stability_pages_text.json --text-chars 400
 
@@ -98,6 +101,21 @@ GROUPS = {
         ["production", "stal"],
         ["manufacture of", "basic metals", "chemicals", "plastics"],
     ),
+    "ai_cloud": (
+        ["intelligence artificielle", "artificial intelligence", "kunstliche intelligenz", "machine learning",
+         "apprentissage auto", "data scien", "deep learning", "mlops", "genai", "datacenter", "data center",
+         "centre de donnees", "rechenzentrum", "calcul haute perf", "cloud", "llm", "nlp", "computer vision"],
+        ["ia", "ai", "ml", "gpu", "hpc"],
+        [],
+    ),
+    "it_other_control": (
+        ["developpeur", "developer", "devops", "fullstack", "full stack", "full-stack", "frontend", "front-end",
+         "backend", "back-end", "software engineer", "ingenieur logiciel", "ingenieur etude", "testeur", "chef de projet",
+         "product owner", "scrum", "administrateur", "integrateur", "consultant sap", "sap ", "php", "java", "angular",
+         "react", "salesforce", "cybersecurite", "securite"],
+        ["qa", "net", ".net"],
+        [],
+    ),
     "control_health_edu": (
         ["nurs", "doctor", "physician", "teacher", "educator", "caregiver", "care assist", "care work", "childcare", "child care", "pflege", "arzt", "lehrer", "erzieh",
          "infirmi", "medecin", "enseignant", "soignant", "sjukskoters", "lakare", "larare", "undersk", "νοσηλευτ",
@@ -114,6 +132,12 @@ CASES = {
               "EU tariffs on Chinese EVs"),
     "ev-de": ("jobs.de", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01"], "2024-11",
               "EU tariffs on Chinese EVs"),
+    "ev-de-long": ("jobs.de", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03"], "2024-11",
+                   "EU tariffs on Chinese EVs (extended window)"),
+    "investai-fr": ("lesjeudis.com", ["2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04"], "2025-02",
+                    "InvestAI launched, 11 Feb 2025"),
+    "aiact-fr": ("lesjeudis.com", ["2025-05", "2025-06", "2025-07", "2025-08", "2025-09"], "2025-08",
+                 "EU AI Act obligations for general-purpose AI models, 2 Aug 2025"),
     "oil-gr": ("kariera.gr", ["2026-01", "2026-02", "2026-03", "2026-04"], "2026-03", "Iran war / oil shock"),
     "oil-se": ("jobbland.se", ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05"], "2026-03",
                "Iran war / oil shock"),

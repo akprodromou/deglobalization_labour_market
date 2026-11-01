@@ -55,6 +55,7 @@ COUNTS_PATH = Path("data/raw/event_window_counts.json")
 REPORT_PATH = Path("docs/stability_check.md")
 PAGE_SIZE = 100
 TOP_K = 40          # categories kept per variable; the rest become "(other)"
+HIGH_DRIFT = 0.10   # adjacent-month divergence above this makes a 'within drift' reading weak
 MIN_N = 300         # months with fewer sampled postings are flagged
 
 CASES = {
@@ -64,6 +65,12 @@ CASES = {
               "EU tariffs on Chinese EVs, 30 Oct 2024"),
     "ev-de": ("jobs.de", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01"], "2024-11",
               "EU tariffs on Chinese EVs, 30 Oct 2024"),
+    "ev-de-long": ("jobs.de", ["2024-08", "2024-09", "2024-10", "2024-11", "2024-12", "2025-01", "2025-02", "2025-03"], "2024-11",
+                   "EU tariffs on Chinese EVs, 30 Oct 2024 (extended window)"),
+    "investai-fr": ("lesjeudis.com", ["2024-11", "2024-12", "2025-01", "2025-02", "2025-03", "2025-04"], "2025-02",
+                    "InvestAI launched, 11 Feb 2025"),
+    "aiact-fr": ("lesjeudis.com", ["2025-05", "2025-06", "2025-07", "2025-08", "2025-09"], "2025-08",
+                 "EU AI Act obligations for general-purpose AI models, 2 Aug 2025"),
     "oil-gr": ("kariera.gr", ["2026-01", "2026-02", "2026-03", "2026-04"], "2026-03",
                "Iran war / oil shock, 28 Feb 2026"),
     "oil-se": ("jobbland.se", ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05"], "2026-03",
@@ -292,6 +299,8 @@ def title_row(samples, pre_m, post_m, perms, rng, top=300):
     null95 = null[int(0.95 * (len(null) - 1))]
     ref = max([x for x in (drift, null95) if x == x] or [0])
     reading = "within normal drift" if d_event <= ref else "shift beyond drift"
+    if reading.startswith("within") and drift == drift and drift > HIGH_DRIFT:
+        reading += " (but the drift itself is high: unstable mix, weak screen)"
     return (f"| title words (top {top}) | {d_event:.3f} | {'n/a' if drift != drift else f'{drift:.3f}'} | "
             f"{null95:.3f} | {reading} |")
 
@@ -345,6 +354,8 @@ def analyse_case(case, store, perms, rng):
             reading = "NO VARIATION: one value in every sampled posting, not testable"
         else:
             reading = "within normal drift" if d_event <= ref else "shift beyond drift"
+            if reading.startswith("within") and drift == drift and drift > HIGH_DRIFT:
+                reading += " (but the drift itself is high: unstable mix, weak screen)"
         lines.append(f"| {name} | {d_event:.3f} | {'n/a' if drift != drift else f'{drift:.3f}'} | {null95:.3f} | {reading} |")
         moves[name] = (vpre, vpost)
     lines.append(title_row(samples, pre_m, post_m, perms, rng))
