@@ -6,7 +6,7 @@ Month 3, step 3a: tag every lexicon-flagged posting by channel and intensity wit
    The flagged set is written once to data/tagged/flagged_<corpus>.jsonl, so
    that later changes to the lexicon cannot silently change which postings
    the tags and the annotation sample refer to (use --refresh to rebuild it).
-2. Tag: for each flagged posting the prompt of prompts/tagging_v7.txt
+2. Tag: for each flagged posting the prompt of prompts/tagging_v8.txt
    (a system part with the channel and intensity definitions and a user part with
    the title, the matched terms and the text) is sent to the model, which
    answers with JSON: channel, intensity, evidence. Temperature 0, fixed seed.
@@ -67,7 +67,7 @@ except ImportError:
 CORPUS = Path("data/raw/corpus_jobbland.se_2026-01_2026-08.jsonl")
 LEXICON = Path("lexicon/lexicon.csv")
 SEEDS = Path("lexicon/seed_lexicon.csv")
-PROMPT = Path("prompts/tagging_v7.txt")
+PROMPT = Path("prompts/tagging_v8.txt")
 OUT_DIR = Path("data/tagged")
 CHANNELS = ["reshoring", "defense", "critical materials", "energy security",
             "trade compliance", "diversification", "none"]
@@ -78,7 +78,7 @@ SEARCH_CHARS = 6000
 SECTOR_CHANNEL = {"aerospace": "reshoring", "space": "reshoring", "semiconductors": "reshoring",
                   "semiconductor": "reshoring", "batteries": "reshoring", "battery": "reshoring",
                   "satellites": "reshoring", "nuclear": "energy security", "nuclear power": "energy security",
-                  "electricity grid": "energy security", "mining": "critical materials"}
+                  "electricity grid": "energy security", "mining": "none"}   # v9: iron-ore mining is not on the EU lists
 
 
 def load_prompt(path):
@@ -133,6 +133,8 @@ def parse_answer(raw):
     elif it == "none":
         return None
     out = {"channel": ch, "intensity": it, "evidence": str(d.get("evidence", ""))[:300]}
+    if d.get("subtype"):
+        out["subtype"] = str(d["subtype"]).strip().lower()[:20]
     if mapped:
         out["mapped_from"] = mapped
     return out
@@ -276,6 +278,9 @@ def main():
     ap.add_argument("--max-chars", type=int, default=3000)
     ap.add_argument("--limit", type=int, default=0, help="tag at most this many (for tests)")
     ap.add_argument("--refresh", action="store_true", help="rebuild the flagged set")
+    ap.add_argument("--ids", action="append", default=[],
+                    help="annotation_key.jsonl file(s): tag only the postings listed there (saves cost when "
+                         "re-testing a prompt on the annotated samples). Repeatable.")
     ap.add_argument("--pilot", type=int, default=0,
                     help="tag only a stratified pilot of this many postings and write the pilot sheet and report")
     args = ap.parse_args()
@@ -334,6 +339,12 @@ def main():
         if dropped:
             out_path.write_text("".join(kept), encoding="utf-8")
             print(f"{dropped} earlier answers were API errors; they are removed and tagged again")
+    if args.ids:
+        only = set()
+        for kp in args.ids:
+            only |= {json.loads(l)["posting_id"] for l in open(kp, encoding="utf-8") if l.strip()}
+        flagged = [r for r in flagged if r["posting_id"] in only]
+        print(f"--ids: restricted to the {len(flagged):,} flagged postings listed in {len(args.ids)} key file(s)")
     todo = [r for r in flagged if r["posting_id"] not in done]
     if args.limit:
         todo = todo[:args.limit]

@@ -122,7 +122,7 @@ Two cautions apply to every term-level result. Terms that occur together in the 
 - One annotator; round-1 labels precede the final definitions.
 - Claude Haiku ran with default sampling, not temperature 0.
 - Rare channels have 15 to 20 annotated postings, so their intervals are wide.
-- The corpus is an English-language slice of jobbland.se and the lexicon is English only.
+- The corpus is an English-language slice of jobbland.se and the lexicon is English only. Job ads have likely been machine-translated to English first.
 
 ## Update, 31 October 2026: v9 tagging, lexicon v2 and other job boards
 

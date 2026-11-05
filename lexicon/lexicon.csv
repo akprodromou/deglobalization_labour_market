@@ -153,7 +153,7 @@ carbon capture,energy security,en,CCS|CCUS|carbon capture and storage|bio-CCS,0,
 energy storage,energy security,en,grid-scale storage|battery energy storage|BESS,0,expansion_2026-10,overlaps battery storage (critical materials)
 battery manufacturing,reshoring,en,battery production|battery cell production|gigafactory|battery factory|cell manufacturing,0,expansion_2026-10,guide v8: battery production is reshoring; CISAF clean-tech outcome must include it
 battery recycling,critical materials,en,recycling of batteries,0,expansion_2026-10_candidate,P: process term
-sovereign cloud,diversification,en,sovereign cloud provider,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign cloud,diversification,en,sovereign cloud provider|EU sovereign cloud,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
 digital sovereignty,diversification,en,sovereign digital|digital autonomy,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
 sovereign ai,diversification,en,sovereign artificial intelligence,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
 ai gigafactory,diversification,en,AI gigafactories|AI factory|AI factories,0,seed_invest_ai_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
@@ -167,3 +167,17 @@ national sovereignty,diversification,en,,0,candidate_embedding_lesjeudis_2026-11
 alternative to american,diversification,en,alternative to US|alternative to the american,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
 european cloud,diversification,en,european cloud provider|EU cloud,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
 secure sovereign cloud security,diversification,en,,0,candidate_embedding_lesjeudis_2026-11,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+data sovereignty,diversification,en,sovereignty of data|data residency,0,lightcast_review_2026-11,recall term; rare (a few postings); tagger decides
+s3ns,diversification,en,,0,provider_review_2026-11,named EU sovereign-cloud operator; counts only when the employer or the platform built (v12 rule)
+eucs,diversification,en,European Cybersecurity Certification Scheme for Cloud Services|EU cloud certification scheme,0,provider_review_2026-11,EU cloud certification scheme
+secnumcloud,diversification,en,secnum cloud|secnumcloud 3.2,0,provider_review_2026-11,ANSSI qualification; as a requirement in a general security role it is none (v12 rule)
+numspot,diversification,en,,0,provider_review_2026-11,named EU sovereign-cloud operator
+scaleway,diversification,en,,0,provider_review_2026-11,named EU cloud provider
+bleu,diversification,en,"re:(?-i:\bBleu\b)(?=[^\n]{0,60}(?:cloud§orange§capgemini§microsoft§secnum§sovereign§souverain))|re:(?:cloud§orange§capgemini§microsoft§secnum§sovereign§souverain)[^\n]{0,60}(?-i:\bBleu\b)",0,provider_review_2026-11,"Orange-Capgemini cloud JV; capitalised Bleu with a cloud context within 60 characters, so colour and French names are excluded"
+stackit,diversification,en,,0,provider_review_2026-11,named EU sovereign-cloud operator (Schwarz Group)
+cloud temple,diversification,en,,0,provider_review_2026-11,named EU sovereign-cloud operator
+delos cloud,diversification,en,,0,provider_review_2026-11,German sovereign-cloud operator
+gaia-x,diversification,en,gaia x,0,provider_review_2026-11,EU data-infrastructure initiative
+cloud de confiance,diversification,en,,0,provider_review_2026-11,French trusted-cloud label
+eurostack,diversification,en,,0,provider_review_2026-11,EU sovereign digital stack initiative
+aleph alpha,diversification,en,,0,provider_review_2026-11,German sovereign-AI company

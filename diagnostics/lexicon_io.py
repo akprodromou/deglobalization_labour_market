@@ -70,6 +70,14 @@ def compile_lexicon(rows):
     out = []
     for r in rows:
         forms = [r["term"]] + r["variants"]
+        raw = [v[3:].replace("\u00a7", "|") for v in r["variants"] if v.startswith("re:")]
+        if raw:
+            # a term with "re:" variants is matched only by those regular expressions (the "|" of the
+            # expression is written as the section sign in the csv, because "|" separates variants);
+            # use (?-i:...) inside for a case-sensitive part. Pre-filter key: the term's own longest word.
+            rx = re.compile("|".join(raw), re.IGNORECASE)
+            out.append(Entry(r, rx, [_key(r["term"])]))
+            continue
         alts = [term_regex(t, r["lang"]) for t in forms]
         rx = re.compile("|".join(alts), re.IGNORECASE)
         out.append(Entry(r, rx, [k for k in (_key(f) for f in forms) if k]))
