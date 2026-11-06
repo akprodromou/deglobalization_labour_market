@@ -1,0 +1,11 @@
+﻿term,channel,lang,variants,from_brief,source,note
+sovereign solutions,boilerplate,en,sovereign solution|sovereign capabilities|sovereign capacities|sovereign offer|sovereign offers|solutions souveraines,0,sovereignty_indicator_2026-11,"generic company wording (Sopra Steria, Thales, consultancies)"
+sovereign and sustainable,boilerplate,en,,0,sovereignty_indicator_2026-11,Outscale company text
+trusted and sovereign,boilerplate,en,secure and sovereign|sovereign and secure,0,sovereignty_indicator_2026-11,
+digital sovereignty,discourse,en,technological sovereignty|data sovereignty|european sovereignty|souverainete numerique|souveraineté numérique|technology sovereignty,0,sovereignty_indicator_2026-11,
+strategic autonomy,discourse,en,autonomie strategique|autonomie stratégique|open strategic autonomy,0,sovereignty_indicator_2026-11,
+national sovereignty,discourse,en,challenges of sovereignty|guarantee the sovereignty|souveraineté nationale,0,sovereignty_indicator_2026-11,also fits the defense channel; counted here as wording only
+sovereign cloud,infrastructure,en,cloud souverain|cloud de confiance|european cloud|eu cloud,0,sovereignty_indicator_2026-11,
+sovereign ai,infrastructure,en,ia souveraine|european ai|ai gigafactory|ai factory|eurohpc,0,sovereignty_indicator_2026-11,
+alternative to american,infrastructure,en,alternative to us hyperscalers|alternative to the us hyperscalers|alternative to hyperscalers|european alternative,0,sovereignty_indicator_2026-11,
+secnumcloud,infrastructure,en,secnum cloud|eucs|gaia-x|eurostack,0,sovereignty_indicator_2026-11,"qualification names, wording only"

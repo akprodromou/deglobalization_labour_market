@@ -1,0 +1,6 @@
+﻿term,channel,lang,variants,from_brief,source,note
+iris²,reshoring,en,iris2|iris squared|secure satellite connectivity,0,projects_firms_2026-11,"EU secure satellite constellation (space is a fixed reshoring sector); the bare word ""iris"" is not used; tagger decides"
+project sprint,reshoring,en,globalfoundries sprint,0,projects_firms_2026-11,"GlobalFoundries expansion project named by user; ""project sprint"" is also a generic agile phrase, so probe contexts before use"
+silicon carbide campus,reshoring,en,catania silicon carbide|catania sic,0,projects_firms_2026-11,"STMicroelectronics Catania project; ""catania"" alone is a city and is not used"
+integrated production facility,reshoring,en,chips act ipf|first-of-a-kind semiconductor,0,projects_firms_2026-11,"Chips Act Pillar 2 designation for first-of-a-kind fabs (user, 2026-11-06); a policy label, so few postings are expected; ""ipf"" alone is not used"
+ultra-pure gas,reshoring,en,air liquide dresden|silicon saxony,0,projects_firms_2026-11,"Air Liquide gas complex in Dresden for the chip industry (user, 2026-11-06); upstream of the fixed semiconductor sector, tagger decides; ""silicon saxony"" alone may be chip-industry marketing, check contexts"

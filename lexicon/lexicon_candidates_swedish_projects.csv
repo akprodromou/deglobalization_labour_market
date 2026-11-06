@@ -1,0 +1,9 @@
+﻿term,channel,lang,variants,from_brief,source,note
+hybrit,energy security,en,hybrit project|hydrogen breakthrough ironmaking technology,0,swedish_projects_2026-11,LKAB-SSAB-Vattenfall hydrogen steelmaking; tagger decides channel
+stegra,energy security,en,h2 green steel|h2gs,0,swedish_projects_2026-11,"hydrogen-based steel plant in Boden; steel itself is none under the EU materials definition, hydrogen production is energy security; employer-level (v12 principle) to be decided"
+talga,critical materials,en,talga group|talga anode,0,swedish_projects_2026-11,natural graphite anode project (graphite is on the EU critical list)
+northvolt,reshoring,en,northvolt ett|northvolt labs|northvolt ab,0,swedish_projects_2026-11,battery cell production (a fixed reshoring sector); recycling duties are critical materials; tagger decides
+revolt ett,critical materials,en,northvolt revolt,0,swedish_projects_2026-11,battery recycling plant
+reemap,critical materials,en,re-emap|rare earth elements lkab,0,swedish_projects_2026-11,LKAB rare-earth initiative
+per geijer,critical materials,en,per geijer deposit,0,swedish_projects_2026-11,LKAB rare-earth deposit in Kiruna
+altris,reshoring,en,,0,swedish_projects_2026-11,"sodium-ion battery materials, Sweden; LOW CONFIDENCE, verify what the company does before use"
