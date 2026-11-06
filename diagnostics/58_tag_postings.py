@@ -123,6 +123,9 @@ def parse_answer(raw):
              "evidence": (e.group(1) if e else "").strip(' "}`\n')}
     ch = str(d.get("channel", "")).strip().lower().replace("_", " ").replace("defence", "defense")
     mapped = None
+    if ch in ("sovereign-tech", "sovereign tech", "supply-side", "supply side"):   # the model put the subtype in the channel field
+        d["subtype"] = ch.replace(" ", "-")
+        mapped, ch = ch, "diversification"
     if ch not in CHANNELS and ch in SECTOR_CHANNEL:     # the model named the sector instead of the channel
         mapped, ch = ch, SECTOR_CHANNEL[ch]
     it = str(d.get("intensity", "")).strip().lower()
@@ -131,7 +134,7 @@ def parse_answer(raw):
     if ch == "none":
         it = "none"
     elif it == "none":
-        return None
+        ch, it = "none", "none"      # a channel with intensity none means the model found no channel work
     out = {"channel": ch, "intensity": it, "evidence": str(d.get("evidence", ""))[:300]}
     if d.get("subtype"):
         out["subtype"] = str(d["subtype"]).strip().lower()[:20]

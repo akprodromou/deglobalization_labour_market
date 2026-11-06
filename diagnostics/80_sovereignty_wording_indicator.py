@@ -13,6 +13,7 @@ share of ALL postings that contain at least one term of a tier:
     boilerplate     generic company wording ("sovereign solutions", "sovereign capabilities")
     discourse       sovereignty as a policy aim ("digital sovereignty", "strategic autonomy")
     infrastructure  concrete sovereign technology ("sovereign cloud", "sovereign AI", "alternative to American")
+    compliance      qualification names (SecNumCloud, EUCS, Gaia-X), mostly skill or compliance requirements
     any             at least one term of any tier
 
     share = sum of day weights of postings with the tier / sum of day weights of all postings
@@ -41,6 +42,7 @@ data/tagged/sovereignty_wording_<label>_monthly.csv.
 
 import argparse
 import csv
+import hashlib
 import random
 import re
 import tempfile
@@ -57,7 +59,7 @@ except ImportError:
     from corpus_io import load_corpus
     from lexicon_io import read_lexicon, compile_lexicon, match_terms, context
 
-TIERS = ["boilerplate", "discourse", "infrastructure"]
+TIERS = ["boilerplate", "discourse", "infrastructure", "compliance"]
 COLS = TIERS + ["any"]
 
 
@@ -107,6 +109,9 @@ def main():
 
     days = defaultdict(lambda: [0.0, 0, np.zeros(len(COLS))])
     term_n = defaultdict(int)
+    conc = defaultdict(lambda: defaultdict(list))      # month -> tier -> list of context fingerprints (one per posting and tier)
+    EMP_KEYS = ("company", "employer", "company_name", "organisation", "organization", "hiring_organization")
+    emp_seen = False
     snippets = defaultdict(list)
     rng = random.Random(a.seed)
     for r in rows:
@@ -116,11 +121,19 @@ def main():
         d[0] = r["w"]
         d[1] += 1
         tiers = {tier_of[h[0]["term"]] for h in hits}
+        month = r["day"][:7]
+        emp = next((str(r["item"][k]).strip().lower() for k in EMP_KEYS if r["item"].get(k)), None)
+        emp_seen = emp_seen or emp is not None
+        for t in tiers:
+            first = next(h for h in hits if tier_of[h[0]["term"]] == t)
+            ctx = re.sub(r"\W+", " ", context(txt, first[1], width=60).lower()).strip()
+            fp = hashlib.md5(ctx.encode()).hexdigest()[:10]
+            conc[month][t].append((fp, emp or fp))
         for i, t in enumerate(TIERS):
             if t in tiers:
                 d[2][i] += 1
         if tiers:
-            d[2][3] += 1
+            d[2][len(TIERS)] += 1
         for row, m in hits:
             term_n[row["term"]] += 1
             k = (row["term"])
@@ -185,6 +198,31 @@ def main():
         cells = [f"{100 * obs[g][i]:.2f}% ({100 * lo[g][i]:.2f} to {100 * hi[g][i]:.2f})" if not np.isnan(obs[g][i]) else "n/a"
                  for i in range(len(COLS))]
         md.append(f"| {name} | {taken} | " + " | ".join(cells) + " |")
+    md += ["", "## Concentration (unweighted): how many different texts and employers sit behind each tier", "",
+           "`postings / distinct contexts / share of the most frequent context`. A tier whose rise comes from one repeated paragraph "
+           "(one employer's recruiting wave) shows many postings but few distinct contexts."
+           + (" `distinct employers` is added because the corpus carries an employer field." if emp_seen else
+              " The corpus carries no employer field, so the distinct context stands in for the employer."), "",
+           "| month | " + " | ".join(TIERS) + " |", "|---|" + "---|" * len(TIERS)]
+    conc_csv = []
+    for m in months:
+        cells = []
+        for t in TIERS:
+            L = conc[m][t]
+            if not L:
+                cells.append("0")
+                conc_csv.append([m, t, 0, 0, 0, 0.0])
+                continue
+            fps = [x[0] for x in L]
+            top = max(fps.count(f) for f in set(fps))
+            emps = len({x[1] for x in L})
+            cells.append(f"{len(L)} / {len(set(fps))} / {100 * top / len(L):.0f}%" + (f" / {emps} employers" if emp_seen else ""))
+            conc_csv.append([m, t, len(L), len(set(fps)), emps, round(top / len(L), 3)])
+        md.append(f"| {m} | " + " | ".join(cells) + " |")
+    with open(Path(f"data/tagged/sovereignty_wording_{a.label}_concentration.csv"), "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f)
+        wr.writerow(["month", "tier", "postings", "distinct_contexts", "distinct_employers_or_contexts", "top_context_share"])
+        wr.writerows(conc_csv)
     md += ["", "## Postings (unweighted) per term, with contexts to check by eye", ""]
     for r in rows_terms:
         t = r["term"]
