@@ -186,3 +186,4 @@ ovhcloud,diversification,en,,0,provider_review_2026-11,European-owned cloud prov
 stegra,energy security,en,h2 green steel|h2gs,0,named_projects_2026-11,named project rule: Stegra together with Boden is energy security; the tagger applies it (v12 prompt)
 hybrit,energy security,en,hybrit project|hydrogen breakthrough ironmaking technology,0,named_projects_2026-11,named project rule: every mention of HYBRIT is energy security; 0 postings in jobbland to 2026-09
 northvolt,reshoring,en,northvolt ett|northvolt labs|northvolt ab|northvolt revolt,0,named_projects_2026-11,battery cell production is a fixed reshoring sector; recycling duties are critical materials; the tagger decides by duties
+iris²,reshoring,en,iris2|iris squared,0,projects_firms_2026-11,"EU secure satellite constellation IRIS2 (space is a fixed reshoring sector); the bare word iris is not used; the tagger decides by duties"

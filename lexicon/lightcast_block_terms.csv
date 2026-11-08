@@ -1,0 +1,630 @@
+term,section,subsection,group,selected
+Aggregate Planning,Section 1,,supply_chain,1
+APICS Certified Supply Chain Professional,Section 1,,supply_chain,1
+ASCM Supply Chain Procurement Certificate,Section 1,,supply_chain,1
+Blue Yonder Fulfillment,Section 1,,supply_chain,1
+Capacity Planning,Section 1,,supply_chain,1
+Certified Customs Specialist,Section 1,,supply_chain,1
+Certified in Planning and Inventory Management,Section 1,,supply_chain,1
+Certified Packer,Section 1,,supply_chain,1
+Circular Supply Chain Management,Section 1,,supply_chain,1
+Cold Chain,Section 1,,supply_chain,1
+Cold Store,Section 1,,supply_chain,1
+Collaborative Planning Forecasting And Replenishment (CPFR),Section 1,,supply_chain,1
+Dealer Business Systems,Section 1,,supply_chain,1
+Delivery Performance,Section 1,,supply_chain,1
+Demand Forecasting,Section 1,,supply_chain,1
+Demand Management,Section 1,,supply_chain,1
+Demand Planning,Section 1,,supply_chain,1
+Demand Sensing,Section 1,,supply_chain,1
+Disintermediation,Section 1,,supply_chain,1
+Distributed Order Management,Section 1,,supply_chain,1
+End-to-End Supply Planning System,Section 1,,supply_chain,1
+Foodservice Management Professional,Section 1,,supply_chain,1
+Handling Unit Management,Section 1,,supply_chain,1
+Institute For Supply Management,Section 1,,supply_chain,1
+Just In Time Methodology,Section 1,,supply_chain,1
+Kinaxis (Software),Section 1,,supply_chain,1
+Kinaxis RapidResponse,Section 1,,supply_chain,1
+Lean Supply Chain Management,Section 1,,supply_chain,1
+Logility (Software),Section 1,,supply_chain,1
+Logistics Software LBASE,Section 1,,supply_chain,1
+Logistics Support Analysis,Section 1,,supply_chain,1
+Manugistics,Section 1,,supply_chain,1
+Marketing Research,Section 1,,supply_chain,1
+Material Flow Analysis,Section 1,,supply_chain,1
+Material Flow Management,Section 1,,supply_chain,1
+Material Requirements Planning,Section 1,,supply_chain,1
+Materials Management,Section 1,,supply_chain,1
+Materials Management Information Systems,Section 1,,supply_chain,1
+Materials Planning,Section 1,,supply_chain,1
+Materials Transport,Section 1,,supply_chain,1
+Oracle Transportation Management,Section 1,,supply_chain,1
+Peoplesoft Demand Planning,Section 1,,supply_chain,1
+PeopleSoft Distribution,Section 1,,supply_chain,1
+Planning Software,Section 1,,supply_chain,1
+Production Planning,Section 1,,supply_chain,1
+Reverse Logistics,Section 1,,supply_chain,1
+Sales and Operations Planning,Section 1,,supply_chain,1
+SAP APO,Section 1,,supply_chain,1
+SAP Ariba,Section 1,,supply_chain,1
+SAP Material Management,Section 1,,supply_chain,1
+SAP Production Planning,Section 1,,supply_chain,1
+SAP Supply Chain Management (SCM),Section 1,,supply_chain,1
+Sensormatic,Section 1,,supply_chain,1
+ServiceMax,Section 1,,supply_chain,1
+Shipping Systems,Section 1,,supply_chain,1
+Short-Term Planning and Material Call-Off,Section 1,,supply_chain,1
+Supply Base Management,Section 1,,supply_chain,1
+Supply Chain,Section 1,,supply_chain,1
+Supply Chain Acumen,Section 1,,supply_chain,1
+Supply Chain Analysis,Section 1,,supply_chain,1
+Supply Chain Collaboration,Section 1,,supply_chain,1
+Supply Chain Integration,Section 1,,supply_chain,1
+Supply Chain Management,Section 1,,supply_chain,1
+Supply Chain Metrics,Section 1,,supply_chain,1
+Supply Chain Network,Section 1,,supply_chain,1
+Supply Chain Operations Reference Model,Section 1,,supply_chain,1
+Supply Chain Optimization,Section 1,,supply_chain,1
+Supply Chain Organizational Design,Section 1,,supply_chain,1
+Supply Chain Planning,Section 1,,supply_chain,1
+Supply Chain Risk and Continuity Planning,Section 1,,supply_chain,1
+Supply Chain Risk Assessment,Section 1,,supply_chain,1
+Supply Chain Risk Management,Section 1,,supply_chain,1
+Supply Chain Risk Mitigation,Section 1,,supply_chain,1
+Supply Chain Scheduling,Section 1,,supply_chain,1
+Supply Chain Security,Section 1,,supply_chain,1
+Supply Chain Software,Section 1,,supply_chain,1
+Supply Chain Strategy,Section 1,,supply_chain,1
+Supply Chain Synchronization,Section 1,,supply_chain,1
+Supply Management,Section 1,,supply_chain,1
+Supply Network Planning,Section 1,,supply_chain,1
+Sustainable Logistics Strategy,Section 1,,supply_chain,1
+Sustainable Supply Chain Management,Section 1,,supply_chain,1
+Transportation Sourcing,Section 1,,supply_chain,1
+Vertical Integration,Section 1,,supply_chain,1
+Brokerage,Section 2,,diversification_financial_not_used,0
+Financial Advising,Section 2,,diversification_financial_not_used,0
+Insurance Products,Section 2,,diversification_financial_not_used,0
+Investment Sales,Section 2,,diversification_financial_not_used,0
+Investments,Section 2,,diversification_financial_not_used,0
+Supply Chain,Section 2,,diversification_financial_not_used,0
+Procurement,Section 2,,diversification_financial_not_used,0
+Align Components,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Assembly Instructions,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Assembly Lines,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Balance Spring,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Book Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Bookbinding,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Certified Packaging Professional,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Certified Production Technician,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Chamfer,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Circular Manufacturing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Color Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Computer-To-Plate,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Digital Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Disassemble Equipment,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Electromechanical Assembly,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Engraving,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Fabrication,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Fasten Components,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Ferrule,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Fiber Optic Assembly,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Fill Cylinders,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Final Assembly Schedule,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Flexographic Printing Press Operation,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Flexography,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Furniture Assembly,Section 3,Production and Assembly,manufacturing_general_not_used,0
+High Volume Production,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Hole Punching,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Indigo Digital Press,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Integrated Circuit Packaging,Section 3,Production and Assembly,semiconductor,1
+Job Shops,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Label Dispenser,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Label Printer Applicator,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Label Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Lens Making,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Letterpress Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Light Industry,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Mass Production,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Material Components,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Maynard Operation Sequence Technique (MOST) Certification,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Mechanical Assembly,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Medical Device Manufacturing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Methods Of Production,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Net Content Control,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Offset Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Overproduction,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Packing and Filling Lines Operation,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Pad Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Paper-Based Packaging,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Pharmaceutical Packaging,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Photo Finishing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Photographic Printing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Picture Framing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Pre-Production,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Prinergy,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Print Binding,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Print Finishing Systems,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Print Production,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Printing Press,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Rotogravure,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Satellite Assembly,Section 3,Production and Assembly,space,1
+SMT Placement Equipment,Section 3,Production and Assembly,semiconductor,1
+Software Manufacturing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Spooling,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Threaded Insert,Section 3,Production and Assembly,manufacturing_general_not_used,0
+Vibratory Finishing,Section 3,Production and Assembly,manufacturing_general_not_used,0
+4G Welding Certification,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Acetylene Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Air Carbon Arc,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Air Carbon Arc Cutting,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Aluminum Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+American Welding Society Certification,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+American Welding Society Codes,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Arc Melting,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Arc Welding Equipment,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Atomic Hydrogen Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Beveling,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Body Solder,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Brazing (Metal Work),Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Butt Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Certified Lubrication Specialist,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Certified Welder,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Certified Welding Educator,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Certified Welding Engineer,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Certified Welding Supervisor,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Cold Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Cold Wire Feed System (Welding),Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Desoldering,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Electric Resistance Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Electrode,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Electrofusion,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Electron Beam Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Explosion Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Filler Metal,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Flame Cutting,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Flux-Cored Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Forge Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Friction Stir Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Friction Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Fusion Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Gas Metal Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Gas Tungsten Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Groove Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Hand Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Hardfacing,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Heat Bending,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Heat Fusion,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Induction Brazing,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Interpass Temperature,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+IPC Soldering Certification,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Laser Beam Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Manual Metal Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Metal Inert Gas (MIG) Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Metal-Cored Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+NCCER Maritime Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Orbital Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Oxy-Fuel,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Oxy-Fuel Welding And Cutting,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Pelet Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Pipe Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Plasma Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Plasma Cutting,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Plastic Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Reflow Soldering,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Selective Soldering,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Shielded Metal Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Solder Paste,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Solderability,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Soldering,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Soldering Iron,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Spot Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Stainless Steel Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Staking,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Structural Steel Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Structural Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Stud Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Submerged Arc Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Ultrasonic Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Underwater/Hyperbaric Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Vertical Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Equipment,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Machine Set-Up,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Power Supply,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Procedure Specification,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Symbols,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Welding Tips,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+X-Ray Welding,Section 3,"Welding, Brazing, and Soldering",manufacturing_general_not_used,0
+Abnormalities Identification,Section 3,Product Inspection,manufacturing_general_not_used,0
+Accelerated Life Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Acceptance Sampling,Section 3,Product Inspection,manufacturing_general_not_used,0
+Autodesk PowerInspect,Section 3,Product Inspection,manufacturing_general_not_used,0
+Battery Charge/Discharge,Section 3,Product Inspection,battery,1
+Battery Conditioning,Section 3,Product Inspection,battery,1
+Battery Cycler,Section 3,Product Inspection,battery,1
+Battery Diagnostics,Section 3,Product Inspection,battery,1
+Battery Inspection,Section 3,Product Inspection,battery,1
+Casting Defect,Section 3,Product Inspection,manufacturing_general_not_used,0
+Certified Nace Coating Inspector,Section 3,Product Inspection,manufacturing_general_not_used,0
+CompTIA Certification,Section 3,Product Inspection,manufacturing_general_not_used,0
+Coordinate Measuring Machine (CMM),Section 3,Product Inspection,manufacturing_general_not_used,0
+Corrosion Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Destructive Physical Analysis,Section 3,Product Inspection,manufacturing_general_not_used,0
+Dimensional Metrology,Section 3,Product Inspection,manufacturing_general_not_used,0
+Dye Penetrant Inspection,Section 3,Product Inspection,manufacturing_general_not_used,0
+Dye Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Fagan Inspection,Section 3,Product Inspection,manufacturing_general_not_used,0
+Failure Mechanisms,Section 3,Product Inspection,manufacturing_general_not_used,0
+First Article Inspections,Section 3,Product Inspection,manufacturing_general_not_used,0
+Fluorescent Penetrant Inspection,Section 3,Product Inspection,manufacturing_general_not_used,0
+Food Inspection,Section 3,Product Inspection,manufacturing_general_not_used,0
+Food Safety Certification,Section 3,Product Inspection,manufacturing_general_not_used,0
+Food Safety Management Systems,Section 3,Product Inspection,manufacturing_general_not_used,0
+Hardware Testing Methods,Section 3,Product Inspection,manufacturing_general_not_used,0
+Intertest,Section 3,Product Inspection,manufacturing_general_not_used,0
+Inverter Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Liquid Penetrant Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Magnetic Flux Leakage,Section 3,Product Inspection,manufacturing_general_not_used,0
+National Inspection Testing Certification,Section 3,Product Inspection,manufacturing_general_not_used,0
+Notified Body,Section 3,Product Inspection,manufacturing_general_not_used,0
+Operating Deflection Shape,Section 3,Product Inspection,manufacturing_general_not_used,0
+Optical Comparator,Section 3,Product Inspection,manufacturing_general_not_used,0
+Package Integrity,Section 3,Product Inspection,manufacturing_general_not_used,0
+Package Testing,Section 3,Product Inspection,manufacturing_general_not_used,0
+Product Inspection,Section 3,Product Inspection,manufacturing_general_not_used,0
+ServSafe Certification,Section 3,Product Inspection,manufacturing_general_not_used,0
+Surface Roughness,Section 3,Product Inspection,manufacturing_general_not_used,0
+Type Approval,Section 3,Product Inspection,manufacturing_general_not_used,0
+Universal Testing Machines,Section 3,Product Inspection,manufacturing_general_not_used,0
+Visual Inspections,Section 3,Product Inspection,manufacturing_general_not_used,0
+Visual Test,Section 3,Product Inspection,manufacturing_general_not_used,0
+Abrasion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Additive Manufacturing (3D Printing),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Adhesive Bonding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Air Separation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Aluminum Smelting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Ammonia Production,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+AMS Device Management,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Annealing (Metallurgy),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Anodic Bonding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Assemble Batteries,Section 3,Manufacturing Processes,battery,1
+Batch Mixing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Batch Production,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Battery Disassembly,Section 3,Manufacturing Processes,battery,1
+Battery Formation,Section 3,Manufacturing Processes,battery,1
+Battery Industry,Section 3,Manufacturing Processes,battery,1
+Battery Life Cycle Management,Section 3,Manufacturing Processes,battery,1
+Battery Maintenance,Section 3,Manufacturing Processes,battery,1
+Battery Production Equipment,Section 3,Manufacturing Processes,battery,1
+Battery Production Process,Section 3,Manufacturing Processes,battery,1
+Battery Recycling Processes,Section 3,Manufacturing Processes,battery,1
+Bayer Process,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Blanking And Piercing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Blending Process,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Blow Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Burnishing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Calendering,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Cell Assembly Process,Section 3,Manufacturing Processes,battery,1
+Centerless Grinding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Centrifugation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Ceramic Mixing Technology,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Chemical Conversion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Chemical Mechanical Planarization,Section 3,Manufacturing Processes,semiconductor,1
+Chemical Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Coating Substances,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Coextrusion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Coffee Grinding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Cold Foils,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Comb Binding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Compression Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Contour Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Conversion Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Copper Plating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Crimping,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Cryogenic Distillation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Cylindrical Grinding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Deburring,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Deflashing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Die Cutting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Direct Digital Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Direct Metal Laser Sintering,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Discrete Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Distillation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Drilling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Dry Etching,Section 3,Manufacturing Processes,semiconductor,1
+Dry Mixing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Drying Methods,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Electric Arc,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Electrical Discharge Machining,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Electrophoretic Deposition,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Electroplating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Electropolishing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Embossing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Etching,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Evaporation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Extrusion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Extrusion Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Fermentation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Fiber Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Fiberglass Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Filament Winding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Film Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Filtering Process,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Formation Cycles,Section 3,Manufacturing Processes,battery,1
+Fractional Crystallization,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Fused Deposition Modeling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Gasification,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Gear Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Glass Etching,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Glass Production,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Granulations,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Grinding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hand Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Heat Sealing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Heat Shielding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Heat Treating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Helium Extraction,Section 3,Manufacturing Processes,critical_materials_subset,1
+Helium Liquefaction,Section 3,Manufacturing Processes,critical_materials_subset,1
+Hermetic Seal,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Horizontal Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hot Filling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hot Isostatic Pressing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hot Pressing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hydraulic Presses,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hydroforming,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hydrogen Liquefaction,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Hydrogen Production,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Induction Sealing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Industry 5.0 Implementation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Injection Mold Tooling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Injection Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Instrument Management,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Investment Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Joining Processes,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Knurling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Kraft Process,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Lacquer,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Lamination,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Lapping,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Beam Machining,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Cladding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Cutting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Drilling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Engraving,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Lithography,Section 3,Manufacturing Processes,semiconductor,1
+Laser Marking Processes,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Laser Peening,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Liners,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Lithography,Section 3,Manufacturing Processes,semiconductor,1
+Logging (Construction),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Low Pressure Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Machining,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Manufacturing Execution System (MES),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Manufacturing Processes,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Maquiladora,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Mass Finishing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Metal Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Metal Powder,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Metallization,Section 3,Manufacturing Processes,semiconductor,1
+Micromachining,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Mineral Processing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Mixing Ratios,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Mold Making,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Mold Setting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Molding (Manufacturing Process),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Molding Presses,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Nitriding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+PackML,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Paper Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Paper Mill,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Parkerizing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Pattern Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Pattern Grading,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Peening,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Pelletizing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Perforation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Permanent Mold Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Phosphate Conversion Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Photolithography,Section 3,Manufacturing Processes,semiconductor,1
+Physical Vapor Deposition (PVD),Section 3,Manufacturing Processes,semiconductor,1
+Pipe Threading,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Plasma Cleaning,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Plasma Etching,Section 3,Manufacturing Processes,semiconductor,1
+Plasma-Enhanced Chemical Vapor Deposition,Section 3,Manufacturing Processes,semiconductor,1
+Plastics Extrusion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Powder Coating,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Powder Dosing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Powder Feedstock Characterization,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Process Specification,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Production Process,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Production Schedule,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Pultrusion,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Radiation Hardening,Section 3,Manufacturing Processes,space,1
+Reaction Injection Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Reagent Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Remanufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Resin Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Riveting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Roll Slitting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Rotational Molding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Screen Printing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Selective Laser Sintering,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Serrations,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Shoemaking,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Sodablasting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Space Manufacturing,Section 3,Manufacturing Processes,space,1
+Sputter Deposition,Section 3,Manufacturing Processes,semiconductor,1
+Stamping (Metalworking),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Steam Methane Reforming,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Steelmaking,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Stereolithography,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Superfinishing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Surface Finishing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Surface Grinding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Surface Planer,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Surface Printing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Surfacing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Swaging,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Tape Casting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Tapping,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Thermal Processing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Thermal Spraying,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Thermofoil,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Thick Film Technology,Section 3,Manufacturing Processes,semiconductor,1
+Thin Film Coating,Section 3,Manufacturing Processes,semiconductor,1
+Thread Cutting,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Thread Forming And Rolling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Tire Manufacturing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Tolerance Analysis,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Trituration,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Unit Processes,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Unsaponifiable,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Urea Production,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vacuum Assisted Resin Transfer Molding (VARTM),Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vacuum Deposition,Section 3,Manufacturing Processes,semiconductor,1
+Vacuum Distillation,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vacuum Forming,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vertical Milling,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vibrating Feeder,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Vulcanization,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Wafer Backgrinding,Section 3,Manufacturing Processes,semiconductor,1
+Web Processing,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Web Tension Control,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Wipe Test Counter,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Wire Binding,Section 3,Manufacturing Processes,manufacturing_general_not_used,0
+Apple Certified Portable Technician,Section 3,Electronics Manufacturing,electronics,0
+Back End Of Line,Section 3,Electronics Manufacturing,electronics,1
+Circuit Assembly,Section 3,Electronics Manufacturing,electronics,1
+Conformal Coating,Section 3,Electronics Manufacturing,electronics,1
+Diffusion Furnaces,Section 3,Electronics Manufacturing,electronics,1
+Electronic Color Codes,Section 3,Electronics Manufacturing,electronics,0
+Electronics Manufacturing,Section 3,Electronics Manufacturing,electronics,1
+Extreme Ultraviolet (EUV) Lithography,Section 3,Electronics Manufacturing,electronics,1
+Function Generator,Section 3,Electronics Manufacturing,electronics,0
+HP Comprehensive Defective Material Retention (CDMR),Section 3,Electronics Manufacturing,electronics,0
+Metal Oxide Semiconductor Implementation Service (MOSIS),Section 3,Electronics Manufacturing,electronics,1
+Mobile Electronics Certified Professional,Section 3,Electronics Manufacturing,electronics,0
+Multi-Project Wafer Services,Section 3,Electronics Manufacturing,electronics,1
+Reflow Oven,Section 3,Electronics Manufacturing,electronics,1
+Residential Electronics Systems Integrator,Section 3,Electronics Manufacturing,electronics,0
+Semiconductor Device Fabrication,Section 3,Electronics Manufacturing,electronics,1
+Semiconductor Fabrication Plant,Section 3,Electronics Manufacturing,electronics,1
+Semiconductor Manufacturing Process,Section 3,Electronics Manufacturing,electronics,1
+Semiconductor Package,Section 3,Electronics Manufacturing,electronics,1
+Thin-Film Transistor,Section 3,Electronics Manufacturing,electronics,1
+Wafer Bonding,Section 3,Electronics Manufacturing,electronics,1
+Wafer Dicing,Section 3,Electronics Manufacturing,electronics,1
+Wafer Fabrication,Section 3,Electronics Manufacturing,electronics,1
+Wafer Testing,Section 3,Electronics Manufacturing,electronics,1
+Wave Soldering,Section 3,Electronics Manufacturing,electronics,1
+Wire Bonding,Section 3,Electronics Manufacturing,electronics,1
+Acids,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Advanced Composite Materials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Aluminum,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Amino Acids,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Ammonia,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Antioxidants,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Atom Probe Field Ion Microscopy,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Atomic Theory,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Attenuated Total Reflectance,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Benzene,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Beryllium,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Bioactive Plant Food Compounds,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Biomaterial,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Butane,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Cadmium Selenide,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Carbon Graphite,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Carbon Steel,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Ceramic Materials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Chiral Column Chromatography,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Colloids,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Composite Materials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+CompTIA Strata - IT Fundamentals,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Condensation Polymer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Copolymer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Corrosive Substances,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Cross-Linking (Chemistry),"Elements, Compounds, and Materials",,materials_general_not_used,0
+Crystallization Of Polymers,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Electron Capture,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Electron Density,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Energy Dispersive X-Ray Fluorescence,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Energy-Dispersive X-Ray Spectroscopy,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Epitaxy,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Extended X-Ray Absorption Fine Structure,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Fiberglass,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Fluoropolymer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Gallium Nitride,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Germanium,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Halide,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Hexane,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Hydrochloric Acid,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Hydrofluoric Acid (Fluorides),"Elements, Compounds, and Materials",,materials_general_not_used,0
+Hydrofluorocarbon,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Indium Antimonide,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Indium Gallium Arsenide,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Industrial Gases,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Inert Gas,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Ionic Bonding,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Isotopes,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Izod Impact Strength Testing,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Kevlar,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Liquid Metal,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Liquid Oxygen,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Low-Density Polyethylene,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Masonite,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Mercury Cadmium Telluride,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Metallic Paint,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Methanol,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nanocomposites,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nanocrystals,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nanomaterials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nanoprobing,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nanostructure,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Natural Rubber,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Novel Materials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Nucleation,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Organic Compounds,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Particle-Induced X-Ray Emission,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Petrochemical,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Photoelectric Flame Photometer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Plastic Materials,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Polyethylene Terephthalate,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Polymers,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Polytetrafluoroethylene,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Polyvinyl Fluoride,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Potassium Ferricyanide,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Potassium Hydroxide,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Powdered Activated Carbon Treatments,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Quantum Phase Transition,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Salts,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Selected Area Diffraction,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Silane,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Silicon Carbide,"Elements, Compounds, and Materials",,critical_materials_subset,1
+Silicone,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Solid-State Reaction Route,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Solvent,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Structural Steel,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Sulfur Hexafluoride,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Sulfuric Acid,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Supercritical Fluid,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Surfactant,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Synthetic Polymers,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Thermoplastic Elastomer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Thermoplastics,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Thermosetting Polymer,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Trace Element,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Transition Metal Oxides,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Tritium,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Ultraviolet Photoelectron Spectroscopy,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Uranium,"Elements, Compounds, and Materials",,materials_general_not_used,0
+VP/MS,"Elements, Compounds, and Materials",,materials_general_not_used,0
+X-Ray Absorption Fine Structures,"Elements, Compounds, and Materials",,materials_general_not_used,0
+X-Ray Absorption Near Edge Structure (XANES),"Elements, Compounds, and Materials",,materials_general_not_used,0
+Xylene,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Zinc Oxide,"Elements, Compounds, and Materials",,materials_general_not_used,0
+Graphite,added (not in the Lightcast list),,critical_materials_subset,1

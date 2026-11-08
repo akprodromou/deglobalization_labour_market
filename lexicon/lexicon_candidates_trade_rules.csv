@@ -1,0 +1,8 @@
+term,channel,lang,variants,from_brief,source,note
+tariffs,trade compliance,en,tariff|import tariffs|customs tariffs|tariff classification,0,probe_2026-11,"do postings name tariffs at all"
+duties,trade compliance,en,customs duties|import duties|anti-dumping duties,0,probe_2026-11,"duty wording"
+sanctions,trade compliance,en,sanctions screening|sanctioned countries|sanctions list|sanctions regulations,0,probe_2026-11,"probe only; sanctions compliance already in lexicon"
+trade regulations,trade compliance,en,trade legislation|customs legislation|customs regulations|export regulations|export legislation|import regulations,0,probe_2026-11,"compliance with trade law, the middle ground"
+trade barriers,trade compliance,en,trade restrictions|trade war|trade policy|protectionism,0,probe_2026-11,"explicit reference to the obstacles themselves"
+certificates of origin,trade compliance,en,certificate of origin|origin certificates|proof of origin,0,probe_2026-11,"origin documentation, close to rules of origin"
+export compliance,trade compliance,en,export license|export licence|export licensing|end-use,0,probe_2026-11,"export-control wording"

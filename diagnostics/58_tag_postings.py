@@ -123,8 +123,8 @@ def parse_answer(raw):
              "evidence": (e.group(1) if e else "").strip(' "}`\n')}
     ch = str(d.get("channel", "")).strip().lower().replace("_", " ").replace("defence", "defense")
     mapped = None
-    if ch in ("sovereign-tech", "sovereign tech", "supply-side", "supply side"):   # the model put the subtype in the channel field
-        d["subtype"] = ch.replace(" ", "-")
+    if ch in ("sovereign-tech", "sovereign tech", "supply-side", "supply side", "sovereign-cloud", "sovereign cloud"):   # the model put the subtype or a cloud label in the channel field
+        d["subtype"] = "supply-side" if ch.startswith("supply") else "sovereign-tech"
         mapped, ch = ch, "diversification"
     if ch not in CHANNELS and ch in SECTOR_CHANNEL:     # the model named the sector instead of the channel
         mapped, ch = ch, SECTOR_CHANNEL[ch]

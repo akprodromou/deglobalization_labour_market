@@ -1,0 +1,193 @@
+﻿term,channel,language,variants,origin,in_brief_seed,version_added,status,note
+batteries,critical materials,en,,tfidf,0,v1,active,
+battery materials,critical materials,en,battery raw materials,seed,0,v1,active,ambiguous: also general battery R&D
+battery recycling,critical materials,en,recycling of batteries,expansion_2026-10_candidate,0,v2,active,P: process term
+battery storage,critical materials,en,,embedding,0,v1,active,
+critical metals,critical materials,en,strategic metals,seed,0,v1,active,
+critical raw materials,critical materials,en,critical minerals|CRMA|Critical Raw Materials Act,seed,1,v1,active,
+lithium,critical materials,en,,seed,0,v1,active,ambiguous: also battery and mining roles in general
+mining and mineral,critical materials,en,,embedding,0,v1,active,
+precious metals,critical materials,en,,embedding,0,v1,active,
+rare earths,critical materials,en,rare earth elements|rare earth metals,seed,0,v1,active,
+raw materials security,critical materials,en,security of raw materials|raw material supply,seed,0,v1,active,
+strategic raw materials,critical materials,en,strategic materials,seed,0,v1,active,
+strategic resource,critical materials,en,,embedding,0,v1,active,
+aeronautical,defense,en,,tfidf,0,v1,active,
+aeronautics sector,defense,en,,tfidf,0,v1,active,
+aerospace,defense,en,,tfidf,0,v1,active,
+air base,defense,en,,tfidf,0,v1,active,
+ammunition production,defense,en,munitions production|munitions,seed,0,v1,active,
+armament,defense,en,armaments,seed,0,v1,active,bare term
+armed forces,defense,en,,tfidf,0,v1,active,
+armed forces commissariat,defense,en,,tfidf,0,v1,active,
+armed forces logistics,defense,en,,embedding,0,v1,active,
+armed forces materiel,defense,en,,embedding,0,v1,active,
+armies,defense,en,,tfidf,0,v1,active,
+armored,defense,en,,tfidf,0,v1,active,
+army,defense,en,,tfidf,0,v1,active,
+army commissariat,defense,en,,tfidf,0,v1,active,
+army commissariat service,defense,en,,tfidf,0,v1,active,
+army materiel,defense,en,,tfidf,0,v1,active,
+artillery,defense,en,,embedding,0,v1,active,
+civil defence and resilience,defense,en,,embedding,0,v1,active,
+combat vehicles,defense,en,,tfidf,0,v1,active,
+defence industrial base,defense,en,defense industrial base|defence industry|defense industry,seed,0,v1,active,
+defence procurement,defense,en,defense procurement|military procurement,seed,0,v1,active,
+defence supply chain,defense,en,defense supply chain|defence supply chains,seed,0,v1,active,
+defend our country,defense,en,,tfidf,0,v1,active,
+defense,defense,en,defence,seed,0,v1,active,bare term: mostly a sector mention in job ads (low intensity); staffing firms post for clients
+defense agency,defense,en,,embedding,0,v1,active,
+defense and security company,defense,en,,embedding,0,v1,active,
+defense and security solutions,defense,en,,embedding,0,v1,active,
+defense authorities,defense,en,,tfidf,0,v1,active,
+defense branches,defense,en,,embedding,0,v1,active,
+defense capabilities,defense,en,,tfidf,0,v1,active,
+defense facilities,defense,en,,embedding,0,v1,active,
+defense forces,defense,en,,embedding,0,v1,active,
+defense logistics,defense,en,,embedding,0,v1,active,
+defense materiel,defense,en,,tfidf,0,v1,active,
+defense policy,defense,en,,embedding,0,v1,active,
+defense research,defense,en,,embedding,0,v1,active,
+defense research institute,defense,en,,embedding,0,v1,active,
+defense secrecy,defense,en,,tfidf,0,v1,active,
+defense sector,defense,en,,tfidf,0,v1,active,
+defense systems,defense,en,,tfidf,0,v1,active,
+deployed for war,defense,en,,tfidf,0,v1,active,
+explosives,defense,en,,embedding,0,v1,active,
+firearms,defense,en,,embedding,0,v1,active,
+forces commissariat service,defense,en,,tfidf,0,v1,active,
+forces in mainland,defense,en,,tfidf,0,v1,active,
+fortifications,defense,en,,embedding,0,v1,active,
+french navy,defense,en,,tfidf,0,v1,active,
+military capability,defense,en,,tfidf,0,v1,active,
+military equipment,defense,en,defence equipment|defense equipment,seed,0,v1,active,
+military helicopters,defense,en,,tfidf,0,v1,active,
+military infrastructure,defense,en,,tfidf,0,v1,active,
+military operations,defense,en,,tfidf,0,v1,active,
+military personnel,defense,en,,tfidf,0,v1,active,
+military unit,defense,en,,embedding,0,v1,active,
+military vehicles,defense,en,,tfidf,0,v1,active,
+missile,defense,en,,embedding,0,v1,active,
+national navy,defense,en,,tfidf,0,v1,active,
+nato,defense,en,,tfidf,0,v1,active,
+naval,defense,en,,tfidf,0,v1,active,
+naval base,defense,en,,tfidf,0,v1,active,
+overseas and abroad,defense,en,,tfidf,0,v1,active,
+submarines,defense,en,,tfidf,0,v1,active,
+total defense authority,defense,en,,tfidf,0,v1,active,
+total military duty,defense,en,,tfidf,0,v1,active,
+warfare,defense,en,,embedding,0,v1,active,
+weapon,defense,en,,embedding,0,v1,active,
+weapon systems,defense,en,,tfidf,0,v1,active,
+weapons,defense,en,,tfidf,0,v1,active,
+ai gigafactory,diversification,en,AI gigafactories|AI factory|AI factories,seed_invest_ai_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+aleph alpha,diversification,en,,provider_review_2026-11,0,v4,active,German sovereign-AI company
+alternative to american,diversification,en,alternative to US|alternative to the american,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+bleu,diversification,en,"re:(?-i:\bBleu\b)(?=[^\n]{0,60}(?:cloud§orange§capgemini§microsoft§secnum§sovereign§souverain))|re:(?:cloud§orange§capgemini§microsoft§secnum§sovereign§souverain)[^\n]{0,60}(?-i:\bBleu\b)",provider_review_2026-11,0,v4,active,"Orange-Capgemini cloud JV; capitalised Bleu with a cloud context within 60 characters, so colour and French names are excluded"
+challenges of sovereignty,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+cloud de confiance,diversification,en,,provider_review_2026-11,0,v4,active,French trusted-cloud label
+cloud temple,diversification,en,,provider_review_2026-11,0,v4,active,named EU sovereign-cloud operator
+data sovereignty,diversification,en,sovereignty of data|data residency,lightcast_review_2026-11,0,v3,active,recall term; rare (a few postings); tagger decides
+delos cloud,diversification,en,,provider_review_2026-11,0,v4,active,German sovereign-cloud operator
+digital sovereignty,diversification,en,sovereign digital|digital autonomy,seed_invest_ai_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+eucs,diversification,en,European Cybersecurity Certification Scheme for Cloud Services|EU cloud certification scheme,provider_review_2026-11,0,v4,active,EU cloud certification scheme
+european cloud,diversification,en,european cloud provider|EU cloud,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+eurostack,diversification,en,,provider_review_2026-11,0,v4,active,EU sovereign digital stack initiative
+free trade agreement,diversification,en,free trade agreements,seed,0,v1,active,
+gaia-x,diversification,en,gaia x,provider_review_2026-11,0,v4,active,EU data-infrastructure initiative
+guarantee the sovereignty,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+market diversification,diversification,en,export market diversification|diversification of export markets,seed,0,v1,active,
+national sovereignty,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+numspot,diversification,en,,provider_review_2026-11,0,v4,active,named EU sovereign-cloud operator
+outscale,diversification,en,,provider_review_2026-11,0,v5,active,European-owned cloud provider; employer-level when the provider is the employer (v12 rule)
+ovhcloud,diversification,en,,provider_review_2026-11,0,v5,active,European-owned cloud provider; employer-level when the provider is the employer (v12 rule)
+s3ns,diversification,en,,provider_review_2026-11,0,v4,active,named EU sovereign-cloud operator; counts only when the employer or the platform built (v12 rule)
+scaleway,diversification,en,,provider_review_2026-11,0,v4,active,named EU cloud provider
+secnumcloud,diversification,en,secnum cloud|secnumcloud 3.2,provider_review_2026-11,0,v4,active,ANSSI qualification; as a requirement in a general security role it is none (v12 rule)
+secure sovereign cloud security,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign ai,diversification,en,sovereign artificial intelligence,seed_invest_ai_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign and sustainable,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign capabilities,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign capacities,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign cloud,diversification,en,sovereign cloud provider|EU sovereign cloud,seed_invest_ai_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+sovereign solutions,diversification,en,,candidate_embedding_lesjeudis_2026-11,0,v3,active,recall term; tagger decides (many hits are defense or cybersecurity employer boilerplate)
+stackit,diversification,en,,provider_review_2026-11,0,v4,active,named EU sovereign-cloud operator (Schwarz Group)
+trade diversification,diversification,en,diversification of trade,seed,0,v1,active,
+carbon capture,energy security,en,CCS|CCUS|carbon capture and storage|bio-CCS,expansion_2026-10,0,v2,active,heavy-industry decarbonisation technology; the tagger decides the channel
+critical infrastructure protection,energy security,en,,seed,0,v1,active,
+electrolyser,energy security,en,electrolyzer|electrolysis,expansion_2026-10,0,v2,active,ambiguous: also laboratory electrochemistry
+energy security,energy security,en,energy independence|energy sovereignty,seed,0,v1,active,
+energy storage,energy security,en,grid-scale storage|battery energy storage|BESS,expansion_2026-10,0,v2,active,overlaps battery storage (critical materials)
+gas supply diversification,energy security,en,diversification of gas supply|LNG supply,seed,0,v1,active,
+grid resilience,energy security,en,resilient energy system,seed,0,v1,active,
+hybrit,energy security,en,hybrit project|hydrogen breakthrough ironmaking technology,named_projects_2026-11,0,v6,active,named project rule: every mention of HYBRIT is energy security; 0 postings in jobbland to 2026-09
+hydrogen,energy security,en,green hydrogen|hydrogen production|hydrogen storage,expansion_2026-10,0,v2,active,ambiguous: also chemicals and fuel-cell roles in general
+nuclear,energy security,en,,tfidf,0,v1,active,
+nuclear power,energy security,en,,tfidf,0,v1,active,
+nuclear power plant,energy security,en,,tfidf,0,v1,active,
+security of supply,energy security,en,supply security|secure energy supply,seed,0,v1,active,
+solar power,energy security,en,solar energy|solar cells|solar panels|solar module|photovoltaic|solar park,expansion_2026-10,0,v2,active,ambiguous: residential solar sales postings are common and not about the channel
+stegra,energy security,en,h2 green steel|h2gs,named_projects_2026-11,0,v6,active,named project rule: Stegra together with Boden is energy security; the tagger applies it (v12 prompt)
+wind power,energy security,en,wind turbine|wind farm|offshore wind|onshore wind|wind energy,expansion_2026-10,0,v2,active,ambiguous: also general wind-energy sales and consulting
+China plus one,reshoring,en,China+1|China +1|China plus 1,seed,1,v1,active,
+battery manufacturing,reshoring,en,battery production|battery cell production|gigafactory|battery factory|cell manufacturing,expansion_2026-10,0,v2,active,guide v8: battery production is reshoring; CISAF clean-tech outcome must include it
+de-risking,reshoring,en,derisking|de-risk,seed,1,v1,active,ambiguous: also finance and clinical-trial usage
+deglobalization,reshoring,en,,seed,0,v1,active,
+dual sourcing,reshoring,en,dual-sourcing|multi-sourcing,seed,0,v1,active,
+friend-shoring,reshoring,en,friendshoring|ally-shoring,seed,1,v1,active,
+iris²,reshoring,en,iris2|iris squared,projects_firms_2026-11,0,v7,active,EU secure satellite constellation IRIS2 (space is a fixed reshoring sector); the bare word iris is not used; the tagger decides by duties
+made in Europe,reshoring,en,buy European|European preference,seed,0,v1,active,
+nearshoring,reshoring,en,near-shoring|near shoring,seed,1,v1,active,
+northvolt,reshoring,en,northvolt ett|northvolt labs|northvolt ab|northvolt revolt,named_projects_2026-11,0,v6,active,battery cell production is a fixed reshoring sector; recycling duties are critical materials; the tagger decides by duties
+onshoring,reshoring,en,on-shoring,seed,0,v1,active,
+produced in sweden,reshoring,en,,embedding,0,v1,active,
+reliable supplier,reshoring,en,,embedding,0,v1,active,
+reshoring,reshoring,en,re-shoring,seed,0,v1,active,
+semiconductor sovereignty,reshoring,en,chip sovereignty|technological sovereignty,seed,1,v1,active,
+semiconductors,reshoring,en,,embedding,0,v1,active,
+strategic autonomy,reshoring,en,open strategic autonomy|economic security,seed,1,v1,active,
+strategic sourcing,reshoring,en,,embedding,0,v1,active,
+supplier base,reshoring,en,,embedding,0,v1,active,
+supply chain diversification,reshoring,en,diversify supply chains|diversified supply chain,seed,0,v1,active,
+supply chain resilience,reshoring,en,resilient supply chains|supply-chain resilience,seed,1,v1,active,
+supply chain security,reshoring,en,secure supply chains,seed,0,v1,active,
+CBAM,trade compliance,en,carbon border adjustment mechanism|carbon border adjustment,seed,1,v1,active,
+ESG sourcing,trade compliance,en,responsible sourcing|sustainable sourcing|ethical sourcing,seed,1,v1,active,
+air freight,trade compliance,en,,tfidf,0,v1,active,
+anti-dumping,trade compliance,en,anti dumping|trade defence instruments,seed,0,v1,active,
+creating shipping documents,trade compliance,en,,tfidf,0,v1,active,
+customs administration,trade compliance,en,,embedding,0,v1,active,
+customs agency,trade compliance,en,,tfidf,0,v1,active,
+customs board,trade compliance,en,,embedding,0,v1,active,
+customs clearance,trade compliance,en,,tfidf,0,v1,active,
+customs compliance,trade compliance,en,customs regulations|customs legislation,seed,0,v1,active,
+customs crime,trade compliance,en,,embedding,0,v1,active,
+customs declarations,trade compliance,en,,tfidf,0,v1,active,
+customs documentation,trade compliance,en,,embedding,0,v1,active,
+customs documents,trade compliance,en,,tfidf,0,v1,active,
+customs handling,trade compliance,en,,tfidf,0,v1,active,
+customs management,trade compliance,en,,tfidf,0,v1,active,
+customs office,trade compliance,en,,embedding,0,v1,active,
+customs procedures,trade compliance,en,,embedding,0,v1,active,
+customs processing,trade compliance,en,,tfidf,0,v1,active,
+customs service,trade compliance,en,,embedding,0,v1,active,
+deforestation regulation,trade compliance,en,EUDR,seed,0,v1,active,
+dual-use goods,trade compliance,en,dual use items|dual-use items|dual use goods,seed,1,v1,active,
+export controls,trade compliance,en,export control|export licensing,seed,1,v1,active,
+export documentation,trade compliance,en,,embedding,0,v1,active,
+exports,trade compliance,en,,embedding,0,v1,active,
+global value chains,trade compliance,en,,seed,0,v1,active,
+incoterms,trade compliance,en,,tfidf,0,v1,active,
+proliferation,trade compliance,en,,tfidf,0,v1,active,
+rules of origin,trade compliance,en,preferential origin|origin rules,seed,0,v1,active,
+sanctions compliance,trade compliance,en,economic sanctions|EU sanctions,seed,0,v1,active,
+supply chain due diligence,trade compliance,en,CSDDD|corporate sustainability due diligence,seed,0,v1,active,
+swedish customs administration,trade compliance,en,,tfidf,0,v1,active,
+telemigration,trade compliance,en,,seed,0,v1,active,
+trade compliance,trade compliance,en,global trade compliance|international trade compliance,seed,1,v1,active,
+transport logistics,trade compliance,en,,tfidf,0,v1,active,
+wholesale and foreign,trade compliance,en,,tfidf,0,v1,active,
+safe and stable electricity,energy security,en,,embedding,0,v1,removed 2026-10-31,removed: matched ordinary grid-operation roles (energy-security false positives)
+safe electricity,energy security,en,,embedding,0,v1,removed 2026-10-31,removed: matched ordinary grid-operation roles (energy-security false positives)
+secure electricity,energy security,en,,embedding,0,v1,removed 2026-10-31,removed: matched ordinary grid-operation roles (energy-security false positives)
+stable electricity,energy security,en,,embedding,0,v1,removed 2026-10-31,removed: matched ordinary grid-operation roles (energy-security false positives)

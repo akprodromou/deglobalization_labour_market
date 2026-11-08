@@ -1,0 +1,16 @@
+﻿firm,aliases,sector,channel_hint,note
+Thales Alenia Space,thales alenia,space,reshoring (space),satellite maker; IRIS2 context; Thales boilerplate rule applies to other Thales units
+Infineon Technologies,infineon,semiconductors,reshoring,chips
+STMicroelectronics,stmicroelectronics|st microelectronics,semiconductors,reshoring,Catania project
+NXP Semiconductors,nxp,semiconductors,reshoring,chips
+ams OSRAM,ams-osram|ams osram,semiconductors / electronic components,reshoring,chips and optical components
+TSMC,tsmc|esmc,semiconductors,reshoring,"chip foundry; esmc is the Dresden joint venture name, verify before use"
+GlobalFoundries,globalfoundries,semiconductors,reshoring,Project SPRINT
+Rheinmetall,rheinmetall,defense,defense,defence employer
+Leonardo,leonardo spa|leonardo s.p.a,defense / aerospace,defense,"the bare word ""leonardo"" is a first name and is not used"
+Airbus Defence and Space,airbus defence|airbus defense,defense / space,defense,Airbus alone covers civil aviation: not used
+Nexans,nexans,cables (energy and telecom infrastructure),energy security (to be decided),no channel rule yet
+Prysmian,prysmian,cables (energy and telecom infrastructure),energy security (to be decided),no channel rule yet
+Air Liquide,air liquide,industrial gases,none (verify the gas complex project),project named by user needs checking before any rule
+SAP SE,sap sovereign cloud,software,diversification only via sovereign cloud wording,"the bare word ""sap"" matches the SAP skill in thousands of postings and is not used"
+ArcelorMittal / Salzgitter / SSAB / thyssenkrupp / BASF,,steel and chemicals,none,low-carbon steel and decarbonisation are not one of the six channels; steel is none under the EU materials definition; hydrogen production would be energy security

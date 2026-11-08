@@ -60,7 +60,9 @@ except ImportError:
     from lexicon_io import read_lexicon, compile_lexicon, match_terms, context
 
 TIERS = ["boilerplate", "discourse", "infrastructure", "compliance"]
-COLS = TIERS + ["any"]
+COLS = TIERS + ["any", "ministry_only"]
+MINISTRY_RX = re.compile(r"industrial and digital sovereignty|ministry[^.]{0,120}digital sovereignty|minist[e\u00e8]re[^.]{0,120}souverainet", re.I)
+DS_RX = re.compile(r"digital sovereignty", re.I)
 
 
 def load_all(paths):
@@ -90,6 +92,7 @@ def main():
     ap.add_argument("--boot", type=int, default=1000)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--contexts", type=int, default=3)
+    ap.add_argument("--keep-ministry", action="store_true", help="count 'digital sovereignty' inside a ministry name as discourse (default: excluded and reported on its own)")
     a = ap.parse_args()
 
     rows_terms = read_lexicon(a.terms)
@@ -109,6 +112,7 @@ def main():
 
     days = defaultdict(lambda: [0.0, 0, np.zeros(len(COLS))])
     term_n = defaultdict(int)
+    ministry_n = [0]
     conc = defaultdict(lambda: defaultdict(list))      # month -> tier -> list of context fingerprints (one per posting and tier)
     EMP_KEYS = ("company", "employer", "company_name", "organisation", "organization", "hiring_organization")
     emp_seen = False
@@ -117,6 +121,11 @@ def main():
     for r in rows:
         txt = text_of(r["item"])
         hits = match_terms(compiled, txt)
+        n_ds = len(DS_RX.findall(txt))
+        n_in_ministry = sum(len(DS_RX.findall(m.group(0))) for m in MINISTRY_RX.finditer(txt))
+        ministry_only = n_ds > 0 and n_in_ministry >= n_ds      # every "digital sovereignty" sits in a ministry name
+        if ministry_only and not a.keep_ministry:
+            hits = [h for h in hits if h[0]["term"] != "digital sovereignty"]
         d = days[r["day"]]
         d[0] = r["w"]
         d[1] += 1
@@ -134,6 +143,9 @@ def main():
                 d[2][i] += 1
         if tiers:
             d[2][len(TIERS)] += 1
+        if ministry_only:
+            d[2][len(TIERS) + 1] += 1
+            ministry_n[0] += 1
         for row, m in hits:
             term_n[row["term"]] += 1
             k = (row["term"])
@@ -192,6 +204,8 @@ def main():
           "This is an upper bound on sovereignty-driven demand: the wording may be marketing and says nothing about the role. "
           "It is not a channel tag and is not mixed with the channel shares.", "",
           f"Postings read: {len(rows):,} (exact duplicates removed: {dropped:,}). Terms file: `{a.terms}`.", "",
+          f"Column `ministry_only`: postings in which every occurrence of \"digital sovereignty\" is part of a ministry name (for example \"Ministry of the Economy, Finance and industrial and digital sovereignty\"); {ministry_n[0]:,} postings (unweighted). "
+          + ("They ARE counted in the tiers (--keep-ministry)." if a.keep_ministry else "They are NOT counted in the tiers above; the column shows how large the exclusion is."), "",
           "| group | postings taken | " + " | ".join(COLS) + " |", "|---|---|" + "---|" * len(COLS)]
     for g, (name, members) in enumerate(groups):
         taken = int(sum(n[pos[k]] for k in members if k in pos))

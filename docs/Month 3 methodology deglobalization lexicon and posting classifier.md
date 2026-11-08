@@ -122,7 +122,7 @@ Two cautions apply to every term-level result. Terms that occur together in the 
 - One annotator; round-1 labels precede the final definitions.
 - Claude Haiku ran with default sampling, not temperature 0.
 - Rare channels have 15 to 20 annotated postings, so their intervals are wide.
-- The corpus is an English-language slice of jobbland.se and the lexicon is English only. Job ads have likely been machine-translated to English first.
+- The corpus is an English-language slice of jobbland.se and the lexicon is English only.
 
 ## Update, 31 October 2026: v9 tagging, lexicon v2 and other job boards
 
@@ -242,6 +242,44 @@ The figures after the full-text check are the ones to report; the first column s
 2. Full corpus tagged with Qwen v9 and the script 71 rule, channel shares computed (script 64); the December 2025 defense spike cannot be attributed to the Defence Industry Programme (see the 31 October update)
 3. Sector classifier: rejected by the author; it is not built.
 4. ESCOX accepted as a diagnostic; local skills at threshold 0.6 are used for skills per channel and never mixed with Tracker skills. Open: a new human sample for critical materials under the EU definition, the InvestAI framing for the supervisor, and the supervisor wording for the two dropped board events.
+
+## Update, 8 November 2026: final run with prompt v12, lexicon v7 and three boards
+
+The four Month 3 deliverables exist in their final form; the sovereignty-wording and firm-watchlist indicators have been run on all three boards and are reported below. Where this section differs from the 28 and 31 October statements (tagger, lexicon size, corpus, diversification), this section holds.
+
+**Final setup.** Qwen 2.5 7B (temperature 0) with prompt v12 and lexicon v7 (188 terms). Four steps follow the model: the EU-term rule for critical materials (script 71), three corrections for diversification (R1 to R3, script 82), and the author's own reading of four Northvolt postings that rule 71 had set to none (script 87). The model's answer is kept beside every corrected tag. Boards: jobbland.se (3,356 flagged postings), lesjeudis.com (3,906) and jobs.de (450, comparison only).
+
+**Decisions since 31 October (author).**
+
+- Diversification has two subtypes: supply-side (explicit dual or multiple sourcing, alternative suppliers, reducing dependence on a country) and sovereign-tech (work in the European sovereign cloud and AI sector). Employers that offer a European alternative to US cloud providers (Outscale, Scaleway, OVHcloud) are coded at employer level, with the intensity set by the duties. InvestAI stays under diversification; the AI Act was dropped.
+- A SecNumCloud or EUCS mention in a role is diversification (sovereign-tech): high when the employee's duties are keeping the company in line with the standard, low in every other case (lists, "a plus", "knowledge of").
+- Cybersecurity and cyber-sovereignty are none. "Sovereign" as a marketing word alone does not qualify a posting; it is counted in the separate wording indicator.
+- Reshoring keeps the fixed sectors (space, aerospace, semiconductors and electronic components, battery production) on every board.
+- Trade compliance stays a channel but is an ambiguous measure: routine customs work is created by globalization and by deglobalization alike. It is reported as counts, with no event inference.
+- Firm watchlists are an upper-bound sensitivity indicator only. The sovereignty-wording indicator has no Swedish terms.
+- The electric-vehicle analysis on jobs.de was dropped with the supervisor's agreement; jobs.de is tagged like the other boards.
+
+**Supervisor's reply (8 November 2026).** The supervisor accepted the three diversification coding decisions (the two subtypes with employer-level coding of European cloud providers, SecNumCloud or EUCS in a role as sovereign-tech, and "sovereign" as a marketing word alone not qualifying a posting) and agreed that trade compliance stays a reported channel, as counts only.
+
+**Deliverables.**
+
+| Deliverable | Status | Files |
+| --- | --- | --- |
+| Final lexicon | 188 active terms, 4 removed terms kept with their status | `deglobalization_lexicon_final.csv`, `lexicon_change_log.md` |
+| Tagged posting dataset | 7,705 rows on three boards, with the model's own answer and the rule that changed each tag | `tagged_postings_v12.csv`, `data_dictionary_tagged_postings.md` |
+| Classifier evaluation report | Written; the defense precision of jobbland.se under v12 is not measured | the evaluation report document |
+| Prompt template library | v1 to v12 with scores | `prompt_library.md`, `prompts/tagging_v1.txt` to `tagging_v12.txt` |
+
+**What the final run shows.** On the 620 annotated jobbland.se postings v12 is not worse than v9 (no channel falls by more than 0.03; exact channel agreement 480 against 466). Defense is the only channel with a validated size; on lesjeudis.com its precision is 0.54 (interval 0.41 to 0.67), so defense counts there are read for high and medium intensity only. Diversification is small and concentrated: 69 postings on lesjeudis.com (all sovereign-tech, about half from two employers), 5 on jobbland.se and none on jobs.de. Around the Critical Raw Materials Act (23 May 2024) and AccelerateEU (22 April 2026) no channel changes outside its interval on jobbland.se; the one interval whose lower end sits at zero is diversification around CRMA (0.00 to +0.11 points), and it rests on a handful of postings. jobs.de ends in April 2025 and tests no event.
+
+**Sovereignty-wording indicator (script 80).** Share of all postings, day-weighted, containing a term of the four tiers (boilerplate, discourse, infrastructure, compliance). It is an upper bound on sovereignty-driven demand and is not a channel. On jobbland.se it is close to zero: every month is at most 0.05%, with 4 "digital sovereignty" postings, 1 "sovereign cloud" and 3 "sovereign AI" postings in the whole corpus, from a handful of employers (evroc, a Swedish HPC centre and a university). On jobs.de it is 2 postings, both the same federal audit-office advertisement (December 2024). On lesjeudis.com it is 0.8% to 3.1% of postings per month, led by the boilerplate tier ("sovereign solutions", "sovereign and sustainable", "trusted and sovereign": 164, 24 and 28 postings), which is recruiting-page wording of defense groups and Outscale; the concentration table shows single contexts carrying up to 91% of a month's boilerplate postings (November 2024: 22 postings, 3 contexts). The 90 days after InvestAI (11 February 2025) show 0.84% (0.33 to 1.46) against 1.18% (0.92 to 1.48) before, so no rise. September 2025 is the highest month (3.13%, 2.02 to 4.30), with infrastructure terms at 1.01% from 8 different employers. The 12 lesjeudis.com postings whose only "digital sovereignty" is a ministry name are excluded from the tiers and counted separately (none on the other boards).
+
+**Firm watchlist (script 88).** Share of all postings that name one of 14 listed firms (the steel and chemicals row has no alias); an upper bound, since a posting may name a firm as customer, partner or competitor, and not a channel. jobbland.se: 10 postings, all tagged none (Prysmian 3, Air Liquide 5, NXP 2, Nexans 1), every monthly share at most 0.14%. jobs.de: 2 postings (Air Liquide), tagged none. lesjeudis.com: 87 postings (Nexans 29, Airbus Defence and Space 19, Thales Alenia Space 13, Air Liquide 11, NXP 8, STMicroelectronics 4, Infineon 3), tagged none 53, defense 29, reshoring 4, energy security 1. The contexts read are mostly employer descriptions or lists of customers and competitors, which is why few carry a reshoring tag. The 90 days after InvestAI show 1.59% (0.46 to 2.90) against 0.24% (0.10 to 0.40) before, driven by May and June 2025 (1.90% and 0.85%); the window after the event holds 967 sampled postings and the firm counts behind it are small, so this is reported as a count, with no event inferred.
+
+**Still open.**
+
+- No held-out labelled sample exists for diversification or defense under v12; the 79-posting diversification check is optimistic because the rules were designed on the same postings.
+- The text of the first sections of this document (v8 or v9 tagger, 154 terms, jobbland.se only) describes the state on 28 and 31 October and has not been rewritten.
 
 ## Data and what it supports
 
@@ -373,47 +411,3 @@ This install recipe is the usual one but has not been run for this project. If i
 | 14 | python -m diagnostics.60\_score\_tagging --tags \<tags file> (repeat --tags per model) |
 
 Step 9 saves after every posting. If the session disconnects, run the same command again and it continues where it stopped.
-
-### Details on the code
-
-#### TF-IDF pipeline
-
-The TF-IDF pipeline is 55_lexicon_seed_coverage_tfidf.py. You run it as python -m diagnostics.55_lexicon_seed_coverage_tfidf, and its docstring has the usage notes.
-
-1. It reads the corpus (from script 52) and drops exact duplicates.
-2. Postings that contain a seed term form the “flagged” set, and the rest form the “other” set.
-3. It counts 1- to 3-grams with scikit-learn’s CountVectorizer (ngram_range=(1, 3), line 177). A second pass at line 181 adds the TF-IDF weights: sublinear tf, idf computed over the whole corpus.
-4. It ranks each n-gram by how much more often it appears in flagged postings than in the others. The score is the z-score of the log odds ratio, using a +0.5 correction in every cell. The mean TF-IDF weight in the flagged postings is shown next to it.
-
-Candidates are filtered to those that:
-* appear in at least --min-flagged-df flagged postings;
-* appear under at least --min-titles distinct titles, so one employer’s repeated advert can’t dominate;
-* don’t start or end with a stop word, and don’t contain a seed term;
-* aren’t a shorter n-gram sitting wholly inside a longer candidate with almost the same count.
-
-Outputs
-
-docs/lexicon_seed_coverage.md shows the count for each seed term and the counts by month.
-data/lexicon/candidates_tfidf.csv is the review sheet you filled in, with the columns term, n, df_flagged, df_other, z, mean_tfidf, titles, example, keep, channel. The sheet contains posting snippets, so keep it out of version control.
-
-#### Expand lexicon using sentence-embedding similarity 
-
-1. Candidate phrases are considered all 1- to 4-word phrases that occur in at least --min-df postings (Apriori counting, corpus_io.frequent_ngrams. We don't allow phrases to cross a sentence, comma or bracket; no stop word at either end). If there are more than --max-candidates, the most frequent are kept.
-2. Each seed term and each of its variants are encoded into a numerical vector (a list of numbers). Both the seed terms and candidates receive the same "query: " prefix, in line with symmetric similarity. This is defined in the E5 (Embeddings from Bidirectional Encoder Representations) model, an open-source family of text-embedding models developed by Microsoft Research designed to convert text into dense vector representations for semantic search and retrieval (in line with the project brief). Therefore, both texts are encoded using the same convention because we want to compare two phrases on equal terms. Finally, they are L2-normalised, so each vector is adjusted to have a length (Euclidean norm) of exactly 1.
-3. For every seed term the --k nearest candidates by cosine similarity are retrieved (FAISS inner-product index).
-(Reference: @misc{johnson2017billionscalesimilaritysearchgpus, title={Billion-scale similarity search with GPUs}, author={Jeff Johnson and Matthijs Douze and Hervé Jégou}, year={2017}, eprint={1702.08734}, archivePrefix={arXiv}, primaryClass={cs.CV}, url={https://arxiv.org/abs/1702.08734},})
-4. A candidate is dropped if it is, contains, or is part of a seed term (i.e. we use the same overlap rule as script 55). The rest go to a review sheet, ordered by the best similarity, with the seed it was closest to and the number of different seeds that retrieved it.
-
-It's important to note that nothing is added automatically. In practice, similarity is a reason to look at a phrase, but doesn't not constitute the reason for it to belong to a channel; for example, "customs clearance" will be close to "customs compliance" but doesn't belong to the lexicon.
-
-#### LLM-based classifier to tag each flagged posting by channel and intensity (low / medium / high).
-
-The prompts are built with the following structure:
-
-1. A decision order with the questions asked in sequence.
-2. The model must quote its evidence.
-3. A fixed JSON output.
-4. Temperature 0. At temperature 0 the model always picks its most likely next token, so rerunning the same posting will give the same answer. It is therefore important for reproducibility, and is the default choice for classification. 
-5. The lexicon term is described as “a reason to look, never a reason to assign a channel”.
-
-To build the prompt, we used references such as "Törnberg (2023), ChatGPT-4 outperforms experts and crowd workers in annotating political Twitter messages with zero-shot learning", which describes the approach of using an LLM as a classifier against human-labelled data, as well as OpenAI, Prompt engineering guide (https://developers.openai.com/api/docs/guides/prompt-engineering?api-mode=responses).
