@@ -1,0 +1,94 @@
+# Title cleaning: jobbland
+
+53,959 postings after removing 3,578 duplicates; 1,389 without a title; 24,625 titles changed (46.8% of the titled ones).
+
+## 25 random before / after pairs (changed titles only)
+
+- `Site Reliability Engineer - nShift AB`  ->  `Site Reliability Engineer`
+- `Fitter Special carpentry |Lernia | Stockholm - LERNIA BEMANNING AB`  ->  `Fitter Special carpentry |Lernia`
+- `Nurse to Berglunda - Nytida`  ->  `Nurse to Berglunda`
+- `Construction work - Skultuna Fastigheter AB`  ->  `Construction work`
+- `Lead Infrastructure Engineer - Digital - Stegra`  ->  `Lead Infrastructure Engineer - Digital`
+- `AnnSam is looking for a Nurse for 24-33 home care in Katrineholm☀️ - Annsam AB`  ->  `AnnSam is looking for a Nurse for 24-33 home care in Katrineholm☀️`
+- `Store assistant (summer job), Willys Huddinge Heron City - Axfood`  ->  `Store assistant (summer job), Willys Huddinge Heron City`
+- `Karlstad: Controller - Jobbakuten Väst AB`  ->  `Karlstad: Controller`
+- `Social pedagogue for Valdemarsro high school - MALMÖ MUNICIPALITY`  ->  `Social pedagogue for Valdemarsro high school`
+- `Licensing and procurement coordinator for the IT and digitization unit - Västervik municipality`  ->  `Licensing and procurement coordinator for the IT and digitization unit`
+- `Kitchen assistant for Ekebackenskolan 2 st, Ljungby - Ljungby municipality`  ->  `Kitchen assistant for Ekebackenskolan 2 st, Ljungby`
+- `Licensed animal nurse with anesthesia skills for AniCura Roslagen - AniCura Group`  ->  `Licensed animal nurse with anesthesia skills for AniCura Roslagen`
+- `Online-based Service Advisor - Din Bil Sverige AB`  ->  `Online-based Service Advisor`
+- `Senior DevOps Engineer IRC216313`  ->  `Senior DevOps Engineer`
+- `Extra staff - Luleå - Retail24 Sweden AB`  ->  `Extra staff`
+- `Are you our new hairdresser at VACKER Center Syd? - Beautiful Sweden AB`  ->  `Are you our new hairdresser at VACKER Center Syd?`
+- `Barista to the King's Curve 10h/week - ESPRESSO HOUSE SWEDEN AKTIEBOLAG`  ->  `Barista to the King's Curve 10h/week`
+- `System Design Engineer - Insulation Coordination - Hitachi, Ltd.`  ->  `System Design Engineer - Insulation Coordination`
+- `Primary school teacher goes F-3, Flurkmark school - UMEÅ KOMMUN`  ->  `Primary school teacher goes F-3, Flurkmark school`
+- `Rehab Kusten is looking for Occupational Therapist - Praktikertjänst AB`  ->  `Rehab Kusten is looking for Occupational Therapist`
+- `Nurse at the Health Center Södra Sandby - REGION SKÅNE`  ->  `Nurse at the Health Center Södra Sandby`
+- `Nurse for assignments in psychiatry in Stockholm - VårdIX AB`  ->  `Nurse for assignments in psychiatry in Stockholm`
+- `Tulkvarnsvägen in Krokom, Jämtland is looking for committed assistant nurses during the summer - Forenede Care`  ->  `Tulkvarnsvägen in Krokom, Jämtland is looking for committed assistant nurses during the summer`
+- `Teacher grades 3-5 in the subjects SVA and Swedish at Lilla Sätraskolan - GÄVLE MUNICIPALITY`  ->  `Teacher grades 3-5 in the subjects SVA and Swedish at Lilla Sätraskolan`
+- `Work as a chef, sous chef or head chef in Åre. - M Dryck & Konsult AB`  ->  `Work as a chef, sous chef or head chef in Åre`
+
+## 179 frequent trailing segments removed as employers/places (>= 25 titles)
+
+- a hub ab
+- a-hub
+- abb
+- academedia support ab
+- academic work sweden ab
+- adecco sweden ab
+- afry
+- afry ab
+- alfa laval
+- almia ab
+- alstom
+- amazon
+- anicura group
+- apotek hjärtat ab
+- arbetsförmedlingen
+- arla
+- astek sweden ab
+- astrazeneca
+- atea
+- aura personal ab
+- avaron ab
+- axfood
+- axis communications ab
+- bauhaus
+- beijer byggmaterial
+- billerud
+- borås municipality
+- bravura
+- capgemini
+- capio
+- capio sweden ab
+- centio consulting group ab
+- cgi
+- circle k stores, inc.
+- city of stockholm
+- clockwork bemanning & rekrytering ab
+- consid
+- dalarna region
+- dfds professionals
+- dfds professionals ab
+- dhl freight (sweden) ab
+- din bil sverige ab
+- e-solutions
+- ecareer ab
+- einride swe
+- epidemic sound
+- eterni sweden ab / eterni
+- fmf assistans ab
+- fordonsakademin sverige ab
+- forenede care
+- forenede care ab
+- framtiden i sverige ab
+- friday väst ab
+- goteborgs universitet
+- gothenburg
+- gothenburg city
+- gothenburg municipality
+- gothenburg university
+- gotland region
+- h & m hennes & mauritz ab
