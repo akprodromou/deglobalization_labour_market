@@ -281,6 +281,17 @@ The four Month 3 deliverables exist in their final form; the sovereignty-wording
 - No held-out labelled sample exists for diversification or defense under v12; the 79-posting diversification check is optimistic because the rules were designed on the same postings.
 - The text of the first sections of this document (v8 or v9 tagger, 154 terms, jobbland.se only) describes the state on 28 and 31 October and has not been rewritten.
 
+## Update, 10 November: sampling design behind the shares
+
+This note records how the corpora were collected (Month 2) because every share in this report depends on it. No Month 2 report exists, so it sits here. The full treatment is in the Month 4 methodology page.
+
+- **Collection.** Script 52 reads each day's total from the Skillab API and fetches one random page of about 100 postings of that day. Each record keeps the day total. The reason is probably cost and speed (API requests take 20 to 70 seconds); this is my inference, not stated in the code.
+- **Weighted shares.** Weight = day total divided by postings taken. Share = sum of weights of a unit's postings divided by sum of day totals. This is the Horvitz-Thompson idea (Horvitz and Thompson 1952); Cochran and Lohr cover stratified sampling.
+- **Limit.** A page holds adjacent postings in server order, so postings within a page may be clumped. Within-day bootstrap intervals may therefore be too narrow. Resampling whole days or week blocks is more conservative but answers a different question, so both should be reported.
+- **Possible effect on this report.** The ESCO extractor can link generic template sentences to unrelated skills (similarity threshold 0.6). The skills-per-channel tables above may be affected; this has not been checked and is pending a diagnostic.
+
+**Template clumping seen in the flagged postings (11 November).** In jobbland for 14 to 20 April 2025, 41 of the 56 flagged postings (73%) share one description opening, probably one employer; 47 of the 56 are energy security. A weekly or quarterly share can therefore move because one employer recruited in bulk. The employer field is empty on all three boards, so employer concentration was checked with a proxy (first 80 characters of the description). Details and the lesjeudis findings are in the Month 4 methodology page.
+
 ## Data and what it supports
 
 Every step uses one corpus: the day-stratified download of jobbland.se postings for January to August 2026 (script 52), 22,638 postings before de-duplication. The skill, occupation and sector tags are empty in 2026, so everything rests on the title and description text.
