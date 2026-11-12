@@ -38,14 +38,14 @@ import numpy as np
 NAMED = {
     "trade compliance officer": r"trade compliance|customs compliance|sanctions? compliance|compliance officer.*(trade|export|customs)|"
                                 r"handelskompliance|tullkompliance|zoll.{0,12}compliance|conformit\w+ (douan|export)",
-    "export control specialist": r"export[- ]?control|exportkontroll|exportkontrolle|ausfuhrkontroll|contr[oô]le des exportations|dual[- ]use",
+    "export control specialist": r"export[- ]?control|exportkontroll|exportkontrolle|ausfuhrkontroll|contr[oô]le des exportations|\bdual[- ]use\b",
     "supply chain resilience analyst": r"supply[- ]chain.{0,20}(risk|resilien)|resilien.{0,20}supply|leveranskedje.{0,20}(risk|resilien)",
     "semiconductor process engineer": r"(semiconductor|halvledar|halbleiter|semi-?conducteur|wafer|cleanroom).{0,40}(process|engineer|ingenj|ingenieur|ing[eé]nieur)|"
                                       r"(process|engineer|ingenj|ingenieur|ing[eé]nieur).{0,40}(semiconductor|halvledar|halbleiter|semi-?conducteur|wafer)",
-    "battery cell technician": r"(batter|akku|accumulateur).{0,30}(cell|zell|technician|tekniker|techniker|technicien|operat|process)|"
-                               r"(cell|zell|technician|tekniker|techniker|technicien|operator).{0,30}(batter|akku|accumulateur)",
+    "battery cell technician": r"^(?!.*\b(?:solar|solcell\w*|solceller)\b).*(?:(batter|akku|accumulateur).{0,30}(cell|zell|technician|tekniker|techniker|technicien|operat|process)|"
+                               r"(cell|zell|technician|tekniker|techniker|technicien|operator).{0,30}(batter|akku|accumulateur))",
     "critical materials specialist": r"critical (raw )?material|kritiska (råvaror|material)|kritische rohstoffe|rare earth|sällsynta jordartsmetaller|"
-                                     r"mati[eè]res? (premi[eè]res? )?critiques|raw materials? (specialist|manager|analyst|engineer)",
+                                     r"mati[eè]res? (premi[eè]res? )?critiques",
     "reshoring program manager": r"reshoring|onshoring|nearshoring|supply chain locali[sz]ation|re-?industriali[sz]|relocali[sz]ation",
 }
 NAMED_RX = {k: re.compile(v, re.I) for k, v in NAMED.items()}
@@ -97,6 +97,10 @@ def coherence_filter(docs, e, min_n, min_lift, seed=0):
     signal. coherence = length of the mean title embedding of the posting set (1 = identical titles); lift = coherence
     minus the same number for 5 random sets of equal size."""
     rng = np.random.default_rng(seed)
+    # e5 embeddings are anisotropic (any two titles have cosine ~0.8), so a mean vector is long for ANY set and every
+    # item looked coherent (v2 first run: all lifts 0.00-0.04). Centre on the board mean and re-normalise first.
+    e = e - e.mean(axis=0, keepdims=True)
+    e = e / np.maximum(np.linalg.norm(e, axis=1, keepdims=True), 1e-9)
     where = defaultdict(list)
     for i, d in enumerate(docs):
         for t in set(d):
@@ -128,7 +132,7 @@ def coherence_report(name, stats, keep, labels):
 
 
 def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min_lift, esco_label, docs_dir,
-                 board, dim_sk=100, dim_lc=20):
+                 board, dim_sk=100, dim_lc=20, only_report=False):
     from sklearn.decomposition import TruncatedSVD
     from sklearn.feature_extraction.text import TfidfVectorizer
     sk = {r["id"]: r["skills"] for r in load_jsonl(skills_file)}
@@ -144,6 +148,19 @@ def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min
     for name, d, dim, mindf, w, min_n in (("esco", sk, dim_sk, 5, w_skills, 20), ("lightcast", lc, dim_lc, 3, w_lc, 10)):
         docs = [d.get(i, []) for i in ids]
         info[f"{name}_postings_with_any_raw"] = int(sum(1 for x in docs if x))
+        if only_report:
+            _, stats = coherence_filter(docs, e, min_n, 0.0)
+            lifts = np.array([v[2] for v in stats.values()])
+            rep_md.append(f"### {name}: {len(stats):,} items with at least {min_n} postings\n")
+            rep_md.append("| lift threshold | items kept | share of items | postings with at least one kept item |")
+            rep_md.append("|---|---|---|---|")
+            for th in (0.05, 0.1, 0.15, 0.2, 0.3, 0.4):
+                kt = {t for t, v in stats.items() if v[2] >= th}
+                cov = sum(1 for x in docs if any(t in kt for t in x)) / max(1, len(docs))
+                rep_md.append(f"| {th} | {len(kt):,} | {len(kt) / max(1, len(stats)):.0%} | {cov:.1%} |")
+            rep_md.append("")
+            rep_md.append(coherence_report(name, stats, {t for t, v in stats.items() if v[2] >= 0.15}, esco_label if name == "esco" else {}))
+            continue
         if min_lift is not None:
             keep, stats = coherence_filter(docs, e, min_n, min_lift)
             rep_md.append(coherence_report(name, stats, keep, esco_label if name == "esco" else {}))
@@ -165,10 +182,10 @@ def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min
         z = np.where(nz > 1e-9, z / np.maximum(nz, 1e-9), 0.0) * w
         blocks.append(z.astype("float32"))
         info[f"{name}_features"] = int(x.shape[1])
-    if min_lift is not None:
+    if only_report or min_lift is not None:
         Path(docs_dir).mkdir(parents=True, exist_ok=True)
         Path(f"{docs_dir}/skill_coherence_{board}.md").write_text("\n".join(rep_md), encoding="utf-8")
-    return blocks, info
+    return (None, info) if only_report else (blocks, info)
 
 
 # ---------------------------------------------------------------- clustering
@@ -284,8 +301,9 @@ def main():
     ap.add_argument("--seeds", type=int, nargs="+", default=[1, 2, 3])
     ap.add_argument("--w-skills", type=float, default=0.5)
     ap.add_argument("--w-lc", type=float, default=0.3)
-    ap.add_argument("--min-lift", type=float, default=0.10, help="coherence filter for skills / Lightcast terms (see coherence_filter)")
+    ap.add_argument("--min-lift", type=float, default=0.15, help="coherence filter for skills / Lightcast terms (see coherence_filter)")
     ap.add_argument("--no-coherence", action="store_true", help="old behaviour: every skill kept (input D v1)")
+    ap.add_argument("--coherence-only", action="store_true", help="no clustering: write docs/skill_coherence_<board>.md with kept-counts per threshold")
     ap.add_argument("--tag", default="", help="suffix for the output files, e.g. v2, so A and D v1 are not overwritten")
     ap.add_argument("--show", type=int, default=60)
     ap.add_argument("--limit", type=int, default=0, help="test on the first N postings")
@@ -315,6 +333,11 @@ def main():
     cache = None if args.limit else f"{args.out}/emb_{args.board}.npy"
     e = embed_titles([text_a(r) for r in recs], args.model, cache, args.mock)
 
+    if args.coherence_only:
+        skill_blocks(ids, e, skills, lcf, args.lc_terms, args.w_skills, args.w_lc, args.min_lift, esco_label, args.docs,
+                     args.board, only_report=True)
+        print(f"wrote {args.docs}/skill_coherence_{args.board}.md")
+        return
     for name in args.input:
         if name == "A":
             x, extra = e, {}

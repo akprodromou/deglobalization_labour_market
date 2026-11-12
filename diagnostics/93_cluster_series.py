@@ -70,12 +70,22 @@ def load_all(paths):
         Path(name).unlink()
 
 
+PERIOD = ["quarter"]
+
+
 def quarter(day):
+    """Period label of a day: quarter (2025-Q4) or, with --period month, month (2025-12). The name is kept for brevity."""
     y, m, _ = day.split("-")
+    if PERIOD[0] == "month":
+        return f"{y}-{m}"
     return f"{y}-Q{(int(m) - 1) // 3 + 1}"
 
 
 def qbounds(q):
+    if "-Q" not in q:
+        y, m = int(q[:4]), int(q[5:7])
+        b = date(y + (m == 12), 1 if m == 12 else m + 1, 1)
+        return date(y, m, 1), date.fromordinal(b.toordinal() - 1)
     y, n = int(q[:4]), int(q[-1])
     a = date(y, 3 * n - 2, 1)
     b = date(y + (n == 4), 1 if n == 4 else 3 * n + 1, 1)
@@ -102,22 +112,31 @@ def main():
     ap.add_argument("--nuts")
     ap.add_argument("--titles")
     ap.add_argument("--event")
+    ap.add_argument("--period", choices=["quarter", "month"], default="quarter")
+    ap.add_argument("--from", dest="d_from", default="0000-00-00", help="first day used (YYYY-MM-DD): restrict to one coverage regime")
+    ap.add_argument("--to", dest="d_to", default="9999-99-99", help="last day used")
     ap.add_argument("--window-days", type=int, default=90, help="days before and from the event used for the baseline (0 = whole board)")
-    ap.add_argument("--threshold", type=float, default=100)
+    ap.add_argument("--threshold", type=float, default=None, help="weighted postings per period; default 100 a quarter, 33.3 a month")
     ap.add_argument("--share-threshold", type=float, default=0.001)
-    ap.add_argument("--min-days", type=int, default=20)
+    ap.add_argument("--min-days", type=int, default=None, help="sampled days a period needs to be usable; default 20 a quarter, 12 a month")
     ap.add_argument("--min-placed", type=int, default=50)
     ap.add_argument("--max-template", type=float, default=0.30)
     ap.add_argument("--max-titleless", type=float, default=0.50, help="clusters made mostly of postings without a title are not eligible")
     ap.add_argument("--boot", type=int, default=500)
     ap.add_argument("--seed", type=int, default=1)
     a = ap.parse_args()
+    PERIOD[0] = a.period
+    if a.threshold is None:
+        a.threshold = 100 if a.period == "quarter" else 100 / 3
+    if a.min_days is None:
+        a.min_days = 20 if a.period == "quarter" else 12
     rng = np.random.default_rng(a.seed)
     labels_p = a.labels or f"data/cluster/labels_{a.board}_{a.input}.jsonl"
     nuts_p = a.nuts or f"data/tagged/nuts2_{a.board}.jsonl"
     titles_p = a.titles or f"data/tagged/titles_{a.board}.jsonl"
 
     rows, dup = load_all(a.corpus)
+    rows = [r for r in rows if a.d_from <= r["day"] <= a.d_to]
     lab = {}
     for l in open(labels_p, encoding="utf-8"):
         if l.strip():
@@ -132,6 +151,8 @@ def main():
                     if r.get("ok") and r.get("channel") in CH:
                         flag[str(r["posting_id"])] = r["channel"]
     reg = {}
+    if not Path(nuts_p).exists():
+        print(f"NOTE: {nuts_p} not found, so every posting counts as unplaced and HHI stays empty. Run script 96 for this board first.")
     if Path(nuts_p).exists():
         for l in open(nuts_p, encoding="utf-8"):
             if l.strip():
@@ -199,7 +220,7 @@ def main():
                            "adjusted_lo_C": loC * pop * adj, "adjusted_hi_C": hiC * pop * adj, "full_quarter": int(full)})
     Path("data/cluster").mkdir(parents=True, exist_ok=True)
     Path("docs").mkdir(exist_ok=True)
-    tag = f"{a.board}_{a.input}"
+    tag = f"{a.board}_{a.input}" + ("" if a.period == "quarter" else "_month") + ("" if a.d_from == "0000-00-00" and a.d_to == "9999-99-99" else f"_{a.d_from}_{a.d_to}")
     with open(f"data/cluster/series_{tag}.csv", "w", newline="", encoding="utf-8") as f:
         wr = csv.DictWriter(f, fieldnames=list(series[0].keys()))
         wr.writeheader()
@@ -230,6 +251,7 @@ def main():
             if c not in first_cross_s and r["share"] >= a.share_threshold:
                 first_cross_s[c] = q
     emerg = []
+    newlist = []     # (cluster, period index, period) : clearly new
     for qn, q in enumerate(fullq):
         act = sum(by[c][q]["weighted_adjusted"] >= a.threshold for c in clusters if c >= 0)
         act_s = sum(by[c][q]["share"] >= a.share_threshold for c in clusters if c >= 0)
@@ -239,6 +261,9 @@ def main():
         clear = sum(by[c][q]["adjusted_lo_C"] >= a.threshold for c in clusters if c >= 0)
         strict = sum(qn > 0 and by[c][q]["adjusted_lo_C"] >= a.threshold and by[c][fullq[qn - 1]]["adjusted_hi_C"] < a.threshold
                      for c in clusters if c >= 0)
+        for c in clusters:
+            if c >= 0 and qn > 0 and by[c][q]["adjusted_lo_C"] >= a.threshold and by[c][fullq[qn - 1]]["adjusted_hi_C"] < a.threshold:
+                newlist.append((c, qn, q))
         emerg.append((q, act, new, act_s, new_s, clear, strict))
 
     # ---- baseline
@@ -391,13 +416,50 @@ def main():
         md.append(f"| {s['cluster']} | {s['taken']} | {s['peak_quarter']} | {s['peak_adjusted']:,.0f} | {s['peak_share']:.2%} | {s['first_cross']} | "
                   f"{s['flagged_share']:.0%} | {s['top_channel']} {s['top_channel_share_of_flagged']:.0%} | {s['top_template_share']:.0%} | "
                   f"{s['hhi_norm']:.2f} | {s['unplaced_share']:.0%} | {ch} | {s['top_titles'][:90]} |")
+    sm = {x["cluster"]: x for x in summ}
+
+    def srow(c, extra):
+        x = sm[c]
+        return (f"| {c} | {x['taken']} | {extra} | {x['flagged_share']:.0%} | {x['top_template_share']:.0%} | {x['titleless_share']:.0%} | "
+                f"{'eligible' if x['eligible'] else 'not eligible'} | {x['top_titles'][:90]} |")
+
+    md += ["", "## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)", "",
+           "Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.", "",
+           "| cluster | taken | first clearly new | flagged | top template | without title | eligible | top titles |", "|---|---|---|---|---|---|---|---|"]
+    seen = set()
+    for c, qn, q in sorted(newlist, key=lambda t: (t[1], -sm[t[0]]["peak_adjusted"])):
+        if c in seen:
+            continue
+        seen.add(c)
+        later = [r_ for r_ in fullq[qn:] if by[c][r_]["adjusted_lo_C"] >= a.threshold]
+        md.append(srow(c, f"{q}; stays clearly above in {len(later)} of {len(fullq) - qn} periods from then on"))
+    if not seen:
+        md.append("| - | | none | | | | | |")
+    if len(fullq) >= 2:
+        f0, f1 = fullq[0], fullq[-1]
+        rise = []
+        for c in clusters:
+            if c < 0:
+                continue
+            r0, r1 = by[c][f0], by[c][f1]
+            rise.append((r1["share"] - r0["share"], c, r0, r1))
+        rise.sort(key=lambda t: -t[0])
+        md += ["", f"## Largest rise in share, first usable period ({f0}) to last ({f1})", "",
+               "Both ends are weighted shares of the whole board with interval C. Clear = the lower end at the last period is above the upper end at the first.", "",
+               "| cluster | taken | share first (interval C) | share last (interval C) | clear | flagged | top template | without title | eligible | top titles |", "|---|---|---|---|---|---|---|---|---|---|"]
+        for d_, c, r0, r1 in rise[:15]:
+            x = sm[c]
+            md.append(f"| {c} | {x['taken']} | {r0['share']:.2%} ({r0['share_lo_C']:.2%} to {r0['share_hi_C']:.2%}) | {r1['share']:.2%} ({r1['share_lo_C']:.2%} to {r1['share_hi_C']:.2%}) | "
+                      f"{'yes' if r1['share_lo_C'] > r0['share_hi_C'] else 'no'} | {x['flagged_share']:.0%} | {x['top_template_share']:.0%} | {x['titleless_share']:.0%} | "
+                      f"{'eligible' if x['eligible'] else 'not eligible'} | {x['top_titles'][:80]} |")
     fl_rank = sorted((s for s in summ if s["cluster"] >= 0 and s["flagged_taken"] >= 10 and s["top_template_share"] < a.max_template and s["titleless_share"] <= a.max_titleless),
                      key=lambda s: -s["flagged_share"])
     md += ["", "## Clusters with the largest flagged share (at least 10 flagged postings taken, not template-dominated)", "",
-           "| cluster | taken | flagged taken | flagged share (weighted) | top channel | peak share | first crossing | top template | HHI norm | unplaced | top titles |",
-           "|---|---|---|---|---|---|---|---|---|---|---|"]
+           "| cluster | taken | flagged taken | flagged share (weighted) | top channel | peak share | first crossing | top template | HHI norm | unplaced | change vs event (95% interval) | top titles |",
+           "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     md += [f"| {s['cluster']} | {s['taken']} | {s['flagged_taken']} | {s['flagged_share']:.0%} | {s['top_channel']} {s['top_channel_share_of_flagged']:.0%} | "
-           f"{s['peak_share']:.2%} | {s['first_cross']} | {s['top_template_share']:.0%} | {s['hhi_norm']:.2f} | {s['unplaced_share']:.0%} | {s['top_titles'][:90]} |"
+           f"{s['peak_share']:.2%} | {s['first_cross']} | {s['top_template_share']:.0%} | {s['hhi_norm']:.2f} | {s['unplaced_share']:.0%} | "
+           + (f"{s['diff']:+.2%} ({s['diff_lo']:+.2%} to {s['diff_hi']:+.2%})" if s["diff"] is not None else "-") + f" | {s['top_titles'][:90]} |"
            for s in fl_rank[:25]]
     tpl = sorted((s for s in summ if s["cluster"] >= 0 and s["cluster"] in first_cross and not s["eligible"]),
                  key=lambda s: -s["peak_adjusted"])

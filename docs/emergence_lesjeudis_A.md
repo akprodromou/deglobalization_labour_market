@@ -1,8 +1,8 @@
 # Cluster series: lesjeudis, input A
 
-18,625 postings after 1,329 duplicates; 141 clusters plus noise; 0 postings without a label. Noise holds 31.2% of the postings.
+18,625 postings after 1,329 duplicates; 144 clusters plus noise; 0 postings without a label. Noise holds 30.9% of the postings.
 
-Threshold: 100 weighted postings a quarter (adjusted to all calendar days of the quarter) and, as a share version, 0.10% of the quarter. Eligible = crosses the threshold in a quarter with at least 20 sampled days and its largest template group holds under 30% of its postings and at most 50% of its postings lack a title. Eligible clusters: 61 of 141.
+Threshold: 100 weighted postings a quarter (adjusted to all calendar days of the quarter) and, as a share version, 0.10% of the quarter. Eligible = crosses the threshold in a quarter with at least 20 sampled days and its largest template group holds under 30% of its postings and at most 50% of its postings lack a title. Eligible clusters: 58 of 144.
 
 ## Coverage per quarter
 
@@ -18,11 +18,11 @@ Threshold: 100 weighted postings a quarter (adjusted to all calendar days of the
 
 | quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (interval C) |
 |---|---|---|---|---|---|---|
-| 2024-Q3 | 27 | 0 | 125 | 0 | 8 | 0 |
-| 2024-Q4 | 17 | 8 | 134 | 14 | 7 | 2 |
-| 2025-Q1 | 22 | 10 | 118 | 1 | 6 | 0 |
-| 2025-Q2 | 28 | 11 | 122 | 1 | 6 | 2 |
-| 2025-Q3 | 22 | 6 | 121 | 0 | 6 | 0 |
+| 2024-Q3 | 25 | 0 | 125 | 0 | 8 | 0 |
+| 2024-Q4 | 16 | 9 | 137 | 17 | 6 | 1 |
+| 2025-Q1 | 24 | 10 | 122 | 0 | 5 | 0 |
+| 2025-Q2 | 26 | 11 | 131 | 2 | 8 | 4 |
+| 2025-Q3 | 23 | 4 | 125 | 0 | 6 | 0 |
 
 Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in the previous usable quarter. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
 
@@ -32,82 +32,82 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 
 | cluster | taken | peak quarter | peak adjusted | peak share | first crossing | flagged | top channel | top template | HHI norm | unplaced | change vs event (95% interval) | top titles |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 41 | 577 | 2024-Q3 | 597 | 4.66% | 2024-Q3 | 19% | defense 89% | 3% | 0.29 | 0% | -0.95% (-1.89% to +0.30%) | Architecte Cloud | Architecte Infrastructure Cloud | Enterprise Architect |
-| 129 | 291 | 2025-Q1 | 439 | 3.86% | 2024-Q4 | 12% | defense 78% | 4% | 0.23 | 0% | -2.17% (-4.56% to -0.05%) | Chef de Projet IT | Chef de projet IT | Chef de Projets Data |
-| 38 | 281 | 2025-Q3 | 357 | 2.71% | 2024-Q3 | 9% | defense 95% | 6% | 0.44 | -0% | -0.70% (-2.56% to +1.24%) | Product Manager Cybersecurity on permanent contract in Paris | Lead Data Engineer - CDI |  |
-| 57 | 339 | 2025-Q2 | 326 | 2.32% | 2024-Q3 | 4% | defense 91% | 2% | 0.47 | -0% | +1.00% (+0.05% to +2.94%) | Digital project manager | Digital Project Manager | Customer Success Manager |
-| 96 | 165 | 2024-Q3 | 285 | 2.23% | 2024-Q3 | 5% | defense 100% | 4% | 0.10 | -0% | +1.67% (+0.28% to +3.90%) | Java Developer | Experienced Java Developer | JAVA Developer |
-| 28 | 204 | 2024-Q4 | 281 | 2.26% | 2024-Q4 | 0% | defense 100% | 8% | 0.19 | 0% | +0.50% (-2.52% to +2.66%) | Support Technician Level 2* | Technicien support Niveau 1* | Technicien Helpdesk N2 |
-| 98 | 51 | 2025-Q1 | 278 | 2.45% | 2025-Q1 | 0% |  0% | 10% | 0.22 | 0% | +4.43% (-0.81% to +9.62%) | Développeur C# | Développeur C# .NET | Développeur C#.NET |
-| 115 | 188 | 2024-Q3 | 246 | 1.92% | 2024-Q3 | 28% | defense 95% | 6% | 0.23 | 0% | +0.01% (-0.59% to +0.45%) | Artificial Intelligence Engineer | AI Engineer | Radar Systems Engineer |
-| 42 | 121 | 2025-Q2 | 246 | 1.75% | 2024-Q3 | 7% | defense 72% | 6% | 0.25 | 0% | +0.43% (-0.06% to +0.95%) | Cloud Engineer | Cloud engineer | Senior Cloud Engineer |
-| 37 | 197 | 2024-Q3 | 233 | 1.82% | 2024-Q3 | 12% | defense 94% | 5% | 0.07 | -0% | +0.48% (+0.06% to +1.48%) | Systems and Network Administrator | Linux System Administrator | System Administrator |
-| 14 | 118 | 2024-Q4 | 226 | 1.82% | 2024-Q4 | 3% | defense 91% | 4% | 0.23 | -0% | -1.85% (-4.21% to -0.20%) | Technicien support helpdesk en informatique | Technicien support IT | Technicien Support |
-| 126 | 204 | 2025-Q1 | 213 | 1.87% | 2024-Q4 | 42% | defense 94% | 11% | 0.12 | -0% | -2.05% (-2.97% to -1.31%) | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
-| 44 | 109 | 2025-Q1 | 191 | 1.68% | 2024-Q4 | 10% | defense 71% | 4% | 0.13 | 0% | -1.00% (-1.69% to -0.43%) | Ingénieur DevOps | Ingénieur Devops | Ingénieur(e) DevOps |
-| 120 | 173 | 2025-Q3 | 188 | 1.42% | 2025-Q2 | 6% | defense 100% | 2% | 0.12 | 0% | +0.85% (-0.05% to +2.30%) | QA Engineer | QA Tester | Tester |
-| 24 | 194 | 2024-Q4 | 187 | 1.51% | 2024-Q3 | 4% | defense 100% | 11% | 0.33 | 0% | -0.39% (-1.15% to +0.93%) | Business Analyst IT | IT Business Analyst | Business Analyst - Services Publics |
-| 113 | 192 | 2025-Q3 | 177 | 1.34% | 2024-Q3 | 2% | defense 62% | 6% | 0.27 | 0% | -0.51% (-1.04% to +0.01%) | Consultant SAP | Expert SAP HR TIME | Consultant SAP MM |
-| 6 | 91 | 2025-Q3 | 173 | 1.31% | 2025-Q3 | 2% | defense 76% | 14% | 0.24 | 0% | +0.26% (-0.12% to +0.97%) | Product Owner | Product Owner MedTech | Product Owner ServiceNow |
-| 88 | 138 | 2025-Q2 | 169 | 1.20% | 2025-Q2 | 60% | defense 90% | 11% | 0.19 | 0% | +0.58% (+0.21% to +1.13%) | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
-| 76 | 73 | 2025-Q1 | 169 | 1.49% | 2025-Q1 | 3% | defense 100% | 4% | 0.08 | -0% | -1.05% (-2.06% to -0.27%) | Développeur Fullstack | Developpeur Fullstack | Développeur full stack |
-| 52 | 187 | 2025-Q2 | 165 | 1.18% | 2024-Q3 | 3% | defense 62% | 3% | 0.23 | -0% | -0.59% (-0.96% to -0.22%) | Tech Lead | Tech Lead informatique | Tech lead |
-| 15 | 128 | 2025-Q3 | 162 | 1.23% | 2024-Q4 | 0% |  0% | 11% | 0.09 | -0% | +0.17% (-0.22% to +0.48%) | IT helpdesk support technician | Helpdesk technician | DESK SERVICE technician |
-| 117 | 111 | 2024-Q3 | 159 | 1.24% | 2024-Q3 | 45% | defense 82% | 5% | 0.26 | -0% | +0.06% (-0.13% to +0.41%) | Systems Engineer | System Engineer | System engineer |
-| 33 | 118 | 2025-Q3 | 158 | 1.20% | 2024-Q3 | 19% | defense 100% | 3% | 0.13 | -0% | +0.05% (-0.24% to +0.50%) | IT support technician | IT Support Technician | support technician |
-| 43 | 164 | 2024-Q4 | 158 | 1.27% | 2024-Q3 | 0% |  0% | 13% | 0.35 | 0% | -0.12% (-0.73% to +0.36%) | Product Designer | UX Designer | UX DESIGNER |
-| 85 | 119 | 2024-Q3 | 158 | 1.23% | 2024-Q3 | 28% | defense 84% | 4% | 0.13 | -0% | +0.44% (-0.02% to +1.25%) | C++ Developer | Embedded C/C++ Developer | Developer C ++ |
-| 32 | 150 | 2024-Q3 | 156 | 1.22% | 2024-Q3 | 12% | defense 84% | 9% | 0.14 | 1% | +0.25% (+0.00% to +0.65%) | IT Technician | Systems and Networks Technician | Computer network technician |
-| 7 | 94 | 2025-Q3 | 156 | 1.18% | 2025-Q3 | 2% | defense 100% | 4% | 0.26 | 0% | -0.63% (-1.37% to -0.14%) | Product Owner SI Infrastructures | PRODUCT OWNER | Product Owner UX |
-| 89 | 105 | 2024-Q3 | 152 | 1.18% | 2024-Q3 | 18% | defense 98% | 8% | 0.16 | 2% | +1.01% (+0.34% to +1.99%) | Linux System Engineer | Linux & network engineer | Embedded Linux development engineer off |
-| 139 | 82 | 2024-Q3 | 146 | 1.14% | 2024-Q3 | 62% | defense 93% | 10% | 0.39 | 0% | +0.69% (+0.28% to +1.24%) | Cybersecurity engineer | Cybersecurity Engineer | Network security engineer - Cybersecurit |
-| 48 | 73 | 2024-Q3 | 145 | 1.13% | 2024-Q3 | 10% | defense 46% | 5% | 0.13 | -0% | -0.07% (-0.14% to -0.01%) | DevOps Engineer | Engineer DevOps | DevOps / Automation Engineer |
-| 68 | 128 | 2025-Q2 | 145 | 1.03% | 2024-Q3 | 17% | defense 65% | 5% | 0.22 | -0% | +0.98% (+0.19% to +1.78%) | Software Engineer | Software Development Engineer | Junior Software Engineer |
-| 97 | 118 | 2025-Q3 | 144 | 1.09% | 2025-Q2 | 4% | defense 100% | 3% | 0.09 | 0% | +0.99% (+0.20% to +2.19%) | C# Developer | Developer C# | Developer .NET |
-| 134 | 54 | 2025-Q2 | 143 | 1.02% | 2025-Q2 | 22% | defense 72% | 6% | 0.24 | 0% | +0.02% (-0.09% to +0.10%) | Information Systems Manager | Head of information systems security | Responsible for infor |
-| 67 | 153 | 2025-Q1 | 137 | 1.20% | 2024-Q4 | 11% | defense 100% | 12% | 0.26 | 0% | -0.62% (-1.39% to +0.09%) | Data Engineer - Financial Services | Data Engineer - Services Financiers | Ingénieur Data |
-| 104 | 125 | 2025-Q2 | 135 | 0.96% | 2024-Q3 | 1% | defense 79% | 3% | 0.43 | -0% | -0.03% (-0.79% to +0.48%) | Développeur Front-End | Senior Frontend Developer Vue.js | Frontend Developer @ startup |
-| 112 | 131 | 2025-Q2 | 135 | 0.96% | 2024-Q3 | 0% | defense 100% | 12% | 0.71 | 0% | +0.19% (-0.30% to +0.64%) | Consultant(e) Data Advisory | Consultant Sénior Data Strategy | Consultant Data Marketing  |
-| 74 | 111 | 2025-Q3 | 131 | 1.00% | 2025-Q3 | 10% | defense 74% | 3% | 0.18 | 0% | +0.35% (+0.05% to +0.92%) | IT project manager | IT Project Manager | Industrial IT Project Manager |
-| 46 | 55 | 2025-Q1 | 130 | 1.15% | 2025-Q1 | 0% |  0% | 11% | 0.42 | 3% | -0.94% (-2.11% to -0.14%) | Technico-commercial Sédentaire | Commercial Sédentaire - Secteur Industrie | Sedentary sal |
-| 70 | 79 | 2025-Q2 | 129 | 0.92% | 2025-Q2 | 31% | defense 97% | 4% | 0.18 | 1% | +1.01% (+0.02% to +2.85%) | Project manager | Project Manager | Project manager if |
-| 130 | 63 | 2025-Q1 | 127 | 1.12% | 2025-Q1 | 18% | defense 95% | 14% | 0.24 | -0% | -0.83% (-1.51% to -0.32%) | Architecte Cybersécurité | Ingénieur Sécurité Informatique | Ingénieur(e) sécurité réseau  |
+| 3 | 280 | 2025-Q3 | 481 | 3.65% | 2024-Q3 | 2% | defense 93% | 8% | 0.27 | -0% | +0.19% (-0.72% to +1.14%) | Product Owner | Product Owner Data | Data Product Owner |
+| 119 | 420 | 2025-Q2 | 425 | 3.02% | 2024-Q3 | 2% | defense 81% | 3% | 0.24 | 1% | +0.87% (-0.20% to +2.61%) | Consultant SAP | Expert SAP HR TIME | Consultant/e SAP - Business Line SAP |
+| 116 | 236 | 2025-Q1 | 335 | 2.95% | 2024-Q4 | 13% | defense 87% | 5% | 0.21 | 1% | -2.64% (-4.20% to -1.41%) | Chef de Projet IT | Chef de projet IT | Chef de projet technique |
+| 46 | 204 | 2025-Q1 | 323 | 2.84% | 2024-Q4 | 7% | defense 67% | 8% | 0.12 | -0% | -1.74% (-3.09% to -0.63%) | Ingénieur DevOps | Ingénieur Devops | Ingénieur(e) DevOps |
+| 75 | 188 | 2024-Q3 | 304 | 2.38% | 2024-Q3 | 6% | defense 100% | 3% | 0.08 | 0% | +1.58% (+0.17% to +4.47%) | Java Developer | Confirmed developer | Experienced Java Developer |
+| 96 | 286 | 2025-Q3 | 299 | 2.26% | 2024-Q3 | 3% | defense 100% | 2% | 0.45 | -0% | +1.39% (+0.39% to +2.85%) | Digital project manager | Digital Project Manager | Digital marketing manager |
+| 79 | 48 | 2025-Q1 | 270 | 2.38% | 2025-Q1 | 0% |  0% | 10% | 0.27 | 0% | +4.50% (-0.70% to +9.63%) | Développeur C# | Développeur C# .NET | Développeur C#.NET |
+| 10 | 187 | 2024-Q4 | 257 | 2.07% | 2024-Q4 | 0% | defense 100% | 4% | 0.20 | 0% | +0.31% (-2.26% to +2.66%) | Technicien helpdesk N2 | Support Technician Level 2 | Technicien support Niveau 1* |
+| 15 | 122 | 2024-Q4 | 249 | 2.00% | 2024-Q4 | 3% | defense 100% | 4% | 0.24 | 0% | -1.76% (-3.91% to -0.03%) | Technicien support helpdesk en informatique | Technicien support IT | Technicien Support |
+| 50 | 275 | 2024-Q3 | 238 | 1.86% | 2024-Q3 | 6% | defense 85% | 2% | 0.28 | 0% | -0.75% (-1.24% to -0.35%) | Tech Lead | Tech Lead Data Engineer | Tech Lead informatique |
+| 41 | 204 | 2024-Q3 | 238 | 1.85% | 2024-Q3 | 12% | defense 94% | 4% | 0.08 | -0% | +0.48% (+0.03% to +1.64%) | Systems and Network Administrator | Linux System Administrator | Systems and Networks Admi |
+| 139 | 201 | 2024-Q3 | 233 | 1.82% | 2024-Q3 | 43% | defense 92% | 4% | 0.29 | 1% | +0.96% (+0.42% to +1.79%) | Cybersecurity engineer | Network and Security Engineer | Security and Network Engineer |
+| 55 | 231 | 2024-Q4 | 229 | 1.84% | 2024-Q3 | 0% | defense 100% | 12% | 0.33 | 0% | -0.21% (-0.82% to +0.35%) | Product Designer | UX RESEARCHER | UX Designer |
+| 137 | 230 | 2025-Q1 | 215 | 1.89% | 2024-Q4 | 52% | defense 95% | 9% | 0.11 | 0% | -1.89% (-2.76% to -1.14%) | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
+| 130 | 199 | 2024-Q3 | 213 | 1.66% | 2024-Q3 | 48% | defense 82% | 7% | 0.11 | 0% | +0.43% (-0.46% to +1.84%) | Electronics Engineer | Electronic Methods Engineer | General Installation Designer |
+| 68 | 141 | 2025-Q2 | 184 | 1.31% | 2025-Q2 | 60% | defense 91% | 11% | 0.19 | -0% | +0.63% (+0.20% to +1.21%) | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
+| 40 | 69 | 2025-Q1 | 183 | 1.61% | 2025-Q1 | 5% | defense 100% | 6% | 0.07 | -0% | -1.15% (-2.31% to -0.30%) | Développeur Fullstack | Developpeur Fullstack | Développeur full stack |
+| 57 | 102 | 2024-Q3 | 176 | 1.38% | 2024-Q3 | 14% | defense 70% | 4% | 0.18 | -0% | -0.06% (-0.43% to +0.36%) | DevOps Engineer | Engineer DevOps | DevOps / Automation Engineer |
+| 110 | 122 | 2025-Q3 | 175 | 1.32% | 2025-Q3 | 9% | defense 84% | 2% | 0.17 | 0% | +0.41% (+0.04% to +1.18%) | IT Project Manager | IT project manager | ERP Deployment Manager D 365 - Industry |
+| 44 | 89 | 2024-Q3 | 173 | 1.35% | 2024-Q3 | 11% | defense 100% | 10% | 0.18 | 0% | -0.20% (-0.45% to +0.00%) | Permanent contract - ERP finance and data project manager | Management Controller | Manage |
+| 142 | 148 | 2025-Q3 | 171 | 1.29% | 2025-Q2 | 4% | defense 100% | 3% | 0.11 | 0% | +0.87% (+0.03% to +2.02%) | QA Engineer | QA Tester | Tester |
+| 69 | 129 | 2024-Q3 | 164 | 1.28% | 2024-Q3 | 28% | defense 85% | 4% | 0.14 | -0% | +0.44% (+0.00% to +1.17%) | C++ Developer | Embedded C/C++ Developer | Embedded C++/QT Software Architect |
+| 77 | 124 | 2025-Q3 | 158 | 1.20% | 2025-Q2 | 4% | defense 100% | 3% | 0.08 | 0% | +0.92% (+0.13% to +2.26%) | C# Developer | Developer C# | Developer .NET |
+| 136 | 140 | 2025-Q1 | 157 | 1.38% | 2024-Q4 | 19% | defense 96% | 7% | 0.20 | -0% | -1.50% (-2.25% to -0.87%) | Responsable informatique | Responsable Informatique | Responsable production d'urbanisme |
+| 63 | 106 | 2024-Q3 | 152 | 1.18% | 2024-Q3 | 17% | defense 98% | 7% | 0.16 | 2% | +0.96% (+0.19% to +1.85%) | Linux System Engineer | Linux & network engineer | Embedded Linux development engineer off |
+| 26 | 132 | 2025-Q3 | 151 | 1.15% | 2024-Q3 | 20% | defense 100% | 5% | 0.13 | -0% | -0.09% (-0.30% to +0.31%) | IT support technician | IT Support Technician | IT Specialist |
+| 129 | 61 | 2025-Q2 | 148 | 1.06% | 2025-Q2 | 15% | defense 62% | 5% | 0.25 | 0% | +0.07% (-0.13% to +0.34%) | Information Systems Manager | Head of information systems security | Responsible for infor |
+| 108 | 119 | 2025-Q2 | 146 | 1.04% | 2024-Q3 | 29% | defense 85% | 3% | 0.25 | 1% | +0.89% (-0.13% to +3.02%) | Project manager | Project Manager | IT Production Manager |
+| 2 | 117 | 2024-Q3 | 145 | 1.13% | 2024-Q3 | 3% | defense 100% | 7% | 0.16 | 0% | -0.24% (-1.13% to +0.66%) | Scrum Master | Agile Master | Coach Agile |
+| 12 | 138 | 2025-Q1 | 145 | 1.27% | 2024-Q4 | 3% | defense 100% | 7% | 0.24 | -0% | +0.35% (-1.76% to +2.13%) | Technicien support de proximité en informatique | Technicien Support de Proximité | VIP Su |
+| 107 | 97 | 2025-Q3 | 144 | 1.09% | 2025-Q3 | 46% | defense 100% | 7% | 0.39 | 4% | +0.36% (-0.12% to +1.02%) | Engineering Manager | Software project manager | systems engineering manager |
+| 126 | 70 | 2025-Q1 | 143 | 1.26% | 2025-Q1 | 24% | defense 97% | 13% | 0.24 | 0% | -0.95% (-1.74% to -0.40%) | Architecte Transverse - Cybersécurité | Architecte Cybersécurité | Ingénieur Sécurité Info |
+| 106 | 110 | 2024-Q3 | 136 | 1.06% | 2024-Q3 | 18% | defense 94% | 5% | 0.29 | 0% | +0.00% (-0.30% to +0.45%) | Technical project manager | Technical Account Manager | Infrastructure Project Manager |
+| 22 | 114 | 2025-Q3 | 135 | 1.03% | 2025-Q1 | 4% | defense 100% | 13% | 0.33 | -0% | -0.12% (-1.00% to +0.48%) | Sales Developer | Chef de secteur High Tech | Talent Acquisition IT |
+| 52 | 80 | 2024-Q3 | 135 | 1.05% | 2024-Q3 | 12% | defense 84% | 4% | 0.28 | 0% | +0.73% (-0.05% to +2.04%) | Cloud Engineer | Cloud engineer | Senior Cloud Engineer |
+| 135 | 65 | 2025-Q1 | 135 | 1.19% | 2025-Q1 | 5% | defense 85% | 5% | 0.25 | 0% | -0.50% (-1.40% to +0.23%) | Responsable Equipe Consulting | Gestionnaire de parc informatique | Gestionnaire Ressource |
+| 84 | 141 | 2024-Q4 | 134 | 1.08% | 2024-Q3 | 2% | defense 89% | 4% | 0.34 | -0% | +0.20% (-0.56% to +0.83%) | Développeur Front-End | Senior Frontend Developer Vue.js | Frontend Developer @ startup |
+| 124 | 141 | 2025-Q2 | 134 | 0.96% | 2024-Q3 | 0% | defense 100% | 10% | 0.68 | 0% | +0.24% (-0.26% to +0.74%) | Consultant(e) Data Advisory | Consultant Sénior Data Strategy | Consultant Data Marketing  |
+| 23 | 123 | 2024-Q3 | 128 | 1.00% | 2024-Q3 | 14% | defense 83% | 11% | 0.17 | 1% | +0.14% (-0.06% to +0.50%) | IT Technician | IT technician | Computer technician |
+| 39 | 88 | 2025-Q1 | 127 | 1.12% | 2024-Q4 | 1% | defense 100% | 8% | 0.40 | 0% | -0.80% (-1.60% to -0.15%) | Lead FullStack (Python/React.js) | Développeur Fullstack Java/React/AWS | FullStack JS (Re |
 
 ## Clusters with the largest flagged share (at least 10 flagged postings taken, not template-dominated)
 
 | cluster | taken | flagged taken | flagged share (weighted) | top channel | peak share | first crossing | top template | HHI norm | unplaced | top titles |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 34 | 73 | 67 | 94% | defense 100% | 0.61% |  | 25% | 0.54 | 0% | IVVQ engineer | IVVQ Engineer | Ingénieur IVVQ |
-| 125 | 50 | 34 | 69% | defense 94% | 0.64% |  | 22% | 0.18 | 0% | Ingénieur conception mécanique et méthodes industrielles | Naval engineer - Design/Mechani |
-| 139 | 82 | 35 | 62% | defense 93% | 1.14% | 2024-Q3 | 10% | 0.39 | 0% | Cybersecurity engineer | Cybersecurity Engineer | Network security engineer - Cybersecurit |
-| 88 | 138 | 79 | 60% | defense 90% | 1.20% | 2025-Q2 | 11% | 0.19 | 0% | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
-| 71 | 77 | 41 | 55% | defense 100% | 0.62% |  | 10% | 0.33 | -0% | Ingénieur validation software CDI | Validation engineer test bench | Validation Engineer - |
-| 121 | 109 | 59 | 50% | defense 90% | 0.78% | 2024-Q3 | 9% | 0.12 | 1% | Electronics Engineer | Electronic Methods Engineer | Electronic Hardware Engineer |
-| 69 | 49 | 27 | 46% | defense 100% | 0.37% |  | 8% | 0.59 | 0% | Engineering Manager | systems engineering manager | Engineering Manager Socle Data |
-| 117 | 111 | 52 | 45% | defense 82% | 1.24% | 2024-Q3 | 5% | 0.26 | -0% | Systems Engineer | System Engineer | System engineer |
-| 126 | 204 | 96 | 42% | defense 94% | 1.87% | 2024-Q4 | 11% | 0.12 | -0% | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
-| 124 | 64 | 27 | 41% | defense 100% | 0.56% |  | 17% | 0.15 | 0% | Stage - Développeur/se JAVA API Rest - Edition de logiciels | Stage - Ingénieur/e en autom |
-| 122 | 48 | 26 | 40% | defense 79% | 0.57% |  | 17% | 0.13 | -0% | General Installation Designer | Mechanical development engineer | Mechanical design engine |
-| 39 | 85 | 36 | 37% | defense 98% | 0.51% |  | 13% | 0.39 | 0% | PMO | Project Management Officer | PMO IT |
-| 128 | 61 | 15 | 33% | defense 51% | 0.80% | 2025-Q3 | 3% | 0.33 | 1% | Head of the IT project | Boss / chiefs the project IT | Chief (fe) the project industrial |
-| 70 | 79 | 27 | 31% | defense 97% | 0.92% | 2025-Q2 | 4% | 0.18 | 1% | Project manager | Project Manager | Project manager if |
-| 85 | 119 | 38 | 28% | defense 84% | 1.23% | 2024-Q3 | 4% | 0.13 | -0% | C++ Developer | Embedded C/C++ Developer | Developer C ++ |
-| 115 | 188 | 53 | 28% | defense 95% | 1.92% | 2024-Q3 | 6% | 0.23 | 0% | Artificial Intelligence Engineer | AI Engineer | Radar Systems Engineer |
-| 56 | 60 | 13 | 27% | defense 100% | 0.53% |  | 8% | 0.18 | -0% | Ingénieur système Linux | Ingénieur développement Linux embarqué bureau étude CDI | Ingéni |
-| 134 | 54 | 13 | 22% | defense 72% | 1.02% | 2025-Q2 | 6% | 0.24 | 0% | Information Systems Manager | Head of information systems security | Responsible for infor |
-| 65 | 106 | 24 | 21% | defense 95% | 0.86% | 2024-Q3 | 7% | 0.28 | 0% | Technical project manager | Technical Account Manager | Infrastructure Project Manager |
-| 133 | 50 | 14 | 20% | defense 83% | 0.37% |  | 8% | 0.67 | -0% | CYBERSECURITY PROJECT MANAGER | Cybersecurity Manager | IT Risk and Resilience Officer |
-| 127 | 93 | 26 | 20% | defense 74% | 0.76% |  | 9% | 0.30 | 0% | Consultant GRC | IAM Cybersecurity Consultant | GRC Consultant - Cybersecurity |
-| 140 | 46 | 11 | 20% | defense 69% | 0.28% |  | 9% | 0.35 | -0% | Cybersecurity Auditor | Technical Auditor - Cybersecurity | HSM Expert - Cybersecurity |
-| 41 | 577 | 123 | 19% | defense 89% | 4.66% | 2024-Q3 | 3% | 0.29 | 0% | Architecte Cloud | Architecte Infrastructure Cloud | Enterprise Architect |
-| 55 | 59 | 15 | 19% | defense 58% | 0.55% |  | 7% | 0.13 | 1% | Web Integrator | Application integrator | Systems Integration Engineer |
-| 33 | 118 | 14 | 19% | defense 100% | 1.20% | 2024-Q3 | 3% | 0.13 | -0% | IT support technician | IT Support Technician | support technician |
+| 33 | 73 | 67 | 94% | defense 100% | 0.63% |  | 25% | 0.54 | 0% | IVVQ engineer | IVVQ Engineer | Ingénieur IVVQ |
+| 68 | 141 | 81 | 60% | defense 91% | 1.31% | 2025-Q2 | 11% | 0.19 | -0% | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
+| 99 | 58 | 30 | 54% | defense 88% | 0.62% |  | 17% | 0.32 | 0% | Program Manager | Cloud project manager | Solution Manager Cloud |
+| 67 | 77 | 39 | 53% | defense 100% | 0.68% |  | 10% | 0.35 | 0% | Software validation engineer | Ingénieur validation software | Validation engineer test be |
+| 61 | 54 | 28 | 53% | defense 100% | 0.56% |  | 7% | 0.25 | 1% | Software Architect | System Architect | System architect |
+| 137 | 230 | 122 | 52% | defense 95% | 1.89% | 2024-Q4 | 9% | 0.11 | 0% | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
+| 130 | 199 | 110 | 48% | defense 82% | 1.66% | 2024-Q3 | 7% | 0.11 | 0% | Electronics Engineer | Electronic Methods Engineer | General Installation Designer |
+| 107 | 97 | 52 | 46% | defense 100% | 1.09% | 2025-Q3 | 7% | 0.39 | 4% | Engineering Manager | Software project manager | systems engineering manager |
+| 127 | 94 | 39 | 44% | defense 82% | 0.90% | 2024-Q3 | 5% | 0.31 | -0% | Systems Engineer | System Engineer | System engineer |
+| 56 | 60 | 27 | 44% | defense 100% | 0.47% |  | 13% | 0.46 | 0% | Software Architect - Defense & Security | Cybersecurity architect | Cyber Technical Archit |
+| 139 | 201 | 61 | 43% | defense 92% | 1.82% | 2024-Q3 | 4% | 0.29 | 1% | Cybersecurity engineer | Network and Security Engineer | Security and Network Engineer |
+| 133 | 48 | 20 | 43% | defense 93% | 0.57% |  | 8% | 0.25 | 0% | Artificial Intelligence Engineer | AI Engineer | Post-doctoral engineer in AI |
+| 141 | 70 | 30 | 39% | defense 97% | 1.06% | 2025-Q1 | 7% | 0.16 | -0% | Développeur C++ | Ingénieur Développement Logiciel ATC (Air Traffic Control) | Ingénieur D |
+| 8 | 87 | 37 | 38% | defense 98% | 0.52% |  | 13% | 0.39 | 0% | PMO | Project Management Officer | PMO IT |
+| 117 | 65 | 18 | 34% | defense 55% | 0.78% | 2025-Q3 | 3% | 0.31 | 1% | Head of the IT project | Boss / chiefs the project IT | Chief (fe) the project industrial |
+| 95 | 49 | 16 | 30% | defense 100% | 0.34% |  | 16% | 0.23 | 0% | Data Engineer - Industrie & Services | Ingénieur(e) Data Scientist confirmé(e) - Industrie |
+| 108 | 119 | 41 | 29% | defense 85% | 1.04% | 2024-Q3 | 3% | 0.25 | 1% | Project manager | Project Manager | IT Production Manager |
+| 69 | 129 | 41 | 28% | defense 85% | 1.28% | 2024-Q3 | 4% | 0.14 | -0% | C++ Developer | Embedded C/C++ Developer | Embedded C++/QT Software Architect |
+| 73 | 57 | 12 | 27% | defense 100% | 0.51% |  | 9% | 0.17 | -0% | Ingénieur système Linux | Ingénieur développement Linux embarqué bureau étude | Ingénieur  |
+| 126 | 70 | 21 | 24% | defense 97% | 1.26% | 2025-Q1 | 13% | 0.24 | 0% | Architecte Transverse - Cybersécurité | Architecte Cybersécurité | Ingénieur Sécurité Info |
+| 128 | 52 | 15 | 22% | defense 84% | 0.35% |  | 6% | 0.59 | -0% | CYBERSECURITY PROJECT MANAGER | Cybersecurity Manager | Product Manager Cybersecurity |
+| 87 | 61 | 10 | 20% | defense 100% | 0.39% |  | 7% | 0.26 | 0% | Service Delivery Manager | Delivery Manager | Delivery Manager Conseil |
+| 114 | 112 | 31 | 20% | defense 65% | 0.78% | 2024-Q3 | 9% | 0.29 | 0% | Consultant GRC | IAM Cybersecurity Consultant | Consultant(e) en Protection des données, e |
+| 26 | 132 | 15 | 20% | defense 100% | 1.15% | 2024-Q3 | 5% | 0.13 | -0% | IT support technician | IT Support Technician | IT Specialist |
+| 136 | 140 | 34 | 19% | defense 96% | 1.38% | 2024-Q4 | 7% | 0.20 | -0% | Responsable informatique | Responsable Informatique | Responsable production d'urbanisme |
 
 ## Crossing the threshold but not eligible (one template or mostly title-less)
 
 | cluster | taken | peak adjusted | top template | without title | unplaced | top titles |
 |---|---|---|---|---|---|---|
-| 87 | 51 | 286 | 37% | 0% | 0% | Alternation - Developer (SE) Java - Public Services | Alternation - IT recruitment/e - Lyo |
+| 72 | 49 | 284 | 35% | 0% | 0% | Alternation - Developer (SE) Java - Public Services | Alternation - IT recruitment/e - Lyo |
 
 ## Reading notes
 

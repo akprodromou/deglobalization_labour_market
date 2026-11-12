@@ -52,7 +52,7 @@ except ImportError:
     from corpus_io import load_corpus
 
 G = r"[mwfhdx]"
-GENDER_RX = re.compile(rf"\(?\s*(?<![A-Za-z]){G}\s*[/|]\s*{G}(?:\s*[/|]\s*{G})?(?![A-Za-z])\s*\)?", re.I)
+GENDER_RX = re.compile(rf"\(?\s*(?<![A-Za-z]){G}\s*[/|]\s*{G}(?:\s*[/|]\s*{G})?(?:\s*[/|]\s*nb)?(?![A-Za-z])\s*\)?", re.I)
 SINGLE_G_RX = re.compile(r"\(\s*[mwfd]\s*\)", re.I)
 TRAIL_CODE_RX = re.compile(r"\s*\(?\b(?:[A-Z]{2,4}\d{5,}|[A-Z]{1,3}\d{4}[A-Z]{1,3}\d{3,}|\d{4}-\d{4,})\b\)?\s*$")
 REF_RX = re.compile(r"^\s*(?=\S*\d)[A-Za-z0-9]+(?:-[A-Za-z0-9]+)+\s+")
@@ -92,12 +92,12 @@ def clean_title(title, location="", employers=frozenset()):
 from collections import Counter
 
 RULES = Counter()          # how often each stage-2 rule changed a title (printed in the report)
-PREPS = {"to", "for", "with", "till", "för", "für", "zu", "pour", "à", "au", "aux", "dans", "en", "in", "i", "på", "im", "at", "hos", "bei", "chez"}
-EMP_PREPS = {"to", "for", "till", "för", "at", "hos", "bei", "chez"}      # prepositions that can introduce an employer (never für, à, en, pour, in)
-EMP_AT = {"at", "hos", "bei", "chez"}
+PREPS = {"to", "for", "with", "till", "för", "für", "zu", "pour", "à", "au", "aux", "dans", "en", "in", "i", "på", "im", "at", "hos", "bei", "chez", "mit", "med", "of"}
+EMP_PREPS = {"to", "for", "till", "för", "at", "hos", "chez"}      # prepositions that can introduce an employer (never für, à, en, pour, in)
+EMP_AT = {"at", "hos", "chez"}
 LINKS = {"or", "and", "&", "/", ",", "eller", "och", "oder", "und", "ou", "et"}
 SMALL = {"the", "a", "an", "of", "and", "or", "in", "to", "for", "at", "with", "de", "la", "le", "du", "des", "der", "die", "das", "och", "i", "på", "för"}
-DANGLE = {"about", "ca", "approx", "circa", "cirka", "ungefär", "from", "ab", "von", "bis", "until", "around", "im"}
+DANGLE = {"central", "centrala", "die", "der", "das", "den", "dem", "the", "our", "unsere", "unseren", "unser", "northern", "southern", "western", "eastern", "norra", "södra", "västra", "östra", "greater", "north", "south", "west", "east", "region", "county", "län", "municipality", "kommun", "st", "sankt", "saint", "about", "ca", "approx", "circa", "cirka", "ungefär", "from", "ab", "von", "bis", "until", "around", "im"}
 MONTHS = (r"jan(?:uary|uar|uari|vier)?|jänner|feb(?:ruary|ruar|ruari|rier)?|mar(?:ch|z|s)?|märz|mars|apr(?:il)?|may|mai|maj|jun(?:e|i|)|juin|jul(?:y|i)?|juillet|"
           r"aug(?:ust|usti)?|août|sep(?:t|tember)?|septembre|oct(?:ober)?|okt(?:ober)?|octobre|nov(?:ember)?|novembre|dec(?:ember)?|dez(?:ember)?|décembre")
 PCT = r"\d{1,3}(?:[.,]\d+)?\s?(?:[-–]\s?\d{1,3}(?:[.,]\d+)?\s?)?%"
@@ -106,14 +106,17 @@ LEAD_RX = re.compile(r"^.{2,70}?\b(?:is|are)\s+(?:now\s+)?(?:looking for|searchi
 LEAD2_RX = re.compile(r"^(?:now\s+)?(?:we are looking for|we are seeking|looking for|we need|wanted:?)\s+(?:an?\s+|the\s+|some\s+|several\s+)?(?P<role>.{3,})$", re.I)
 REFCUT_RX = re.compile(r"\s*[,;(\[]?\s*\b(?:Kennzahl|Kennziffer|Chiffre|Referenz(?:nummer)?|Ref\.?|Job[- ]?ID)\s*[:#]?\s*\S*\d.*$", re.I)
 AGEBAND_RX = re.compile(r"\s*,?\s*\bAltersbereich\b.*$", re.I)
-ADDR_RX = re.compile(r"\b[\wäöüÄÖÜß-]*(?:straße|strasse|str\.|weg|platz|allee|gasse|ring|damm)\s*\d+\s?[A-Za-z]?\b")
+ADDR_RX = re.compile(r"\b[\wäöüÄÖÜß-]*(?:straße|strasse|str\.|weg|platz|allee|gasse|ring|damm|stieg|halde|morgen)\s*\d+(?:\s?[a-zA-Z]\b)?(?:\s?[/-]\s?\d+)?|"
+                     r"\b[\wäöüÄÖÜß-]+\s+(?:Straße|Strasse|Str\.|Weg|Platz|Allee|Gasse)\s*\d+(?:\s?[a-zA-Z]\b)?(?:\s?[/-]\s?\d+)?", re.I)
 START_RX = re.compile(rf"\b(?:ab|from|starting(?:\s+from)?|beginning|zum|per|as of|dès|à partir de|från)\s+"
                       rf"(?:\d{{1,2}}\.\s?\d{{1,2}}\.?(?:\s?20\d\d)?|(?:\d{{1,2}}(?:st|nd|rd|th)?\.?\s+)?(?:{MONTHS})\b\.?(?:\s+\d{{1,2}}(?:st|nd|rd|th)?(?!\d))?(?:\s+20\d\d)?|20[2-3]\d)", re.I)
 CONTRACT_RX = re.compile(rf"\(\s*{PCT}(?:\s*[-–]\s*{PCT})?\s*\)|(?:\b(?:about|ca\.?|approx\.?|circa|cirka|ungefär)\s+)?(?<![\w/])\b{PCT}|"
-                         r"(?:\bin\s+)?\b(?:voll|teil)[- ]?zeit\b|(?:\bin\s+)?\b(?:voll|teil)-\s*(?:/|oder|und)\s*(?:voll|teil)zeit\b|"
-                         r"\b(?:full|part)[- ]?(?:/|or|and|&)\s*(?:full|part)[- ]?time\b|\b(?:in\s+)?(?:full|part)[- ]?time\b|"
-                         r"\btemps (?:plein|partiel)\b|\b(?:CDI|CDD)\b", re.I)
-FILLER_RX = re.compile(r"\b(?:wanted(?:\s+(?:immediately|now|urgently|for))?|needed|urgent(?:ly)?|immediately|hourly(?:\s+employment)?|"
+                         r"(?:(?<![/\w-])in\s+)?\b(?:voll|teil)[- ]?zeit\b|(?:(?<![/\w-])in\s+)?\b(?:voll|teil)-\s*(?:/|oder|und|&)\s*(?:voll|teil)zeit\b|"
+                         r"\b(?:full|part)[- ]?time\s*(?:/|or|and|&)\s*(?:full|part)[- ]?time\b|"
+                         r"\b(?:full|part)[- ]?(?:/|or|and|&)\s*(?:full|part)[- ]?time\b|\b(?:(?<![/\w-])in\s+)?(?:full|part)[- ]?time\b|"
+                         r"\b(?:à\s+)?temps (?:plein|partiel)\b", re.I)
+CDI_RX = re.compile(r"(?:\s*[-–—/]\s*)?\b(?:en\s+|in\s+)?(?:CDI|CDD)\b(?:\s*[-–—]\s*)?", re.I)
+FILLER_RX = re.compile(r"\b(?:(?:is|are)\s+wanted|wanted(?:\s+(?:immediately|now|urgently))?|needed|urgent(?:ly)?|immediately|hourly(?:\s+employment)?|"
                        r"until further notice|(?:summer|autumn|fall|winter|spring)\s+20\d\d|\d{1,3}\s?h/v)\b[!.]*|(?<![\d./-])20[2-3]\d(?![\d/-])", re.I)
 IFNEEDED_RX = re.compile(r"\b(if|as|when|where|is|are|be|only)\s+needed\b", re.I)
 TAILFRAME_RX = re.compile(r"\s+(?:im\s+(?:Raum|Großraum|Umkreis)|in\s+and\s+around|in\s+the\s+(?:area|region)(?:\s+of)?|in\s+der\s+(?:Region|Umgebung))\s*$", re.I)
@@ -176,7 +179,8 @@ def strip_places(t, places, extra=frozenset()):
         for n in (4, 3, 2, 1):
             if len(ws) > n:
                 name = " ".join(hy(tclean(w)) for w in ws[-n:])
-                if name in places or name in extra:
+                first = name.split(" ")[0]
+                if name in places or name in extra or (n == 1 and "-" in ws[-1] and first in places and len(first) >= 4):
                     ws = ws[:-n]
                     while ws and (is_dangler(ws[-1])):
                         ws.pop()
@@ -189,6 +193,8 @@ def strip_places(t, places, extra=frozenset()):
 def is_dangler(w):
     c = tclean(w)
     if w in KEEPPUNCT:
+        return False
+    if w in ('"', "'", "»", "”", "“") or any(ch in w for ch in "€$£"):
         return False
     if c == "":
         return not (")" in w or "]" in w)
@@ -238,7 +244,11 @@ def clean_stage2(t, places, common, loc="", use_tail=True):
     for rx in (LEAD_RX, LEAD2_RX):
         m = rx.match(t)
         if m:
-            t = m.group("role")
+            role = m.group("role")
+            if re.fullmatch(r"(?:you|us|someone|people|colleagues?|new colleagues?|more|dig|dej|er|vous|toi)[ !?.]*", role.strip(), re.I) or len(role.strip()) < 4:
+                RULES["lead-in kept (role is a pronoun)"] += 1
+                break
+            t = role
             RULES["lead-in sentence"] += 1
             break
     t0 = t
@@ -254,11 +264,17 @@ def clean_stage2(t, places, common, loc="", use_tail=True):
         RULES["start date"] += 1
     t1 = t
     t = CONTRACT_RX.sub(" ", t)
+    t = CDI_RX.sub(" - ", t)
+    t = re.sub(r"\s*[/(]\s*NB\s*\)?", " ", t)
     t = FILLER_RX.sub(" ", t)
     t = t.replace("NEEDEDKEEP", "needed")
     if t != t1:
         RULES["filler / hours / contract"] += 1
     t = re.sub(r"[!?]+", " ", t)
+    t = re.sub(r"[(\[]\s*[-–—]?\s*[)\]]", " ", t)
+    t = re.sub(r"\(\s*[,;]\s*", "(", t)
+    t = re.sub(r"(?:\s*[-–—]\s*){2,}", " - ", t)
+    t = re.sub(r",\s*(?:,\s*)+", ", ", t)
     t = re.sub(r"\s+([,;:])", r"\1", t)
     t = re.sub(r"\s+", " ", t)
     t = trim(t)
@@ -269,10 +285,14 @@ def clean_stage2(t, places, common, loc="", use_tail=True):
         t = strip_places(t, places, extra)
     t = TAILFRAME_RX.sub("", t)
     ws = t.split()
+    while len(ws) > 1 and tclean(ws[0]) in LINKS and ws[0] not in KEEPPUNCT:
+        ws.pop(0)
     while len(ws) > 1 and is_dangler(ws[-1]):
         ws.pop()
     t = trim(" ".join(ws))
     t = re.sub(r"[\[(]\s*[\])]", "", t)
+    if "(" not in t:
+        t = re.sub(r"\s*\)+$", "", t)
     t = trim(re.sub(r"\s+", " ", t))
     return t if len(t) >= 3 else orig
 
@@ -307,6 +327,7 @@ def main():
     ap.add_argument("--corpus", nargs="+", required=True)
     ap.add_argument("--label", required=True)
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--tail", choices=["auto", "on", "off"], default="auto", help="employer-tail rule (to / for / at + Name): auto = on when the capitalised-word share is below 55%%")
     ap.add_argument("--no-stage2", action="store_true", help="old cleaning only (stage 1)")
     args = ap.parse_args()
     rows, dup = load_all(args.corpus)
@@ -316,7 +337,7 @@ def main():
     recs = []
     stage1 = [clean_title((r["item"].get("title") or "").strip(), r["item"].get("location") or "", employers) for r in rows]
     places, common, tc = board_stats(stage1, [r["item"].get("location") or "" for r in rows])
-    use_tail = tc < 0.35
+    use_tail = (tc < 0.55) if args.tail == "auto" else args.tail == "on"
     for r, c1 in zip(rows, stage1):
         it = r["item"]
         t = (it.get("title") or "").strip()
@@ -339,7 +360,7 @@ def main():
     if not args.no_stage2:
         from collections import Counter
         ch2 = [x for x in titled if x["title_clean"] != x["title_stage1"]]
-        md += ["", f"## Stage 2: {len(ch2):,} titles changed ({len(ch2)/max(1,len(titled)):.1%} of the titled ones); {len(places):,} place names, {len(common):,} common words known; capitalised-word share {tc:.0%} -> employer-tail rule {'ON' if use_tail else 'OFF (Title Case / German board)'}", "",
+        md += ["", f"## Stage 2: {len(ch2):,} titles changed ({len(ch2)/max(1,len(titled)):.1%} of the titled ones); {len(places):,} place names, {len(common):,} common words known; capitalised-word share {tc:.0%} -> employer-tail rule {'ON' if use_tail else 'OFF'}", "",
               "Rule counts: " + ", ".join(f"{k} {v:,}" for k, v in RULES.most_common()), ""]
         removed = Counter()
         removed_common = Counter()

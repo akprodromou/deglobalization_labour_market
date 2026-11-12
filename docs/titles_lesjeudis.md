@@ -1,49 +1,49 @@
 # Title cleaning: lesjeudis
 
-18,625 postings after removing 1,329 duplicates; 0 without a title; 14,773 titles changed (79.3% of the titled ones).
+18,625 postings after removing 1,329 duplicates; 0 without a title; 14,780 titles changed (79.4% of the titled ones).
 
 ## 25 random before / after pairs (changed titles only)
 
-- `IVVQ Engineer M/F`  ->  `IVVQ Engineer`
-- `Administrateur Hadoop H/F`  ->  `Administrateur Hadoop`
-- `System / Developer Engineer Automation (Python / Gitlab / Sysops) h / f`  ->  `System / Developer Engineer Automation (Python / Gitlab / Sysops)`
-- `Cloud/ Cyber/ Accommodation Product Manager - H/ F`  ->  `Cloud/ Cyber/ Accommodation Product Manager`
-- `Talent Acquisition Lead - F/H/NB`  ->  `Talent Acquisition Lead - /NB`
+- `Offer manager (M/F)`  ->  `Offer manager`
+- `Cloud Engineer Assistant (F/M/NB)`  ->  `Cloud Engineer Assistant`
+- `Full Stack Cloud engineer (F/H)`  ->  `Full Stack Cloud engineer`
+- `Digital Project Manager (F/M)`  ->  `Digital Project Manager`
+- `Consultant Sénior Salesforce Cpq H/F`  ->  `Consultant Sénior Salesforce Cpq`
 - `Talent Acquisition IT - Paris`  ->  `Talent Acquisition IT`
-- `Engineer in image processing software development - Spatial - Toulouse`  ->  `Engineer in image processing software development - Spatial`
+- `Application Manager - Cybersecurity - Toulouse`  ->  `Application Manager - Cybersecurity`
 - `Back-end JAVA 17 Developer (F/M)`  ->  `Back-end JAVA 17 Developer`
-- `Consultant Cybersécurité Cloud - H/F/X`  ->  `Consultant Cybersécurité Cloud`
-- `Data Analyst H/F`  ->  `Data Analyst`
-- `Technicien informatique H/F`  ->  `Technicien informatique`
-- `Consultant.e Métier / Business Analyst ServiceNow - Expertise ITIL (H/F)`  ->  `Consultant.e Métier / Business Analyst ServiceNow - Expertise ITIL`
-- `Lawyer law law / contracts IT - Ile de France`  ->  `Lawyer law law / contracts IT`
-- `Ingénieur Sysops H/F`  ->  `Ingénieur Sysops`
-- `Architecte Hardware F/H`  ->  `Architecte Hardware`
-- `AI Specialist (M/F)`  ->  `AI Specialist`
+- `Cloud Security Engineer H/F`  ->  `Cloud Security Engineer`
+- `Développeur Fullstack Cloud / Platform Engineering - H/F`  ->  `Développeur Fullstack Cloud / Platform Engineering`
+- `Technicien helpdesk N2 H/F`  ->  `Technicien helpdesk N2`
+- `Salesforce Tech Lead (F/M)`  ->  `Salesforce Tech Lead`
+- `Lead developer C#.NET (M/F)`  ->  `Lead developer C#.NET`
+- `Webmaster (F/H)`  ->  `Webmaster`
+- `ERP H/F functional analyst`  ->  `ERP functional analyst`
+- `Experienced Integration Project Manager M/F`  ->  `Experienced Integration Project Manager`
 - `Data Analyst W/M`  ->  `Data Analyst`
-- `Technicien helpdesk* H/F`  ->  `Technicien helpdesk*`
+- `Administrateur réseaux Linux/Wifi - leader mondial de la gestion d'accès, de la monétisation et du marketing Wi-Fi`  ->  `Administrateur réseaux Linux/Wifi`
 - `Project Manager - Industry and Services - Lille`  ->  `Project Manager - Industry and Services`
-- `Data and Connectivity System Engineer H/F`  ->  `Data and Connectivity System Engineer`
-- `IT F/H operating technician`  ->  `IT operating technician`
-- `Senior Machine Learning Engineer (F/M)`  ->  `Senior Machine Learning Engineer`
-- `Technicien de support informatique H/F`  ->  `Technicien de support informatique`
-- `Project manager data management and analytics h/f`  ->  `Project manager data management and analytics`
-- `R&D program manager (NPI) - Turbines and heat exchangers F/H (2025-133557)`  ->  `R&D program manager (NPI) - Turbines and heat exchangers`
+- `F/H web developer`  ->  `web developer`
+- `Référent Process (SAP) Manufacturing & Supply Chain F/H/D`  ->  `Référent Process (SAP) Manufacturing & Supply Chain`
+- `Administrateurs Systèmes Windows et/ou Linux (H/F)`  ->  `Administrateurs Systèmes Windows et/ou Linux`
+- `Manager - centre d'appel d'assistance bancaire H/F`  ->  `Manager - centre d'appel d'assistance bancaire`
+- `PRODUCT DESIGNER SENIOR F/H`  ->  `PRODUCT DESIGNER SENIOR`
+- `F/H software lot manager`  ->  `software lot manager`
 
-## Stage 2: 906 titles changed (4.9% of the titled ones); 412 place names, 178 common words known; capitalised-word share 73% -> employer-tail rule OFF (Title Case / German board)
+## Stage 2: 960 titles changed (5.2% of the titled ones); 412 place names, 178 common words known; capitalised-word share 73% -> employer-tail rule OFF
 
-Rule counts: filler / hours / contract 446, place 425, reference / address 4, lead-in sentence 3
+Rule counts: filler / hours / contract 450, place 436, reference / address 4, lead-in sentence 3
 
 ### Most frequent removed tails (the text cut off the end)
 
-- `france` (35)
-- `cdi` (28)
+- `france` (34)
+- `cdi` (30)
 - `aix en provence` (25)
+- `paris` (22)
 - `montpellier` (21)
+- `- cdd` (19)
 - `- - cdi` (18)
-- `- cdd` (18)
 - `- toulon` (15)
-- `paris` (13)
 - `vitrolles` (13)
 - `[ ]` (13)
 - `lille` (12)
@@ -65,7 +65,6 @@ Rule counts: filler / hours / contract 446, place 425, reference / address 4, le
 - `- aix -en -provence` (5)
 - `(france)` (4)
 - `- corbas` (4)
-- `en cdi` (4)
 - `*` (4)
 - `in cdi in paris` (4)
 - `- nancy` (3)
@@ -73,6 +72,7 @@ Rule counts: filler / hours / contract 446, place 425, reference / address 4, le
 - `grenoble` (3)
 - `in cdi aix en provence` (3)
 - `(toulouse)` (3)
+- `en cdi` (3)
 - `nantes` (3)
 - `- niort` (3)
 - `or france` (3)
@@ -104,6 +104,7 @@ Rule counts: filler / hours / contract 446, place 425, reference / address 4, le
 - `Systems Administrator (Microsoft, Unix, Linux) - Fixed-term contract - Toulouse or Bordeaux`  ->  `Systems Administrator (Microsoft, Unix, Linux) - Fixed-term contract`
 - `Java Development Engineer - AIX-EN-PROVENCE or ORLEANS`  ->  `Java Development Engineer`
 - `Tech lead - Toulouse/ Lille/ Aix-en-provence`  ->  `Tech lead`
+- `CDI - Marketing Operations Manager - SBS - Paris-London-Brussels`  ->  `Marketing Operations Manager - SBS`
 - `Product Manager Cybersecurity en CDI à Paris`  ->  `Product Manager Cybersecurity`
 - `Analyst, Business Systems, Mobile Response Team in Europe, Paris (Le Bourget), France`  ->  `Analyst, Business Systems, Mobile Response Team in Europe`
 - `Spécialiste DevOps Azure - PARIS ou TOULOUSE`  ->  `Spécialiste DevOps Azure`
@@ -114,70 +115,69 @@ Rule counts: filler / hours / contract 446, place 425, reference / address 4, le
 - `Confirmed thermohydraulic study engineer (Merger reactor) - Nuclear - Aix -en -Provence`  ->  `Confirmed thermohydraulic study engineer (Merger reactor) - Nuclear`
 - `Engineer Studies and Modeling Development - Nuclear - Aix -en -Provence`  ->  `Engineer Studies and Modeling Development - Nuclear`
 - `Nuclear Safety Project Manager - Nuclear - Aix -en -Provence`  ->  `Nuclear Safety Project Manager - Nuclear`
-- `Partner relations manager in CDI in Paris`  ->  `Partner relations manager`
 
 ### 60 random stage-2 before / after pairs
 
-- `Data Analyst Qlik Sense-CDD 6 months`  ->  `Data Analyst Qlik Sense- 6 months`
-- `B PSE- Java-JavaScript developer agile mode devops- bordeaux`  ->  `B PSE- Java-JavaScript developer agile mode devops`
-- `Flow pilot Corbas`  ->  `Flow pilot`
-- `Project Manager " char du futur "`  ->  `Project Manager " char du futur`
-- `Devops Engineer - Aeroline - Toulon`  ->  `Devops Engineer - Aeroline`
-- `Consultant Senior SAP FICO en Freelance - Paris et Région Ref. 005741`  ->  `Consultant Senior SAP FICO en Freelance - Paris et Région`
-- `Business engineer in CDI in Paris`  ->  `Business engineer`
-- `Our Decathlon Pro team is looking for a Tech. Lead in Lille`  ->  `Tech. Lead`
-- `SAP JUNIOR Consultant - 1st job (Lille)`  ->  `SAP JUNIOR Consultant - 1st job`
-- `Network development coordinator - - CDD - Roaming all France`  ->  `Network development coordinator - - - Roaming all`
-- `Business Analyst - Payment / Credit Financial Services- Brest`  ->  `Business Analyst - Payment / Credit Financial Services`
-- `Developer (SE) C# .NET Financial services Strasbourg`  ->  `Developer (SE) C# .NET Financial services`
-- `Ingénieur validation software CDI`  ->  `Ingénieur validation software`
-- `Experienced Network Engineer - DSI - Nice`  ->  `Experienced Network Engineer - DSI`
-- `Data Engineer Services Financiers Strasbourg`  ->  `Data Engineer Services Financiers`
-- `Embedded C++/QT Software Architect CDI`  ->  `Embedded C++/QT Software Architect`
-- `QA Analyst - AAA Project Not announced - CDD /NB)`  ->  `QA Analyst - AAA Project Not announced - /NB)`
-- `Technical Scrum Master Aix-en-Provence`  ->  `Technical Scrum Master`
-- `Post-doctorator or post-doctorating in machine learning-CDD 2 years`  ->  `Post-doctorator or post-doctorating in machine learning- 2 years`
-- `Lead technique Java - PAU`  ->  `Lead technique Java`
-- `Accommodation manager Le Saint Paul R&C 5* CDI`  ->  `Accommodation manager Le Saint Paul R&C 5*`
-- `Développeur/se Java Services Financiers Lille`  ->  `Développeur/se Java Services Financiers`
-- `Digital and CRM - CDD - 12 month managers`  ->  `Digital and CRM - - 12 month managers`
-- `Ingénieur Validation Support - CDI en Interne`  ->  `Ingénieur Validation Support - en Interne`
-- `IT / Connectivity Solution Design Architect, France`  ->  `IT / Connectivity Solution Design Architect`
-- `Data Engineer MSBI Montpellier`  ->  `Data Engineer MSBI`
-- `Operational Quality Engineer : labelling specialization`  ->  `Operational Quality Engineer: labelling specialization`
-- `MRI Application Engineer (France)`  ->  `MRI Application Engineer`
+- `CDI - Juriste IT`  ->  `Juriste IT`
+- `C ++ development engineer and field support - Defense & Security - Toulon`  ->  `C ++ development engineer and field support - Defense & Security`
+- `Manager IT Project Manager Full remote or Paris`  ->  `Manager IT Project Manager Full remote`
+- `Software Engineer FullStack JAVA - Aubière`  ->  `Software Engineer FullStack JAVA`
+- `Business Development/ Sales Manager - Installer Channel France`  ->  `Business Development/ Sales Manager - Installer Channel`
+- `Head of Editorial Content, Vogue France`  ->  `Head of Editorial Content, Vogue`
+- `Product Owner - CDD`  ->  `Product Owner`
+- `Application Architect (Marseille)`  ->  `Application Architect`
+- `Accelerator Digital Data Engineer (Lyon)`  ->  `Accelerator Digital Data Engineer`
+- `CDI- boss the project IT`  ->  `boss the project IT`
+- `CDI - Master Digital Service Manager`  ->  `Master Digital Service Manager`
+- `Network development coordinator - - CDD - Roaming all France`  ->  `Network development coordinator - Roaming all`
+- `Développeur .NET Paris`  ->  `Développeur .NET`
+- `Helpdesk Technician Vitrolles`  ->  `Helpdesk Technician`
+- `Software Engineer JAVA Back End - Clermont-Ferrand`  ->  `Software Engineer JAVA Back End`
+- `Business Manager in Medical Technologies Marseille`  ->  `Business Manager in Medical Technologies`
+- `Software - Grand -Est engineer engineer)`  ->  `Software - Grand -Est engineer engineer`
+- `SharePoint Developer NANCY`  ->  `SharePoint Developer`
+- `Doctorant ou Doctorante - Etendre la méthode Event-B pour intégrer la modularisation - CDD 3 ANS`  ->  `Doctorant ou Doctorante - Etendre la méthode Event-B pour intégrer la modularisation - 3 ANS`
+- `Confirmed thermohydraulic study engineer (Merger reactor) - Nuclear - Aix -en -Provence`  ->  `Confirmed thermohydraulic study engineer (Merger reactor) - Nuclear`
+- `[CDI] Data Scientist`  ->  `Data Scientist`
+- `Ingénieur développement logiciel C++ - Défense & Sécurité - Toulon`  ->  `Ingénieur développement logiciel C++ - Défense & Sécurité`
+- `Developer- DEVOPS Cloud- IT (Information Systems)- Fontenay-sous-Bois, Ile de France, France`  ->  `Developer- DEVOPS Cloud- IT (Information Systems)- Fontenay-sous-Bois, Ile de`
+- `IT Project Manager France`  ->  `IT Project Manager`
+- `CDD - C ++ development engineer`  ->  `C ++ development engineer`
+- `Responsable IT Fonctions Support et Supply Chain, CDI`  ->  `Responsable IT Fonctions Support et Supply Chain`
+- `CDI - SAP Logistics functional project manager - Sales`  ->  `SAP Logistics functional project manager - Sales`
+- `POSTE : Ingénieur développement Angular - Domaine de la santé`  ->  `POSTE: Ingénieur développement Angular - Domaine de la santé`
+- `Ingénieur développement Linux embarqué bureau étude CDI`  ->  `Ingénieur développement Linux embarqué bureau étude`
+- `Juriste junior Data Privacy et IA - 2025`  ->  `Juriste junior Data Privacy et IA`
+- `Developer/Developer Java Fullstack - Pau`  ->  `Developer/Developer Java Fullstack`
+- `Sommelier -Le Saint-Paul R&C 5* Logé - CDD saisonnier Avril à Novembre 2025 - Logement Possible`  ->  `Sommelier -Le Saint-Paul R&C 5* Logé - saisonnier Avril à Novembre - Logement Possible`
+- `Alternance : Ingénieur/e DevOps - Défense & Sécurité`  ->  `Alternance: Ingénieur/e DevOps - Défense & Sécurité`
 - `Supplier Development Manager Saint-Nazaire`  ->  `Supplier Development Manager`
-- `Data project leader data clients Massy`  ->  `Data project leader data clients`
-- `CDI - Responsable applicatif SAP Business One`  ->  `Responsable applicatif SAP Business One`
-- `IT Category Buyer - 6 months temporary contract (CDD)`  ->  `IT Category Buyer - 6 months temporary contract`
-- `Ingénieur validation software CDI`  ->  `Ingénieur validation software`
-- `JDE Peet's - Tassimo European South - CDI brand`  ->  `JDE Peet's - Tassimo European South - brand`
+- `Developer C ++ - Snowdrop Paris`  ->  `Developer C ++ - Snowdrop`
+- `Chef / Project manager Digital CDD FUNCTION CDD`  ->  `Chef / Project manager Digital - FUNCTION`
 - `Consultant Cloud Automation LYON`  ->  `Consultant Cloud Automation`
-- `Technicien helpdesk N2 *`  ->  `Technicien helpdesk N2`
-- `Tech Lead Angular - Crédits Particulier Gestion et Recouvrement - Lille /Rouen`  ->  `Tech Lead Angular - Crédits Particulier Gestion et Recouvrement`
-- `Development Manager France`  ->  `Development Manager`
-- `Technicien helpdesk Aix en Provence`  ->  `Technicien helpdesk`
-- `CDI Full Stack Java`  ->  `Full Stack Java`
-- `Senior NetSuite Administrator (France)`  ->  `Senior NetSuite Administrator`
-- `Doctorant ou Doctorante - A marketplace for 6G edge computing - CDD 3 ans`  ->  `Doctorant ou Doctorante - A marketplace for 6G edge computing - 3 ans`
-- `IT deployment technician Aix en Provence`  ->  `IT deployment technician`
-- `Team Lead Data Engineering and ML Ops (80-100%) - Sophia-Antipolis - Hybrid Work`  ->  `Team Lead Data Engineering and ML Ops - Sophia-Antipolis - Hybrid Work`
-- `Data Analyst Banque Strasbourg`  ->  `Data Analyst Banque`
-- `Tech Lead Angular - Individual Credits Management and Collection - Lille /Rouen`  ->  `Tech Lead Angular - Individual Credits Management and Collection`
-- `Long-term Temporary Hotline Support Technician Aix en Provence`  ->  `Long-term Temporary Hotline Support Technician`
+- `Enseignante Chercheuse ou Enseignant Chercheur (Professeure ou Professeur) en Data/IA - CDI à IMT Nord Europe`  ->  `Enseignante Chercheuse ou Enseignant Chercheur (Professeure ou Professeur) en Data/IA - à IMT Nord Europe`
+- `Psychologue en charge de l'évaluation des Informations Préoccupantes (IP) Lunel`  ->  `Psychologue en charge de l'évaluation des Informations Préoccupantes (IP)`
+- `Data Scientist Senior Expert - - BPLS Corporate`  ->  `Data Scientist Senior Expert - BPLS Corporate`
+- `Technicien hotline - CDD 6 mois à partir du 09/12`  ->  `Technicien hotline - 6 mois à partir du 09/12`
+- `CDI - Cybersecurity Project Manager-Pilier Advisory`  ->  `Cybersecurity Project Manager-Pilier Advisory`
+- `Technicien TOIP Marseille`  ->  `Technicien TOIP`
+- `Technicien Informatique et Multimedia à domicile secteurs 93,94,77 et Paris`  ->  `Technicien Informatique et Multimedia à domicile secteurs 93,94,77`
+- `AGGP2026 - Graduate - Aircraft Data and Connectivity System Designer`  ->  `AGGP - Graduate - Aircraft Data and Connectivity System Designer`
+- `CDD - Digital Verification Engineer`  ->  `Digital Verification Engineer`
+- `Développeur Fullstack - - CDI`  ->  `Développeur Fullstack`
+- `Java Development Engineer - AIX-EN-PROVENCE or ORLEANS`  ->  `Java Development Engineer`
+- `Technicien helpdesk N1 Montpellier`  ->  `Technicien helpdesk N1`
+- `Local Technician N2 Venelles`  ->  `Local Technician N2`
+- `Post-doctoral fellow in stochastic modeling of wireless networks - CDD 18 months`  ->  `Post-doctoral fellow in stochastic modeling of wireless networks - 18 months`
+- `IT Support Technician Montpellier`  ->  `IT Support Technician`
 - `Experienced Cloud Consultant PARIS`  ->  `Experienced Cloud Consultant`
-- `Telephone technical advisor - 6-month fixed-term contract / part-time`  ->  `Telephone technical advisor - 6-month fixed-term contract`
-- `Technicien déploiement en informatique Aix en Provence`  ->  `Technicien déploiement en informatique`
-- `Senior Gameplay Programmer /NB) : Third-Person Shooter RPG / The Division Resurgence`  ->  `Senior Gameplay Programmer /NB): Third-Person Shooter RPG / The Division Resurgence`
-- `CDI - Fullstack / Backend Developer`  ->  `Fullstack / Backend Developer`
-- `Technicien Informatique (Rueil-Malmaison)`  ->  `Technicien Informatique`
-- `Product Owner Data - - CDD`  ->  `Product Owner Data`
-- `Analyste SOC - Detection Cybersécurité - Toulon`  ->  `Analyste SOC - Detection Cybersécurité`
-- `CDI - HR Digital Project Manager`  ->  `HR Digital Project Manager`
-- `UX/UI Designer - Freelance Vannes`  ->  `UX/UI Designer - Freelance`
-- `CDI - Concepteur logiciel frameworks`  ->  `Concepteur logiciel frameworks`
-- `IT technician / Logistics mission (CDI)`  ->  `IT technician / Logistics mission`
-- `Chef /fe de Projet Développement Logiciel / Responsable de lot - Défense & Sécurité - Toulon`  ->  `Chef /fe de Projet Développement Logiciel / Responsable de lot - Défense & Sécurité`
+- `CDD : Product Owner - Application mobile`  ->  `Product Owner - Application mobile`
+- `Technicien TOIP Marseille`  ->  `Technicien TOIP`
+- `Solutions Architect France`  ->  `Solutions Architect`
+- `CDI - IA Architect`  ->  `IA Architect`
+- `Chef de rang Le Saint-Paul R&C 5* - CDD saisonnier Mars à Novembre 2025 - logement possible`  ->  `Chef de rang Le Saint-Paul R&C 5* - saisonnier Mars à Novembre - logement possible`
+- `Développeur Mainframe Paris`  ->  `Développeur Mainframe`
+- `Senior Front-End Engineer - Crypto/Web3 ( Paris)`  ->  `Senior Front-End Engineer - Crypto/Web3`
 
 ### Named-occupation titles (script 92) before and after stage 2
 
