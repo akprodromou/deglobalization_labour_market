@@ -71,6 +71,7 @@ def main():
             r = json.loads(l)
             lab[str(r["id"])] = int(r["cluster"])
     flag = {}
+    inten = {}
     for p in a.tags or []:
         if not Path(p).exists():
             raise SystemExit(f"tags file not found: {p}")
@@ -79,6 +80,7 @@ def main():
                 r = json.loads(l)
                 if r.get("ok") and r.get("channel") in CH:
                     flag[str(r["posting_id"])] = r["channel"]
+                    inten[str(r["posting_id"])] = r.get("intensity") or "?"
     rows, dup = load_all(a.corpus)
     rows = [r for r in rows if a.d_from <= r["day"] <= a.d_to]
     rnd = random.Random(a.seed)
@@ -91,11 +93,14 @@ def main():
         fl = sum(str(r["item"]["id"]) in flag for r in mine)
         out.append(f"## Cluster {c}: {len(mine):,} postings taken, {nt:,} without a title, {fl:,} flagged"
                    + (f", days {min(r['day'] for r in mine)} to {max(r['day'] for r in mine)}" if mine else "") + "\n")
+        if fl:
+            mix = {k: sum(inten.get(str(r["item"]["id"])) == k for r in mine) for k in ("high", "medium", "low")}
+            out.append(f"Intensity of the flagged postings taken: high {mix['high']}, medium {mix['medium']}, low {mix['low']}\n")
         for r in rnd.sample(mine, min(a.n, len(mine))):
             it = r["item"]
             title = (it.get("title") or "").strip() or "(no title)"
             desc = re.sub(r"\s+", " ", it.get("description") or "").strip()[:a.chars]
-            out.append(f"- **{r['day']}** | channel: {flag.get(str(it['id']), 'none')} | id {it['id']} | {title}\n  {desc}\n")
+            out.append(f"- **{r['day']}** | channel: {flag.get(str(it['id']), 'none')}{(' (' + inten[str(it['id'])] + ')') if str(it['id']) in inten else ''} | id {it['id']} | {title}\n  {desc}\n")
     Path("docs").mkdir(exist_ok=True)
     out_p = f"docs/cluster_sample_{a.board}_{'_'.join(map(str, a.clusters))}.md"
     Path(out_p).write_text("\n".join(out) + "\n", encoding="utf-8")

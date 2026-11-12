@@ -57,6 +57,8 @@ CH = ["reshoring", "defense", "critical materials", "energy security", "trade co
 REGIONS = {"SE": 8, "FR": 22, "DE": 38}
 
 
+INT_RANK = {"low": 0, "medium": 1, "high": 2}
+
 def load_all(paths):
     with tempfile.NamedTemporaryFile("w", suffix=".jsonl", delete=False, encoding="utf-8") as tmp:
         for p in paths:
@@ -109,6 +111,8 @@ def main():
     ap.add_argument("--corpus", nargs="+", required=True)
     ap.add_argument("--labels")
     ap.add_argument("--tags", nargs="+")
+    ap.add_argument("--min-intensity", choices=["low", "medium", "high"], default="low",
+                    help="count a posting as flagged only at this intensity or higher (low = every tag, the default; medium = duties in or supporting the sector, company text alone excluded)")
     ap.add_argument("--nuts")
     ap.add_argument("--titles")
     ap.add_argument("--event")
@@ -148,7 +152,7 @@ def main():
             for l in open(p, encoding="utf-8"):
                 if l.strip():
                     r = json.loads(l)
-                    if r.get("ok") and r.get("channel") in CH:
+                    if r.get("ok") and r.get("channel") in CH and INT_RANK.get(r.get("intensity") or "low", 0) >= INT_RANK[a.min_intensity]:
                         flag[str(r["posting_id"])] = r["channel"]
     reg = {}
     if not Path(nuts_p).exists():
@@ -220,7 +224,7 @@ def main():
                            "adjusted_lo_C": loC * pop * adj, "adjusted_hi_C": hiC * pop * adj, "full_quarter": int(full)})
     Path("data/cluster").mkdir(parents=True, exist_ok=True)
     Path("docs").mkdir(exist_ok=True)
-    tag = f"{a.board}_{a.input}" + ("" if a.period == "quarter" else "_month") + ("" if a.d_from == "0000-00-00" and a.d_to == "9999-99-99" else f"_{a.d_from}_{a.d_to}")
+    tag = f"{a.board}_{a.input}" + ("" if a.min_intensity == "low" else f"_int{a.min_intensity}") + ("" if a.period == "quarter" else "_month") + ("" if a.d_from == "0000-00-00" and a.d_to == "9999-99-99" else f"_{a.d_from}_{a.d_to}")
     with open(f"data/cluster/series_{tag}.csv", "w", newline="", encoding="utf-8") as f:
         wr = csv.DictWriter(f, fieldnames=list(series[0].keys()))
         wr.writeheader()

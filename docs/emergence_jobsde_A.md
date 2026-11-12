@@ -70,13 +70,47 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 | 62 | 67 | 2024-Q4 | 143 | 0.76% | 2024-Q3 | 2% | energy security 100% | 4% | 0.06 | -0% | - | Internal Sales Employee | Employee in internal sales | Employee internal sales |
 | 6 | 60 | 2024-Q4 | 142 | 0.76% | 2024-Q4 | 0% |  0% | 25% | 0.11 | -0% | - | Salesperson | Saleswoman | Salesperson (M,W,D) |
 
+## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)
+
+Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.
+
+| cluster | taken | first clearly new | flagged | top template | without title | eligible | top titles |
+|---|---|---|---|---|---|---|---|
+| 53 | 198 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 2% | 0% | eligible | Finanzbuchhalter | Kreditorenbuchhalter | Buchhalter/in / Finanzbuchhalter/in Personalsach |
+| 52 | 188 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Sachbearbeiter Immobilienmanagement |
+| 30 | 115 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 4% | 0% | eligible | Filialleitung | Führungskraft in der Filiale | Abteilungsleiter Fleischabteilung |
+| 40 | 153 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 3% | 0% | eligible | Lagermitarbeiter | Ausbildung Fachkraft für Lagerlogistik | Mitarbeiter Bauhöfe und Logist |
+| 21 | 124 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer | Verkäufer/in | Verkäufer allgemeiner Verkaufsbereich / Kasse |
+
+## Largest rise in share, first usable period (2024-Q3) to last (2025-Q1)
+
+Both ends are weighted shares of the whole board with interval C. Clear = the lower end at the last period is above the upper end at the first.
+
+| cluster | taken | share first (interval C) | share last (interval C) | clear | flagged | top template | without title | eligible | top titles |
+|---|---|---|---|---|---|---|---|---|---|
+| 27 | 876 | 1.01% (0.77% to 1.35%) | 11.75% (5.30% to 17.64%) | yes | 3% | 2% | 0% | eligible | Elektroniker | Elektriker | Servicetechniker |
+| 12 | 656 | 5.61% (3.96% to 7.43%) | 9.29% (1.11% to 21.75%) | no | 0% | 3% | 0% | eligible | Nursing specialist | Medical assistant | Nursing assistant |
+| 1 | 43 | 0.00% (0.00% to 0.00%) | 2.54% (0.00% to 5.97%) | no | 0% | 93% | 0% | not eligible | Ausbildung Verkäufer / Kaufleute im Einzelhandel | Ausbildung zum Fachwirt für V |
+| 53 | 198 | 0.01% (0.00% to 0.05%) | 2.18% (1.11% to 3.60%) | yes | 0% | 2% | 0% | eligible | Finanzbuchhalter | Kreditorenbuchhalter | Buchhalter/in / Finanzbuchhalter/in Pe |
+| 16 | 119 | 0.05% (0.00% to 0.17%) | 2.16% (0.65% to 3.51%) | yes | 0% | 7% | 0% | eligible | Finanzkaufmann Vertrieb | Versicherungskaufmann / Versicherungsmakler gesucht |  |
+| 52 | 188 | 0.07% (0.00% to 0.23%) | 1.85% (0.87% to 2.99%) | yes | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Sachbearbeiter Immobilienmanag |
+| 39 | 69 | 0.01% (0.00% to 0.05%) | 1.54% (0.22% to 2.92%) | yes | 0% | 3% | 0% | eligible | Berufskraftfahrer | Kraftfahrer | LKW-Fahrer |
+| 40 | 153 | 0.28% (0.07% to 0.51%) | 1.68% (0.49% to 2.72%) | no | 0% | 3% | 0% | eligible | Lagermitarbeiter | Ausbildung Fachkraft für Lagerlogistik | Mitarbeiter Bauhöfe  |
+| 35 | 113 | 0.01% (0.00% to 0.04%) | 1.26% (0.59% to 1.99%) | yes | 0% | 4% | 0% | eligible | Pflegefachkraft | Pflegefachkräfte | Pflegekraft |
+| 36 | 95 | 0.00% (0.00% to 0.00%) | 1.18% (0.47% to 1.81%) | yes | 0% | 5% | 0% | eligible | Medizinische Fachangestellte | Zahnmedizinische Fachangestellte | Medizinische F |
+| 26 | 116 | 0.12% (0.00% to 0.24%) | 1.29% (0.54% to 2.22%) | yes | 0% | 2% | 0% | eligible | Haustechniker | Hausmeister | Reinigungskraft |
+| 14 | 42 | 0.00% (0.00% to 0.00%) | 1.04% (0.00% to 4.10%) | no | 0% | 76% | 0% | not eligible | Weitere pädagogische Fachkraft für die Tageseinrichtung für Kinder | weitere päd |
+| 21 | 124 | 0.05% (0.00% to 0.16%) | 1.06% (0.35% to 1.80%) | yes | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer | Verkäufer/in | Verkäufer allgemeiner Verkaufsbereich / |
+| 25 | 106 | 0.15% (0.05% to 0.29%) | 1.15% (0.51% to 1.74%) | yes | 0% | 3% | 0% | eligible | Produktionsmitarbeiter | Maschinenführer | Kranführer |
+| 24 | 59 | 0.00% (0.00% to 0.00%) | 0.92% (0.26% to 1.59%) | yes | 5% | 8% | 0% | eligible | Versicherung Vertrieb Außendienst | Versicherungsfachmann Außendienst | Servicet |
+
 ## Clusters with the largest flagged share (at least 10 flagged postings taken, not template-dominated)
 
-| cluster | taken | flagged taken | flagged share (weighted) | top channel | peak share | first crossing | top template | HHI norm | unplaced | top titles |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 69 | 269 | 12 | 5% | energy security 97% | 1.93% | 2024-Q3 | 1% | 0.03 | 2% | Electronics technician for industrial technology | Electrician / electronics technician |  |
-| 65 | 321 | 16 | 3% | energy security 92% | 4.89% | 2024-Q3 | 2% | 0.04 | 1% | Project Manager Electrical Engineering | Project manager | Senior Engineer Process Enginee |
-| 27 | 876 | 32 | 3% | energy security 86% | 8.75% | 2024-Q4 | 2% | 0.02 | 1% | Elektroniker | Elektriker | Servicetechniker |
+| cluster | taken | flagged taken | flagged share (weighted) | top channel | peak share | first crossing | top template | HHI norm | unplaced | change vs event (95% interval) | top titles |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 69 | 269 | 12 | 5% | energy security 97% | 1.93% | 2024-Q3 | 1% | 0.03 | 2% | - | Electronics technician for industrial technology | Electrician / electronics technician |  |
+| 65 | 321 | 16 | 3% | energy security 92% | 4.89% | 2024-Q3 | 2% | 0.04 | 1% | - | Project Manager Electrical Engineering | Project manager | Senior Engineer Process Enginee |
+| 27 | 876 | 32 | 3% | energy security 86% | 8.75% | 2024-Q4 | 2% | 0.02 | 1% | - | Elektroniker | Elektriker | Servicetechniker |
 
 ## Crossing the threshold but not eligible (one template or mostly title-less)
 
