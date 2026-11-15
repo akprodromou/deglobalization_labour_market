@@ -18,6 +18,12 @@ Emergence (docs/emergence_<board>_<input>.md)
     A cluster crosses when weighted_adjusted >= --threshold (default 100 postings a quarter) or, in the share version,
     when share >= --share-threshold (default 0.001). First crossing in the board's first usable quarter is "already present",
     not new. Occupation Emergence Rate = clusters newly crossing per quarter, next to the number of active clusters.
+    Clearly new (default, --new-rule all): interval C wholly above the threshold now AND wholly below it in EVERY earlier usable
+    quarter. Clusters that were above the line earlier, dipped, and came back are listed apart as "returning after a dip"
+    (the old rule, --new-rule previous, looked only at the previous quarter and counted such returns as new).
+    Joint dips: per quarter, the clusters that were clearly above the line in an earlier quarter and are wholly below it now. When
+    at least --dip-min of them (and --dip-share of those clusters) drop in the same quarter, the report flags the quarter: a common
+    cause (a thin quarter, one source missing) is more likely than separate occupations declining.
 
 Baseline (--event NAME=YYYY-MM-DD): share in the --window-days days before the event day (default 90) against the same
 number of days from it on, difference and ratio, with a 95% interval for the difference from resampling ISO weeks inside each
@@ -113,6 +119,9 @@ def main():
     ap.add_argument("--tags", nargs="+")
     ap.add_argument("--min-intensity", choices=["low", "medium", "high"], default="low",
                     help="count a posting as flagged only at this intensity or higher (low = every tag, the default; medium = duties in or supporting the sector, company text alone excluded)")
+    ap.add_argument("--weight-mode", choices=["ht", "log", "cap"], default="ht",
+                    help="ht = inverse-probability weights (default, the estimator of the population share); log = log(1+w) scaled to (0,1] and cap = weights cut at --cap-pct; both are sensitivity checks of the shares (the weighted-postings counts and the count threshold lose their meaning)")
+    ap.add_argument("--cap-pct", type=float, default=95.0, help="percentile at which --weight-mode cap cuts the weights")
     ap.add_argument("--nuts")
     ap.add_argument("--titles")
     ap.add_argument("--event")
@@ -126,6 +135,10 @@ def main():
     ap.add_argument("--min-placed", type=int, default=50)
     ap.add_argument("--max-template", type=float, default=0.30)
     ap.add_argument("--max-titleless", type=float, default=0.50, help="clusters made mostly of postings without a title are not eligible")
+    ap.add_argument("--new-rule", choices=["all", "previous"], default="all",
+                    help="all = clearly new only if wholly below the threshold in every earlier usable quarter (default); previous = only the previous quarter (old rule, counts returns after a dip as new)")
+    ap.add_argument("--dip-min", type=int, default=3, help="flag a quarter when at least this many clusters drop wholly below the threshold together")
+    ap.add_argument("--dip-share", type=float, default=0.3, help="... and at least this share of the clusters that were clearly above the line earlier")
     ap.add_argument("--boot", type=int, default=500)
     ap.add_argument("--seed", type=int, default=1)
     a = ap.parse_args()
@@ -179,6 +192,14 @@ def main():
     D = len(days)
     dix = np.array([di[r["day"]] for r in rows])
     w = np.array([r["w"] for r in rows])
+    if a.weight_mode == "log":
+        w0 = w.sum()
+        w = np.log1p(w)
+        w = w * w0 / w.sum()
+    elif a.weight_mode == "cap":
+        w0 = w.sum()
+        w = np.minimum(w, np.percentile(w, a.cap_pct))
+        w = w * w0 / w.sum()
     n_d = np.bincount(dix, minlength=D).astype(float)
     W_d = np.bincount(dix, weights=w, minlength=D)
     qs = sorted({quarter(d) for d in days})
@@ -224,7 +245,7 @@ def main():
                            "adjusted_lo_C": loC * pop * adj, "adjusted_hi_C": hiC * pop * adj, "full_quarter": int(full)})
     Path("data/cluster").mkdir(parents=True, exist_ok=True)
     Path("docs").mkdir(exist_ok=True)
-    tag = f"{a.board}_{a.input}" + ("" if a.min_intensity == "low" else f"_int{a.min_intensity}") + ("" if a.period == "quarter" else "_month") + ("" if a.d_from == "0000-00-00" and a.d_to == "9999-99-99" else f"_{a.d_from}_{a.d_to}")
+    tag = f"{a.board}_{a.input}" + ("" if a.min_intensity == "low" else f"_int{a.min_intensity}") + ("" if a.weight_mode == "ht" else f"_w{a.weight_mode}") + ("" if a.period == "quarter" else "_month") + ("" if a.d_from == "0000-00-00" and a.d_to == "9999-99-99" else f"_{a.d_from}_{a.d_to}")
     with open(f"data/cluster/series_{tag}.csv", "w", newline="", encoding="utf-8") as f:
         wr = csv.DictWriter(f, fieldnames=list(series[0].keys()))
         wr.writeheader()
@@ -255,20 +276,34 @@ def main():
             if c not in first_cross_s and r["share"] >= a.share_threshold:
                 first_cross_s[c] = q
     emerg = []
-    newlist = []     # (cluster, period index, period) : clearly new
+    newlist = []     # (cluster, period index, period): clearly new under --new-rule
+    retlist = []     # clearly above now, wholly below in the previous quarter but above the line earlier ("returning after a dip")
+    diplist = {}     # period -> clusters that were clearly above earlier and are wholly below now
+    real = [c for c in clusters if c >= 0]
     for qn, q in enumerate(fullq):
-        act = sum(by[c][q]["weighted_adjusted"] >= a.threshold for c in clusters if c >= 0)
-        act_s = sum(by[c][q]["share"] >= a.share_threshold for c in clusters if c >= 0)
+        act = sum(by[c][q]["weighted_adjusted"] >= a.threshold for c in real)
+        act_s = sum(by[c][q]["share"] >= a.share_threshold for c in real)
         new = sum(v == q and q != fullq[0] for v in first_cross.values())
         new_s = sum(v == q and q != fullq[0] for v in first_cross_s.values())
-        # strict: the whole interval C is above the line now, and was wholly below it in the previous usable quarter
-        clear = sum(by[c][q]["adjusted_lo_C"] >= a.threshold for c in clusters if c >= 0)
-        strict = sum(qn > 0 and by[c][q]["adjusted_lo_C"] >= a.threshold and by[c][fullq[qn - 1]]["adjusted_hi_C"] < a.threshold
-                     for c in clusters if c >= 0)
-        for c in clusters:
-            if c >= 0 and qn > 0 and by[c][q]["adjusted_lo_C"] >= a.threshold and by[c][fullq[qn - 1]]["adjusted_hi_C"] < a.threshold:
+        clear = sum(by[c][q]["adjusted_lo_C"] >= a.threshold for c in real)
+        n_new = n_ret = 0
+        for c in real:
+            if qn == 0 or by[c][q]["adjusted_lo_C"] < a.threshold:
+                continue
+            below_prev = by[c][fullq[qn - 1]]["adjusted_hi_C"] < a.threshold
+            below_all = all(by[c][e]["adjusted_hi_C"] < a.threshold for e in fullq[:qn])
+            if below_all:
+                n_new += 1
+            elif below_prev:
+                n_ret += 1
+            if (below_all if a.new_rule == "all" else below_prev):
                 newlist.append((c, qn, q))
-        emerg.append((q, act, new, act_s, new_s, clear, strict))
+            if below_prev and not below_all:
+                retlist.append((c, qn, q))
+        was = [c for c in real if any(by[c][e]["adjusted_lo_C"] >= a.threshold for e in fullq[:qn])]
+        dips = [c for c in was if by[c][q]["adjusted_hi_C"] < a.threshold] if qn > 0 else []
+        diplist[q] = (dips, len(was))
+        emerg.append((q, act, new, act_s, new_s, clear, n_new, n_ret, len(dips)))
 
     # ---- baseline
     base = {}
@@ -406,11 +441,17 @@ def main():
           "## Coverage per quarter", "", "| quarter | sampled days | calendar days | weighted postings (sampled days) | usable |", "|---|---|---|---|---|"]
     md += [f"| {q} | {v['days']} | {v['cal']} | {v['pop']:,.0f} | {'yes' if v['full'] else 'no'} |" for q, v in qinfo.items()]
     md += ["", "## Occupation Emergence Rate", "",
-           "| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (interval C) |",
-           "|---|---|---|---|---|---|---|"]
-    md += [f"| {q} | {x} | {nw} | {xs} | {ns} | {cl_} | {st} |" for q, x, nw, xs, ns, cl_, st in emerg]
-    md += ["", "Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in the previous usable quarter. "
+           "| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (below the line in every earlier quarter) | returning after a dip | clearly below now, clearly above earlier |",
+           "|---|---|---|---|---|---|---|---|---|"]
+    md += [f"| {q} | {x} | {nw} | {xs} | {ns} | {cl_} | {st} | {rt} | {dp} |" for q, x, nw, xs, ns, cl_, st, rt, dp in emerg]
+    md += ["", "Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in every earlier usable quarter "
+           "(with --new-rule previous: in the previous quarter only). Returning after a dip = clearly above now, wholly below in the previous quarter, but above the line in an earlier one: not an emerging occupation. "
            "The count version moves with the weighted population of the board (see the coverage table); the share version does not."]
+    joint = [(q, d, n) for q, (d, n) in diplist.items() if len(d) >= a.dip_min and n and len(d) / n >= a.dip_share]
+    for q, d, n in joint:
+        md += ["", f"**Joint dip in {q}.** {len(d)} of the {n} clusters that were clearly above the line earlier are wholly below it in {q} "
+               f"({qinfo[q]['days']} of {qinfo[q]['cal']} days sampled; clusters {', '.join(str(c) for c in d[:15])}). When many clusters drop in the same quarter, suspect the quarter "
+               "(thin or unusual sampling, one source missing) before reading the drops as declines, and do not read the returns the quarter after as emergence."]
     md += ["", f"The first usable quarter ({fullq[0] if fullq else '-'}) cannot show new crossings; clusters already above the line then count as present at the start.", "",
            "## Eligible clusters (largest peak first)", "",
            "| cluster | taken | peak quarter | peak adjusted | peak share | first crossing | flagged | top channel | top template | HHI norm | unplaced | change vs event (95% interval) | top titles |",
@@ -427,7 +468,7 @@ def main():
         return (f"| {c} | {x['taken']} | {extra} | {x['flagged_share']:.0%} | {x['top_template_share']:.0%} | {x['titleless_share']:.0%} | "
                 f"{'eligible' if x['eligible'] else 'not eligible'} | {x['top_titles'][:90]} |")
 
-    md += ["", "## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)", "",
+    md += ["", "## Clearly new clusters (interval C wholly above the threshold now, wholly below it in " + ("every earlier usable period" if a.new_rule == "all" else "the previous usable period") + ")", "",
            "Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.", "",
            "| cluster | taken | first clearly new | flagged | top template | without title | eligible | top titles |", "|---|---|---|---|---|---|---|---|"]
     seen = set()
@@ -439,6 +480,21 @@ def main():
         md.append(srow(c, f"{q}; stays clearly above in {len(later)} of {len(fullq) - qn} periods from then on"))
     if not seen:
         md.append("| - | | none | | | | | |")
+    seen_r = set()
+    ret_rows = []
+    for c, qn, q in sorted(retlist, key=lambda t: (t[1], -sm[t[0]]["peak_adjusted"])):
+        if c in seen_r or (a.new_rule == "previous" and c in seen):
+            continue
+        seen_r.add(c)
+        earlier = [e for e in fullq[:qn] if by[c][e]["adjusted_lo_C"] >= a.threshold]
+        reach = [e for e in fullq[:qn] if e not in earlier and by[c][e]["adjusted_hi_C"] >= a.threshold]
+        note = (f"clearly above earlier in {', '.join(earlier)}" if earlier else "") + ("; " if earlier and reach else "") + \
+               (f"interval C reaches the line in {', '.join(reach)}" if reach else "")
+        ret_rows.append(srow(c, f"returns {q}; {note}"))
+    if ret_rows:
+        md += ["", "## Returning after a dip (not counted as new)", "",
+               "Clearly above the line now and wholly below it in the previous quarter, but clearly above it in an earlier quarter, or with an interval that reaches the line there: a gap in the series, not a new occupation.", "",
+               "| cluster | taken | returns | flagged | top template | without title | eligible | top titles |", "|---|---|---|---|---|---|---|---|"] + ret_rows
     if len(fullq) >= 2:
         f0, f1 = fullq[0], fullq[-1]
         rise = []
@@ -476,6 +532,8 @@ def main():
            "- Adjusted counts assume unsampled days resemble sampled ones; quarters with few sampled days are not used for crossings.",
            "- HHI uses placed postings only; read it with the unplaced share and the number of placed postings (data/cluster/hhi_*.csv).",
            "- Baseline windows are the --window-days days before and from the event (default 90), the same length on both sides; check the coverage of each window before reading a difference."]
+    if a.weight_mode != "ht":
+        md.insert(2, f"**Weights transformed ({a.weight_mode}{'' if a.weight_mode == 'log' else f', cut at percentile {a.cap_pct:g}'}).** Read the shares and their intervals as a sensitivity check of the inverse-probability weights. The transformed weights are rescaled to the same board total as the inverse-probability weights, so counts and the threshold are in comparable units overall; but the per-day totals change, so read counts as approximate and compare shares and verdicts.\n")
     Path(f"docs/emergence_{tag}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print("\n".join(md[:40]))
 

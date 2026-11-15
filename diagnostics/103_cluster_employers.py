@@ -165,6 +165,8 @@ def main():
     ap.add_argument("--flagged-only", action="store_true")
     ap.add_argument("--employer-from", choices=["organization", "text", "named"], default="named")
     ap.add_argument("--top", type=int, default=5)
+    ap.add_argument("--board-wide", action="store_true",
+                    help="also tabulate the largest employers over the whole board by quarter (all postings taken, and flagged ones when --tags is given)")
     a, _ignored = ap.parse_known_args()
     labels_p = a.labels or f"data/cluster/labels_{a.board}_{a.input}.jsonl"
     if not Path(labels_p).exists():
@@ -217,6 +219,28 @@ def main():
         md += [f"### Cluster {c}", "", "| quarter | postings | distinct groups | largest group | its share |", "|---|---|---|---|---|"]
         md += [f"| {q} | {v['n']} | {v['groups']} | {v['top']} | {v['top_share']:.0%} |" for q, v in s["byq"].items()]
         md.append("")
+    if a.board_wide:
+        tot, allc, flc = Counter(), defaultdict(Counter), defaultdict(Counter)
+        for r in rows:
+            q = quarter(r["day"])
+            tot[q] += 1
+            g = employer_keys(r["item"], a.employer_from)[1]
+            if g:
+                allc[g][q] += 1
+                if str(r["item"]["id"]) in flag:
+                    flc[g][q] += 1
+        qs = sorted(tot)
+        best = [g for g, _ in sorted(allc.items(), key=lambda kv: -sum(kv[1].values()))[:12]]
+        md += ["", "## Whole board: postings taken per quarter by employer (share of all postings taken that quarter)", "",
+               "| employer | " + " | ".join(qs) + " |", "|---|" + "---|" * len(qs),
+               "| all postings taken | " + " | ".join(f"{tot[q]:,}" for q in qs) + " |"]
+        md += [f"| {g} | " + " | ".join(f"{allc[g][q]} ({allc[g][q] / tot[q]:.1%})" for q in qs) + " |" for g in best]
+        if a.tags:
+            md += ["", f"## Whole board: flagged postings (intensity {a.min_intensity} or higher) per quarter by employer", "",
+                   "| employer | " + " | ".join(qs) + " |", "|---|" + "---|" * len(qs)]
+            md += [f"| {g} | " + " | ".join(str(flc[g][q]) for q in qs) + " |" for g in best]
+            md += ["| all flagged, any employer | " + " | ".join(str(sum(1 for r in rows if quarter(r["day"]) == q and str(r["item"]["id"]) in flag)) for q in qs) + " |"]
+        md += ["", "Counts are postings taken, not weighted; quarters differ in the number of sampled days (see the coverage table of script 93), so compare shares, not counts."]
     Path("docs").mkdir(exist_ok=True)
     out_p = f"docs/employers_{a.board}_{a.input}.md"
     Path(out_p).write_text("\n".join(md) + "\n", encoding="utf-8")

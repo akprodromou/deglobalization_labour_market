@@ -16,15 +16,17 @@ Threshold: 100 weighted postings a quarter (adjusted to all calendar days of the
 
 ## Occupation Emergence Rate
 
-| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (interval C) |
-|---|---|---|---|---|---|---|
-| 2024-Q3 | 25 | 0 | 125 | 0 | 8 | 0 |
-| 2024-Q4 | 16 | 9 | 137 | 17 | 6 | 1 |
-| 2025-Q1 | 24 | 10 | 122 | 0 | 5 | 0 |
-| 2025-Q2 | 26 | 11 | 131 | 2 | 8 | 4 |
-| 2025-Q3 | 23 | 4 | 125 | 0 | 6 | 0 |
+| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (below the line in every earlier quarter) | returning after a dip | clearly below now, clearly above earlier |
+|---|---|---|---|---|---|---|---|---|
+| 2024-Q3 | 25 | 0 | 125 | 0 | 8 | 0 | 0 | 0 |
+| 2024-Q4 | 16 | 9 | 137 | 17 | 6 | 1 | 0 | 0 |
+| 2025-Q1 | 24 | 10 | 122 | 0 | 5 | 0 | 0 | 3 |
+| 2025-Q2 | 26 | 11 | 131 | 2 | 8 | 0 | 4 | 5 |
+| 2025-Q3 | 23 | 4 | 125 | 0 | 6 | 0 | 0 | 4 |
 
-Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in the previous usable quarter. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
+Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in every earlier usable quarter (with --new-rule previous: in the previous quarter only). Returning after a dip = clearly above now, wholly below in the previous quarter, but above the line in an earlier one: not an emerging occupation. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
+
+**Joint dip in 2025-Q2.** 5 of the 14 clusters that were clearly above the line earlier are wholly below it in 2025-Q2 (44 of 91 days sampled; clusters 10, 44, 46, 116, 136). When many clusters drop in the same quarter, suspect the quarter (thin or unusual sampling, one source missing) before reading the drops as declines, and do not read the returns the quarter after as emergence.
 
 The first usable quarter (2024-Q3) cannot show new crossings; clusters already above the line then count as present at the start.
 
@@ -39,10 +41,10 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 | 75 | 188 | 2024-Q3 | 304 | 2.38% | 2024-Q3 | 6% | defense 100% | 3% | 0.08 | 0% | +1.58% (+0.17% to +4.47%) | Java Developer | Confirmed developer | Experienced Java Developer |
 | 96 | 286 | 2025-Q3 | 299 | 2.26% | 2024-Q3 | 3% | defense 100% | 2% | 0.45 | -0% | +1.39% (+0.39% to +2.85%) | Digital project manager | Digital Project Manager | Digital marketing manager |
 | 79 | 48 | 2025-Q1 | 270 | 2.38% | 2025-Q1 | 0% |  0% | 10% | 0.27 | 0% | +4.50% (-0.70% to +9.63%) | Développeur C# | Développeur C# .NET | Développeur C#.NET |
-| 10 | 187 | 2024-Q4 | 257 | 2.07% | 2024-Q4 | 0% | defense 100% | 4% | 0.20 | 0% | +0.31% (-2.26% to +2.66%) | Technicien helpdesk N2 | Support Technician Level 2 | Technicien support Niveau 1* |
+| 10 | 187 | 2024-Q4 | 257 | 2.07% | 2024-Q4 | 0% | defense 100% | 4% | 0.20 | 0% | +0.31% (-2.26% to +2.66%) | Technicien support Niveau 1* | Technicien Helpdesk N2 | Support Technician Level 1* |
 | 15 | 122 | 2024-Q4 | 249 | 2.00% | 2024-Q4 | 3% | defense 100% | 4% | 0.24 | 0% | -1.76% (-3.91% to -0.03%) | Technicien support helpdesk en informatique | Technicien support IT | Technicien Support |
 | 50 | 275 | 2024-Q3 | 238 | 1.86% | 2024-Q3 | 6% | defense 85% | 2% | 0.28 | 0% | -0.75% (-1.24% to -0.35%) | Tech Lead | Tech Lead Data Engineer | Tech Lead informatique |
-| 41 | 204 | 2024-Q3 | 238 | 1.85% | 2024-Q3 | 12% | defense 94% | 4% | 0.08 | -0% | +0.48% (+0.03% to +1.64%) | Systems and Network Administrator | Linux System Administrator | Systems and Networks Admi |
+| 41 | 204 | 2024-Q3 | 238 | 1.85% | 2024-Q3 | 12% | defense 94% | 4% | 0.08 | -0% | +0.48% (+0.03% to +1.64%) | Systems and Network Administrator | Linux System Administrator | System Administrator |
 | 139 | 201 | 2024-Q3 | 233 | 1.82% | 2024-Q3 | 43% | defense 92% | 4% | 0.29 | 1% | +0.96% (+0.42% to +1.79%) | Cybersecurity engineer | Network and Security Engineer | Security and Network Engineer |
 | 55 | 231 | 2024-Q4 | 229 | 1.84% | 2024-Q3 | 0% | defense 100% | 12% | 0.33 | 0% | -0.21% (-0.82% to +0.35%) | Product Designer | UX RESEARCHER | UX Designer |
 | 137 | 230 | 2025-Q1 | 215 | 1.89% | 2024-Q4 | 52% | defense 95% | 9% | 0.11 | 0% | -1.89% (-2.76% to -1.14%) | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
@@ -50,10 +52,10 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 | 68 | 141 | 2025-Q2 | 184 | 1.31% | 2025-Q2 | 60% | defense 91% | 11% | 0.19 | -0% | +0.63% (+0.20% to +1.21%) | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
 | 40 | 69 | 2025-Q1 | 183 | 1.61% | 2025-Q1 | 5% | defense 100% | 6% | 0.07 | -0% | -1.15% (-2.31% to -0.30%) | Développeur Fullstack | Developpeur Fullstack | Développeur full stack |
 | 57 | 102 | 2024-Q3 | 176 | 1.38% | 2024-Q3 | 14% | defense 70% | 4% | 0.18 | -0% | -0.06% (-0.43% to +0.36%) | DevOps Engineer | Engineer DevOps | DevOps / Automation Engineer |
-| 110 | 122 | 2025-Q3 | 175 | 1.32% | 2025-Q3 | 9% | defense 84% | 2% | 0.17 | 0% | +0.41% (+0.04% to +1.18%) | IT Project Manager | IT project manager | ERP Deployment Manager D 365 - Industry |
+| 110 | 122 | 2025-Q3 | 175 | 1.32% | 2025-Q3 | 9% | defense 84% | 2% | 0.17 | 0% | +0.41% (+0.04% to +1.18%) | IT project manager | IT Project Manager | ERP Deployment Manager D 365 - Industry |
 | 44 | 89 | 2024-Q3 | 173 | 1.35% | 2024-Q3 | 11% | defense 100% | 10% | 0.18 | 0% | -0.20% (-0.45% to +0.00%) | Permanent contract - ERP finance and data project manager | Management Controller | Manage |
 | 142 | 148 | 2025-Q3 | 171 | 1.29% | 2025-Q2 | 4% | defense 100% | 3% | 0.11 | 0% | +0.87% (+0.03% to +2.02%) | QA Engineer | QA Tester | Tester |
-| 69 | 129 | 2024-Q3 | 164 | 1.28% | 2024-Q3 | 28% | defense 85% | 4% | 0.14 | -0% | +0.44% (+0.00% to +1.17%) | C++ Developer | Embedded C/C++ Developer | Embedded C++/QT Software Architect |
+| 69 | 129 | 2024-Q3 | 164 | 1.28% | 2024-Q3 | 28% | defense 85% | 4% | 0.14 | -0% | +0.44% (+0.00% to +1.17%) | C++ Developer | Embedded C/C++ Developer | Developer C ++ |
 | 77 | 124 | 2025-Q3 | 158 | 1.20% | 2025-Q2 | 4% | defense 100% | 3% | 0.08 | 0% | +0.92% (+0.13% to +2.26%) | C# Developer | Developer C# | Developer .NET |
 | 136 | 140 | 2025-Q1 | 157 | 1.38% | 2024-Q4 | 19% | defense 96% | 7% | 0.20 | -0% | -1.50% (-2.25% to -0.87%) | Responsable informatique | Responsable Informatique | Responsable production d'urbanisme |
 | 63 | 106 | 2024-Q3 | 152 | 1.18% | 2024-Q3 | 17% | defense 98% | 7% | 0.16 | 2% | +0.96% (+0.19% to +1.85%) | Linux System Engineer | Linux & network engineer | Embedded Linux development engineer off |
@@ -70,20 +72,27 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 | 135 | 65 | 2025-Q1 | 135 | 1.19% | 2025-Q1 | 5% | defense 85% | 5% | 0.25 | 0% | -0.50% (-1.40% to +0.23%) | Responsable Equipe Consulting | Gestionnaire de parc informatique | Gestionnaire Ressource |
 | 84 | 141 | 2024-Q4 | 134 | 1.08% | 2024-Q3 | 2% | defense 89% | 4% | 0.34 | -0% | +0.20% (-0.56% to +0.83%) | Développeur Front-End | Senior Frontend Developer Vue.js | Frontend Developer @ startup |
 | 124 | 141 | 2025-Q2 | 134 | 0.96% | 2024-Q3 | 0% | defense 100% | 10% | 0.68 | 0% | +0.24% (-0.26% to +0.74%) | Consultant(e) Data Advisory | Consultant Sénior Data Strategy | Consultant Data Marketing  |
-| 23 | 123 | 2024-Q3 | 128 | 1.00% | 2024-Q3 | 14% | defense 83% | 11% | 0.17 | 1% | +0.14% (-0.06% to +0.50%) | IT Technician | IT technician | Computer technician |
+| 23 | 123 | 2024-Q3 | 128 | 1.00% | 2024-Q3 | 14% | defense 83% | 11% | 0.17 | 1% | +0.14% (-0.06% to +0.50%) | IT Technician | Computer technician | IT technician |
 | 39 | 88 | 2025-Q1 | 127 | 1.12% | 2024-Q4 | 1% | defense 100% | 8% | 0.40 | 0% | -0.80% (-1.60% to -0.15%) | Lead FullStack (Python/React.js) | Développeur Fullstack Java/React/AWS | FullStack JS (Re |
 
-## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)
+## Clearly new clusters (interval C wholly above the threshold now, wholly below it in every earlier usable period)
 
 Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.
 
 | cluster | taken | first clearly new | flagged | top template | without title | eligible | top titles |
 |---|---|---|---|---|---|---|---|
 | 46 | 204 | 2024-Q4; stays clearly above in 2 of 4 periods from then on | 7% | 8% | 0% | eligible | Ingénieur DevOps | Ingénieur Devops | Ingénieur(e) DevOps |
-| 75 | 188 | 2025-Q2; stays clearly above in 2 of 2 periods from then on | 6% | 3% | 0% | eligible | Java Developer | Confirmed developer | Experienced Java Developer |
-| 41 | 204 | 2025-Q2; stays clearly above in 1 of 2 periods from then on | 12% | 4% | 0% | eligible | Systems and Network Administrator | Linux System Administrator | Systems and Networks Admi |
-| 139 | 201 | 2025-Q2; stays clearly above in 1 of 2 periods from then on | 43% | 4% | 0% | eligible | Cybersecurity engineer | Network and Security Engineer | Security and Network Engineer |
-| 68 | 141 | 2025-Q2; stays clearly above in 1 of 2 periods from then on | 60% | 11% | 0% | eligible | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
+
+## Returning after a dip (not counted as new)
+
+Clearly above the line now and wholly below it in the previous quarter, but clearly above it in an earlier quarter: a gap in the series, not a new occupation.
+
+| cluster | taken | returns | flagged | top template | without title | eligible | top titles |
+|---|---|---|---|---|---|---|---|
+| 75 | 188 | returns 2025-Q2; clearly above earlier in 2024-Q3 | 6% | 3% | 0% | eligible | Java Developer | Confirmed developer | Experienced Java Developer |
+| 41 | 204 | returns 2025-Q2; clearly above earlier in 2024-Q3 | 12% | 4% | 0% | eligible | Systems and Network Administrator | Linux System Administrator | System Administrator |
+| 139 | 201 | returns 2025-Q2; clearly above earlier in  | 43% | 4% | 0% | eligible | Cybersecurity engineer | Network and Security Engineer | Security and Network Engineer |
+| 68 | 141 | returns 2025-Q2; clearly above earlier in  | 60% | 11% | 0% | eligible | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
 
 ## Largest rise in share, first usable period (2024-Q3) to last (2025-Q3)
 
@@ -95,7 +104,7 @@ Both ends are weighted shares of the whole board with interval C. Clear = the lo
 | 46 | 204 | 0.29% (0.06% to 0.47%) | 1.20% (0.17% to 2.94%) | no | 7% | 8% | 0% | eligible | Ingénieur DevOps | Ingénieur Devops | Ingénieur(e) DevOps |
 | 96 | 286 | 1.48% (1.06% to 2.03%) | 2.26% (1.78% to 2.81%) | no | 3% | 2% | 0% | eligible | Digital project manager | Digital Project Manager | Digital marketing manager |
 | 91 | 41 | 0.00% (0.00% to 0.00%) | 0.72% (0.49% to 0.95%) | yes | 6% | 5% | 0% | not eligible | Boss the project it | Boss the project Erp | Boss the project sap |
-| 110 | 122 | 0.61% (0.38% to 0.91%) | 1.32% (0.53% to 2.48%) | no | 9% | 2% | 0% | eligible | IT Project Manager | IT project manager | ERP Deployment Manager D 365 - Industr |
+| 110 | 122 | 0.61% (0.38% to 0.91%) | 1.32% (0.53% to 2.48%) | no | 9% | 2% | 0% | eligible | IT project manager | IT Project Manager | ERP Deployment Manager D 365 - Industr |
 | 142 | 148 | 0.64% (0.41% to 0.98%) | 1.29% (0.97% to 1.64%) | no | 4% | 3% | 0% | eligible | QA Engineer | QA Tester | Tester |
 | 107 | 97 | 0.45% (0.20% to 0.84%) | 1.09% (0.61% to 1.79%) | no | 46% | 7% | 0% | eligible | Engineering Manager | Software project manager | systems engineering manager |
 | 22 | 114 | 0.48% (0.25% to 0.70%) | 1.03% (0.52% to 1.53%) | no | 4% | 13% | 0% | eligible | Sales Developer | Chef de secteur High Tech | Talent Acquisition IT |
@@ -105,7 +114,7 @@ Both ends are weighted shares of the whole board with interval C. Clear = the lo
 | 113 | 69 | 0.27% (0.07% to 0.48%) | 0.72% (0.29% to 1.11%) | no | 4% | 6% | 0% | eligible | Data Project Manager | Data project manager | Data Migration Project Manager - T |
 | 29 | 54 | 0.16% (0.03% to 0.30%) | 0.60% (0.28% to 0.90%) | no | 0% | 6% | 0% | not eligible | Senior Data Analyst | Data Analyst Senior | Data and BI Senior Analyst |
 | 77 | 124 | 0.76% (0.50% to 1.01%) | 1.20% (0.99% to 1.43%) | no | 4% | 3% | 0% | eligible | C# Developer | Developer C# | Developer .NET |
-| 17 | 117 | 0.38% (0.18% to 0.69%) | 0.80% (0.29% to 1.23%) | no | 6% | 4% | 0% | eligible | Data Scientist | Data engineer | Data scientist |
+| 17 | 117 | 0.38% (0.18% to 0.69%) | 0.80% (0.29% to 1.23%) | no | 6% | 4% | 0% | eligible | Data Scientist | Data engineer | DATA SCIENTIST |
 
 ## Clusters with the largest flagged share (at least 10 flagged postings taken, not template-dominated)
 
@@ -114,7 +123,7 @@ Both ends are weighted shares of the whole board with interval C. Clear = the lo
 | 33 | 73 | 67 | 94% | defense 100% | 0.63% |  | 25% | 0.54 | 0% | +0.22% (-0.22% to +0.90%) | IVVQ engineer | IVVQ Engineer | Ingénieur IVVQ |
 | 68 | 141 | 81 | 60% | defense 91% | 1.31% | 2025-Q2 | 11% | 0.19 | -0% | +0.63% (+0.20% to +1.21%) | Embedded Software Engineer | Embedded software engineer | Aeronautical Embedded Software E |
 | 99 | 58 | 30 | 54% | defense 88% | 0.62% |  | 17% | 0.32 | 0% | -0.11% (-0.23% to +0.06%) | Program Manager | Cloud project manager | Solution Manager Cloud |
-| 67 | 77 | 39 | 53% | defense 100% | 0.68% |  | 10% | 0.35 | 0% | +0.34% (+0.03% to +1.06%) | Software validation engineer | Ingénieur validation software | Validation engineer test be |
+| 67 | 77 | 39 | 53% | defense 100% | 0.68% |  | 10% | 0.35 | 0% | +0.34% (+0.03% to +1.06%) | Ingénieur validation software CDI | Validation engineer test bench | Validation Engineer - |
 | 61 | 54 | 28 | 53% | defense 100% | 0.56% |  | 7% | 0.25 | 1% | -0.12% (-0.25% to -0.02%) | Software Architect | System Architect | System architect |
 | 137 | 230 | 122 | 52% | defense 95% | 1.89% | 2024-Q4 | 9% | 0.11 | 0% | -1.89% (-2.76% to -1.14%) | Ingénieur Système | Ingénieur Systèmes | Ingénieur Qualité éléctronique |
 | 130 | 199 | 110 | 48% | defense 82% | 1.66% | 2024-Q3 | 7% | 0.11 | 0% | +0.43% (-0.46% to +1.84%) | Electronics Engineer | Electronic Methods Engineer | General Installation Designer |
@@ -128,10 +137,10 @@ Both ends are weighted shares of the whole board with interval C. Clear = the lo
 | 117 | 65 | 18 | 34% | defense 55% | 0.78% | 2025-Q3 | 3% | 0.31 | 1% | +0.65% (+0.09% to +2.02%) | Head of the IT project | Boss / chiefs the project IT | Chief (fe) the project industrial |
 | 95 | 49 | 16 | 30% | defense 100% | 0.34% |  | 16% | 0.23 | 0% | -0.19% (-0.44% to +0.22%) | Data Engineer - Industrie & Services | Ingénieur(e) Data Scientist confirmé(e) - Industrie |
 | 108 | 119 | 41 | 29% | defense 85% | 1.04% | 2024-Q3 | 3% | 0.25 | 1% | +0.89% (-0.13% to +3.02%) | Project manager | Project Manager | IT Production Manager |
-| 69 | 129 | 41 | 28% | defense 85% | 1.28% | 2024-Q3 | 4% | 0.14 | -0% | +0.44% (+0.00% to +1.17%) | C++ Developer | Embedded C/C++ Developer | Embedded C++/QT Software Architect |
-| 73 | 57 | 12 | 27% | defense 100% | 0.51% |  | 9% | 0.17 | -0% | -0.34% (-0.68% to -0.07%) | Ingénieur système Linux | Ingénieur développement Linux embarqué bureau étude | Ingénieur  |
+| 69 | 129 | 41 | 28% | defense 85% | 1.28% | 2024-Q3 | 4% | 0.14 | -0% | +0.44% (+0.00% to +1.17%) | C++ Developer | Embedded C/C++ Developer | Developer C ++ |
+| 73 | 57 | 12 | 27% | defense 100% | 0.51% |  | 9% | 0.17 | -0% | -0.34% (-0.68% to -0.07%) | Ingénieur système Linux | Ingénieur développement Linux embarqué bureau étude CDI | Ingéni |
 | 126 | 70 | 21 | 24% | defense 97% | 1.26% | 2025-Q1 | 13% | 0.24 | 0% | -0.95% (-1.74% to -0.40%) | Architecte Transverse - Cybersécurité | Architecte Cybersécurité | Ingénieur Sécurité Info |
-| 128 | 52 | 15 | 22% | defense 84% | 0.35% |  | 6% | 0.59 | -0% | -0.07% (-0.31% to +0.29%) | CYBERSECURITY PROJECT MANAGER | Cybersecurity Manager | Product Manager Cybersecurity |
+| 128 | 52 | 15 | 22% | defense 84% | 0.35% |  | 6% | 0.59 | -0% | -0.07% (-0.31% to +0.29%) | CYBERSECURITY PROJECT MANAGER | Cybersecurity Manager | Product Manager Cybersecurity en C |
 | 87 | 61 | 10 | 20% | defense 100% | 0.39% |  | 7% | 0.26 | 0% | +0.00% (-0.39% to +0.87%) | Service Delivery Manager | Delivery Manager | Delivery Manager Conseil |
 | 114 | 112 | 31 | 20% | defense 65% | 0.78% | 2024-Q3 | 9% | 0.29 | 0% | +0.22% (-0.28% to +1.08%) | Consultant GRC | IAM Cybersecurity Consultant | Consultant(e) en Protection des données, e |
 | 26 | 132 | 15 | 20% | defense 100% | 1.15% | 2024-Q3 | 5% | 0.13 | -0% | -0.09% (-0.30% to +0.31%) | IT support technician | IT Support Technician | IT Specialist |

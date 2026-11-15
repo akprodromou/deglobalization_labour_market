@@ -1,0 +1,22 @@
+board,occupation,seeds,any_esco,share_esco,two_plus_esco,lightcast,any
+jobbland,trade compliance officer,8,41,0.0007598361719083007,5,0,41
+jobbland,export control specialist,5,5,9.266294779369521e-05,0,0,5
+jobbland,semiconductor process engineer,8,10,0.00018532589558739043,0,14,18
+jobbland,battery cell technician,8,44,0.0008154339405845179,2,7,51
+jobbland,supply chain resilience analyst (generic supply chain skills only),5,456,0.008450860838785004,32,0,456
+jobbland,critical materials specialist (weak: no critical-raw-materials skill),2,82,0.0015196723438166014,0,0,82
+jobbland,reshoring program manager (no ESCO skill),0,0,0.0,0,0,0
+lesjeudis,trade compliance officer,8,4,0.00021476510067114095,1,0,4
+lesjeudis,export control specialist,5,4,0.00021476510067114095,0,0,4
+lesjeudis,semiconductor process engineer,8,0,0.0,0,2,2
+lesjeudis,battery cell technician,8,1,5.3691275167785237e-05,0,0,1
+lesjeudis,supply chain resilience analyst (generic supply chain skills only),5,517,0.027758389261744967,6,0,517
+lesjeudis,critical materials specialist (weak: no critical-raw-materials skill),2,14,0.0007516778523489933,0,0,14
+lesjeudis,reshoring program manager (no ESCO skill),0,0,0.0,0,0,0
+jobsde,trade compliance officer,8,10,0.0008167932696234583,0,0,10
+jobsde,export control specialist,5,0,0.0,0,0,0
+jobsde,semiconductor process engineer,8,2,0.00016335865392469166,0,6,7
+jobsde,battery cell technician,8,2,0.00016335865392469166,0,0,2
+jobsde,supply chain resilience analyst (generic supply chain skills only),5,21,0.0017152658662092624,1,0,21
+jobsde,critical materials specialist (weak: no critical-raw-materials skill),2,13,0.0010618312505104959,0,0,13
+jobsde,reshoring program manager (no ESCO skill),0,0,0.0,0,0,0
