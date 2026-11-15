@@ -89,13 +89,20 @@ def main():
         if m.any():
             ax.scatter(xy[m, 0], xy[m, 1], s=9, c=palette[i % len(palette)], alpha=0.85, linewidths=0, label=f"cluster {c} (n={int(m.sum())})")
     markers = ["o", "s", "^", "D", "v", "P", "X"]
-    md = [f"# Named occupations on the UMAP map: {a.board}", "", "| named occupation | postings with a title match | share in its largest cluster |", "|---|---|---|"]
+    md = [f"# Named occupations on the UMAP map: {a.board}", "",
+          "| named occupation | postings with a title match | in noise (no cluster) | largest cluster (id, share of matches) |", "|---|---|---|---|"]
+    allc = np.array(_all_clusters(a, recs))
     for j, (k, m) in enumerate(named.items()):
         n = int(m.sum())
         if n:
             ax.scatter(xy[m, 0], xy[m, 1], s=34, marker=markers[j % len(markers)], facecolors="none", edgecolors="black", linewidths=0.9, label=f"{k} (n={n})")
-            cnt = Counter(lab[m].tolist()) if a.clusters else Counter()
-        md.append(f"| {k} | {n} | " + (f"{max(Counter(_cluster_of(a, recs, m)).values()) / n:.0%}" if n else "") + " |")
+            cs = allc[m]
+            noise = int((cs < 0).sum())
+            cnt = Counter(cs[cs >= 0].tolist())
+            big = f"{cnt.most_common(1)[0][0]}, {cnt.most_common(1)[0][1]}/{n}" if cnt else "none"
+            md.append(f"| {k} | {n} | {noise} | {big} |")
+        else:
+            md.append(f"| {k} | 0 | | |")
     ax.set_xlabel("UMAP 1")
     ax.set_ylabel("UMAP 2")
     ax.set_title(f"{a.board}: two-dimensional UMAP of the title embeddings (input A)", fontsize=11)
@@ -108,9 +115,9 @@ def main():
     print(f"docs/fig/umap_{a.board}.png written")
 
 
-def _cluster_of(a, recs, mask):
+def _all_clusters(a, recs):
     by_id = {str(r["id"]): int(r["cluster"]) for r in load_jsonl(f"data/cluster/labels_{a.board}_A.jsonl")}
-    return [by_id.get(str(r["id"]), -1) for r, m in zip(recs, mask) if m]
+    return [by_id.get(str(r["id"]), -1) for r in recs]
 
 
 if __name__ == "__main__":

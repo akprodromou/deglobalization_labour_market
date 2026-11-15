@@ -26,6 +26,177 @@ Month 3 is finished and the supervisor approved moving to Month 4. The brief: em
     - Input A: It only uses the job ad title. We run script 90 (`90_prepare_titles.py`) to clear any gender markers, reference codes, employer and place suffixes, so that the posting title refers only to the role.
     - Input D: We use the same (cleaned) title embedding plus (i) ESCO skills extracted from the full posting text; skills are extracted using ESCOX at a threshold of 0.6, and (ii) a Lightcast phrase block of 135 terms, which were selected from the online [Lightcast Skills Taxonomy](https://lightcast.io/taxonomies/skills-taxonomy/categories). The reason is that, by examining the job titles, it was evident that alone they do not define the actual role of an ad, so a way to add the actual skills was deemed a valuable alternative. Duties usually appear further down in postings, so e.g. truncated views are not enough. Running script 69b (`69b_extract_skills_full.py`), we added ESCOX skills to 98% of jobbland.se postings. For Lightcast terms, we ran script 91 (`91_lightcast_phrase_block.py`) and added skills to 2.1%, 5.4% and 1.2% of postings to lesjeudis, jobbland and jobs.de postings, respectively.
 
+## Selected clusters (final set, 15 November)
+
+Rule: the cluster is among the flagged clusters of its board, has at least 60 postings taken, is not dominated by one template, and I read its titles by hand. Ten clusters (five on lesjeudis, three on jobbland, two on jobs.de) pass. These are concentrated flagged clusters. None is validated as an emerging occupation.
+
+| board | cluster | what the checks show | verdict |
+|---|---|---|---|
+| lesjeudis | 33 | present from the first quarter; one employer (Thales 92%, effective employers 1.2) | employer artefact |
+| lesjeudis | 68 | returning after a dip; change around InvestAI +0.63% | not new |
+| lesjeudis | 137 | share falling (-1.89% around InvestAI); employer check not yet run (item 13) | not new, check open |
+| lesjeudis | 130 | flat; Thales 56% | employer artefact |
+| lesjeudis | 139 | present since 2024-Q3, returning 2025-Q2; +0.96% around InvestAI; Thales 41% | not new, employer-heavy |
+| jobbland | 350 | clearly new in 2024-Q4, which coincides with the coverage jump; share falling afterwards | coverage artefact |
+| jobbland | 266 | small; 33% of postings unplaced | too small to read |
+| jobbland | 283 | first crossing 2026-Q1; 67-100% of its titles contain a place word, and the board's share of such titles doubles in the same quarter (script 111); regional mix equals the board's | artefact of title wording |
+| jobs.de | 65 | weakly flagged (3%); ordinary occupation, present at the start | not new |
+| jobs.de | 69 | weakly flagged (5%); ordinary occupation, present at the start | not new |
+
+Regional table, quarterly series, regional concentration and the Occupation Emergence Rate per board come from `python -m diagnostics.110_final_clusters` (output `docs/final_clusters_<board>.md` and `docs/fig/<board>_*.png`). ### Regional table of the selected clusters (scripts 110 and 111, 15 November)
+
+Top regions by weighted share of each cluster's placed postings, next to the board's own share in the same region (baseline, script 111). Lesjeudis and jobs.de cover the whole period. Jobbland is shown for the two windows with a stable location text; the baseline is given for both windows.
+
+| board | cluster | postings | unplaced | region 1 (board share) | region 2 | region 3 |
+|---|---|---|---|---|---|---|
+| lesjeudis | 33 | 73 | 0% | FR10 74% (45.7%) | FRJ2 8% | FRL0 7% |
+| lesjeudis | 68 | 141 | 0% | FR10 38% | FRK2 22% (10.3%) | FRJ2 17% |
+| lesjeudis | 137 | 230 | 0% | FR10 32% | FRH0 11% (4.0%) | FRD1 11% |
+| lesjeudis | 130 | 199 | 0% | FR10 30% | FRK2 14% | FRJ2 11% |
+| lesjeudis | 139 | 201 | 1% | FR10 54% | FRJ2 9% | FRK2 8% |
+| jobs.de | 65 | 321 | 1% | DE21 15% (12.7%) | DE11 11% (5.8%) | DE71 8% (6.8%) |
+| jobs.de | 69 | 269 | 2% | DE71 15% (6.8%) | DE21 8% | DEA2 6% (5.3%) |
+| jobbland 2024-04 to 2025-06 | 350 | 81 | 10% | SE11 41% (28.7%) | SE12 25% (15.7%) | SE23 18% (17.9%) |
+| jobbland 2024-04 to 2025-06 | 266 | 44 | 11% | SE11 31% (28.7%) | SE23 28% (17.9%) | SE12 14% (15.7%) |
+| jobbland 2024-04 to 2025-06 | 283 | 28 | 16% | SE12 35% (15.7%) | SE23 32% (17.9%) | SE11 25% (28.7%) |
+| jobbland 2026-04 to 2026-09 | 350 | 31 | 7% | SE12 36% (16.4%) | SE11 21% (27.8%) | SE23 19% (18.9%) |
+| jobbland 2026-04 to 2026-09 | 266 | 9 | 0% | SE12 51% | SE21 22% (7.9%) | SE22 19% (12.2%) |
+| jobbland 2026-04 to 2026-09 | 283 | 133 | 3% | SE11 30% (27.8%) | SE12 19% (16.4%) | SE23 14% (18.9%) |
+
+Board baselines: lesjeudis FR10 45.7%, FRK2 10.3%, FRL0 8.6%, FRJ2 5.8%, FRG0 4.8%, FRH0 4.0%; jobs.de DE21 12.7%, DE71 6.8%, DE11 5.8%, DEA2 5.3%, DE30 4.8%, DEA1 4.4%; jobbland 2024-04 to 2025-06 SE11 28.7%, SE23 17.9%, SE12 15.7%, SE22 12.6%, SE21 7.7%, SE33 7.1%; jobbland 2026 SE11 27.8%, SE23 18.9%, SE12 16.4%, SE22 12.2%, SE21 7.9%, SE31 6.9%. Only the baseline values I have for the same region are shown in brackets in the table.
+
+Reading:
+- Lesjeudis: only cluster 33 is clearly more Paris-centred than the board (FR10 74% against 45.7%), and it is the one dominated by a single employer. Cluster 139 (54%) is slightly above. Clusters 68, 137 and 130 (30-38%) are below the board's share, so they are less concentrated in Île-de-France than the board as a whole. Cluster 68 has 22% in FRK2 against 10.3% on the board.
+- Jobs.de: cluster 65 follows the board's regional mix. Cluster 69 has twice the board's share in DE71 (15% against 6.8%), but with no region above 15% this is a mild tilt, not a local occupation.
+- Jobbland cluster 283 (2026 window, 133 postings) follows the board's regional mix (SE11 30% against 27.8%, SE12 19% against 16.4%), so it has no regional signature. Cluster 350 and 266 are too small in the 2026 window (31 and 9 postings) and in the earlier window they have 81, 44 and 28 postings, so only tilts are noted: in 2024-04 to 2025-06 cluster 350 leans to SE11 and SE12 (41% and 25% against 28.7% and 15.7%) and cluster 283 to SE12 and SE23, but 28 postings are too few to read.
+- No selected cluster has a regional profile that would support a new occupation.
+
+### Place words in jobbland titles (script 111, 15 November): test of cluster 283
+
+Share of titles (weighted) with Sweden, Swedish, Sverige, svensk(a) or the name of a large Swedish city. 52,570 of 53,959 jobbland postings have a title.
+
+| quarter | board | cluster 283 | cluster 350 |
+|---|---|---|---|
+| 2024-Q1 | 12.6% | 0.0% | 0.0% |
+| 2024-Q2 | 13.9% | 88.0% | 6.1% |
+| 2024-Q3 | 14.0% | 44.3% | 6.7% |
+| 2024-Q4 | 11.9% | 100.0% | 8.1% |
+| 2025-Q1 | 11.4% | 0.0% | 12.8% |
+| 2025-Q2 | 9.3% | 72.8% | 0.0% |
+| 2025-Q3 | 14.1% | 14.9% | 7.7% |
+| 2025-Q4 | 15.0% | 86.4% | 9.5% |
+| 2026-Q1 | 30.5% | 73.8% | 23.6% |
+| 2026-Q2 | 31.2% | 75.5% | 35.3% |
+| 2026-Q3 | 30.2% | 67.0% | 34.6% |
+
+Reading:
+- On lesjeudis and jobs.de no title contains such a word (0.0% in every quarter), so the check says nothing there.
+- On jobbland the board's share is 9-15% until 2025-Q4 and doubles to about 30% in 2026-Q1, the quarter in which cluster 283 first crosses the threshold. Cluster 350 follows the same pattern (9.5% in 2025-Q4, 23.6% in 2026-Q1, 35% in 2026-Q2).
+- Cluster 283 is a place-word cluster in almost every quarter (67-100% where it has enough postings; the quarters at 0% and 100% have very few postings), and it is not a cluster of one occupation. Its rise in 2026-Q1 coincides with the board-wide doubling of place words in titles.
+- Reading: the 2026-Q1 rise of cluster 283 measures a change in what the titles contain, not a new occupation. The data do not show why the titles changed from 2026-Q1; the move of the location text into the title is one possible reason and has to be asked of the source (Skillab question, item 11). The verdict on cluster 283 is therefore an artefact of title wording.
+
+### Figures (script 110, 15 November)
+
+Files are in `docs/fig/`, one set per board. Each board has three figures: the quarterly share of the selected clusters, the Occupation Emergence Rate per quarter, and the regional concentration of the selected clusters.
+
+**Quarterly share of the selected clusters** (`lesjeudis_series.png`, `jobsde_series.png`, `jobbland_series.png`). Line = share of the board's postings in the cluster, band = interval C, quarters with at least 20 sampled days. Each panel has its own y-axis.
+
+![lesjeudis: quarterly share of the selected clusters](fig/lesjeudis_series.png)
+
+![jobsde: quarterly share of the selected clusters](fig/jobsde_series.png)
+
+![jobbland: quarterly share of the selected clusters](fig/jobbland_series.png)
+- Lesjeudis: none of the five clusters rises over the period. Clusters 33, 68 and 139 dip in 2025-Q1 and recover in 2025-Q2 (cluster 33 from about 0.04% to 0.63%), 137 peaks in 2024-Q4 to 2025-Q1 (about 1.9%) and falls, 130 falls from the first quarter and recovers slightly. The bands overlap across quarters for most of the series, so the movements are within the sampling uncertainty.
+- Jobs.de: clusters 65 and 69 fall from 2024-Q3 to 2025-Q1 (65 from about 4.9% to 1.8%, 69 from 3.6% to 0.9%). Only three quarters are usable.
+- Jobbland: cluster 350 and 266 move within a small share (below 1%). Cluster 283 is flat below 0.5% until 2025-Q4, then rises to about 0.9% in 2026-Q1 and 1.0% in 2026-Q3, with a band clearly above the earlier quarters. This is the rise explained by the change in the title wording (place-words table above).
+
+**Occupation Emergence Rate per quarter** (`lesjeudis_oer.png`, `jobsde_oer.png`, `jobbland_oer.png`). Number of clusters newly crossing the threshold and the number that are clearly new under the stricter rule, for the whole board (all eligible clusters, not only the selected ones). The first usable quarter is zero by construction.
+
+![lesjeudis: Occupation Emergence Rate per quarter](fig/lesjeudis_oer.png)
+
+![jobsde: Occupation Emergence Rate per quarter](fig/jobsde_oer.png)
+
+![jobbland: Occupation Emergence Rate per quarter](fig/jobbland_oer.png)
+- Lesjeudis: 9, 10, 11 and 4 clusters newly cross in 2024-Q4 to 2025-Q3; one is clearly new (2024-Q4).
+- Jobs.de: 28 cross in 2024-Q4 and 5 of them are clearly new; 1 crosses in 2025-Q1.
+- Jobbland: about 219 cross in 2024-Q4 and 74 are clearly new, which is the coverage jump (more postings, and clusters that were below the sampling floor before). A second spike of about 69 (6 clearly new) in 2026-Q1 coincides with the board-wide change in the title wording. These spikes are artefacts of the data and not waves of new occupations; the validated count remains zero.
+
+**Regional concentration of the selected clusters** (`lesjeudis_hhi.png`, `jobsde_hhi.png`, `jobbland_hhi.png`). Normalised HHI over NUTS-2 regions for the whole period, with the unplaced share and the number of placed postings above each bar.
+
+![lesjeudis: regional concentration of the selected clusters](fig/lesjeudis_hhi.png)
+
+![jobsde: regional concentration of the selected clusters](fig/jobsde_hhi.png)
+
+![jobbland: regional concentration of the selected clusters](fig/jobbland_hhi.png)
+- Lesjeudis: cluster 33 is the most concentrated (about 0.54), then 139 (about 0.29), 68 (about 0.19), 137 and 130 (about 0.11). Île-de-France is 45.7% of the board, so some concentration is expected; only 33 is clearly above it (regional table above).
+- Jobs.de: both clusters are near 0.03-0.04, i.e. spread over many regions.
+- Jobbland: 350 about 0.15, 266 about 0.11, 283 about 0.05. The unplaced shares (20-33%) are high because the figure uses the whole period, including the quarters in which the location text had collapsed (per-quarter HHI section); the regional table above uses the two valid windows and should be preferred.
+
+### UMAP map with the named occupations (script 112, 15 November)
+
+Files: `docs/fig/umap_lesjeudis.png`, `umap_jobsde.png`, `umap_jobbland.png`. Each map is a two-dimensional UMAP (cosine, 30 neighbours) of all title embeddings of the board (input A). Grey = all postings (a sample is drawn), colour = the selected clusters, open markers = postings whose cleaned title matches one of the seven named occupations (same regexes as script 92; never forced). The map is for illustration and validation. The clusters come from the ten-dimensional UMAP, and distances in two dimensions are only approximate.
+
+![lesjeudis: two-dimensional UMAP with the named occupations](fig/umap_lesjeudis.png)
+
+![jobsde: two-dimensional UMAP with the named occupations](fig/umap_jobsde.png)
+
+![jobbland: two-dimensional UMAP with the named occupations](fig/umap_jobbland.png)
+
+Named occupations found by title:
+
+| named occupation | jobbland | jobs.de | lesjeudis |
+|---|---|---|---|
+| trade compliance officer | 4 | 0 | 0 |
+| export control specialist | 8 | 1 | 3 |
+| supply chain resilience analyst | 1 | 0 | 0 |
+| semiconductor process engineer | 0 | 2 | 1 |
+| battery cell technician | 6 | 0 | 0 |
+| critical materials specialist | 0 | 0 | 0 |
+| reshoring program manager | 0 | 0 | 0 |
+
+Reading:
+- The seven named occupations are almost absent: 19 matching titles on jobbland (53,959 postings), 3 on jobs.de (12,243) and 4 on lesjeudis (18,625). Critical materials specialist and reshoring program manager are not found on any board, and semiconductor process engineer is not found on jobbland.
+- Selected clusters are compact groups on the map and separate from each other. Lesjeudis cluster 33 is a thin strand, which fits the one-employer template found in the employer check. Jobbland clusters 283 and 350 lie in different places, with 283 below and 350 above the group of trade-compliance and export-control titles.
+- On jobbland the trade-compliance (4) and export-control (7 of 8) titles form one tight group between clusters 283 and 350. The battery-cell titles (6) are scattered over five places and do not form a group. The one supply-chain-resilience title and one export-control title lie far from the others (the export-control title at the lower left, the supply-chain title below the main mass). On jobs.de and lesjeudis the few matches are scattered; the two jobs.de semiconductor titles lie right next to cluster 69, which is an ordinary occupation, so the map does not show them as a group of their own.
+- Where the matching titles sit (cluster assignment, script 112, second version; the first version counted noise as a cluster and is not used):
+
+| board | named occupation | matches | in noise | other placements |
+|---|---|---|---|---|
+| jobbland | trade compliance officer | 4 | 3 | 1 in cluster 263 |
+| jobbland | export control specialist | 8 | 7 | 1 in cluster 20 |
+| jobbland | supply chain resilience analyst | 1 | 0 | cluster 71 |
+| jobbland | battery cell technician | 6 | 4 | 1 in cluster 321, 1 in another cluster |
+| jobs.de | export control specialist | 1 | 0 | cluster 52 |
+| jobs.de | semiconductor process engineer | 2 | 0 | 1 in cluster 69, 1 in another cluster |
+| lesjeudis | export control specialist | 3 | 1 | 1 in cluster 108, 1 in another cluster |
+| lesjeudis | semiconductor process engineer | 1 | 0 | cluster 86 |
+
+- The tight group on the jobbland map (trade compliance and export control titles between clusters 283 and 350) is noise: 3 of 4 and 7 of 8 of those titles belong to no cluster, so HDBSCAN did not find it as a cluster. With 10 or fewer postings it is far below the minimum cluster size of 40. The same holds for the battery-cell titles (4 of 6 in noise).
+- No named occupation has more than one title in any cluster. They are therefore not found as clusters on any board, and no named occupation is validated or forced. This agrees with the finding that no cluster is validated as an emerging occupation: the occupations named in the brief exist in the titles but only as a handful of postings, below the size at which the method can see them.
+- Consequence for the method: a named occupation with fewer than about 40 postings cannot be detected by the clustering. It can only be tracked through the seeded variant (script 106) (seeded section above).
+
+### Check of the named-occupation terms against the Skillab API (script 113, 15 November)
+
+The two named occupations that no board shows in the titles (critical materials specialist, reshoring program manager) were also searched in the Skillab API itself, which holds all postings of the three sources and not only our sample of days. One query per source and keyword, up to 5 pages of 100 postings. "Postings" = postings returned by the API's keyword search; "title" = postings with a keyword word of more than three letters in the title (a weak test: any one word counts).
+
+| keyword | jobbland.se | lesjeudis.com | jobs.de |
+|---|---|---|---|
+| critical raw materials | 83 (3 in title) | 5 (1 in title) | 0 |
+| critical materials | 500, page limit reached (11 in title) | 116 (2 in title) | 5 (0 in title) |
+| rare earth | 69 (1 in title) | 5 (0 in title) | 0 |
+| reshoring | 0 | 0 | 0 |
+| nearshoring | 6 (0 in title) | 0 | 0 |
+| onshoring | 0 | 0 | 0 |
+| matières premières critiques | 0 | 0 | 0 |
+| kritische Rohstoffe | 0 | 0 | 0 |
+| kritiska råvaror | 0 | 0 | 0 |
+
+Reading:
+- Reshoring, nearshoring in a title and onshoring do not occur as titles in any of the three sources. Reshoring and onshoring are not found at all in the postings, and nearshoring appears in 6 jobbland postings (a business-development representative, a business analyst and payroll specialists), none with the word in the title.
+- The critical-materials terms return postings, but the titles are unrelated occupations (a PhD student in mining waste, a warehouse production planner, a mechanical design engineer, a finance consultant). The terms appear in the descriptions only. The search appears to match words anywhere in the text: "critical materials" returns more postings than "critical raw materials", which would not happen with an exact phrase. This is inferred and not checked in the API documentation.
+- The non-English phrases return nothing on all three sources. Many titles of the Swedish board appear in English in the API (for example "PhD student in Mining Waste Facility and Life Cycle Assessment") next to Swedish ones, so a zero for a Swedish, German or French phrase does not prove that the term is absent. The language handling of the API is a question for the Skillab team (item 11).
+- Result: the check agrees with the title matches in the clusters. The two named occupations are not found as job titles on these boards.
+
 ## Update of 13 November: results, candidates and conclusion
 
 **Where Month 4 stands.** No validated emerging occupation cluster has been found on the three boards. The 6 to 10 clusters chosen by size and flagged share, the selection step (c) in the plan sent to the supervisor, can still be delivered with their series, HHI and a verdict on emergence; none of them shows validated emergence. Two lesjeudis candidates (clusters 68 and 139) were tested against employer mix and coverage and do not hold. What the data do support is a defence-flagged engineering and cybersecurity core on lesjeudis that nvertheless results from postings of three or four employers, a flagged footprint that moves between employers over time, and the seven named occupations as counts below ten postings each. The numbers under "Results so far" and in the first cluster series below come from the first clustering, before title cleaning and title inference, and are superseded by this section. **Added on 14 November:** with a stricter rule for "clearly new" (wholly below the threshold in every earlier quarter, not only the previous one) the five lesjeudis "clearly new" clusters become one (DevOps, French titles), and that one is a posting campaign of one employer (Sopra Steria). Clusters 68 and 139, and the Java and systems administrator clusters, were at or near the threshold in 2024-Q3, dropped in 2025-Q1 with the posting cycles of individual employers (Capgemini, CGI, Thales) and returned in 2025-Q2. We find no new occupation cluster on lesjeudis (input A). **Added on 15 November:** the same rule on jobs.de and jobbland (input A) gives the same answer: the "clearly new" clusters are ordinary occupations or board and coverage effects, none is flagged above 3% (jobs.de) or is an emerging flagged cluster (jobbland); see the section "Update of 14 November".
@@ -344,6 +515,67 @@ Matching titles of each named occupation after the pattern correction (the clean
 
 **Result.** The seeded variant confirms HDBSCAN and the title search: none of the named occupations that can be seeded grows on jobbland, and the one with a long series (export control) is dominated by neighbouring titles. The method catches occupations with fewer than 40 postings, which HDBSCAN cannot form, but on these data it finds that the postings are too few and too close to their neighbours to be an occupation cluster. A seed of titles from a source that lists the occupation (an ESCO or O*NET label with synonyms) would be a firmer centre than 5 to 8 matching titles; this is not tried.
 
+### Seeding with the flagged clusters (script 106, 15 November)
+
+The supervisor's suggestion was to preserve chosen clusters by fixing them. Here the five flagged clusters of lesjeudis (33, 68, 137, 130, 139) and of jobbland (350, 291, 263, 266, 283) were used as seeds: the centre of each is the mean title embedding of its HDBSCAN members, and a posting joins when its similarity to the centre reaches the board's background 99th percentile for that centre (the floor from the seeds, the 10th percentile of their leave-one-out similarities, is lower in all ten cases, so the background decides). Members of the cluster always belong. The question is whether postings left in noise or in neighbouring clusters belong to the same occupation, and whether the extended cluster shows a rise that the HDBSCAN cluster does not.
+
+| Board, cluster | HDBSCAN members | Members after seeding | Of these in noise | What the extra postings are |
+| --- | --- | --- | --- | --- |
+| lesjeudis 33 (IVVQ) | 73 | 81 | 5 | more IVVQ and IVV titles: the same occupation |
+| lesjeudis 68 (embedded software) | 141 | 186 | 14 | embedded C and C++ developers: the same occupation, plus 10 "Software Development Engineer" |
+| lesjeudis 139 (cybersecurity) | 201 | 271 | 28 | cybersecurity architects, consultants, managers: the same occupation |
+| lesjeudis 137 (systems engineer) | 230 | 344 | 42 | IT systems, network and cloud engineers: a neighbouring occupation |
+| lesjeudis 130 (electronics, mechanical design) | 199 | 388 | 5 | 96 data engineers, 31 software engineers: false positives |
+| jobbland 350 (systems, security engineer) | 193 | 587 | 85 | data, software, automation and DevOps engineers: mostly false positives |
+| jobbland 291 (quality engineer) | 108 | 319 | 78 | inspection and maintenance technicians, supplier quality engineers and quality managers: partly the same |
+| jobbland 263 (compliance and IT manager) | 81 | 543 | 79 | account, project and sales managers: false positives |
+| jobbland 266 (process engineer) | 82 | 201 | 77 | production, plumbing and automation engineers: neighbouring |
+| jobbland 283 (project and IT manager, Swedish agencies) | 262 | 636 | 200 | postings whose title names "Swedish" or "Sweden" (Swedish-speaking customer service, a Swedish sales team): a cluster held by a word, not an occupation |
+
+**Reading.**
+
+- Seeding recovers real members where the cluster is tight and named by one expression (lesjeudis 33, 68, 139: +8, +45 and +70 postings, of which 5, 14 and 28 were in noise). Where the cluster is a broad family of engineers or managers (lesjeudis 130, jobbland 350, 263), the centre drifts to the general title and the extension is mostly false positives; the memberships of 543 and 587 are not read as occupations.
+- No extended cluster shows a sustained rise in the monthly share, except jobbland 283. The share of lesjeudis 33 stays between 0.08% and 0.94% and of 68 between 0.12% and 2.67% with no direction; 139 falls from 2.84% in 2024-08 to 0.38% in 2024-12 and returns to 1.2 to 1.9% from 2025-05; 137 holds 3.3 to 4.7% from 2024-11 to 2025-02 and falls to about 0.2 to 1.8% from March, the same wave that the employer check found; 130 stays between 1.0% and 3.0%. On jobbland 350 falls from 2 to 3% in early 2024 (few sampled days) to 0.3 to 1.3% in 2026, so the "clearly new" status of 350 in 2024-Q4 is not a rise; 291 and 266 stay flat (0.2 to 2.5% and 0.1 to 1.3%) and 263 stays near 1% with two peaks (2.87% in 2025-12 on 49 postings, 3.91% in 2025-06 on 5 postings).
+- Jobbland 283 rises from 0.05 to 0.9% (2024-12 to 2025-08) to 1.4 to 2.7% from 2025-09 to 2026-08 (4.00% in 2025-11 on 17 postings, 2.71% in 2026-02 on 63). This is the only rise, and it is not read as an emerging occupation: the cluster is held together by the words Swedish and Sweden and by place names in the titles ("our Stockholm office", "in Lund", "Västerås, Mälardalen"), and it grows in the same months in which the location text of the source changed to the bare country name (see the per-quarter HHI section). A plausible reading, not tested, is that part of the location information now sits in the title, so that the cluster partly measures the source change. The test is to count, by quarter, the titles of the board that contain a place name or "Swedish" (open item 27).
+
+**Result.** Seeding with the flagged clusters does not change the verdict. The occupations that can be extended (IVVQ, embedded software, cybersecurity on lesjeudis) keep a flat or falling share; the clusters that look like growth on jobbland (350 in 2024-Q4, 283 from 2025-09) are a coverage regime and a source change, not occupations. The method is useful as a check on cluster boundaries, not as a way to find emerging occupations.
+
+### Weight sensitivity on jobs.de and jobbland (15 November)
+
+The sensitivity run of question 2 (log and capped weights) was made on lesjeudis only; on 15 November it was repeated for jobs.de and jobbland on input A, quarterly, with the stricter rule and the default flag intensity. The transformed weights are rescaled to the same board total. Number of clusters "clearly new" per quarter under the inverse-probability weights (ht), log weights and capped weights (95th percentile):
+
+| Quarter | jobs.de: ht / log / cap | jobbland: ht / log / cap |
+| --- | --- | --- |
+| 2024-Q2 | | 0 / 1 / 0 |
+| 2024-Q3 | 0 / 0 / 0 | 3 / 5 / 3 |
+| 2024-Q4 | 5 / 7 / 7 | 74 / 33 / 75 |
+| 2025-Q1 | 0 / 0 / 0 | 2 / 1 / 2 |
+| 2025-Q2 to 2025-Q4 | 0 / 0 / 0 (Q2 not usable) | 0 / 0 / 0 in each |
+| 2026-Q1 | | 6 / 2 / 5 |
+| 2026-Q2 and 2026-Q3 | | 0 / 0 / 0 |
+
+Clusters clearly below the line now and clearly above it earlier (the joint-dip signal), jobbland: 2025-Q2 87 / 69 / 85, 2025-Q3 97 / 73 / 97, 2026-Q1 21 / 26 / 22; jobs.de 2025-Q1: 5 / 5 / 4. Clusters "returning after a dip" on jobbland in 2026-Q1: 37 / 26 / 45.
+
+**Reading.** The verdict does not depend on the weighting. On jobs.de the clearly new clusters appear only in 2024-Q4 (the first quarter after the start of the series), none in 2025-Q1, and the same clusters lead the eligible list under all three weightings (27, 12, 58, 11, 41, 65 and 53 in the top eight each time; the eighth is 70 under the inverse-probability weights and 69 under log and capped weights). On jobbland the pattern is the same under all three: a mass of clusters becomes "clearly new" in 2024-Q4 (the coverage jump), most clusters fall wholly below the line in 2025-Q2 and 2025-Q3 and return in 2026-Q1, and no cluster stays clearly new after 2026-Q1. What the weighting does change is the size of the 2024-Q4 count (74 under the inverse-probability weights, 33 under log weights, 75 under capped weights), because the log transformation compresses the very large weights of that quarter; the count is a coverage effect in all three, so the difference does not change the conclusion.
+
+**Which clusters.** The lists of clusters that are clearly new in any quarter were compared cluster by cluster (full reports, input A).
+
+- jobs.de: the five clusters of the inverse-probability run (53, 52, 30, 40 and 21) are all in the log and cap lists, which add two: cluster 25 (Produktionsmitarbeiter, Maschinenführer, Kranführer) and cluster 35 (Pflegefachkraft). Both are ordinary occupations, 0% flagged, clearly new in 2024-Q4 only and clearly above the line in 1 of 2 later periods, so they sit on the edge of the rule. No jobs.de cluster in any list has a flagged share above 25%.
+- jobbland, capped against inverse-probability weights: 81 of 85 clusters are the same (cap adds 21, 83, 205 and 256; it drops 54, 111, 116 and 218). Capping does not change the picture.
+- jobbland, log against inverse-probability weights: only 35 of the 85 clusters are shared, and log adds 7 (83, 159, 193, 206, 291, 303 and 348). Log weights give the early, low-volume quarters more weighted postings relative to 2024-Q4 (2024-Q3: 40,143 under log against 16,278 under the inverse-probability weights; 2024-Q4: 129,353 against 145,266), so more clusters are already above the line before 2024-Q4 and fewer are counted as becoming new in it (33 against 74). Of the seven, cluster 291 (quality engineer, 14% flagged, small) is the only one with a flagged share above 10%; 159 is the CE drivers cluster and 303 tire and plumbing fitters, both unflagged.
+- The one strongly flagged cluster on jobbland that is clearly new under the other two weightings is 350 (system and security engineers, 41% flagged, clearly new in 2024-Q4 and above the line in 3 of 8 later periods under cap). It is not clearly new under log. Its appearance in 2024-Q4 is the coverage jump, and its status depends on the weighting, so it is not read as emergence.
+
+Conclusion for the weighting question: the verdict "no validated emerging occupation" does not depend on the weighting on either board. The log transformation changes which clusters are labelled clearly new in 2024-Q3 and 2024-Q4 on jobbland, because the series starts in a quarter with very low volume, which shows how much of that label is the coverage regime and not the occupations.
+
+### Per-quarter HHI: what the files show (15 November)
+
+Script 93 writes `data/cluster/hhi_<board>_<input>.csv` with the normalised HHI per cluster and quarter, the number of placed postings, the unplaced share and a reliability flag (at least 50 placed postings). The files read here are the log and cap runs (jobs.de and jobbland, input A); the results are the same under both weightings, so the weighting does not matter for what follows. The files of the inverse-probability runs and of lesjeudis were not read.
+
+- **Per-quarter HHI of single clusters is mostly unreadable.** On jobbland only 272 of 3,927 cluster-quarters are reliable and only 52 have 50 or more placed postings. The flagged clusters have 1 to 24 placed postings in a quarter (cluster 350: 24 in 2024-Q4, 17 in 2026-Q1 and 17 in 2026-Q2; 291: 5, 16 and 9 in 2026-Q1, Q2 and Q3), so their HHI jumps between 0.05 and 1.0 from quarter to quarter without meaning. For the flagged clusters only the whole-period HHI is used (350: 0.14 to 0.15; 283: 0.05; 291: 0.06 to 0.07). There is therefore no readable change in regional concentration around AccelerateEU for a flagged cluster. The one exception is cluster 283 (project managers, 29% flagged), reliable in 2026-Q2 (64 placed) and 2026-Q3 (61): HHI 0.05 to 0.09, diffuse, with 0.03 to 0.04 in 2026-Q1 on 41 placed postings.
+- **jobbland: the share of unplaced postings collapses in the middle of the series.** The weighted share of postings without a NUTS-2 region is 7 to 14% from 2024-Q2 to 2025-Q2, then 91% in 2025-Q3, 79% in 2025-Q4 and 43% in 2026-Q1, and 3 to 4% from 2026-Q2 (log weights; cap weights 94%, 85% and 42%). The board-wide quarterly HHI in 2025-Q3 to 2026-Q1 rests on 386, 1,499 and 4,357 placed postings, against 7,570 in 2024-Q4, and is not comparable with the other quarters. This answers the question the mapping section left open (whether the dropped share changes over time): it does, strongly, and in the same period as the coverage dips of the series. Script 109 (location by quarter, run on all 53,959 postings) gives the cause, and it is neither a gap in our mapping nor missing ids: every posting is in the nuts2 file. Up to 2025-Q2 the location text names a place ("Stockholm", a municipality) and script 96 places 87 to 93% of the postings from it (learned place names, counties). From 2025-Q3 the location text is only the country: in 2025-Q3 2,416 of the 2,900 postings taken (and 3,701 of 5,405 in 2025-Q4) have the location "Sweden", and place names and counties disappear (method county 0 and learned 4 to 42 postings a quarter). The postings' own nuts2 field is the only route left, and it fills up gradually: 381 postings in 2025-Q3, 1,482 in 2025-Q4, 4,312 in 2026-Q1 and 7,259 (96%) in 2026-Q2. The unplaced share therefore follows how many postings carry the field in the quarter. The change is in the source data (the location schema of the postings changed between 2025-Q2 and 2026-Q2), not in our scripts; it is of the same kind as the change in the sector field.
+- **jobs.de: the regional mix concentrates in 2025-Q1 in every cluster.** The board-wide normalised HHI is 0.013 in 2024-Q3, 0.020 in 2024-Q4 and 0.037 in 2025-Q1 (log; the cap run gives the same). Of the 19 clusters with at least 30 placed postings in both 2024-Q4 and 2025-Q1, HHI rises in all 19 (median 0.029 to 0.076; cluster 12 from 0.037 to 0.073 with 187 and 183 placed postings, cluster 27 from 0.014 to 0.043). A small sample inflates HHI by about 1/n (0.03 for 30 postings, 0.005 for 183), which cannot explain a doubling in clusters whose number of placed postings did not change. A rise that appears in every cluster is a property of the board in that quarter (which regions or employers were collected), not of any occupation, which fits the earlier composition checks of script 97. From 2024-Q3 to 2024-Q4 the picture is mixed (15 of 24 clusters up). The cause was not checked; it belongs to the questions for Skillab (open item 11).
+- **Consequence for the deliverable.** The regional HHI is reported per cluster for the whole period with the unplaced share next to it. Per-quarter HHI is not used for any cluster with fewer than 50 placed postings in the quarter. The jobbland HHI of 2025-Q3 to 2026-Q1 and the jobs.de HHI of 2025-Q1 are not read as regional change. The whole-period HHI of a jobbland cluster mixes two ways of placing postings (place names up to 2025-Q2, the own field from 2026-Q2) and quarters with 40 to 94% unplaced; it is read with the unplaced share and, for a firm statement, on the windows 2024-Q2 to 2025-Q2 and 2026-Q2 to 2026-Q3.
+
 ### Related work: how others define a new occupation
 
 Giabelli et al. (2021) present NEO, which takes the occupation mentions in 2,119,025 UK job ads of 2018 and finds those that are missing from ESCO, then proposes the ESCO concept under which each fits best (embeddings trained on the ads, a taxonomy-based similarity and a comparison of skills with RCA). Ten experts rated 49 candidate mentions and judged 43 of them (88%) to be new occupations. Their notion of new is relative to a taxonomy at one point in time, not to a threshold crossed over time, and the paper distinguishes a new occupation ("scrum master") from a new label of an existing one ("Android developer"). Our Occupation Emergence Rate is the second kind of definition. The ESCO-based check (do the skills of a cluster match an existing ESCO occupation?) is a candidate for Month 5, using `occupationSkillRelations_en.csv`. Reference: Giabelli, A., Malandri, L., Mercorio, F., Mezzanzanica, M., Seveso, A. (2021). NEO: A System for Identifying New Emerging Occupation from Job Ads. Proceedings of the AAAI Conference on Artificial Intelligence 35, 16035–16036. Only this two-page demo was read; the formal definitions are in Giabelli et al. (2020b), not yet read.
@@ -465,7 +697,7 @@ where s\_r is region r's weighted share of the cluster's postings. It runs from 
 | lesjeudis.com | 99.8% | under 0.1% | 0.2% | 22 mainland regions |
 | jobs.de | 98.7% | 0.8% outside, under 0.1% vague | 0.5% | 38 of 38 |
 
-- **jobbland.se.** Only postings whose location names a county carry their own region (36.1%); the county table agrees with that field in all 20,767 postings checked. Towns written without a county are placed from the same town seen with a county (38.8%). The gazetteer route agreed with the own field in only 20 of 51 postings, so it is switched off for Sweden. The 23.5% dropped are bare country names and Nordic-area names; whether this share changes over time or by cluster has not been checked.
+- **jobbland.se.** Only postings whose location names a county carry their own region (36.1%); the county table agrees with that field in all 20,767 postings checked. Towns written without a county are placed from the same town seen with a county (38.8%). The gazetteer route agreed with the own field in only 20 of 51 postings, so it is switched off for Sweden. The 23.5% dropped are bare country names and Nordic-area names. This share is not constant: it is 6 to 13% from 2024-Q2 to 2025-Q2, 94% in 2025-Q3, 83% in 2025-Q4, 41% in 2026-Q1 and 3 to 4% from 2026-Q2, because the location text of the postings changed in 2025-Q3 (see the section on per-quarter HHI below).
 - **lesjeudis.com and jobs.de.** Placement relies on the GeoNames gazetteer and the NUTS 2021 polygons. 45.6% of lesjeudis postings and 29.0% of jobs.de postings sit in place names that exist in more than one region; the largest place is taken. I read the 40 busiest such names for each board and found no wrong choice, which is my own reading, not an independent check.
 - **Two errors found and fixed.** A shared manual file dropped 665 Berlin postings as outside Germany; manual rows now name their country. Bracket qualifiers such as (Oder) are kept when the qualified name exists, and otherwise an ambiguous bare name is left unmatched instead of guessed.
 - **Concentration.** Île-de-France holds 46.4% of placed lesjeudis postings, so HHI is only comparable within a board.
@@ -515,3 +747,7 @@ TF-IDF has no time dimension, so it cannot say which terms are growing. It also 
 
 23. Done on 15 November: the seeded variant on lesjeudis and jobs.de (no seeds). Optional: seed from the ESCO label and its synonyms instead of the matching titles, since 5 to 8 titles are too few for a firm centre.
 24. Agree with the supervisor on the algorithm comparison: HDBSCAN eom as the main setting, leaf as sensitivity, no tuning of the cluster count by silhouette. The comparison table uses D v2 (0.5 and 0.5); D v3 (0.25 and 0.25, `--max-df 0.05`), the best of the D inputs on title coherence, was added to the table on 15 November. The conclusions do not change: HDBSCAN eom has the highest UMAP silhouette on D v3 as well, k-means and Ward on the same postings are 0.01 to 0.05 lower (jobs.de 0.540 against 0.592), and the k-means curves are flat or peak at 100 to 400, so they do not favour fewer clusters (lesjeudis 0.408 at k=25, 0.474 at k=100, 0.455 at k=400).
+25. Done on 15 November (script 109): the unplaced share of jobbland in 2025-Q3 to 2026-Q1 comes from a change in the location text of the source (only "Sweden" instead of a place) while the own nuts2 field fills up gradually. To do: add the question to the Skillab list (item 11); decide with the supervisor whether HHI on jobbland is reported only for the windows with a stable location field (2024-Q2 to 2025-Q2 and 2026-Q2 to 2026-Q3); check whether the postings that carry the field in 2025-Q3 to 2026-Q1 differ in occupation mix from those that do not (they may not be a random subset).
+26. Check what changed in the regional mix of jobs.de in 2025-Q1 (HHI up in 19 of 19 clusters): top regions per quarter for the whole board.
+27. Done (script 111, 15 November): cluster 283 is a place-word cluster whose rise in 2026-Q1 coincides with a board-wide doubling of place words in jobbland titles (about 12% to 30%). Open: ask the source why the titles changed from 2026-Q1 (item 11).
+28. Done (script 111): board-wide baseline for lesjeudis, jobs.de and both jobbland windows.
