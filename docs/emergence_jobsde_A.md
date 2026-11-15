@@ -15,13 +15,13 @@ Threshold: 100 weighted postings a quarter (adjusted to all calendar days of the
 
 ## Occupation Emergence Rate
 
-| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (interval C) |
-|---|---|---|---|---|---|---|
-| 2024-Q3 | 26 | 0 | 49 | 0 | 12 | 0 |
-| 2024-Q4 | 51 | 28 | 69 | 20 | 15 | 5 |
-| 2025-Q1 | 11 | 1 | 60 | 2 | 1 | 0 |
+| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (below the line in every earlier quarter) | returning after a dip | clearly below now, clearly above earlier |
+|---|---|---|---|---|---|---|---|---|
+| 2024-Q3 | 26 | 0 | 49 | 0 | 12 | 0 | 0 | 0 |
+| 2024-Q4 | 51 | 28 | 69 | 20 | 15 | 5 | 0 | 0 |
+| 2025-Q1 | 11 | 1 | 60 | 2 | 1 | 0 | 0 | 5 |
 
-Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in the previous usable quarter. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
+Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in every earlier usable quarter (with --new-rule previous: in the previous quarter only). Returning after a dip = clearly above now, wholly below in the previous quarter, but above the line in an earlier one: not an emerging occupation. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
 
 The first usable quarter (2024-Q3) cannot show new crossings; clusters already above the line then count as present at the start.
 
@@ -31,33 +31,33 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
 | 27 | 876 | 2024-Q4 | 1,637 | 8.75% | 2024-Q4 | 3% | energy security 86% | 2% | 0.02 | 1% | - | Elektroniker | Elektriker | Servicetechniker |
 | 12 | 656 | 2024-Q4 | 824 | 4.40% | 2024-Q3 | 0% |  0% | 3% | 0.03 | 1% | - | Nursing specialist | Medical assistant | Nursing assistant |
-| 58 | 455 | 2024-Q4 | 703 | 3.75% | 2024-Q3 | 0% | trade compliance 100% | 4% | 0.03 | 2% | - | Financial accountant | Tax clerk | Clerk internal sales |
-| 11 | 299 | 2024-Q4 | 580 | 3.10% | 2024-Q3 | 0% |  0% | 3% | 0.06 | 1% | - | Pedagogical specialist | Educator | Social worker |
+| 58 | 455 | 2024-Q4 | 703 | 3.75% | 2024-Q3 | 0% | trade compliance 100% | 4% | 0.03 | 2% | - | Financial accountant | Clerk internal sales | Tax clerk |
+| 11 | 299 | 2024-Q4 | 580 | 3.10% | 2024-Q3 | 0% |  0% | 3% | 0.06 | 1% | - | Pedagogical specialist | Social worker | Educator |
 | 41 | 297 | 2024-Q4 | 563 | 3.01% | 2024-Q3 | 1% | trade compliance 100% | 4% | 0.02 | 1% | - | Warehouse logistics specialist | Warehouse employee | Shipping employee |
 | 65 | 321 | 2024-Q3 | 481 | 4.89% | 2024-Q3 | 3% | energy security 92% | 2% | 0.04 | 1% | - | Project Manager Electrical Engineering | Project manager | Senior Engineer Process Enginee |
-| 70 | 203 | 2024-Q3 | 393 | 4.00% | 2024-Q3 | 1% | energy security 61% | 2% | 0.03 | 3% | - | Automotive mechatronics engineer | Vehicle journeyman/journeyman for vehicle valuations |  |
+| 70 | 203 | 2024-Q3 | 393 | 4.00% | 2024-Q3 | 1% | energy security 61% | 2% | 0.03 | 3% | - | Vehicle journeyman/journeyman for vehicle valuations | Electronics engineer / mechatronics |
 | 53 | 198 | 2024-Q4 | 372 | 1.99% | 2024-Q4 | 0% | energy security 100% | 2% | 0.03 | 0% | - | Finanzbuchhalter | Kreditorenbuchhalter | Buchhalter/in / Finanzbuchhalter/in Personalsach |
 | 69 | 269 | 2024-Q4 | 361 | 1.93% | 2024-Q3 | 5% | energy security 97% | 1% | 0.03 | 2% | - | Electronics technician for industrial technology | Electrician / electronics technician |  |
 | 56 | 202 | 2024-Q4 | 346 | 1.85% | 2024-Q3 | 0% | defense 100% | 2% | 0.03 | 3% | - | IT-Administrator | IT-Systemadministrator | Systemadministrator |
 | 20 | 207 | 2024-Q4 | 336 | 1.80% | 2024-Q3 | 1% | energy security 100% | 7% | 0.05 | 3% | - | Sales Manager | Key Account Manager Finanzdienstleistung | Key Account Manager |
-| 52 | 188 | 2024-Q4 | 303 | 1.62% | 2024-Q4 | 3% | trade compliance 80% | 2% | 0.04 | 1% | - | Personalsachbearbeiter | Sachbearbeiter Einkauf | Sachbearbeiter Immobilienmanagement |
+| 52 | 188 | 2024-Q4 | 303 | 1.62% | 2024-Q4 | 3% | trade compliance 80% | 2% | 0.04 | 1% | - | Personalsachbearbeiter | Sachbearbeiter Einkauf | Personalsachbearbeiter/-in |
 | 30 | 115 | 2024-Q4 | 303 | 1.62% | 2024-Q4 | 0% |  0% | 4% | 0.12 | 1% | - | Filialleitung | Führungskraft in der Filiale | Abteilungsleiter Fleischabteilung |
 | 40 | 153 | 2024-Q4 | 273 | 1.46% | 2024-Q4 | 0% |  0% | 3% | 0.03 | 0% | - | Lagermitarbeiter | Ausbildung Fachkraft für Lagerlogistik | Mitarbeiter Bauhöfe und Logist |
 | 60 | 116 | 2024-Q3 | 266 | 2.71% | 2024-Q3 | 0% |  0% | 4% | 0.09 | 1% | - | Salesperson / career changer bakery | Salesperson general sales area / cash register | Sal |
-| 21 | 124 | 2024-Q4 | 252 | 1.35% | 2024-Q4 | 0% |  0% | 13% | 0.03 | -0% | - | Verkäuferin / Verkäufer | Verkäufer/in | Verkäufer allgemeiner Verkaufsbereich / Kasse |
+| 21 | 124 | 2024-Q4 | 252 | 1.35% | 2024-Q4 | 0% |  0% | 13% | 0.03 | -0% | - | Verkäuferin / Verkäufer in Teilzeit | Verkäufer/in | Verkäuferin / Verkäufer in Vollzeit |
 | 19 | 119 | 2024-Q3 | 235 | 2.39% | 2024-Q3 | 0% | energy security 100% | 5% | 0.06 | -0% | - | Production employee | Productionshelfer | Production assistant block assembly (temporary) |
 | 35 | 113 | 2024-Q4 | 229 | 1.22% | 2024-Q4 | 0% |  0% | 4% | 0.03 | 0% | - | Pflegefachkraft | Pflegefachkräfte | Pflegekraft |
-| 63 | 102 | 2024-Q3 | 225 | 2.29% | 2024-Q3 | 0% |  0% | 10% | 0.09 | 2% | - | Sales representative | Sales consultant | Sales Consultant |
-| 18 | 121 | 2024-Q4 | 204 | 1.09% | 2024-Q3 | 0% |  0% | 6% | 0.05 | 0% | - | Branch manager | Deputy nursing management | Deputy branch management |
-| 67 | 150 | 2024-Q3 | 197 | 2.00% | 2024-Q3 | 0% |  0% | 5% | 0.02 | 4% | - | Industrial mechanic | Training to become an industrial mechanic | Service technician / sys |
+| 63 | 102 | 2024-Q3 | 225 | 2.29% | 2024-Q3 | 0% |  0% | 10% | 0.09 | 2% | - | Sales consultant | Sales representative | Sales representative in the office |
+| 18 | 121 | 2024-Q4 | 204 | 1.09% | 2024-Q3 | 0% |  0% | 6% | 0.05 | 0% | - | Deputy nursing management | Deputy branch management | Branch manager / branch manager for |
+| 67 | 150 | 2024-Q3 | 197 | 2.00% | 2024-Q3 | 0% |  0% | 5% | 0.02 | 4% | - | Industrial mechanic | Training to become an industrial mechanic 2025 | Service technician  |
 | 25 | 106 | 2024-Q4 | 195 | 1.04% | 2024-Q4 | 0% |  0% | 3% | 0.03 | 0% | - | Produktionsmitarbeiter | Maschinenführer | Kranführer |
 | 8 | 102 | 2024-Q3 | 182 | 1.86% | 2024-Q3 | 0% |  0% | 25% | 0.13 | 2% | - | Job as a driver / parcel delivery person - mini job / temporary worker | Postman - mini jo |
 | 61 | 101 | 2024-Q3 | 182 | 1.85% | 2024-Q3 | 0% |  0% | 3% | 0.04 | 0% | - | Call Center Agent | Customer advisor* in building cleaning | Customer advisor |
 | 31 | 133 | 2024-Q3 | 177 | 1.80% | 2024-Q3 | 0% |  0% | 2% | 0.03 | 1% | - | Professional driver | Truck driver | Truck driver / professional driver |
-| 26 | 116 | 2024-Q4 | 167 | 0.89% | 2024-Q4 | 0% |  0% | 2% | 0.03 | -0% | - | Haustechniker | Hausmeister | Reinigungskraft |
+| 26 | 116 | 2024-Q4 | 167 | 0.89% | 2024-Q4 | 0% |  0% | 2% | 0.03 | -0% | - | Hausmeister | Haustechniker | Reinigungskraft |
 | 28 | 83 | 2024-Q4 | 167 | 0.89% | 2024-Q3 | 0% |  0% | 4% | 0.06 | -0% | - | Physiotherapist | Occupational therapist | Physiotherapeut |
 | 36 | 95 | 2024-Q4 | 159 | 0.85% | 2024-Q4 | 0% |  0% | 5% | 0.07 | 0% | - | Medizinische Fachangestellte | Zahnmedizinische Fachangestellte | Medizinische Fachangeste |
-| 49 | 102 | 2024-Q4 | 155 | 0.83% | 2024-Q4 | 0% |  0% | 4% | 0.05 | 0% | - | Service employee | Service worker | Customer Service Employee |
+| 49 | 102 | 2024-Q4 | 155 | 0.83% | 2024-Q4 | 0% |  0% | 4% | 0.05 | 0% | - | Service employee | Customer Service Employee | Service worker |
 | 15 | 94 | 2024-Q4 | 153 | 0.82% | 2024-Q3 | 0% |  0% | 3% | 0.04 | 0% | - | House technician | Kitchen helper | Head chef |
 | 68 | 112 | 2024-Q3 | 153 | 1.56% | 2024-Q3 | 6% | energy security 93% | 4% | 0.03 | 2% | - | Service technician | Service technician in the field | Technical employee |
 | 16 | 119 | 2025-Q1 | 153 | 2.16% | 2024-Q4 | 0% |  0% | 7% | 0.05 | -0% | - | Finanzkaufmann Vertrieb | Versicherungskaufmann / Versicherungsmakler gesucht | Vertriebsp |
@@ -66,21 +66,21 @@ The first usable quarter (2024-Q3) cannot show new crossings; clusters already a
 | 43 | 85 | 2024-Q4 | 149 | 0.80% | 2024-Q4 | 0% |  0% | 2% | 0.05 | 1% | - | Dipl. Sozialpädagog*in / staatl. anerk. Erzieher*in /staatl. anerk. Heilpädagog*in | Pfleg |
 | 50 | 98 | 2024-Q4 | 146 | 0.78% | 2024-Q4 | 0% |  0% | 2% | 0.07 | 0% | - | Assistant to the management | Office Manager | Administrative employee |
 | 34 | 69 | 2024-Q4 | 145 | 0.78% | 2024-Q4 | 2% | energy security 100% | 6% | 0.06 | 0% | - | Teamassistenz | Serviceassistent | Diätassistent |
-| 44 | 85 | 2024-Q4 | 144 | 0.77% | 2024-Q4 | 0% |  0% | 8% | 0.04 | 3% | - | Salesperson - also career changers | Employee customer service / career changer | Customer |
+| 44 | 85 | 2024-Q4 | 144 | 0.77% | 2024-Q4 | 0% |  0% | 8% | 0.04 | 3% | - | Salesperson part-time - also career changers | Employee customer service / career changer  |
 | 62 | 67 | 2024-Q4 | 143 | 0.76% | 2024-Q3 | 2% | energy security 100% | 4% | 0.06 | -0% | - | Internal Sales Employee | Employee in internal sales | Employee internal sales |
-| 6 | 60 | 2024-Q4 | 142 | 0.76% | 2024-Q4 | 0% |  0% | 25% | 0.11 | -0% | - | Salesperson | Saleswoman | Salesperson (M,W,D) |
+| 6 | 60 | 2024-Q4 | 142 | 0.76% | 2024-Q4 | 0% |  0% | 25% | 0.11 | -0% | - | Salesperson part-time | Salesperson | Salesperson full-time and part-time |
 
-## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)
+## Clearly new clusters (interval C wholly above the threshold now, wholly below it in every earlier usable period)
 
 Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.
 
 | cluster | taken | first clearly new | flagged | top template | without title | eligible | top titles |
 |---|---|---|---|---|---|---|---|
 | 53 | 198 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 2% | 0% | eligible | Finanzbuchhalter | Kreditorenbuchhalter | Buchhalter/in / Finanzbuchhalter/in Personalsach |
-| 52 | 188 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Sachbearbeiter Immobilienmanagement |
+| 52 | 188 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Personalsachbearbeiter/-in |
 | 30 | 115 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 4% | 0% | eligible | Filialleitung | Führungskraft in der Filiale | Abteilungsleiter Fleischabteilung |
 | 40 | 153 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 3% | 0% | eligible | Lagermitarbeiter | Ausbildung Fachkraft für Lagerlogistik | Mitarbeiter Bauhöfe und Logist |
-| 21 | 124 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer | Verkäufer/in | Verkäufer allgemeiner Verkaufsbereich / Kasse |
+| 21 | 124 | 2024-Q4; stays clearly above in 1 of 2 periods from then on | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer in Teilzeit | Verkäufer/in | Verkäuferin / Verkäufer in Vollzeit |
 
 ## Largest rise in share, first usable period (2024-Q3) to last (2025-Q1)
 
@@ -93,16 +93,16 @@ Both ends are weighted shares of the whole board with interval C. Clear = the lo
 | 1 | 43 | 0.00% (0.00% to 0.00%) | 2.54% (0.00% to 5.97%) | no | 0% | 93% | 0% | not eligible | Ausbildung Verkäufer / Kaufleute im Einzelhandel | Ausbildung zum Fachwirt für V |
 | 53 | 198 | 0.01% (0.00% to 0.05%) | 2.18% (1.11% to 3.60%) | yes | 0% | 2% | 0% | eligible | Finanzbuchhalter | Kreditorenbuchhalter | Buchhalter/in / Finanzbuchhalter/in Pe |
 | 16 | 119 | 0.05% (0.00% to 0.17%) | 2.16% (0.65% to 3.51%) | yes | 0% | 7% | 0% | eligible | Finanzkaufmann Vertrieb | Versicherungskaufmann / Versicherungsmakler gesucht |  |
-| 52 | 188 | 0.07% (0.00% to 0.23%) | 1.85% (0.87% to 2.99%) | yes | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Sachbearbeiter Immobilienmanag |
-| 39 | 69 | 0.01% (0.00% to 0.05%) | 1.54% (0.22% to 2.92%) | yes | 0% | 3% | 0% | eligible | Berufskraftfahrer | Kraftfahrer | LKW-Fahrer |
+| 52 | 188 | 0.07% (0.00% to 0.23%) | 1.85% (0.87% to 2.99%) | yes | 3% | 2% | 0% | eligible | Personalsachbearbeiter | Sachbearbeiter Einkauf | Personalsachbearbeiter/-in |
+| 39 | 69 | 0.01% (0.00% to 0.05%) | 1.54% (0.22% to 2.92%) | yes | 0% | 3% | 0% | eligible | Berufskraftfahrer | LKW-Fahrer | LKW Fahrer |
 | 40 | 153 | 0.28% (0.07% to 0.51%) | 1.68% (0.49% to 2.72%) | no | 0% | 3% | 0% | eligible | Lagermitarbeiter | Ausbildung Fachkraft für Lagerlogistik | Mitarbeiter Bauhöfe  |
 | 35 | 113 | 0.01% (0.00% to 0.04%) | 1.26% (0.59% to 1.99%) | yes | 0% | 4% | 0% | eligible | Pflegefachkraft | Pflegefachkräfte | Pflegekraft |
 | 36 | 95 | 0.00% (0.00% to 0.00%) | 1.18% (0.47% to 1.81%) | yes | 0% | 5% | 0% | eligible | Medizinische Fachangestellte | Zahnmedizinische Fachangestellte | Medizinische F |
-| 26 | 116 | 0.12% (0.00% to 0.24%) | 1.29% (0.54% to 2.22%) | yes | 0% | 2% | 0% | eligible | Haustechniker | Hausmeister | Reinigungskraft |
-| 14 | 42 | 0.00% (0.00% to 0.00%) | 1.04% (0.00% to 4.10%) | no | 0% | 76% | 0% | not eligible | Weitere pädagogische Fachkraft für die Tageseinrichtung für Kinder | weitere päd |
-| 21 | 124 | 0.05% (0.00% to 0.16%) | 1.06% (0.35% to 1.80%) | yes | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer | Verkäufer/in | Verkäufer allgemeiner Verkaufsbereich / |
+| 26 | 116 | 0.12% (0.00% to 0.24%) | 1.29% (0.54% to 2.22%) | yes | 0% | 2% | 0% | eligible | Hausmeister | Haustechniker | Reinigungskraft |
+| 14 | 42 | 0.00% (0.00% to 0.00%) | 1.04% (0.00% to 4.10%) | no | 0% | 76% | 0% | not eligible | weitere pädagogische Fachkraft für die Tageseinrichtung für Kinder Schwabstr. 95 |
+| 21 | 124 | 0.05% (0.00% to 0.16%) | 1.06% (0.35% to 1.80%) | yes | 0% | 13% | 0% | eligible | Verkäuferin / Verkäufer in Teilzeit | Verkäufer/in | Verkäuferin / Verkäufer in  |
 | 25 | 106 | 0.15% (0.05% to 0.29%) | 1.15% (0.51% to 1.74%) | yes | 0% | 3% | 0% | eligible | Produktionsmitarbeiter | Maschinenführer | Kranführer |
-| 24 | 59 | 0.00% (0.00% to 0.00%) | 0.92% (0.26% to 1.59%) | yes | 5% | 8% | 0% | eligible | Versicherung Vertrieb Außendienst | Versicherungsfachmann Außendienst | Servicet |
+| 24 | 59 | 0.00% (0.00% to 0.00%) | 0.92% (0.26% to 1.59%) | yes | 5% | 8% | 0% | eligible | Versicherung Vertrieb Außendienst | Versicherungsfachmann Außendienst | Vertrieb |
 
 ## Clusters with the largest flagged share (at least 10 flagged postings taken, not template-dominated)
 

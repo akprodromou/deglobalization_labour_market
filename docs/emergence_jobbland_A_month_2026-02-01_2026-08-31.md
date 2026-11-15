@@ -18,17 +18,17 @@ Threshold: 33.3333 weighted postings a quarter (adjusted to all calendar days of
 
 ## Occupation Emergence Rate
 
-| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (interval C) |
-|---|---|---|---|---|---|---|
-| 2026-02 | 230 | 0 | 192 | 0 | 92 | 0 |
-| 2026-03 | 235 | 56 | 175 | 46 | 94 | 2 |
-| 2026-04 | 232 | 18 | 203 | 34 | 69 | 0 |
-| 2026-05 | 240 | 10 | 209 | 24 | 82 | 2 |
-| 2026-06 | 227 | 7 | 199 | 11 | 92 | 2 |
-| 2026-07 | 194 | 5 | 203 | 13 | 58 | 3 |
-| 2026-08 | 226 | 14 | 213 | 15 | 67 | 2 |
+| quarter | at or above threshold | newly crossing | at or above share threshold | newly crossing (share) | clearly above (interval C) | clearly new (below the line in every earlier quarter) | returning after a dip | clearly below now, clearly above earlier |
+|---|---|---|---|---|---|---|---|---|
+| 2026-02 | 230 | 0 | 192 | 0 | 92 | 0 | 0 | 0 |
+| 2026-03 | 235 | 56 | 175 | 46 | 94 | 2 | 0 | 3 |
+| 2026-04 | 232 | 18 | 203 | 34 | 69 | 0 | 0 | 5 |
+| 2026-05 | 240 | 10 | 209 | 24 | 82 | 0 | 2 | 7 |
+| 2026-06 | 227 | 7 | 199 | 11 | 92 | 0 | 2 | 11 |
+| 2026-07 | 194 | 5 | 203 | 13 | 58 | 0 | 3 | 11 |
+| 2026-08 | 226 | 14 | 213 | 15 | 67 | 0 | 2 | 17 |
 
-Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in the previous usable quarter. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
+Clearly above = the lower end of interval C is at or above the threshold. Clearly new = clearly above now and the upper end of interval C was below the threshold in every earlier usable quarter (with --new-rule previous: in the previous quarter only). Returning after a dip = clearly above now, wholly below in the previous quarter, but above the line in an earlier one: not an emerging occupation. The count version moves with the weighted population of the board (see the coverage table); the share version does not.
 
 The first usable quarter (2026-02) cannot show new crossings; clusters already above the line then count as present at the start.
 
@@ -77,7 +77,7 @@ The first usable quarter (2026-02) cannot show new crossings; clusters already a
 | 172 | 95 | 2026-08 | 320 | 0.78% | 2026-02 | 0% |  0% | 2% | 0.06 | 4% | +0.01% (-0.17% to +0.20%) | Head chef | Sous chef | Confectioner |
 | 334 | 61 | 2026-03 | 317 | 0.51% | 2026-02 | 0% |  0% | 5% | 0.03 | 13% | -0.21% (-0.39% to +0.01%) | Concrete workers | Construction worker | Construction workers |
 
-## Clearly new clusters (interval C wholly above the threshold now, wholly below it in the previous usable period)
+## Clearly new clusters (interval C wholly above the threshold now, wholly below it in every earlier usable period)
 
 Candidates for emerging occupations. Read the share in the next periods too: a real new occupation stays above the line.
 
@@ -85,14 +85,22 @@ Candidates for emerging occupations. Read the share in the next periods too: a r
 |---|---|---|---|---|---|---|---|
 | 121 | 51 | 2026-03; stays clearly above in 4 of 6 periods from then on | 0% | 6% | 0% | eligible | Home cleaner - Hemfrid | Window cleaners - Hemfrid | House cleaner for Hemfrid Örebro - su |
 | 143 | 36 | 2026-03; stays clearly above in 3 of 6 periods from then on | 0% | 11% | 0% | eligible | Preschool teacher | Preschool admissions officer | Reading trainer in early reading teachi |
-| 21 | 20 | 2026-05; stays clearly above in 1 of 4 periods from then on | 0% | 40% | 0% | not eligible | Leader Jungle Gym - Spread the joy of movement for children 2-6 years old in Kungsbacka HT |
-| 50 | 27 | 2026-05; stays clearly above in 1 of 4 periods from then on | 0% | 11% | 0% | eligible | assistant | Guide | new assistant |
-| 334 | 61 | 2026-06; stays clearly above in 2 of 3 periods from then on | 0% | 5% | 0% | eligible | Concrete workers | Construction worker | Construction workers |
-| 272 | 14 | 2026-06; stays clearly above in 1 of 3 periods from then on | 0% | 7% | 0% | eligible | Warehouse manager | warranty & warehouse manager | Administrator for warehouse & logistics |
-| 7 | 30 | 2026-07; stays clearly above in 1 of 2 periods from then on | 0% | 7% | 0% | eligible | Personal assistant |
-| 232 | 25 | 2026-07; stays clearly above in 1 of 2 periods from then on | 5% | 8% | 0% | eligible | Production technician | Process technician | Production technicians |
-| 184 | 12 | 2026-08; stays clearly above in 1 of 1 periods from then on | 0% | 17% | 0% | eligible | Avdelningschef | Handläggare utländska fastighetsförvärv med juridisk kompetens - Länsstyr |
-| 194 | 20 | 2026-08; stays clearly above in 1 of 1 periods from then on | 0% | 15% | 0% | eligible | District physician Primary care area Väst Vännäs Health Center | Legitimate doctor for Mel |
+
+## Returning after a dip (not counted as new)
+
+Clearly above the line now and wholly below it in the previous quarter, but clearly above it in an earlier quarter, or with an interval that reaches the line there: a gap in the series, not a new occupation.
+
+| cluster | taken | returns | flagged | top template | without title | eligible | top titles |
+|---|---|---|---|---|---|---|---|
+| 21 | 20 | returns 2026-05; interval C reaches the line in 2026-02 | 0% | 40% | 0% | not eligible | Leader Jungle Gym - Spread the joy of movement for children 2-6 years old in Kungsbacka HT |
+| 50 | 27 | returns 2026-05; interval C reaches the line in 2026-02, 2026-03 | 0% | 11% | 0% | eligible | assistant | Guide | new assistant |
+| 334 | 61 | returns 2026-06; clearly above earlier in 2026-02, 2026-03, 2026-04 | 0% | 5% | 0% | eligible | Concrete workers | Construction worker | Construction workers |
+| 272 | 14 | returns 2026-06; interval C reaches the line in 2026-03, 2026-04 | 0% | 7% | 0% | eligible | Warehouse manager | warranty & warehouse manager | Administrator for warehouse & logistics |
+| 121 | 51 | returns 2026-07; clearly above earlier in 2026-03, 2026-05; interval C reaches the line in 2026-04 | 0% | 6% | 0% | eligible | Home cleaner - Hemfrid | Window cleaners - Hemfrid | House cleaner for Hemfrid Örebro - su |
+| 7 | 30 | returns 2026-07; clearly above earlier in 2026-02; interval C reaches the line in 2026-03, 2026-04, 2026-05 | 0% | 7% | 0% | eligible | Personal assistant |
+| 232 | 25 | returns 2026-07; clearly above earlier in 2026-05; interval C reaches the line in 2026-02, 2026-03, 2026-04 | 5% | 8% | 0% | eligible | Production technician | Process technician | Production technicians |
+| 184 | 12 | returns 2026-08; interval C reaches the line in 2026-02, 2026-03 | 0% | 17% | 0% | eligible | Avdelningschef | Handläggare utländska fastighetsförvärv med juridisk kompetens - Länsstyr |
+| 194 | 20 | returns 2026-08; interval C reaches the line in 2026-02, 2026-03, 2026-04, 2026-05, 2026-06 | 0% | 15% | 0% | eligible | District physician Primary care area Väst Vännäs Health Center | Legitimate doctor for Mel |
 
 ## Largest rise in share, first usable period (2026-02) to last (2026-08)
 

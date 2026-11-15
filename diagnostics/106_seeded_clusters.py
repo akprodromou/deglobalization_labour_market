@@ -68,6 +68,8 @@ def main():
     ap.add_argument("--thresholds", type=float, nargs="+", default=[0.90, 0.92, 0.94, 0.96])
     ap.add_argument("--use", type=float, default=None, help="absolute threshold used for the series and the output file; default: the seed-relative threshold (the lowest leave-one-out similarity of the occupation's own seed postings)")
     ap.add_argument("--min-seed", type=int, default=5)
+    ap.add_argument("--cluster-seeds", type=int, nargs="+", default=[], help="HDBSCAN cluster numbers (of --input) to use as seeds too: the centre is the mean embedding of the cluster's postings, and the members beyond the cluster show what HDBSCAN left in noise or in other clusters")
+    ap.add_argument("--no-named", action="store_true", help="leave the seven named occupations out (use with --cluster-seeds); the report is then docs/seeded_clusters_<board>.md")
     ap.add_argument("--show", type=int, default=12)
     ap.add_argument("--mock", action="store_true")
     a = ap.parse_args()
@@ -92,6 +94,18 @@ def main():
     for name, rx in cp.NAMED_RX.items():
         hit = np.array([bool(t) and bool(rx.search(t)) for t in txt])
         seeds[name] = hit
+    if a.no_named:
+        seeds = {}
+    if a.cluster_seeds:
+        lp0 = Path(f"data/cluster/labels_{a.board}_{a.input}.jsonl")
+        if not lp0.exists():
+            raise SystemExit(f"{lp0} not found: --cluster-seeds needs the labels of script 92")
+        lab0 = {str(r["id"]): r["cluster"] for r in cp.load_jsonl(str(lp0))}
+        arr = np.array([lab0.get(i, -2) for i in ids])
+        for c in a.cluster_seeds:
+            seeds[f"C{c}"] = arr == c
+    cluster_names = {f"C{c}" for c in a.cluster_seeds}
+    OUT = f"seeded_clusters_{a.board}" if a.no_named else f"seeded_{a.board}"
     use = [n for n, h in seeds.items() if h.sum() >= a.min_seed]
     md = [f"# Seeded clustering with the named occupations: {a.board}", "",
           f"{len(recs):,} postings. Centre = mean title embedding of the postings whose cleaned title matches the occupation; a posting joins when its cosine similarity to the centre is at least the threshold; the matching postings always belong.", "",
@@ -101,7 +115,7 @@ def main():
     if not use:
         md += ["", "No occupation has enough matching titles to form a centre, so there is nothing to extend. The counts above are the result."]
         Path("docs").mkdir(exist_ok=True)
-        Path(f"docs/seeded_{a.board}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+        Path(f"docs/{OUT}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
         print("\n".join(md))
         return
 
@@ -126,7 +140,9 @@ def main():
         loo_stats[n] = (float(loo.min()), float(np.median(loo)), float(loo.max()))
         bg[n] = tuple(float(np.quantile(S[:, j], q)) for q in (0.5, 0.95, 0.99))
         # an outlier seed (a title like "TULL24STO, Export Control, 10Yhp, v18-19") must not pull the threshold down into the background
-        rel[n] = max(float(loo.min()), bg[n][2])
+        # a cluster seed has hundreds of postings and a few odd ones: its floor is the 10th percentile of the leave-one-out similarities, not the minimum
+        floor = float(np.quantile(loo, 0.10)) if n in cluster_names else float(loo.min())
+        rel[n] = max(floor, bg[n][2])
         low = [(txt[i], float(l)) for i, l in zip(idx, loo) if l < bg[n][2]]
         outliers[n] = low
 
@@ -143,7 +159,9 @@ def main():
     for n in use:
         if outliers[n]:
             md.append("")
-            md.append(f"Seed titles of {n} that are no more similar to the others than the background 99th percentile (outliers; the threshold ignores them): " + "; ".join(f"{t} ({l:.3f})" for t, l in outliers[n]))
+            lst = sorted(outliers[n], key=lambda x: x[1])[:8]
+            more = len(outliers[n]) - len(lst)
+            md.append(f"Seed titles of {n} that are no more similar to the others than the background 99th percentile (outliers; the threshold ignores them): " + "; ".join(f"{t} ({l:.3f})" for t, l in lst) + (f"; and {more} more" if more > 0 else ""))
     md += ["", "## Members by threshold", "The last column uses the occupation's own seed-relative threshold = the larger of (the lowest leave-one-out seed similarity, the background 99th percentile); it is the one used for the series.", "",
            "| occupation | seed (regex) | " + " | ".join(f"sim >= {t:.2f}" for t in a.thresholds) + " | seed-relative threshold | members at it |",
            "|---|---|" + "---|" * (len(a.thresholds) + 2)]
@@ -210,15 +228,15 @@ def main():
 
     Path("docs").mkdir(exist_ok=True)
     Path("data/cluster").mkdir(parents=True, exist_ok=True)
-    Path(f"docs/seeded_{a.board}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
-    with open(f"data/cluster/seeded_{a.board}.csv", "w", newline="", encoding="utf-8") as f:
+    Path(f"docs/{OUT}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
+    with open(f"data/cluster/{OUT}.csv", "w", newline="", encoding="utf-8") as f:
         wr = csv.writer(f)
         wr.writerow(["id", "occupation", "similarity", "seed"])
         for j, n in enumerate(use):
             for i in np.where(member[(n, KEY)])[0]:
                 wr.writerow([ids[i], n, round(float(S[i, j]), 4), int(seeds[n][i])])
     print("\n".join(md[:30]))
-    print(f"docs/seeded_{a.board}.md written")
+    print(f"docs/{OUT}.md written")
 
 
 if __name__ == "__main__":
