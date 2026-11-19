@@ -1,6 +1,6 @@
 # Month 4 methodology: emerging occupation clusters
 
-Nov 10, 2026 (updated 14 November) · @anton
+Nov 10, 2026 (updated 19 November) · @anton
 
 Month 4 clusters job titles, and titles plus skills, to find emerging occupations in the three boards, then measures their volume and regional concentration. This page records the method and the decisions taken so far; it is a working draft.
 
@@ -26,6 +26,23 @@ Month 3 is finished and the supervisor approved moving to Month 4. The brief: em
     - Input A: It only uses the job ad title. We run script 90 (`90_prepare_titles.py`) to clear any gender markers, reference codes, employer and place suffixes, so that the posting title refers only to the role.
     - Input D: We use the same (cleaned) title embedding plus (i) ESCO skills extracted from the full posting text; skills are extracted using ESCOX at a threshold of 0.6, and (ii) a Lightcast phrase block of 135 terms, which were selected from the online [Lightcast Skills Taxonomy](https://lightcast.io/taxonomies/skills-taxonomy/categories). The reason is that, by examining the job titles, it was evident that alone they do not define the actual role of an ad, so a way to add the actual skills was deemed a valuable alternative. Duties usually appear further down in postings, so e.g. truncated views are not enough. Running script 69b (`69b_extract_skills_full.py`), we added ESCOX skills to 98% of jobbland.se postings. For Lightcast terms, we ran script 91 (`91_lightcast_phrase_block.py`) and added skills to 2.1%, 5.4% and 1.2% of postings to lesjeudis, jobbland and jobs.de postings, respectively.
 
+## Conclusion
+
+**Result.** On the three boards (lesjeudis.com 18,625 postings, jobs.de 12,243, jobbland.se 53,959; never merged) no cluster is a validated new occupation. The ten clusters selected for reading (five on lesjeudis, three on jobbland, two on jobs.de) are concentrated flagged clusters, and each was read by hand. The verdicts are employer artefact (33, 130), not new (68, 137, 139, 65, 69), coverage artefact (350), artefact of title wording (283) and too small to read (266). The Occupation Emergence Rate series (clusters crossing the line per quarter) is therefore an unvalidated series and is reported as such.
+
+**Why the result is stable.** Each line of evidence points the same way:
+- *Reading the clusters:* the apparent novelty comes from one employer's postings (Thales, Sopra Steria/CS), from jumps in the board's coverage (jobbland 2024-Q4), from a change of title wording in 2026-Q1 (jobbland cluster 283) and from the language of titles.
+- *Settings of the clustering:* no combination of `min_cluster_size` and `min_samples` beats 40/10 on any board. Smaller sizes split the same postings or isolate one employer's template (lesjeudis 183, 219); larger sizes merge the flagged groups and raise noise.
+- *The seven named occupations:* they are scattered in noise and no cluster holds more than one of their titles; the Skillab API finds no postings with reshoring or onshoring wording.
+- *ESCO:* by skills and by titles, nine of the ten selected clusters sit on an existing ESCO occupation. The titles of flagged postings are as close to ESCO labels as the other titles.
+- *The emergence line:* a share line of 0.1% is non-selective (every cluster peaks above it) and a count line of 100 depends on the board's size.
+
+**Open for the supervisor.** Whether to raise the share line, to add a growth rule (a share that at least doubles), or to aim for fewer clusters (sizes of 80 give 51 to 57 clusters on lesjeudis, with more noise and diluted flagged groups).
+
+**Limitations.** One run per clustering setting, and runs differ (noise varies by up to six points on lesjeudis at the same setting); the French and English versions of the same posting on lesjeudis are not counted; the title route compares embeddings, not exact matches; the trade-compliance channel has few postings (19 on lesjeudis, 69 on jobbland); the boards cover different periods and are never merged.
+
+**Where the detail is.** The method, thresholds, series and regional concentration follow below. The checks behind the conclusion (regional and place-word tests, UMAP, Skillab API, presence line, ESCO overlap and titles, the settings grid, employer checks, algorithm and weight sensitivity) are in the appendix at the end, in the order they were run.
+
 ## Selected clusters (final set, 15 November)
 
 Rule: the cluster is among the flagged clusters of its board, has at least 60 postings taken, is not dominated by one template, and I read its titles by hand. Ten clusters (five on lesjeudis, three on jobbland, two on jobs.de) pass. These are concentrated flagged clusters. None is validated as an emerging occupation.
@@ -43,7 +60,9 @@ Rule: the cluster is among the flagged clusters of its board, has at least 60 po
 | jobs.de | 65 | weakly flagged (3%); ordinary occupation, present at the start | not new |
 | jobs.de | 69 | weakly flagged (5%); ordinary occupation, present at the start | not new |
 
-Regional table, quarterly series, regional concentration and the Occupation Emergence Rate per board come from `python -m diagnostics.110_final_clusters` (output `docs/final_clusters_<board>.md` and `docs/fig/<board>_*.png`). ### Regional table of the selected clusters (scripts 110 and 111, 15 November)
+Regional table, quarterly series, regional concentration and the Occupation Emergence Rate per board come from `python -m diagnostics.110_final_clusters` (output `docs/final_clusters_<board>.md` and `docs/fig/<board>_*.png`).
+
+### Regional table of the selected clusters (scripts 110 and 111, 15 November)
 
 Top regions by weighted share of each cluster's placed postings, next to the board's own share in the same region (baseline, script 111). Lesjeudis and jobs.de cover the whole period. Jobbland is shown for the two windows with a stable location text; the baseline is given for both windows.
 
@@ -70,515 +89,6 @@ Reading:
 - Jobs.de: cluster 65 follows the board's regional mix. Cluster 69 has twice the board's share in DE71 (15% against 6.8%), but with no region above 15% this is a mild tilt, not a local occupation.
 - Jobbland cluster 283 (2026 window, 133 postings) follows the board's regional mix (SE11 30% against 27.8%, SE12 19% against 16.4%), so it has no regional signature. Cluster 350 and 266 are too small in the 2026 window (31 and 9 postings) and in the earlier window they have 81, 44 and 28 postings, so only tilts are noted: in 2024-04 to 2025-06 cluster 350 leans to SE11 and SE12 (41% and 25% against 28.7% and 15.7%) and cluster 283 to SE12 and SE23, but 28 postings are too few to read.
 - No selected cluster has a regional profile that would support a new occupation.
-
-### Place words in jobbland titles (script 111, 15 November): test of cluster 283
-
-Share of titles (weighted) with Sweden, Swedish, Sverige, svensk(a) or the name of a large Swedish city. 52,570 of 53,959 jobbland postings have a title.
-
-| quarter | board | cluster 283 | cluster 350 |
-|---|---|---|---|
-| 2024-Q1 | 12.6% | 0.0% | 0.0% |
-| 2024-Q2 | 13.9% | 88.0% | 6.1% |
-| 2024-Q3 | 14.0% | 44.3% | 6.7% |
-| 2024-Q4 | 11.9% | 100.0% | 8.1% |
-| 2025-Q1 | 11.4% | 0.0% | 12.8% |
-| 2025-Q2 | 9.3% | 72.8% | 0.0% |
-| 2025-Q3 | 14.1% | 14.9% | 7.7% |
-| 2025-Q4 | 15.0% | 86.4% | 9.5% |
-| 2026-Q1 | 30.5% | 73.8% | 23.6% |
-| 2026-Q2 | 31.2% | 75.5% | 35.3% |
-| 2026-Q3 | 30.2% | 67.0% | 34.6% |
-
-Reading:
-- On lesjeudis and jobs.de no title contains such a word (0.0% in every quarter), so the check says nothing there.
-- On jobbland the board's share is 9-15% until 2025-Q4 and doubles to about 30% in 2026-Q1, the quarter in which cluster 283 first crosses the threshold. Cluster 350 follows the same pattern (9.5% in 2025-Q4, 23.6% in 2026-Q1, 35% in 2026-Q2).
-- Cluster 283 is a place-word cluster in almost every quarter (67-100% where it has enough postings; the quarters at 0% and 100% have very few postings), and it is not a cluster of one occupation. Its rise in 2026-Q1 coincides with the board-wide doubling of place words in titles.
-- Reading: the 2026-Q1 rise of cluster 283 measures a change in what the titles contain, not a new occupation. The data do not show why the titles changed from 2026-Q1; the move of the location text into the title is one possible reason and has to be asked of the source (Skillab question, item 11). The verdict on cluster 283 is therefore an artefact of title wording.
-
-### Figures (script 110, 15 November)
-
-Files are in `docs/fig/`, one set per board. Each board has three figures: the quarterly share of the selected clusters, the Occupation Emergence Rate per quarter, and the regional concentration of the selected clusters.
-
-**Quarterly share of the selected clusters** (`lesjeudis_series.png`, `jobsde_series.png`, `jobbland_series.png`). Line = share of the board's postings in the cluster, band = interval C, quarters with at least 20 sampled days. Each panel has its own y-axis.
-
-![lesjeudis: quarterly share of the selected clusters](fig/lesjeudis_series.png)
-
-![jobsde: quarterly share of the selected clusters](fig/jobsde_series.png)
-
-![jobbland: quarterly share of the selected clusters](fig/jobbland_series.png)
-- Lesjeudis: none of the five clusters rises over the period. Clusters 33, 68 and 139 dip in 2025-Q1 and recover in 2025-Q2 (cluster 33 from about 0.04% to 0.63%), 137 peaks in 2024-Q4 to 2025-Q1 (about 1.9%) and falls, 130 falls from the first quarter and recovers slightly. The bands overlap across quarters for most of the series, so the movements are within the sampling uncertainty.
-- Jobs.de: clusters 65 and 69 fall from 2024-Q3 to 2025-Q1 (65 from about 4.9% to 1.8%, 69 from 3.6% to 0.9%). Only three quarters are usable.
-- Jobbland: cluster 350 and 266 move within a small share (below 1%). Cluster 283 is flat below 0.5% until 2025-Q4, then rises to about 0.9% in 2026-Q1 and 1.0% in 2026-Q3, with a band clearly above the earlier quarters. This is the rise explained by the change in the title wording (place-words table above).
-
-**Occupation Emergence Rate per quarter** (`lesjeudis_oer.png`, `jobsde_oer.png`, `jobbland_oer.png`). Number of clusters newly crossing the threshold and the number that are clearly new under the stricter rule, for the whole board (all eligible clusters, not only the selected ones). The first usable quarter is zero by construction.
-
-![lesjeudis: Occupation Emergence Rate per quarter](fig/lesjeudis_oer.png)
-
-![jobsde: Occupation Emergence Rate per quarter](fig/jobsde_oer.png)
-
-![jobbland: Occupation Emergence Rate per quarter](fig/jobbland_oer.png)
-- Lesjeudis: 9, 10, 11 and 4 clusters newly cross in 2024-Q4 to 2025-Q3; one is clearly new (2024-Q4).
-- Jobs.de: 28 cross in 2024-Q4 and 5 of them are clearly new; 1 crosses in 2025-Q1.
-- Jobbland: about 219 cross in 2024-Q4 and 74 are clearly new, which is the coverage jump (more postings, and clusters that were below the sampling floor before). A second spike of about 69 (6 clearly new) in 2026-Q1 coincides with the board-wide change in the title wording. These spikes are artefacts of the data and not waves of new occupations; the validated count remains zero.
-
-**Regional concentration of the selected clusters** (`lesjeudis_hhi.png`, `jobsde_hhi.png`, `jobbland_hhi.png`). Normalised HHI over NUTS-2 regions for the whole period, with the unplaced share and the number of placed postings above each bar.
-
-![lesjeudis: regional concentration of the selected clusters](fig/lesjeudis_hhi.png)
-
-![jobsde: regional concentration of the selected clusters](fig/jobsde_hhi.png)
-
-![jobbland: regional concentration of the selected clusters](fig/jobbland_hhi.png)
-- Lesjeudis: cluster 33 is the most concentrated (about 0.54), then 139 (about 0.29), 68 (about 0.19), 137 and 130 (about 0.11). Île-de-France is 45.7% of the board, so some concentration is expected; only 33 is clearly above it (regional table above).
-- Jobs.de: both clusters are near 0.03-0.04, i.e. spread over many regions.
-- Jobbland: 350 about 0.15, 266 about 0.11, 283 about 0.05. The unplaced shares (20-33%) are high because the figure uses the whole period, including the quarters in which the location text had collapsed (per-quarter HHI section); the regional table above uses the two valid windows and should be preferred.
-
-### UMAP map with the named occupations (script 112, 15 November)
-
-Files: `docs/fig/umap_lesjeudis.png`, `umap_jobsde.png`, `umap_jobbland.png`. Each map is a two-dimensional UMAP (cosine, 30 neighbours) of all title embeddings of the board (input A). Grey = all postings (a sample is drawn), colour = the selected clusters, open markers = postings whose cleaned title matches one of the seven named occupations (same regexes as script 92; never forced). The map is for illustration and validation. The clusters come from the ten-dimensional UMAP, and distances in two dimensions are only approximate.
-
-![lesjeudis: two-dimensional UMAP with the named occupations](fig/umap_lesjeudis.png)
-
-![jobsde: two-dimensional UMAP with the named occupations](fig/umap_jobsde.png)
-
-![jobbland: two-dimensional UMAP with the named occupations](fig/umap_jobbland.png)
-
-Named occupations found by title:
-
-| named occupation | jobbland | jobs.de | lesjeudis |
-|---|---|---|---|
-| trade compliance officer | 4 | 0 | 0 |
-| export control specialist | 8 | 1 | 3 |
-| supply chain resilience analyst | 1 | 0 | 0 |
-| semiconductor process engineer | 0 | 2 | 1 |
-| battery cell technician | 6 | 0 | 0 |
-| critical materials specialist | 0 | 0 | 0 |
-| reshoring program manager | 0 | 0 | 0 |
-
-Reading:
-- The seven named occupations are almost absent: 19 matching titles on jobbland (53,959 postings), 3 on jobs.de (12,243) and 4 on lesjeudis (18,625). Critical materials specialist and reshoring program manager are not found on any board, and semiconductor process engineer is not found on jobbland.
-- Selected clusters are compact groups on the map and separate from each other. Lesjeudis cluster 33 is a thin strand, which fits the one-employer template found in the employer check. Jobbland clusters 283 and 350 lie in different places, with 283 below and 350 above the group of trade-compliance and export-control titles.
-- On jobbland the trade-compliance (4) and export-control (7 of 8) titles form one tight group between clusters 283 and 350. The battery-cell titles (6) are scattered over five places and do not form a group. The one supply-chain-resilience title and one export-control title lie far from the others (the export-control title at the lower left, the supply-chain title below the main mass). On jobs.de and lesjeudis the few matches are scattered; the two jobs.de semiconductor titles lie right next to cluster 69, which is an ordinary occupation, so the map does not show them as a group of their own.
-- Where the matching titles sit (cluster assignment, script 112, second version; the first version counted noise as a cluster and is not used):
-
-| board | named occupation | matches | in noise | other placements |
-|---|---|---|---|---|
-| jobbland | trade compliance officer | 4 | 3 | 1 in cluster 263 |
-| jobbland | export control specialist | 8 | 7 | 1 in cluster 20 |
-| jobbland | supply chain resilience analyst | 1 | 0 | cluster 71 |
-| jobbland | battery cell technician | 6 | 4 | 1 in cluster 321, 1 in another cluster |
-| jobs.de | export control specialist | 1 | 0 | cluster 52 |
-| jobs.de | semiconductor process engineer | 2 | 0 | 1 in cluster 69, 1 in another cluster |
-| lesjeudis | export control specialist | 3 | 1 | 1 in cluster 108, 1 in another cluster |
-| lesjeudis | semiconductor process engineer | 1 | 0 | cluster 86 |
-
-- The tight group on the jobbland map (trade compliance and export control titles between clusters 283 and 350) is noise: 3 of 4 and 7 of 8 of those titles belong to no cluster, so HDBSCAN did not find it as a cluster. With 10 or fewer postings it is far below the minimum cluster size of 40. The same holds for the battery-cell titles (4 of 6 in noise).
-- No named occupation has more than one title in any cluster. They are therefore not found as clusters on any board, and no named occupation is validated or forced. This agrees with the finding that no cluster is validated as an emerging occupation: the occupations named in the brief exist in the titles but only as a handful of postings, below the size at which the method can see them.
-- Consequence for the method: a named occupation with fewer than about 40 postings cannot be detected by the clustering. It can only be tracked through the seeded variant (script 106) (seeded section above).
-
-### Check of the named-occupation terms against the Skillab API (script 113, 15 November)
-
-The two named occupations that no board shows in the titles (critical materials specialist, reshoring program manager) were also searched in the Skillab API itself, which holds all postings of the three sources and not only our sample of days. One query per source and keyword, up to 5 pages of 100 postings. "Postings" = postings returned by the API's keyword search; "title" = postings with a keyword word of more than three letters in the title (a weak test: any one word counts).
-
-| keyword | jobbland.se | lesjeudis.com | jobs.de |
-|---|---|---|---|
-| critical raw materials | 83 (3 in title) | 5 (1 in title) | 0 |
-| critical materials | 500, page limit reached (11 in title) | 116 (2 in title) | 5 (0 in title) |
-| rare earth | 69 (1 in title) | 5 (0 in title) | 0 |
-| reshoring | 0 | 0 | 0 |
-| nearshoring | 6 (0 in title) | 0 | 0 |
-| onshoring | 0 | 0 | 0 |
-| matières premières critiques | 0 | 0 | 0 |
-| kritische Rohstoffe | 0 | 0 | 0 |
-| kritiska råvaror | 0 | 0 | 0 |
-
-Reading:
-- Reshoring, nearshoring in a title and onshoring do not occur as titles in any of the three sources. Reshoring and onshoring are not found at all in the postings, and nearshoring appears in 6 jobbland postings (a business-development representative, a business analyst and payroll specialists), none with the word in the title.
-- The critical-materials terms return postings, but the titles are unrelated occupations (a PhD student in mining waste, a warehouse production planner, a mechanical design engineer, a finance consultant). The terms appear in the descriptions only. The search appears to match words anywhere in the text: "critical materials" returns more postings than "critical raw materials", which would not happen with an exact phrase. This is inferred and not checked in the API documentation.
-- The non-English phrases return nothing on all three sources. Many titles of the Swedish board appear in English in the API (for example "PhD student in Mining Waste Facility and Life Cycle Assessment") next to Swedish ones, so a zero for a Swedish, German or French phrase does not prove that the term is absent. The language handling of the API is a question for the Skillab team (item 11).
-- Result: the check agrees with the title matches in the clusters. The two named occupations are not found as job titles on these boards.
-
-## Update of 13 November: results, candidates and conclusion
-
-**Where Month 4 stands.** No validated emerging occupation cluster has been found on the three boards. The 6 to 10 clusters chosen by size and flagged share, the selection step (c) in the plan sent to the supervisor, can still be delivered with their series, HHI and a verdict on emergence; none of them shows validated emergence. Two lesjeudis candidates (clusters 68 and 139) were tested against employer mix and coverage and do not hold. What the data do support is a defence-flagged engineering and cybersecurity core on lesjeudis that nvertheless results from postings of three or four employers, a flagged footprint that moves between employers over time, and the seven named occupations as counts below ten postings each. The numbers under "Results so far" and in the first cluster series below come from the first clustering, before title cleaning and title inference, and are superseded by this section. **Added on 14 November:** with a stricter rule for "clearly new" (wholly below the threshold in every earlier quarter, not only the previous one) the five lesjeudis "clearly new" clusters become one (DevOps, French titles), and that one is a posting campaign of one employer (Sopra Steria). Clusters 68 and 139, and the Java and systems administrator clusters, were at or near the threshold in 2024-Q3, dropped in 2025-Q1 with the posting cycles of individual employers (Capgemini, CGI, Thales) and returned in 2025-Q2. We find no new occupation cluster on lesjeudis (input A). **Added on 15 November:** the same rule on jobs.de and jobbland (input A) gives the same answer: the "clearly new" clusters are ordinary occupations or board and coverage effects, none is flagged above 3% (jobs.de) or is an emerging flagged cluster (jobbland); see the section "Update of 14 November".
-
-**Titles.** Title cleaning (script 90) has a second stage: lead-in sentences, contract, hours and date fillers, references and addresses, trailing places and, on boards where capitalised words are under 55% of title words, an employer tail ("for", "to", "at", "till", "för", "hos", "chez" followed by a proper name). The first stage had left place and employer words in many titles, and the first clusters formed around them. The 1,389 title-less jobbland postings (December 2025 to January 2026) got an inferred title from the description with Qwen 2.5 7B (script 99). On a manual check (i.e. human classifier on a sample), 88% of inferred titles named the same occupation as the real one (Wilson 95% interval 80% to 93%). 1,385 postings got a title and 4 stay without one (UNKNOWN). Clusters 171 and 168 of the first run no longer exist.
-
-**Reclustering.** Input A was rerun on the cleaned and inferred titles: jobbland.se 357 clusters (34.3% noise), lesjeudis.com 144 (30.9%), jobs.de 71 (27.6%). Input D gave 358, 139 and 80 clusters (35.2%, 28.9% and 29.5% noise) but is not used for selection, because D v1 is withdrawn.
-
-**Named occupations, checked directly on jobbland (script 101).** The regexes were corrected after the first check produced false matches: solar-cell sellers matched "battery cell technician" (11 of 17 hits), "individual users" matched "dual use", and "Raw Material Manager" matched critical materials. After the correction, jobbland holds 5 trade compliance titles, 7 genuine export control titles (a further hit is a customs course code), 6 battery cell titles, 1 supply chain resilience hit (a doctoral student post, not an occupation) and none for semiconductor process engineer, critical materials specialist and reshoring program manager. A cluster needs 40 postings, so none of these can form one; they are reported as counts by quarter. The earlier check of lesjeudis and jobs.de found 0 to 1 per occupation and was not rerun after the pattern fix.
-
-**Named occupations, second route: seed skills (script 108).** To test whether the seven occupations are better found through skills than through titles, we took, for each occupation, the ESCO skills that describe it (found in `lexicon/skills.csv`) and the matching Lightcast terms, and counted the postings that carry any of them. Four occupations have specific ESCO skills: trade compliance (customs compliance, customs law, import-export regulations and licences), export control (export control principles, export regulations of dual-use goods, embargo regulations), semiconductor process (wafer cleaning and polishing, photolithography, semiconductor testing) and battery cell (battery formation and conditioning, battery chemistry, battery components, battery test equipment). Supply chain resilience has only generic supply chain skills, critical materials only "materials engineering (battery material)" and "implement mineral processes", and reshoring program manager has no ESCO skill. The idea follows the seed-skill indicator of Dawson, Williams and Rizoiu (2021), who start from a few seed skills and follow the skills that co-occur with them.
-
-The seeds are listed in the next table. The Month 3 lexicon column holds the terms of the Month 3 lexicon that correspond to each occupation. The ESCO column holds the skills used in script 108 (`lexicon/skills.csv`), and the Lightcast column the terms of the pruned Lightcast block (`lexicon/lightcast_block_terms.csv`, 135 selected terms; script 91). I searched all 629 terms of that file for export, customs, trade, sanction, dual, tariff, licence, compliance, import, rare, lithium and reshoring: the only match is Certified Customs Specialist.
-
-| Named occupation | Month 3 lexicon terms | ESCO skills used as seeds (script 108) | Lightcast terms in the block | Assessment |
-| --- | --- | --- | --- | --- |
-| Trade compliance officer | trade compliance, export controls, dual-use goods, sanctions compliance, customs compliance, rules of origin | ensure cargo complies with customs regulations; ensure customs compliance; customs law; keep up to date with customs regulations; advise on customs regulations; international import export regulations; manage import export licenses; import-export commercial documentation | Certified Customs Specialist | Strong, but the skills describe customs clearance and freight forwarding as much as trade compliance |
-| Export control specialist | export controls, export licensing, dual-use goods | export control principles; export regulations of dual-use goods; comply with export regulations in different countries; advise clients on export restrictions; embargo regulations | none in the block | Strong and very specific |
-| Semiconductor process engineer | semiconductor sovereignty (a policy term) | clean wafers; polish wafers; load electronic circuits onto wafers; imprint circuit design onto wafers (photolithography); slice crystals into wafers; produce semiconductor crystals; test semiconductors; inspect semiconductor components | Semiconductor Manufacturing Process; Wafer Fabrication; Wafer Testing; Wafer Bonding; Wafer Dicing; Semiconductor Device Fabrication; Semiconductor Fabrication Plant; Semiconductor Package; Lithography; Photolithography; Dry Etching; Plasma Etching; Thin Film Coating; Metallization | Strong for process roles |
-| Battery cell technician | battery materials (ambiguous) | battery formation, conditioning and cell preparation; battery chemistry; battery components; assemble batteries; operate battery test equipment; repair battery components; battery management systems; battery testers | Battery Production Process; Battery Formation; Battery Production Equipment; Battery Recycling Processes; Battery Industry; Battery Inspection; Battery Life Cycle Management; Battery Maintenance; Battery Disassembly; Battery Cycler; Battery Diagnostics; Battery Charge/Discharge; Battery Conditioning (also in the block: Assemble Batteries, Cell Assembly Process, Formation Cycles) | Strong. "Change watch battery" and "install automotive batteries" are left out |
-| Supply chain resilience analyst | supply chain resilience, supply chain security, supply chain diversification, dual sourcing | analyse supply chain strategies; analyse supply chain trends; detect bottlenecks in the supply chain; supply chain principles; supply chain management | none specific: the block holds 70 generic supply chain terms (for example Demand Planning, Reverse Logistics, Material Requirements Planning). The plain term "Supply Chain" is boilerplate on lesjeudis (351 of 352 postings in one cluster) and is not used | Too broad as a seed: it picks up every supply chain role |
-| Critical materials specialist | critical raw materials, CRMA, battery materials | implement mineral processes; materials engineering (battery material) | 11 material terms: Beryllium; Carbon Graphite; Germanium; Gallium Nitride; Indium Antimonide; Indium Gallium Arsenide; Mercury Cadmium Telluride; Silicon Carbide; Epitaxy; Helium Extraction; Helium Liquefaction (not used as seeds in script 108; they mostly mark semiconductor and optics materials) | Weak: no critical-raw-materials skill in ESCO |
-| Reshoring program manager | reshoring, nearshoring, friend-shoring, onshoring, China plus one | none | none | No ESCO or Lightcast seed; only the lexicon terms could serve |
-
-| Occupation | By title regex (jobbland / lesjeudis / jobs.de) | By seed skills or Lightcast terms | Of these, titles that hold the occupation (reading of titles) |
-| --- | --- | --- | --- |
-| Trade compliance officer | 5 / 0 / 0 | 41 / 4 / 10 | about 18 / 0 / 5 |
-| Export control specialist | 8 / 3 / 1 | 5 / 4 / 0 | 0 / 0 / 0 |
-| Semiconductor process engineer | 0 / 1 / 2 | 18 / 2 / 7 | 0 / 0 / 4 (optoelectronics and semiconductor development) |
-| Battery cell technician | 6 / 0 / 0 | 51 / 1 / 2 | about 8 / 0 / 1 |
-| Supply chain resilience analyst | 1 / 0 / 0 | 456 / 517 / 21 (generic skills) | not meaningful |
-| Critical materials specialist | 0 / 0 / 0 | 82 / 14 / 13 | seed unusable |
-| Reshoring program manager | 0 / 0 / 0 | no seed | none |
-
-Skills find more postings than titles do, but most are false matches or topic mentions, not the occupation. Reading the titles of the carriers, only trade compliance has a group of real role-holders (about 18 on jobbland and 5 on jobs.de), and these are mostly customs clearance and freight forwarding, an established occupation; three jobbland titles are trade-governance roles (Global Trade Program and Systems Governance Manager, Trade Compliance Officer, Export Control Manager), all dated September 2025 or later, which is too few to read as a trend. The export control skills produced no title of an export control role. The semiconductor carriers on jobbland include none that is a process role and half share the skill "monitor satellites", which suggests a space or optics employer's template; on jobs.de four of seven are in optoelectronics or semiconductor development. Battery carriers include about eight engineering or production roles on jobbland, seven research posts and several salespeople and electricians. The seeds for supply chain and critical materials give false matches (for example "implement mineral processes" on IT and finance roles) and are not used. A seed marks a topic, not a role, and the extraction has false matches, so these counts are upper bounds. The skill-seeded variant is not pursued as a series; the counts are reported as a second check on the named occupations, which agrees with the title search: the occupations are present only in handfuls.
-
-**Emergence by board.**
-
-- **jobbland.se.** Weighted postings per quarter swing from 727 to 166,360, so quarterly crossings follow coverage. For example, assuming a cluster that is always 0.1% of the board’s postings:
-    - In a quarter that has 727 weighted postings, its postings are 0.1% × 727 = 0.7 postings. That is below the threshold of 100.
-    - In a quarter with 166,360 weighted postings, it counts are 0.1% × 166,360 = 166 postings. That is above 100, so it “crosses”.
-
-The monthly run from 2026-02-01 to 2026-08-31 around AccelerateEU (22 April 2026) lists "clearly new" clusters that are cleaners, preschool staff, concrete workers and doctors, none flagged (under the stricter rule of 15 November only the cleaners and the preschool staff remain; concrete workers and doctors are returns after a dip). Samples of the flagged clusters with a rise (291 quality engineer, 263, 232 production technician, 350 systems engineer) show consultancy staffing patterns that exist from 2024, or 6 postings in total (263). No candidate.
-- **jobs.de.** Three usable quarters. The 28 "new" crossings in 2024-Q4 are the board starting up, and the rise of the electronics cluster from 1.01% to 11.75% compares a partial first quarter with a thin last one. No emergence evidence; the board is used for validation only. *Update of 15 November:* under the stricter rule, 5 clusters are clearly new in 2024-Q4 (accountants, HR clerks, branch managers, warehouse staff, sales assistants), all flagged at 0% to 3%; see the update section.
-- **lesjeudis.com.** Clusters 68 (embedded software, aeronautics and defence) and 139 (cybersecurity) are "clearly new" [^2] in 2025-Q2 (monthly: 2025-05), with 57% and 38% of postings flagged at medium intensity or higher and event changes of +0.63% (+0.20 to +1.21) and +0.96% (+0.42 to +1.79) around InvestAI. The monthly series shows both already above the line in 2024-08, and cluster 139 peaks in 2024-08 (2.29%). Flagged postings per quarter (2024-Q3 to 2025-Q3) are 22, 5, 2, 15, 15 for cluster 68 and 13, 5, 1, 12, 8 for cluster 139. The "new" status comes from comparing with 2025-02 (16 sampled days), the last usable month before a coverage gap (2025-03, 2025-04 and 2025-07 are unusable). In reality, the clusters had been above the threshold before; they didn’t appear for the first time. The largest clear rises (Product Owner 0.59% to 4.52%, data analysts) are not flagged and reflect IT and data roles gaining share on the board. *Update of 14 November:* on the quarterly series, the Java and systems administrator clusters were clearly above the threshold in 2024-Q3, and the interval of clusters 139 and 68 reaches the line there; all four are below it in 2025-Q1 and above it again in 2025-Q2. The stricter rule no longer counts them as new (see below).
-
-[^2]: A cluster is “clearly new” in a month if its whole interval is above the threshold now, and its whole interval was below the threshold in the previous usable month.
-
-**Flag intensity.** The flagged share counted every tag, including `low`, which the annotation guide gives to a role whose duties are outside the sector and where the sector appears only in the company text. However, since we are examining emerging occupations with respect to their role and duties in the context of deglobalization, they should be disregarded. For this reason Script 93 was adjusted to only filter `--min-intensity medium` and `high`. Cluster 117 (head of IT project) falls from 34% to 11% flagged and drops out; clusters 68 (60% to 57%) and 139 (43% to 28%) hold. Script 98 now prints the intensity of each flagged posting.
-
-**Employer concentration (script 103).** The employer field is empty on lesjeudis, so we used a script to take the employer namen from known names in the first 1,500 characters of the description (Thales, Sopra Steria and CS, Safran, Alten and about 35 more; 1 to 19 of 19 to 78 postings per cluster are unmatched). Flagged postings at medium intensity or higher:
-
-| Cluster | Title | Flagged postings | Effective employers | Largest employer share |
-| --- | --- | --- | --- | --- |
-| 99 | Program manager | 27 | 1.1 | Thales 96% |
-| 33 | IVVQ engineer | 67 | 1.2 | Thales 92% |
-| 61 | Software architect | 28 | 1.3 | Thales 88% |
-| 107 | Engineering manager | 43 | 1.3 | Thales 86% |
-| 127 | Systems engineer | 34 | 1.8 | Thales 72% |
-| 56 | Software architect, defence and security | 27 | 2.3 | Sopra Steria 58% |
-| 133 | AI engineer | 19 | 2.3 | Thales 62% |
-| 67 | Software validation engineer | 36 | 2.6 | Thales 54% |
-| 130 | Electronics engineer | 102 | 2.8 | Thales 56% |
-| 68 | Embedded software engineer | 78 | 3.3 | Thales 42% |
-| 139 | Cybersecurity engineer | 48 | 3.9 | Thales 41% |
-
-To discuss the findings on employers, we will use the concept of ``Effective employers''. This is a standard transformation of the Herfindahl–Hirschman Index and is equal to 1 divided by the sum of squared employer shares. For example, if one employer holds 96% of a cluster’s postings and the rest is spread thinly, Σs² is ~0.92, so the effective number is about 1/0.92=1.09. That can be interpreted as “the cluster behaves as if it had one employer”.. Over the whole board, Thales rises from 3.5% of all postings taken in 2025-Q1 to 7.0% in 2025-Q2 and 9.0% in 2025-Q3, and its flagged postings from 95 to 198 and 257, while Sopra Steria and CS flagged postings fall from 129 (2024-Q3) to 33 (2025-Q3):
-
-| Quarter | Thales share of postings taken | Thales flagged postings | Share of all flagged postings |
-| --- | --- | --- | --- |
-| 2024-Q3 | 4.7% | 134 | 30% |
-| 2024-Q4 | 4.0% | 201 | 44% |
-| 2025-Q1 | 3.5% | 95 | 34% |
-| 2025-Q2 | 7.0% | 198 | 49% |
-| 2025-Q3 | 9.0% | 257 | 56% |
-
-The clusters that first cross the line in 2025-05 to 2025-08 (33, 67, 99, 107) are the Thales-dominated ones. Counts are postings taken, not weighted, so shares are compared and not counts. The data cannot say whether Thales posted more or the board covered it better from 2025-Q2.
-
-**Conclusion.** Under the criteria used (clearly new or a clear rise in share, at least 25% flagged at medium intensity or higher, coherent content, not an employer pattern), no cluster is validated as an emerging occupation. Reported instead: (1) the named occupations as counts; (2) a lesjeudis defence-flagged core that is concentrated in a few employers, with five clusters that are employer patterns (33, 61, 99, 107, 127) and the rest of the core (56, 67, 68, 130, 133, 139) too concentrated or too flat to call emerging; (3) declines of defence-flagged IT and systems clusters after InvestAI (137, 126, 136, 116), read with the coverage gap; (4) the negative results for jobbland.se and jobs.de; (5) the intensity filter and the employer check as methods. The thesis calls the flagged clusters "concentrated in a few employers" and does not call them emerging. *Update of 14 November:* the stricter rule and the employer cycles (see the update section) leave the conclusion unchanged for lesjeudis and also remove the DevOps cluster, the only one that passed the stricter rule.
-
-**Options for Month 5, to agree with the supervisor.** Cluster only the flagged postings with a smaller minimum cluster size (about 20), which can separate small occupations but depends on the tagger by construction. A series that caps any single employer's share. Ask Skillab, through the supervisor, whether sources or employer coverage changed in 2025.
-
-**Supervisor guidance not yet applied.** From the earlier exchange on weights, clustering and HHI:
-
-- **Weights.** Normalise the weights to \[0, 1\], possibly with a logarithm, so that very large weights (for example 200 on a high-volume day) do not dominate. The inverse-probability weight is the unbiased estimator of the population share, so it stays the main estimate. Script 93 now has `--weight-mode log` and `--weight-mode cap` to rerun the shares and intervals as a sensitivity check; the verdicts on the candidate clusters are then compared across the three modes.
-- **Number of clusters.** The supervisor found 256, 141 and 79 clusters too many and asked for 3 to 4 clustering algorithms compared by silhouette score. The current runs give 357, 144 and 71 clusters on input A. The algorithm comparison by silhouette was made on 15 November (see the update below): HDBSCAN has the highest silhouette in the UMAP space, the silhouette does not favour fewer or more clusters, so the count stays a consequence of the minimum cluster size. The silhouette is computed on the non-noise points of each method, and HDBSCAN noise has to be reported next to it.
-- **Preserving specific clusters.** The supervisor suggested intervening in the clustering to keep chosen clusters, based on the distances between them. A seeded variant (titles of the seven named occupations and of the flagged clusters as fixed centres, postings assigned within a cosine distance) would also catch occupations with fewer than 40 postings, which HDBSCAN cannot form.
-- **Lightcast weight.** The Lightcast block should have the same weight as the ESCO block; D v1 used 0.5 and 0.3. D is withdrawn and is not used for selection, and D v2 should use equal weights.
-- **HHI and the thesis question.** The supervisor reads the index as a measure of how far specific domains dominate a market, and the aim as quantifying how far larger markets are more or less similar to smaller ones in the composition and concentration of their skill sets. The employer concentration reported above fits this reading; what "larger and smaller markets" refers to (boards, countries or clusters) is to be confirmed.
-
-## Supervisor answers of 14 November, and what each decision means
-
-The supervisor answered the four questions of the email. Option A is adopted: the 6 to 10 clusters are described as concentrated, flagged occupation clusters, and emergence is reported as a finding for each cluster. The notes below explain each decision in plain words, with the example used in the discussion.
-
-**1. Option A or Option B (how the 6 to 10 clusters are chosen).** Option A selects clusters by size and flagged share (step (c) of the plan the supervisor approved) and then reports for each one whether it is emerging. Option B makes emergence the selection rule, so only clusters that pass the emergence test are delivered. Example: lesjeudis cluster 33 (embedded software, Thales at about 42% of its postings) is large and strongly flagged, so it is selected under A, with the finding "present since 2024-08, concentrated in 3 to 4 employers, not emerging". Under B it is dropped, and since no cluster passes both the emergence test and the flag test, B delivers zero clusters. The only cluster with a clear rise on lesjeudis is cluster 3 (Product Owner), which is not flagged, so under B it would be the only cluster "in", although it has nothing to do with deglobalization. A keeps the deliverable and keeps the negative result visible.
-
-**2. Inverse-probability weights as the main estimate.** The collection takes about 100 postings from one page per calendar day, so a posting stands for (day total / postings taken that day) postings. Example: a day with 1,000 postings of which 100 are taken gives each posting weight 10; a day with 200 postings of which 100 are taken gives weight 2. Without weights the quiet day counts as much as the busy day. The weights are the only way the sample is unbiased for the whole board, so they stay the main estimate. They also make the quarterly totals swing (jobbland 727 to 166,360 weighted postings), because a few days carry very large weights. Two sensitivity runs test this: log-scaled weights (log(1+w), so a weight of 1,000 counts about 3 times a weight of 10, not 100 times) and capped weights (cut at the 95th percentile). They trade some bias for lower variance. If a verdict (new, rising, flat) is the same under all three, it does not depend on the weighting; the counts and the 100-postings threshold lose their meaning under log and cap, so only shares and verdicts are compared. The supervisor agreed to re-run and decide from the results.
-
-**3. Silhouette comparison and the seeded variant.** The silhouette of a posting is (distance to the nearest other cluster minus distance to its own cluster) divided by the larger of the two, from -1 to 1. Example: a posting 0.2 from its own cluster centre and 0.6 from the nearest other cluster scores (0.6 - 0.2) / 0.6 = 0.67 (well placed); a posting at 0.4 and 0.45 scores 0.11 (on the boundary). The mean silhouette over the postings of a clustering allows 3 to 4 algorithms (for example HDBSCAN, k-means, agglomerative, HDBSCAN on UMAP) to be compared on the same input, reporting the share of noise next to it, since an algorithm that drops a third of the postings as noise can score high on the rest. The cluster counts (357, 144 and 71) are only a result of one setting and should be fixed by this comparison before the remaining analysis is built on it. The supervisor also notes that titles alone are unlikely to give clusters of emerging occupations, because employers use a general title and put the detail in the description; input D (titles with ESCO and Lightcast skills) addresses this and is compared in the same way. The seeded (constrained) variant is a complementary method: it fixes centres from postings of chosen occupations (for example the titles that contain "export control"), lets a posting join a centre when its cosine distance is under a threshold, and clusters the rest freely. A named occupation then cannot dissolve into a larger cluster, and the question becomes whether the seed grows over time.
-
-**4. "Larger and smaller markets".** The supervisor confirms that markets are the boards or countries: Sweden (jobbland, 53,959 postings), France (lesjeudis, 18,625) and Germany (jobs.de, 12,243). The question is whether the larger board is more or less similar to the smaller ones in the composition (which skills and sectors make up the postings) and the concentration (how much a few of them dominate) of its skill sets. HHI falls as a sample grows, so a large board looks less concentrated for no real reason; the comparison therefore uses equal-size subsamples next to the whole-board value. Composition is compared with a similarity score (Jensen-Shannon, 1 = identical) on the skill and sector labels the boards share. The boards are never merged. This is built in script 104 (docs/boards\_concentration.md): HHI and top-10 share over skills, sectors, clusters, NUTS-2 regions and employers per board, and the same by quarter. The organisation field is empty on all three boards, so employer concentration cannot be computed across whole boards; it is reported only for the clusters checked with script 103.
-
-**Result for question 2 (lesjeudis, monthly, flag intensity medium or higher, log and capped weights; weights rescaled to the same board total).** No verdict changes in a way that matters. The clusters with the largest flagged share are the same under both transformations and under the default weights, and their flagged shares move by at most 2 points (cluster 33: 93% and 94%; 68: 57% and 57%; 137: 49% and 48%; 130: 49% and 48%; 139: 28% and 29%). The clear rise of cluster 3 (Product Owner, unflagged) is the same: 0.82% to 3.65% under log weights, 0.83% to 4.12% under capped weights, clear in both. The “clearly new” lists overlap in five of seven clusters (1, 12, 68, 75, 137). The two that differ are borderline: 139 is clearly new under capped weights only, and 125 (log) and 65 (capped) appear in one transformation only. The count of clearly new clusters per month is the same under both transformations in 2024-11 and 2025-05 (2 and 3). Clusters 68 and 139 are clearly new in 2025-05 under both weightings, but they already crossed the threshold in 2024-08, so this is the effect of the missing March and April 2025 data, not weighting; weighting does not resolve that. The inverse-probability weights stay the main estimate. *Update of 14 November:* the "clearly new" lists in this paragraph use the original rule (previous period only); under the stricter rule, which does not depend on the weights, most of them drop out (see below).
-
-**Result for question 4 (script 104, common window 2024-08-01 to 2025-04-09).** The largest board (Sweden) is not the most different from the smaller ones, and concentration does not fall or rise steadily with board size. Skills are the ESCOX skills extracted from the full text (script 69b), the same method for every board and month; the tracker (API) tags are not used, because they are missing on jobbland from mid-2025.
-
-| Board | Skills: effective number (HHI) | Sectors: effective number (HHI) | Regions: normalised HHI |
-| --- | --- | --- | --- |
-| Sweden (jobbland, largest) | 200 (0.0050) | 62 (0.0162) | 0.052 |
-| France (lesjeudis) | 311 (0.0032) | 45 (0.0222) | 0.199 |
-| Germany (jobs.de, smallest) | 296 (0.0034) | 91 (0.0110) | 0.019 |
-
-Similarity of composition (Jensen-Shannon, 1 = identical):
-
-| Pair | Skills | Sectors |
-| --- | --- | --- |
-| Sweden and Germany | 0.79 | 0.89 |
-| Sweden and France | 0.71 | 0.85 |
-| France and Germany | 0.64 | 0.80 |
-
-Sweden is the most concentrated in skills, France in sectors and regions (Île-de-France), and Germany the most diffuse in sectors and regions. The largest board is the most similar to both others, and the two smaller boards are the least similar to each other. With three boards, size cannot be separated from country, language and platform, so these are descriptions of the boards, not an estimate of an effect of size. The values are stable across quarters within each board (Sweden skills HHI 0.0044 to 0.0057 over eleven quarters), so the differences between boards are structural, not caused by one period. Equal-size subsamples give the same values as the whole boards, so sample size is not behind the differences. Limits: the sector labels come from the tracker and are filled for about 90% of jobbland postings only up to 2025-05, which is why the comparison uses the common window; the cluster HHI is not compared across boards, because the same minimum cluster size gives 357, 144 and 71 clusters; jobs.de 2025-Q2 rests on 349 postings.
-
-**Order of work.** (1) The log and capped weight runs and the board comparison (script 104). (2) The silhouette comparison of the algorithms for inputs A and D v2, and the seeded variant, on Colab. (3) Fix the final clustering setup, then rebuild the series, HHI and the verdict per cluster.
-
-**Status of the order of work on 14 November.** (1) is done. (2) is done for lesjeudis: D v2 and D v3 were compared with A on title coherence and on emergence (below); the algorithm comparison (six board and input combinations) and the seeded variant (jobbland) are reported in the update below. (3) Proposed, to be confirmed with the supervisor: input A is the main input, D v3 and D v2 are documented sensitivity checks. The series, HHI and verdicts are rebuilt on A with the stricter rule for lesjeudis, jobs.de and jobbland (15 November).
-
-## Update of 14 November: inputs, a stricter rule for "clearly new" and employer waves
-
-All numbers in this section are for lesjeudis (18,625 postings, France), except where the three boards are named. Flagged shares in the tables of the emergence reports are at the default intensity (every tag), not at medium or higher, so they are higher than the shares quoted above (for example cluster 139: 43% here, 28% at medium or higher).
-
-### Input D v2 and D v3 against A: title coherence (script 107)
-
-Coherence of a cluster is the length of the mean of the unit title embeddings of its postings after centring on the board mean (1 = identical titles, 0 = unrelated). The lift is the coherence minus that of random sets of the same size. A cluster is weak when its lift is below the 10th percentile of the lift of A's clusters (0.439), the same bar for every input. Lift in plain words: it measures how much more alike the titles of a cluster are than the titles of a random set of the same size. Coherence is 1 for identical titles and 0 for unrelated ones, so a cluster of unrelated titles has a lift near 0, and a high lift means the titles share a role. A is built from the title embedding alone, so it has an advantage on coherence by construction; the top-token share (the share of titles that hold the cluster's most frequent title word) does not use the embedding and is read next to it.
-
-D v2 weights the title embedding, the ESCO block and the Lightcast block 1 / 0.5 / 0.5 and uses only the coherence filter on skills. D v3 weights them 1 / 0.25 / 0.25 and drops skills that occur in more than 5% of postings (`--max-df 0.05`, a document-frequency cut) before the coherence filter.
-
-| Input | Clusters | Noise | Median lift | Median top-token share | Clusters below the weak cutoff | Postings in them |
-| --- | --- | --- | --- | --- | --- | --- |
-| A | 144 | 30.9% | 0.543 | 87% | 15 (10%) | 1,370 (11%) |
-| D v2 | 142 | 20.6% | 0.261 | 43% | 119 (84%) | 13,169 (89%) |
-| D v3 | 102 | 30.6% | 0.540 | 88% | 14 (14%) | 1,763 (14%) |
-
-On the postings clustered in both inputs, the agreement with A (adjusted Rand index, 1 = same partition) is 0.139 for D v2 (10,462 postings) and 0.533 for D v3 (10,145 postings). D v2 puts most postings into clusters that are held together by a skill or by company text, with unrelated titles inside; on the three boards 76% to 89% of the postings clustered in D v2 sit in weak clusters. D v3 is as coherent as A. It still contains clusters held by a skill bundle, for example cluster 81 (91% of its postings carry "quantum mechanics"; one of its titles is a Thales recruiting event). D v3 was run on lesjeudis only.
-
-### Emergence on D v3 against A (original rule, quarterly, event InvestAI)
-
-| | A | D v3 |
-| --- | --- | --- |
-| Clusters / eligible | 144 / 58 | 102 / 41 |
-| Clearly new per quarter (2024-Q3 to 2025-Q3) | 0, 1, 0, 4, 0 | 0, 1, 0, 2, 0 |
-| Clearly new clusters | 46 DevOps, 75 Java, 41 systems and network administrator, 139 cybersecurity, 68 embedded software | 65 systems administrator (French titles), 75 Java, 57 cloud architect |
-
-The Java cluster has the same verdict in both. A's DevOps clusters (46 French titles, 57 English titles) become one cluster in D v3 (52) that is already above the line in 2024-Q3, so the verdict disappears; the change around the event is the same (-1.74 points, interval -2.71 to -0.26). The cybersecurity cluster (A 139, 43% flagged; D v3 89, 36%) is not clearly new in D v3 but its change around the event holds: +0.96 points (+0.42 to +1.79) in A and +0.86 (+0.23 to +2.12) in D v3. The embedded software cluster (A 68, 60% flagged; D v3 64, 49%) crosses in 2025-Q2 in both, but is clearly new only in A; its change in D v3 is +0.29 (-0.07 to +0.85) and includes zero. The defence-flagged core is kept in D v3 as smaller clusters (IVVQ: A 33 and D v3 12, 94% flagged in both; validation: A 67 and D v3 50), but A's two largest flagged clusters (137 and 130) have no eligible counterpart. D v3 gave no additional emergence evidence over A, and it needs an extra embedding pass per board; the proposal is to keep A as the main input.
-
-### A stricter rule for "clearly new"
-
-The rule of script 93 compared a quarter with the previous quarter only. A cluster that was at or above the threshold in 2024-Q3, dropped below it in 2025-Q1 and came back in 2025-Q2 was therefore counted as new. The quarterly series of the five lesjeudis clusters (postings taken, input A) shows this:
-
-| Cluster | 2024-Q3 | 2024-Q4 | 2025-Q1 | 2025-Q2 | 2025-Q3 |
-| --- | --- | --- | --- | --- | --- |
-| 75 Java | 51 | 33 | 6 | 52 | 46 |
-| 41 systems and network administrator | 73 | 42 | 5 | 47 | 37 |
-| 139 cybersecurity | 58 | 48 | 11 | 48 | 36 |
-| 68 embedded software | 36 | 18 | 8 | 40 | 39 |
-| 46 DevOps (French titles) | 9 | 80 | 91 | 12 | 12 |
-
-Under the new rule (default `--new-rule all` in script 93) a cluster is clearly new only if interval C is wholly above the threshold now and wholly below it in every earlier usable quarter. Clusters that dip and return are listed in a separate table, "Returning after a dip". Script 93 also flags a quarter in which several clusters that were clearly above the line earlier drop wholly below it together (at least 3 and at least 30% of them, `--dip-min`, `--dip-share`), since a common cause is then more likely than separate declines. The old rule is still available with `--new-rule previous`. Applied to the series of input A, the five clusters become one: DevOps (46) in 2024-Q4; clusters 41, 68, 75 and 139 are returns after a dip in 2025-Q2. For clusters 75 and 41 the 2024-Q3 interval is wholly above the line; for 139 (233 estimated, interval 94 to 562) and 68 (92 estimated, interval 53 to 115) it only reaches it, and the script lists them as returns because their interval was not wholly below the line in 2024-Q3. The monthly series supports this for both (above the line in 2024-08, see the lesjeudis paragraph above). The patched script was run on the real data on 15 November and gives the same result: one clearly new cluster (2024-Q4), none in the other quarters, and four returns after a dip in 2025-Q2. Its joint-dip flag (at least 3 clusters and at least 30% of the clusters that were clearly above the line earlier) fires in 2025-Q2, not in 2025-Q1: 5 of 14 clusters (10, 44, 46, 116, 136) fall wholly below the line in 2025-Q2, which includes the end of the DevOps campaign (46). The 3 clusters that drop in 2025-Q1 are below the 30% bar, so the flag does not fire there; a lower `--dip-share` (0.2) would. Four clusters fall below the line in 2025-Q3, also without a flag. D v3 was not rerun under the stricter rule.
-
-### Employer check on the five clusters (script 103)
-
-Employer names are found in the first 1,500 characters of the description (about 35 known names). They are found in 38% of the postings of cluster 75, 27% of 41, 41% of 139, 55% of 68 and 45% of 46, so every share below is a lower bound.
-
-| Cluster | Effective employers | Largest identified employers |
-| --- | --- | --- |
-| 75 Java | 9.5 | Alten 13, Capgemini 10, Sogeti 9, Sopra Steria 7, CGI 6 |
-| 41 systems and network administrator | 8.4 | CGI 10, Sopra Steria 10, defence ministry 7, Alten 6, Scalian 6 |
-| 139 cybersecurity | 5.5 | Sopra Steria 28, Thales 18 |
-| 68 embedded software | 4.8 | Thales 26, Sopra Steria 19, Safran 8, Segula 8, Airbus 7 |
-| 46 DevOps (French titles) | 5.2 | Sopra Steria 35, Capgemini 10, Thales 10, Scalian 8 |
-
-**DevOps (cluster 46).** Sopra Steria has 35 of the 91 postings with an identified employer, all of them in 2024-Q4 (about 14) and 2025-Q1 (about 21), none in the other quarters. Sopra Steria's share of the whole board is steady (7.9%, 8.5%, 10.5%, 9.9%, 4.9% by quarter), so the hump is a campaign of DevOps titles by one employer, not a rise in its volume. Cluster 57 (English DevOps) falls steadily from 14 to 8 identified postings with a changing leading employer; it shows no campaign and no emergence.
-
-**The dip and the return are employer posting cycles.** 2025-Q1 is not a thin quarter: postings taken per sampled day are 73, 62, 61, 73 and 61 in the five quarters. Over the whole board:
-
-| Employer, share of postings taken | 2024-Q3 | 2024-Q4 | 2025-Q1 | 2025-Q2 | 2025-Q3 |
-| --- | --- | --- | --- | --- | --- |
-| Capgemini | 3.4% | 0.6% | 0.9% | 3.3% | 0.2% |
-| CGI | 2.6% | 1.3% | 1.1% | 3.4% | 0.1% |
-| Thales | 4.7% | 4.0% | 3.5% | 7.0% | 9.0% |
-| Scalian | 0.1% | 0.3% | 4.0% | 2.2% | 4.1% |
-| Orange | 0.4% | 2.5% | 3.7% | 2.7% | 2.5% |
-
-Capgemini and CGI, leading employers of the Java and systems administrator clusters, are high in 2024-Q3, low in 2024-Q4 and 2025-Q1, high in 2025-Q2 and almost absent in 2025-Q3, the same shape as the clusters. Thales, the leading identified employer of cluster 68 in 2025-Q2 and 2025-Q3 and of cluster 139 in 2025-Q2, falls to 3.5% in 2025-Q1 and doubles in 2025-Q2. The data cannot say whether these employers posted in waves or whether the board or Skillab covered them in waves (open item 11). The shares of other employers (Scalian from 0.3% to 4.0%, Orange from 0.4% to 3.7%) show how much the employer mix moves from quarter to quarter.
-
-**Consequence.** Interval C redraws whole weeks, so it does not protect a cluster series against an employer that posts in some quarters and not in others. A cluster that rests on two or three employers can cross the threshold, dip and cross again without any change in the market. A possible additional eligibility condition is a minimum number of effective employers in the quarter that counts as a crossing (Month 5).
-
-**Result.** On lesjeudis (input A, original run), no cluster is a validated new occupation under the methodology as specified: the one cluster that passes the stricter rule (DevOps, French titles) is a posting campaign of one employer, and the four others are returns after a dip that follow employer posting cycles. The event-window changes of clusters 68 and 139 (+0.63 and +0.96 points) are measured against a baseline that includes the thin 2025-Q1 cluster counts and are treated as unconfirmed. The claim now covers input A on all three boards for the stricter rule (next section); the employer check (script 103) has been run on lesjeudis only.
-
-### The stricter rule on jobs.de and jobbland (15 November)
-
-The patched script 93 (new rule, default) was run on input A for jobs.de (quarterly), jobbland (quarterly, whole period) and jobbland (monthly, 2026-02-01 to 2026-08-31, as in the event analysis).
-
-| Board and run | Usable periods | Clearly new (stricter rule) | Returning after a dip | Joint-dip flags |
-| --- | --- | --- | --- | --- |
-| jobs.de, quarterly | 2024-Q3 to 2025-Q1 (2025-Q2 has 7 sampled days) | 5, all in 2024-Q4: 53, 52, 30, 40, 21 | 0 | none |
-| jobbland, quarterly | 11 quarters, 2024-Q1 to 2026-Q3 | 3 (2024-Q3), 74 (2024-Q4), 2 (2025-Q1), 6 (2026-Q1) | 8 (2025-Q4), 37 (2026-Q1) | 2025-Q2 (87 of 109 clusters), 2025-Q3 (97 of 109), 2025-Q4 (47 of 109) |
-| jobbland, monthly | 2026-02 to 2026-08 | 2, both in 2026-03: 121, 143 | 9 (from 2026-05) | none |
-
-**jobs.de.** The five clearly new clusters of 2024-Q4 are accountants (53), HR and purchasing clerks (52), branch managers (30), warehouse staff (40) and sales assistants (21), flagged at 0% to 3%. The weighted postings per sampled day fall from about 200 in 2024-Q4 to about 78 in 2025-Q1 (18,520 postings over 91 days against 5,953 over 76 days), so the count threshold cannot be read across those quarters, and only one cluster is clearly above the line in 2025-Q1. The board is used for validation only.
-
-**jobbland, quarterly.** The count rule follows the board's coverage, as already shown: weighted postings per quarter are 727, 5,389, 16,278, 145,266, 87,115, 10,481, 7,493, 33,777, 166,360, 147,642 and 72,636. The 74 clearly new clusters of 2024-Q4 are the board growing 9-fold in one quarter (it includes cluster 350, 41% flagged, whose peak share is 0.35% and whose change around the event is +0.00 points). The joint-dip flags fire in exactly the three quarters of the low-coverage stretch (2025-Q2 to 2025-Q4), and the 37 returns and 6 new clusters of 2026-Q1 follow the jump from 33,777 to 166,360 weighted postings. The new flag therefore identifies the coverage regime without being told about it. The six clearly new clusters of 2026-Q1 are a nurse cluster (50% one template, not eligible), a department manager cluster, a probation service cluster (47% one template, not eligible), personal assistants, a service manager and a store manager, flagged at 0% to 8%. Cluster 283 (28% flagged, defence 82%) first crosses in 2026-Q1 on the quarterly series, but it is already above the line in 2026-02 on the monthly series, so it is not new.
-
-**jobbland, monthly (the stable stretch around AccelerateEU).** Two clusters are clearly new in 2026-03: 121, whose titles are all one company's home cleaners ("Home cleaner - Hemfrid"), and 143, preschool staff; neither is flagged. The concrete workers (334) and the district physician cluster (194) that the original rule listed as new are returns after a dip. The flagged clusters keep their earlier reading: cluster 350 (46% flagged) has a change of +0.03 points (-0.16 to +0.23), cluster 283 (28%) -0.31 (-0.63 to +0.02); the flagged clusters with a clear rise in share (291 quality engineer, 263 security manager and compliance officer, 78 project manager) are small (24 to 36 postings taken) and were read earlier as consultancy staffing or a handful of postings.
-
-**Result for the three boards.** On input A, under the stricter rule, no cluster is a validated emerging occupation on any board: lesjeudis has one (a one-employer campaign), jobs.de has five ordinary occupations at the start of its series, and jobbland has ordinary occupations and coverage effects (quarterly) or one company's cleaners and preschool staff (monthly). None of the clearly new clusters has a flagged share above 25% except cluster 350 on jobbland, whose appearance is the 2024-Q4 coverage jump.
-
-### Algorithm comparison by silhouette (script 105, 15 November)
-
-Four algorithms were run on the same 10-dimensional UMAP space of each input and board: HDBSCAN with excess-of-mass selection (the setting used so far), HDBSCAN with leaf selection (finer clusters), k-means and Ward agglomerative clustering, the last two with the same k as HDBSCAN eom. The silhouette is computed on a random sample of 10,000 postings (seed 1), once in the UMAP space (Euclidean) and once in the input space (cosine, the original embedding). HDBSCAN leaves its noise out of the silhouette, so the noise share is shown next to it; the last column scores k-means and Ward on the same postings that HDBSCAN eom kept, so that all methods are judged on the same ground. Input D is run in two versions: D v2 with the script defaults (ESCO and Lightcast weights 0.5 and 0.5) and D v3 (weights 0.25 and 0.25, skills and terms present in more than 5% of the postings dropped).
-
-| Board, input | HDBSCAN eom: clusters (noise), silhouette UMAP / input | HDBSCAN leaf: clusters (noise), silhouette UMAP / input | k-means, same k: UMAP / input | Ward, same k: UMAP / input | k-means and Ward on the eom postings only: UMAP |
-| --- | --- | --- | --- | --- | --- |
-| lesjeudis A | 144 (30.9%), 0.618 / 0.087 | 151 (32.5%), 0.633 / 0.089 | 0.467 / 0.030 | 0.461 / 0.026 | 0.576 and 0.593 |
-| lesjeudis D | 136 (21.1%), 0.735 / 0.170 | 148 (26.5%), 0.743 / 0.158 | 0.615 / 0.118 | 0.609 / 0.115 | 0.720 and 0.716 |
-| jobbland A | 357 (34.3%), 0.618 / 0.071 | 391 (40.3%), 0.639 / 0.100 | 0.438 / -0.014 | 0.433 / -0.022 | 0.577 and 0.587 |
-| jobbland D | 263 (20.2%), 0.707 / 0.122 | 290 (29.1%), 0.708 / 0.123 | 0.608 / 0.089 | 0.603 / 0.090 | 0.704 and 0.703 |
-| jobs.de A | 71 (27.6%), 0.542 / 0.086 | 84 (38.8%), 0.590 / 0.117 | 0.431 / 0.023 | 0.417 / 0.052 | 0.519 and 0.528 |
-| jobs.de D | 102 (25.2%), 0.711 / 0.163 | 109 (28.9%), 0.706 / 0.167 | 0.539 / 0.088 | 0.537 / 0.081 | 0.638 and 0.646 |
-| lesjeudis D v3 | 101 (29.8%), 0.590 / 0.090 | 121 (38.6%), 0.629 / 0.109 | 0.476 / 0.058 | 0.459 / 0.055 | 0.567 and 0.581 |
-| jobbland D v3 | 282 (36.3%), 0.627 / 0.098 | 308 (42.2%), 0.659 / 0.103 | 0.433 / 0.028 | 0.417 / 0.024 | 0.595 and 0.603 |
-| jobs.de D v3 | 65 (32.5%), 0.592 / 0.119 | 75 (40.1%), 0.625 / 0.143 | 0.416 / 0.059 | 0.415 / 0.053 | 0.540 and 0.540 |
-
-k-means silhouette in the UMAP space for k = 25, 50, 100, 200 and 400 (the k scan):
-
-| Board, input | 25 | 50 | 100 | 200 | 400 |
-| --- | --- | --- | --- | --- | --- |
-| lesjeudis A | 0.358 | 0.389 | 0.426 | 0.495 | 0.526 |
-| lesjeudis D | 0.512 | 0.497 | 0.575 | 0.622 | 0.570 |
-| jobbland A | 0.384 | 0.400 | 0.384 | 0.420 | 0.441 |
-| jobbland D | 0.362 | 0.413 | 0.527 | 0.610 | 0.560 |
-| jobs.de A | 0.404 | 0.404 | 0.434 | 0.473 | 0.497 |
-| jobs.de D | 0.440 | 0.469 | 0.536 | 0.618 | 0.615 |
-| lesjeudis D v3 | 0.408 | 0.444 | 0.474 | 0.473 | 0.455 |
-| jobbland D v3 | 0.351 | 0.387 | 0.407 | 0.430 | 0.439 |
-| jobs.de D v3 | 0.425 | 0.438 | 0.422 | 0.459 | 0.465 |
-
-**Reading.**
-
-- In the UMAP space HDBSCAN (eom or leaf) has the highest silhouette on all six combinations. k-means and Ward score 0.10 to 0.18 lower when they have to place every posting. On the postings that HDBSCAN eom kept, the gap shrinks to 0.00 to 0.07 (jobbland D: 0.704 and 0.703 against 0.707, no difference), so most of HDBSCAN's advantage is that it sets the hard-to-place postings aside as noise, which is the reason for reading the noise share next to it.
-- In the input space no method separates the postings well: every value is below 0.17, and k-means and Ward on jobbland A are slightly negative. Ward on the eom postings scores at or above eom in three of the six combinations (lesjeudis A 0.091 against 0.087; jobbland D 0.132 against 0.122; jobs.de A 0.111 against 0.086). HDBSCAN looks for clusters in the UMAP space, so the UMAP silhouette favours it by construction; the input-space values are the fairer comparison, and they do not separate the algorithms.
-- The silhouette does not identify the number of clusters. On input A the k-means curve rises with k on lesjeudis and jobs.de (lesjeudis 0.358 at k=25 to 0.526 at k=400) and is nearly flat on jobbland (0.38 to 0.44); on input D it peaks at k=200 on lesjeudis, jobbland and (marginally) jobs.de. Nothing in the curves favours fewer clusters than the 357, 144 and 71 of HDBSCAN eom, nor more. The cluster count therefore stays a consequence of the minimum cluster size (40) and is not tuned by silhouette.
-- Leaf selection gives 7 to 34 more clusters (jobbland 391 against 357) and 2 to 11 points more noise (jobs.de A 38.8% against 27.6%) for a silhouette that is 0.00 to 0.05 higher in the UMAP space (and about the same on D). The gain is the same kind of gain as dropping postings, so leaf is kept as a sensitivity check and not as the main setting.
-- Input D v2 scores higher than A on every board (UMAP 0.707 to 0.735 against 0.542 to 0.618) and has less noise (20 to 25% against 28 to 34%). D v3 does not: its silhouette (0.590, 0.627 and 0.592) is close to that of A and 0.08 to 0.14 below D v2, and its noise (29.8 to 36.3%) is back at the level of A. The extra tightness of D v2 therefore disappears once the common skills are dropped and the weights lowered, which fits the boilerplate explanation. D v3 also gives fewer clusters than A on every board (101 against 144, 282 against 357, 65 against 71). This is not evidence that D gives better occupation clusters: the title coherence test (above) found that on lesjeudis 89% of the postings of D v2 sit in clusters whose titles are no more alike than random ones, so the skill blocks make the geometry tighter without making the clusters occupations. Silhouette measures how compact the clusters are in the space they were built in, not whether they are occupations.
-
-**Example: why a tighter D is not a better D.** The silhouette asks whether postings sit close together in the space the clustering was built in. In input D that space is the title plus a block of ESCO and Lightcast skills, so two postings can be close because their skills match even when their titles are unrelated. Suppose a D v2 cluster holds these titles (constructed to show the mechanism, not taken from the data): "Chef de projet SAP", "Développeur Java", "Consultant cybersécurité" and "Ingénieur DevOps". All four postings come from the same consultancy and carry the same boilerplate skills (agile, English, project management, teamwork). In D they sit tightly together, so the silhouette is high. As occupations they are four different jobs, and the title lift of this cluster is near 0. D v2 clusters are therefore tighter, because the skill blocks pull postings together, and weaker as occupations. The boilerplate explanation is consistent with the D v3 result (dropping the skills present in more than 5% of postings brings the weak clusters on lesjeudis from 89% to 14%) but was not tested separately.
-
-**Decision.** Input A with HDBSCAN eom stays the main setting, for the reasons the supervisor asked to see: it has the highest UMAP silhouette on A for all three boards, the silhouette in the input space does not favour another algorithm, and the other algorithms have no noise class, so they place every posting (including the boilerplate and the one-off titles) in a cluster. HDBSCAN leaf and D v3 are kept as sensitivity checks. To be confirmed with the supervisor, together with the choice of A as the main input (open item 21).
-
-### Seeded variant (script 106, jobbland, 15 November)
-
-Method. For each named occupation the seed postings are those whose cleaned title matches the occupation pattern. An occupation with fewer than 5 matching titles is reported but not used as a centre. The centre is the mean of the (normalised) title embeddings of the seed postings; a posting joins when its cosine similarity to the centre reaches a threshold, and the seed postings always belong. The first idea was an absolute threshold (0.85 to 0.90), but the calibration shows it means little: multilingual-e5 gives a median similarity of 0.83 between a centre and any posting of the board, and the 99th percentile is 0.87 to 0.89. Each occupation therefore gets its own threshold, the larger of the lowest leave-one-out similarity of its seeds (each seed against the centre made from the others) and the background 99th percentile. The seeded variant was run on all three boards (15 November); only jobbland has enough matching titles.
-
-Why a relative threshold. The compression of cosine similarities is a known property of the model, not of our data: multilingual-e5 is trained contrastively with a temperature of 0.01, which pushes the similarities of any two texts into a narrow high band (the model card gives roughly 0.7 to 1.0), and short titles with the same prefix start from a high baseline. A threshold such as 0.85 or 0.90 is therefore not comparable between occupations, boards or models, and 0.85 would lie below the background median plus two spreads. The ranking of similarities is informative, the absolute value is not, so the threshold is taken from the background distribution of the board (99th percentile) and from the occupation's own seeds. The same compression is the reason the coherence filter of script 92 centres the embeddings on the board mean.
-
-*Background: why e5 similarities fall in a narrow high band.* Multilingual-e5 is trained contrastively: it learns to produce embeddings of sentences or passages so that texts with similar meanings (positive pairs) lie close together and texts with different meanings (negative pairs) lie further apart. The training process, the geometry of the embedding space and the way cosine similarity is computed can make the scores cluster in a relatively narrow range. E5 uses the InfoNCE loss with a temperature of 0.01, and its developers give this as the reason cosine similarities tend to fall between about 0.7 and 1.0; they recommend using the relative ordering of the scores, not their absolute values. The mechanism runs through the loss. In its simplified form, with positive-pair similarity s_p, negative-pair similarity s_n and temperature τ:
-
-`L = -log( e^(s_p/τ) / ( e^(s_p/τ) + e^(s_n/τ) ) ) = -log(P_positive)`
-
-The loss is the negative log of the probability the model assigns to the positive example: close to 0 when that probability is close to 1, larger when it is low. The temperature enters because it divides the similarities before the softmax. Take a positive pair at cosine 0.85 and a negative pair at 0.75:
-
-| Temperature | Probability of the positive | Loss |
-| --- | --- | --- |
-| 0.1 | 73.1% | 0.3133 |
-| 0.01 | 99.995% | 0.0000454 |
-
-The small temperature magnifies the gap between the two scores (0.10 becomes 10 in the exponent), so a gap of 0.10 is already enough to give the positive example almost all of the probability. The model is not pushed to spread the similarities over the whole range from -1 to 1, and all of them stay high. This is why a median similarity of 0.83 between a centre and any posting of the board is expected, and why the thresholds of the seeded variant are taken from the background distribution of each board.
-
-| Named occupation | Matching titles | Used as centre | Own threshold | Members at the threshold | Members beyond the matching titles (largest) |
-| --- | --- | --- | --- | --- | --- |
-| trade compliance officer | 5 | yes | 0.911 | 26 | Compliance Officer (3), Trade Marketing Representative (3), Compliance Manager (2) |
-| export control specialist | 8 | yes | 0.881 | 517 | Account Manager (65), Sales Manager (27), Business Controller (18) |
-| battery cell technician | 6 | yes | 0.907 | 45 | Electronics Engineer (7), Manufacturing Engineer (2) |
-| supply chain resilience analyst | 1 | no | | | |
-| semiconductor process engineer | 0 | no | | | |
-| critical materials specialist | 0 | no | | | |
-| reshoring program manager | 0 | no | | | |
-
-Number of members by similarity threshold (all postings of jobbland, 53,959):
-
-| Named occupation | Seed titles | >= 0.90 | >= 0.92 | >= 0.94 | >= 0.96 |
-| --- | --- | --- | --- | --- | --- |
-| trade compliance officer | 5 | 34 | 16 | 5 | 5 |
-| export control specialist | 8 | 60 | 13 | 10 | 8 |
-| battery cell technician | 6 | 147 | 11 | 7 | 6 |
-
-**Reading.**
-
-- Four of the seven occupations have fewer than 5 matching titles on jobbland (one title for supply chain resilience analyst, none for the other three) and cannot be seeded. This agrees with the title search and the skill-count check above: the named occupations are present only in handfuls.
-- Past the seeds, the extra members are mostly false positives. For trade compliance the 21 extra postings are general compliance officers, with "Trade Marketing Representative" caught on the word "trade". For export control, 509 of the 517 members are account managers, sales managers and business controllers: the seed titles are few (8), one of them is a code-like title that is no closer to the others than the background (0.860), and the centre drifts to the general sales and controller titles. The 0.881 threshold is too low for this occupation; at 0.92 there are 13 members and at 0.94 there are 10, which is the seeds plus two. For battery cell technician the extra members are electronics and manufacturing engineers and battery-system engineers: related, but not the same role. A seed of 5 to 8 titles is too small for a threshold to separate neighbouring roles.
-- The monthly share of the board does not grow for any of the three. Trade compliance officer: 0.52% in 2024-01 (one posting), 0.00 to 0.34% afterwards, 0.04% in 2026-08. Battery cell technician: 0.00 to 0.29% with 0 to 3 postings per month and no direction. Export control: 4.25% in 2024-01 falling to 0.4 to 2.0% (0.87% in 2026-08); since most of its members are false positives the series is not read as an occupation. The last month (2026-09) has few sampled days and is unreliable.
-- Against HDBSCAN: 10 of the 26 trade compliance members, 159 of 517 export control members and 22 of 45 battery members are noise. The trade compliance members that are clustered fall in cluster 263 (15 postings, security manager and compliance officer, read earlier as consultancy staffing); the battery members are spread (cluster 356 with 9, then 3, 3 and 2).
-
-Lesjeudis and jobs.de. No occupation reaches 5 matching titles on either board, so there is no centre and nothing to extend; the counts are the result.
-
-| Named occupation | jobbland | lesjeudis | jobs.de |
-| --- | --- | --- | --- |
-| trade compliance officer | 5 | 0 | 0 |
-| export control specialist | 8 | 3 | 1 |
-| supply chain resilience analyst | 1 | 0 | 0 |
-| semiconductor process engineer | 0 | 1 | 2 |
-| battery cell technician | 6 | 0 | 0 |
-| critical materials specialist | 0 | 0 | 0 |
-| reshoring program manager | 0 | 0 | 0 |
-
-Matching titles of each named occupation after the pattern correction (the cleaned titles of each board; jobbland with the inferred titles). Only jobbland has three occupations with 5 or more titles. On lesjeudis and jobs.de the named occupations do not appear as job titles at all, which agrees with the skill-based counts above (the skills mark a topic, not a role).
-
-**Result.** The seeded variant confirms HDBSCAN and the title search: none of the named occupations that can be seeded grows on jobbland, and the one with a long series (export control) is dominated by neighbouring titles. The method catches occupations with fewer than 40 postings, which HDBSCAN cannot form, but on these data it finds that the postings are too few and too close to their neighbours to be an occupation cluster. A seed of titles from a source that lists the occupation (an ESCO or O*NET label with synonyms) would be a firmer centre than 5 to 8 matching titles; this is not tried.
-
-### Seeding with the flagged clusters (script 106, 15 November)
-
-The supervisor's suggestion was to preserve chosen clusters by fixing them. Here the five flagged clusters of lesjeudis (33, 68, 137, 130, 139) and of jobbland (350, 291, 263, 266, 283) were used as seeds: the centre of each is the mean title embedding of its HDBSCAN members, and a posting joins when its similarity to the centre reaches the board's background 99th percentile for that centre (the floor from the seeds, the 10th percentile of their leave-one-out similarities, is lower in all ten cases, so the background decides). Members of the cluster always belong. The question is whether postings left in noise or in neighbouring clusters belong to the same occupation, and whether the extended cluster shows a rise that the HDBSCAN cluster does not.
-
-| Board, cluster | HDBSCAN members | Members after seeding | Of these in noise | What the extra postings are |
-| --- | --- | --- | --- | --- |
-| lesjeudis 33 (IVVQ) | 73 | 81 | 5 | more IVVQ and IVV titles: the same occupation |
-| lesjeudis 68 (embedded software) | 141 | 186 | 14 | embedded C and C++ developers: the same occupation, plus 10 "Software Development Engineer" |
-| lesjeudis 139 (cybersecurity) | 201 | 271 | 28 | cybersecurity architects, consultants, managers: the same occupation |
-| lesjeudis 137 (systems engineer) | 230 | 344 | 42 | IT systems, network and cloud engineers: a neighbouring occupation |
-| lesjeudis 130 (electronics, mechanical design) | 199 | 388 | 5 | 96 data engineers, 31 software engineers: false positives |
-| jobbland 350 (systems, security engineer) | 193 | 587 | 85 | data, software, automation and DevOps engineers: mostly false positives |
-| jobbland 291 (quality engineer) | 108 | 319 | 78 | inspection and maintenance technicians, supplier quality engineers and quality managers: partly the same |
-| jobbland 263 (compliance and IT manager) | 81 | 543 | 79 | account, project and sales managers: false positives |
-| jobbland 266 (process engineer) | 82 | 201 | 77 | production, plumbing and automation engineers: neighbouring |
-| jobbland 283 (project and IT manager, Swedish agencies) | 262 | 636 | 200 | postings whose title names "Swedish" or "Sweden" (Swedish-speaking customer service, a Swedish sales team): a cluster held by a word, not an occupation |
-
-**Reading.**
-
-- Seeding recovers real members where the cluster is tight and named by one expression (lesjeudis 33, 68, 139: +8, +45 and +70 postings, of which 5, 14 and 28 were in noise). Where the cluster is a broad family of engineers or managers (lesjeudis 130, jobbland 350, 263), the centre drifts to the general title and the extension is mostly false positives; the memberships of 543 and 587 are not read as occupations.
-- No extended cluster shows a sustained rise in the monthly share, except jobbland 283. The share of lesjeudis 33 stays between 0.08% and 0.94% and of 68 between 0.12% and 2.67% with no direction; 139 falls from 2.84% in 2024-08 to 0.38% in 2024-12 and returns to 1.2 to 1.9% from 2025-05; 137 holds 3.3 to 4.7% from 2024-11 to 2025-02 and falls to about 0.2 to 1.8% from March, the same wave that the employer check found; 130 stays between 1.0% and 3.0%. On jobbland 350 falls from 2 to 3% in early 2024 (few sampled days) to 0.3 to 1.3% in 2026, so the "clearly new" status of 350 in 2024-Q4 is not a rise; 291 and 266 stay flat (0.2 to 2.5% and 0.1 to 1.3%) and 263 stays near 1% with two peaks (2.87% in 2025-12 on 49 postings, 3.91% in 2025-06 on 5 postings).
-- Jobbland 283 rises from 0.05 to 0.9% (2024-12 to 2025-08) to 1.4 to 2.7% from 2025-09 to 2026-08 (4.00% in 2025-11 on 17 postings, 2.71% in 2026-02 on 63). This is the only rise, and it is not read as an emerging occupation: the cluster is held together by the words Swedish and Sweden and by place names in the titles ("our Stockholm office", "in Lund", "Västerås, Mälardalen"), and it grows in the same months in which the location text of the source changed to the bare country name (see the per-quarter HHI section). A plausible reading, not tested, is that part of the location information now sits in the title, so that the cluster partly measures the source change. The test is to count, by quarter, the titles of the board that contain a place name or "Swedish" (open item 27).
-
-**Result.** Seeding with the flagged clusters does not change the verdict. The occupations that can be extended (IVVQ, embedded software, cybersecurity on lesjeudis) keep a flat or falling share; the clusters that look like growth on jobbland (350 in 2024-Q4, 283 from 2025-09) are a coverage regime and a source change, not occupations. The method is useful as a check on cluster boundaries, not as a way to find emerging occupations.
-
-### Weight sensitivity on jobs.de and jobbland (15 November)
-
-The sensitivity run of question 2 (log and capped weights) was made on lesjeudis only; on 15 November it was repeated for jobs.de and jobbland on input A, quarterly, with the stricter rule and the default flag intensity. The transformed weights are rescaled to the same board total. Number of clusters "clearly new" per quarter under the inverse-probability weights (ht), log weights and capped weights (95th percentile):
-
-| Quarter | jobs.de: ht / log / cap | jobbland: ht / log / cap |
-| --- | --- | --- |
-| 2024-Q2 | | 0 / 1 / 0 |
-| 2024-Q3 | 0 / 0 / 0 | 3 / 5 / 3 |
-| 2024-Q4 | 5 / 7 / 7 | 74 / 33 / 75 |
-| 2025-Q1 | 0 / 0 / 0 | 2 / 1 / 2 |
-| 2025-Q2 to 2025-Q4 | 0 / 0 / 0 (Q2 not usable) | 0 / 0 / 0 in each |
-| 2026-Q1 | | 6 / 2 / 5 |
-| 2026-Q2 and 2026-Q3 | | 0 / 0 / 0 |
-
-Clusters clearly below the line now and clearly above it earlier (the joint-dip signal), jobbland: 2025-Q2 87 / 69 / 85, 2025-Q3 97 / 73 / 97, 2026-Q1 21 / 26 / 22; jobs.de 2025-Q1: 5 / 5 / 4. Clusters "returning after a dip" on jobbland in 2026-Q1: 37 / 26 / 45.
-
-**Reading.** The verdict does not depend on the weighting. On jobs.de the clearly new clusters appear only in 2024-Q4 (the first quarter after the start of the series), none in 2025-Q1, and the same clusters lead the eligible list under all three weightings (27, 12, 58, 11, 41, 65 and 53 in the top eight each time; the eighth is 70 under the inverse-probability weights and 69 under log and capped weights). On jobbland the pattern is the same under all three: a mass of clusters becomes "clearly new" in 2024-Q4 (the coverage jump), most clusters fall wholly below the line in 2025-Q2 and 2025-Q3 and return in 2026-Q1, and no cluster stays clearly new after 2026-Q1. What the weighting does change is the size of the 2024-Q4 count (74 under the inverse-probability weights, 33 under log weights, 75 under capped weights), because the log transformation compresses the very large weights of that quarter; the count is a coverage effect in all three, so the difference does not change the conclusion.
-
-**Which clusters.** The lists of clusters that are clearly new in any quarter were compared cluster by cluster (full reports, input A).
-
-- jobs.de: the five clusters of the inverse-probability run (53, 52, 30, 40 and 21) are all in the log and cap lists, which add two: cluster 25 (Produktionsmitarbeiter, Maschinenführer, Kranführer) and cluster 35 (Pflegefachkraft). Both are ordinary occupations, 0% flagged, clearly new in 2024-Q4 only and clearly above the line in 1 of 2 later periods, so they sit on the edge of the rule. No jobs.de cluster in any list has a flagged share above 25%.
-- jobbland, capped against inverse-probability weights: 81 of 85 clusters are the same (cap adds 21, 83, 205 and 256; it drops 54, 111, 116 and 218). Capping does not change the picture.
-- jobbland, log against inverse-probability weights: only 35 of the 85 clusters are shared, and log adds 7 (83, 159, 193, 206, 291, 303 and 348). Log weights give the early, low-volume quarters more weighted postings relative to 2024-Q4 (2024-Q3: 40,143 under log against 16,278 under the inverse-probability weights; 2024-Q4: 129,353 against 145,266), so more clusters are already above the line before 2024-Q4 and fewer are counted as becoming new in it (33 against 74). Of the seven, cluster 291 (quality engineer, 14% flagged, small) is the only one with a flagged share above 10%; 159 is the CE drivers cluster and 303 tire and plumbing fitters, both unflagged.
-- The one strongly flagged cluster on jobbland that is clearly new under the other two weightings is 350 (system and security engineers, 41% flagged, clearly new in 2024-Q4 and above the line in 3 of 8 later periods under cap). It is not clearly new under log. Its appearance in 2024-Q4 is the coverage jump, and its status depends on the weighting, so it is not read as emergence.
-
-Conclusion for the weighting question: the verdict "no validated emerging occupation" does not depend on the weighting on either board. The log transformation changes which clusters are labelled clearly new in 2024-Q3 and 2024-Q4 on jobbland, because the series starts in a quarter with very low volume, which shows how much of that label is the coverage regime and not the occupations.
-
-### Per-quarter HHI: what the files show (15 November)
-
-Script 93 writes `data/cluster/hhi_<board>_<input>.csv` with the normalised HHI per cluster and quarter, the number of placed postings, the unplaced share and a reliability flag (at least 50 placed postings). The files read here are the log and cap runs (jobs.de and jobbland, input A); the results are the same under both weightings, so the weighting does not matter for what follows. The files of the inverse-probability runs and of lesjeudis were not read.
-
-- **Per-quarter HHI of single clusters is mostly unreadable.** On jobbland only 272 of 3,927 cluster-quarters are reliable and only 52 have 50 or more placed postings. The flagged clusters have 1 to 24 placed postings in a quarter (cluster 350: 24 in 2024-Q4, 17 in 2026-Q1 and 17 in 2026-Q2; 291: 5, 16 and 9 in 2026-Q1, Q2 and Q3), so their HHI jumps between 0.05 and 1.0 from quarter to quarter without meaning. For the flagged clusters only the whole-period HHI is used (350: 0.14 to 0.15; 283: 0.05; 291: 0.06 to 0.07). There is therefore no readable change in regional concentration around AccelerateEU for a flagged cluster. The one exception is cluster 283 (project managers, 29% flagged), reliable in 2026-Q2 (64 placed) and 2026-Q3 (61): HHI 0.05 to 0.09, diffuse, with 0.03 to 0.04 in 2026-Q1 on 41 placed postings.
-- **jobbland: the share of unplaced postings collapses in the middle of the series.** The weighted share of postings without a NUTS-2 region is 7 to 14% from 2024-Q2 to 2025-Q2, then 91% in 2025-Q3, 79% in 2025-Q4 and 43% in 2026-Q1, and 3 to 4% from 2026-Q2 (log weights; cap weights 94%, 85% and 42%). The board-wide quarterly HHI in 2025-Q3 to 2026-Q1 rests on 386, 1,499 and 4,357 placed postings, against 7,570 in 2024-Q4, and is not comparable with the other quarters. This answers the question the mapping section left open (whether the dropped share changes over time): it does, strongly, and in the same period as the coverage dips of the series. Script 109 (location by quarter, run on all 53,959 postings) gives the cause, and it is neither a gap in our mapping nor missing ids: every posting is in the nuts2 file. Up to 2025-Q2 the location text names a place ("Stockholm", a municipality) and script 96 places 87 to 93% of the postings from it (learned place names, counties). From 2025-Q3 the location text is only the country: in 2025-Q3 2,416 of the 2,900 postings taken (and 3,701 of 5,405 in 2025-Q4) have the location "Sweden", and place names and counties disappear (method county 0 and learned 4 to 42 postings a quarter). The postings' own nuts2 field is the only route left, and it fills up gradually: 381 postings in 2025-Q3, 1,482 in 2025-Q4, 4,312 in 2026-Q1 and 7,259 (96%) in 2026-Q2. The unplaced share therefore follows how many postings carry the field in the quarter. The change is in the source data (the location schema of the postings changed between 2025-Q2 and 2026-Q2), not in our scripts; it is of the same kind as the change in the sector field.
-- **jobs.de: the regional mix concentrates in 2025-Q1 in every cluster.** The board-wide normalised HHI is 0.013 in 2024-Q3, 0.020 in 2024-Q4 and 0.037 in 2025-Q1 (log; the cap run gives the same). Of the 19 clusters with at least 30 placed postings in both 2024-Q4 and 2025-Q1, HHI rises in all 19 (median 0.029 to 0.076; cluster 12 from 0.037 to 0.073 with 187 and 183 placed postings, cluster 27 from 0.014 to 0.043). A small sample inflates HHI by about 1/n (0.03 for 30 postings, 0.005 for 183), which cannot explain a doubling in clusters whose number of placed postings did not change. A rise that appears in every cluster is a property of the board in that quarter (which regions or employers were collected), not of any occupation, which fits the earlier composition checks of script 97. From 2024-Q3 to 2024-Q4 the picture is mixed (15 of 24 clusters up). The cause was not checked; it belongs to the questions for Skillab (open item 11).
-- **Consequence for the deliverable.** The regional HHI is reported per cluster for the whole period with the unplaced share next to it. Per-quarter HHI is not used for any cluster with fewer than 50 placed postings in the quarter. The jobbland HHI of 2025-Q3 to 2026-Q1 and the jobs.de HHI of 2025-Q1 are not read as regional change. The whole-period HHI of a jobbland cluster mixes two ways of placing postings (place names up to 2025-Q2, the own field from 2026-Q2) and quarters with 40 to 94% unplaced; it is read with the unplaced share and, for a firm statement, on the windows 2024-Q2 to 2025-Q2 and 2026-Q2 to 2026-Q3.
-
-### Related work: how others define a new occupation
-
-Giabelli et al. (2021) present NEO, which takes the occupation mentions in 2,119,025 UK job ads of 2018 and finds those that are missing from ESCO, then proposes the ESCO concept under which each fits best (embeddings trained on the ads, a taxonomy-based similarity and a comparison of skills with RCA). Ten experts rated 49 candidate mentions and judged 43 of them (88%) to be new occupations. Their notion of new is relative to a taxonomy at one point in time, not to a threshold crossed over time, and the paper distinguishes a new occupation ("scrum master") from a new label of an existing one ("Android developer"). Our Occupation Emergence Rate is the second kind of definition. The ESCO-based check (do the skills of a cluster match an existing ESCO occupation?) is a candidate for Month 5, using `occupationSkillRelations_en.csv`. Reference: Giabelli, A., Malandri, L., Mercorio, F., Mezzanzanica, M., Seveso, A. (2021). NEO: A System for Identifying New Emerging Occupation from Job Ads. Proceedings of the AAAI Conference on Artificial Intelligence 35, 16035–16036. Only this two-page demo was read; the formal definitions are in Giabelli et al. (2020b), not yet read.
 
 ## Pipeline
 
@@ -710,6 +220,8 @@ TF-IDF has no time dimension, so it cannot say which terms are growing. It also 
 
 ## Open items
 
+**Status on 19 November.** The conclusion above does not depend on further analysis. Still to do: items 11 (questions to Skillab), 12 (send the finding to the supervisor and agree the Month 5 options), 19 and 21 (decisions with the supervisor), 22 (reading), and the writing. Not planned unless the supervisor asks: items 13, 15, 16, 18, 26 and the overlap check of all flagged clusters under item 20. The count of the French and English versions of the same posting on lesjeudis is also not planned; it is stated as a limitation.
+
 **Status on 13 November.** Items 1 to 3 are unchanged. Item 4 is settled: the rule is in the update above. Item 5 is done: the patterns were corrected and checked on jobbland. Item 7 is done: titles were inferred and checked (88%). Item 8 is done for the clusters read (lesjeudis 68, 139, 117, 67, 33, 107, 141; jobbland 291, 263, 232, 350); the cluster numbers listed in item 8 belong to the first clustering and no longer apply. Item 9 is done for jobbland; for lesjeudis the sampled days around InvestAI were not checked per window (49 sampled days in 2025-Q1 and 44 in 2025-Q2). Items 6 and 10 are only partly answered: the monthly lesjeudis series shows the gap months, but the late-September 2025 collapse was not checked on its own. Item 11 is open.
 
 1. Run `--coherence-only` for the three boards, read `docs/skill_coherence_<board>.md`, choose the threshold, then rerun D with tag v2.
@@ -739,7 +251,7 @@ TF-IDF has no time dimension, so it cannot say which terms are growing. It also 
 17. Done on 15 November: script 93 with the stricter rule on lesjeudis, jobs.de and jobbland (input A). Open: the same on D v3 for lesjeudis if the supervisor wants it.
 18. Run script 103 with `--board-wide` for jobs.de and, with `--employer-from text`, for jobbland, to see whether employer cycles also drive their series.
 19. Add a minimum-effective-employers condition to the eligibility of a crossing (Month 5) and decide with the supervisor.
-20. ESCO-overlap check of the clusters (skills of a cluster against the skills of the closest ESCO occupation, `occupationSkillRelations_en.csv`), after Giabelli et al. (2021) (Month 5).
+20. First pass done (script 115, 18 November) for the selected clusters; see the section above. Title route done (script 118, four languages, and script 119 for flagged postings, 19 November); open: an overlap check for all flagged clusters and a check of the trade-compliance titles.
 21. Confirm with the supervisor that input A is the main input, with D v3 and D v2 as documented sensitivity checks; run D v3 on the other boards only if the supervisor wants it (about an hour on Colab each).
 22. Read Giabelli et al. (2020b) for the formal definitions behind NEO.
 
@@ -751,3 +263,780 @@ TF-IDF has no time dimension, so it cannot say which terms are growing. It also 
 26. Check what changed in the regional mix of jobs.de in 2025-Q1 (HHI up in 19 of 19 clusters): top regions per quarter for the whole board.
 27. Done (script 111, 15 November): cluster 283 is a place-word cluster whose rise in 2026-Q1 coincides with a board-wide doubling of place words in jobbland titles (about 12% to 30%). Open: ask the source why the titles changed from 2026-Q1 (item 11).
 28. Done (script 111): board-wide baseline for lesjeudis, jobs.de and both jobbland windows.
+
+
+## Appendix: checks and diagnostics
+
+The checks below are in the order they were run. The conclusion above does not depend on any single one.
+
+### Place words in jobbland titles (script 111, 15 November): test of cluster 283
+
+Share of titles (weighted) with Sweden, Swedish, Sverige, svensk(a) or the name of a large Swedish city. 52,570 of 53,959 jobbland postings have a title.
+
+| quarter | board | cluster 283 | cluster 350 |
+|---|---|---|---|
+| 2024-Q1 | 12.6% | 0.0% | 0.0% |
+| 2024-Q2 | 13.9% | 88.0% | 6.1% |
+| 2024-Q3 | 14.0% | 44.3% | 6.7% |
+| 2024-Q4 | 11.9% | 100.0% | 8.1% |
+| 2025-Q1 | 11.4% | 0.0% | 12.8% |
+| 2025-Q2 | 9.3% | 72.8% | 0.0% |
+| 2025-Q3 | 14.1% | 14.9% | 7.7% |
+| 2025-Q4 | 15.0% | 86.4% | 9.5% |
+| 2026-Q1 | 30.5% | 73.8% | 23.6% |
+| 2026-Q2 | 31.2% | 75.5% | 35.3% |
+| 2026-Q3 | 30.2% | 67.0% | 34.6% |
+
+Reading:
+- On lesjeudis and jobs.de no title contains such a word (0.0% in every quarter), so the check says nothing there.
+- On jobbland the board's share is 9-15% until 2025-Q4 and doubles to about 30% in 2026-Q1, the quarter in which cluster 283 first crosses the threshold. Cluster 350 follows the same pattern (9.5% in 2025-Q4, 23.6% in 2026-Q1, 35% in 2026-Q2).
+- Cluster 283 is a place-word cluster in almost every quarter (67-100% where it has enough postings; the quarters at 0% and 100% have very few postings), and it is not a cluster of one occupation. Its rise in 2026-Q1 coincides with the board-wide doubling of place words in titles.
+- Reading: the 2026-Q1 rise of cluster 283 measures a change in what the titles contain, not a new occupation. The data do not show why the titles changed from 2026-Q1; the move of the location text into the title is one possible reason and has to be asked of the source (Skillab question, item 11). The verdict on cluster 283 is therefore an artefact of title wording.
+
+### Figures (script 110, 15 November)
+
+Files are in `docs/fig/`, one set per board. Each board has three figures: the quarterly share of the selected clusters, the Occupation Emergence Rate per quarter, and the regional concentration of the selected clusters.
+
+**Quarterly share of the selected clusters** (`lesjeudis_series.png`, `jobsde_series.png`, `jobbland_series.png`). Line = share of the board's postings in the cluster, band = interval C, quarters with at least 20 sampled days. Each panel has its own y-axis.
+
+![lesjeudis: quarterly share of the selected clusters](fig/lesjeudis_series.png)
+
+![jobsde: quarterly share of the selected clusters](fig/jobsde_series.png)
+
+![jobbland: quarterly share of the selected clusters](fig/jobbland_series.png)
+- Lesjeudis: none of the five clusters rises over the period. Clusters 33, 68 and 139 dip in 2025-Q1 and recover in 2025-Q2 (cluster 33 from about 0.04% to 0.63%), 137 peaks in 2024-Q4 to 2025-Q1 (about 1.9%) and falls, 130 falls from the first quarter and recovers slightly. The bands overlap across quarters for most of the series, so the movements are within the sampling uncertainty.
+- Jobs.de: clusters 65 and 69 fall from 2024-Q3 to 2025-Q1 (65 from about 4.9% to 1.8%, 69 from 3.6% to 0.9%). Only three quarters are usable.
+- Jobbland: cluster 350 and 266 move within a small share (below 1%). Cluster 283 is flat below 0.5% until 2025-Q4, then rises to about 0.9% in 2026-Q1 and 1.0% in 2026-Q3, with a band clearly above the earlier quarters. This is the rise explained by the change in the title wording (place-words table above).
+
+**Occupation Emergence Rate per quarter** (`lesjeudis_oer.png`, `jobsde_oer.png`, `jobbland_oer.png`). Number of clusters newly crossing the threshold and the number that are clearly new under the stricter rule, for the whole board (all eligible clusters, not only the selected ones). The first usable quarter is zero by construction.
+
+![lesjeudis: Occupation Emergence Rate per quarter](fig/lesjeudis_oer.png)
+
+![jobsde: Occupation Emergence Rate per quarter](fig/jobsde_oer.png)
+
+![jobbland: Occupation Emergence Rate per quarter](fig/jobbland_oer.png)
+- Lesjeudis: 9, 10, 11 and 4 clusters newly cross in 2024-Q4 to 2025-Q3; one is clearly new (2024-Q4).
+- Jobs.de: 28 cross in 2024-Q4 and 5 of them are clearly new; 1 crosses in 2025-Q1.
+- Jobbland: about 219 cross in 2024-Q4 and 74 are clearly new, which is the coverage jump (more postings, and clusters that were below the sampling floor before). A second spike of about 69 (6 clearly new) in 2026-Q1 coincides with the board-wide change in the title wording. These spikes are artefacts of the data and not waves of new occupations; the validated count remains zero.
+
+**Regional concentration of the selected clusters** (`lesjeudis_hhi.png`, `jobsde_hhi.png`, `jobbland_hhi.png`). Normalised HHI over NUTS-2 regions for the whole period, with the unplaced share and the number of placed postings above each bar.
+
+![lesjeudis: regional concentration of the selected clusters](fig/lesjeudis_hhi.png)
+
+![jobsde: regional concentration of the selected clusters](fig/jobsde_hhi.png)
+
+![jobbland: regional concentration of the selected clusters](fig/jobbland_hhi.png)
+- Lesjeudis: cluster 33 is the most concentrated (about 0.54), then 139 (about 0.29), 68 (about 0.19), 137 and 130 (about 0.11). Île-de-France is 45.7% of the board, so some concentration is expected; only 33 is clearly above it (regional table above).
+- Jobs.de: both clusters are near 0.03-0.04, i.e. spread over many regions.
+- Jobbland: 350 about 0.15, 266 about 0.11, 283 about 0.05. The unplaced shares (20-33%) are high because the figure uses the whole period, including the quarters in which the location text had collapsed (per-quarter HHI section); the regional table above uses the two valid windows and should be preferred.
+
+### UMAP map with the named occupations (script 112, 15 November)
+
+Files: `docs/fig/umap_lesjeudis.png`, `umap_jobsde.png`, `umap_jobbland.png`. Each map is a two-dimensional UMAP (cosine, 30 neighbours) of all title embeddings of the board (input A). Grey = all postings (a sample is drawn), colour = the selected clusters, open markers = postings whose cleaned title matches one of the seven named occupations (same regexes as script 92; never forced). The map is for illustration and validation. The clusters come from the ten-dimensional UMAP, and distances in two dimensions are only approximate.
+
+![lesjeudis: two-dimensional UMAP with the named occupations](fig/umap_lesjeudis.png)
+
+![jobsde: two-dimensional UMAP with the named occupations](fig/umap_jobsde.png)
+
+![jobbland: two-dimensional UMAP with the named occupations](fig/umap_jobbland.png)
+
+Named occupations found by title:
+
+| named occupation | jobbland | jobs.de | lesjeudis |
+|---|---|---|---|
+| trade compliance officer | 4 | 0 | 0 |
+| export control specialist | 8 | 1 | 3 |
+| supply chain resilience analyst | 1 | 0 | 0 |
+| semiconductor process engineer | 0 | 2 | 1 |
+| battery cell technician | 6 | 0 | 0 |
+| critical materials specialist | 0 | 0 | 0 |
+| reshoring program manager | 0 | 0 | 0 |
+
+Reading:
+- The seven named occupations are almost absent: 19 matching titles on jobbland (53,959 postings), 3 on jobs.de (12,243) and 4 on lesjeudis (18,625). Critical materials specialist and reshoring program manager are not found on any board, and semiconductor process engineer is not found on jobbland.
+- Selected clusters are compact groups on the map and separate from each other. Lesjeudis cluster 33 is a thin strand, which fits the one-employer template found in the employer check. Jobbland clusters 283 and 350 lie in different places, with 283 below and 350 above the group of trade-compliance and export-control titles.
+- On jobbland the trade-compliance (4) and export-control (7 of 8) titles form one tight group between clusters 283 and 350. The battery-cell titles (6) are scattered over five places and do not form a group. The one supply-chain-resilience title and one export-control title lie far from the others (the export-control title at the lower left, the supply-chain title below the main mass). On jobs.de and lesjeudis the few matches are scattered; the two jobs.de semiconductor titles lie right next to cluster 69, which is an ordinary occupation, so the map does not show them as a group of their own.
+- Where the matching titles sit (cluster assignment, script 112, second version; the first version counted noise as a cluster and is not used):
+
+| board | named occupation | matches | in noise | other placements |
+|---|---|---|---|---|
+| jobbland | trade compliance officer | 4 | 3 | 1 in cluster 263 |
+| jobbland | export control specialist | 8 | 7 | 1 in cluster 20 |
+| jobbland | supply chain resilience analyst | 1 | 0 | cluster 71 |
+| jobbland | battery cell technician | 6 | 4 | 1 in cluster 321, 1 in another cluster |
+| jobs.de | export control specialist | 1 | 0 | cluster 52 |
+| jobs.de | semiconductor process engineer | 2 | 0 | 1 in cluster 69, 1 in another cluster |
+| lesjeudis | export control specialist | 3 | 1 | 1 in cluster 108, 1 in another cluster |
+| lesjeudis | semiconductor process engineer | 1 | 0 | cluster 86 |
+
+- The tight group on the jobbland map (trade compliance and export control titles between clusters 283 and 350) is noise: 3 of 4 and 7 of 8 of those titles belong to no cluster, so HDBSCAN did not find it as a cluster. With 10 or fewer postings it is far below the minimum cluster size of 40. The same holds for the battery-cell titles (4 of 6 in noise).
+- No named occupation has more than one title in any cluster. They are therefore not found as clusters on any board, and no named occupation is validated or forced. This agrees with the finding that no cluster is validated as an emerging occupation: the occupations named in the brief exist in the titles but only as a handful of postings, below the size at which the method can see them.
+- Consequence for the method: a named occupation with fewer than about 40 postings cannot be detected by the clustering. It can only be tracked through the seeded variant (script 106) (seeded section above).
+
+### Check of the named-occupation terms against the Skillab API (script 113, 15 November)
+
+The two named occupations that no board shows in the titles (critical materials specialist, reshoring program manager) were also searched in the Skillab API itself, which holds all postings of the three sources and not only our sample of days. One query per source and keyword, up to 5 pages of 100 postings. "Postings" = postings returned by the API's keyword search; "title" = postings with a keyword word of more than three letters in the title (a weak test: any one word counts).
+
+| keyword | jobbland.se | lesjeudis.com | jobs.de |
+|---|---|---|---|
+| critical raw materials | 83 (3 in title) | 5 (1 in title) | 0 |
+| critical materials | 500, page limit reached (11 in title) | 116 (2 in title) | 5 (0 in title) |
+| rare earth | 69 (1 in title) | 5 (0 in title) | 0 |
+| reshoring | 0 | 0 | 0 |
+| nearshoring | 6 (0 in title) | 0 | 0 |
+| onshoring | 0 | 0 | 0 |
+| matières premières critiques | 0 | 0 | 0 |
+| kritische Rohstoffe | 0 | 0 | 0 |
+| kritiska råvaror | 0 | 0 | 0 |
+
+Reading:
+- Reshoring, nearshoring in a title and onshoring do not occur as titles in any of the three sources. Reshoring and onshoring are not found at all in the postings, and nearshoring appears in 6 jobbland postings (a business-development representative, a business analyst and payroll specialists), none with the word in the title.
+- The critical-materials terms return postings, but the titles are unrelated occupations (a PhD student in mining waste, a warehouse production planner, a mechanical design engineer, a finance consultant). The terms appear in the descriptions only. The search appears to match words anywhere in the text: "critical materials" returns more postings than "critical raw materials", which would not happen with an exact phrase. This is inferred and not checked in the API documentation.
+- The non-English phrases return nothing on all three sources. Many titles of the Swedish board appear in English in the API (for example "PhD student in Mining Waste Facility and Life Cycle Assessment") next to Swedish ones, so a zero for a Swedish, German or French phrase does not prove that the term is absent. The language handling of the API is a question for the Skillab team (item 11).
+- Result: the check agrees with the title matches in the clusters. The two named occupations are not found as job titles on these boards.
+
+### Can a cluster reach the presence line? (script 114, 18 November)
+
+Question: clusters need at least 40 collected postings, but the share line is 0.1% of the quarter's weighted postings. Are there clusters that exist but can never be present in a quarter? The unit matters. Cluster size counts collected postings over the whole period. The share is a ratio of the weighted postings of the quarter, and the weights mostly cancel in the ratio.
+
+On lesjeudis, 0.1% of a quarter is about 3 to 6 collected postings (3.0 to 5.7), or 11 to 14 weighted postings (the board has 11,000 to 14,000 weighted postings per quarter). The line of 100 weighted postings of the brief is therefore about 8 times higher than 0.1% of the board.
+
+| line | clusters reaching it in some quarter | of |
+|---|---|---|
+| share 0.05% | 144 | 144 |
+| share 0.1% | 144 | 144 |
+| share 0.2% | 144 | 144 |
+| share 0.5% | 103 | 144 |
+| weighted 40 | 142 | 144 |
+| weighted 100 | 59 | 144 |
+
+The smallest peak share of any cluster is 0.27% (quartiles 0.48%, 0.67% and 1.06%; maximum 3.65%). Postings taken per cluster over the period: minimum 40, median 72, maximum 420.
+
+Reading:
+- No cluster is excluded by the share line: every one of the 144 clusters reaches 0.1% in some quarter, and the smallest peak is almost three times the line. The worry that a 60-posting cluster can never be present does not apply to the share line, because 60 collected postings in one quarter of about 4,000 are 1.5% of the board.
+- It does apply to the count line: 85 of the 144 clusters (59%) never reach 100 weighted postings in any quarter. A fixed count of 100 therefore cannot see most clusters, which is one more reason the share version is the main one.
+- The consequence for the definition: on lesjeudis the 0.1% line does not select among clusters. A cluster "newly crosses" only when its share was below 0.1% in an earlier usable quarter, which for clusters with a peak of 0.3% to 1% means a dip, not an appearance. Whether the line should be higher (0.5% is reached by 103 of the 144 clusters) is a decision with no support in the literature and has to be made with the supervisor.
+- Jobs.de gives the same picture (71 clusters, 3 usable quarters). 0.1% of a quarter is 3.1 to 5.5 collected postings, or 7 to 19 weighted postings. All 71 clusters reach 0.05%, 0.1% and 0.2% in some quarter, 64 reach 0.5%, and 55 reach 100 weighted postings. The smallest peak share is 0.41% (quartiles 0.76%, 1.11% and 1.85%; maximum 11.75%). Postings taken per cluster: minimum 40, median 85, maximum 874. The count line of 100 excludes 16 of the 71 clusters, fewer than on lesjeudis, because the jobs.de board has fewer clusters of small weighted size.
+- Jobbland (357 clusters, 11 usable quarters) differs on the count line. 0.1% of a quarter is 0.7 to 8.2 collected postings, but the weighted total of the board swings from 788 (2024-Q1) to 166,360 (2026-Q1), so 0.1% is worth 1 weighted posting in 2024-Q1 and 145 to 166 in 2024-Q4, 2026-Q1 and 2026-Q2. A fixed 100 weighted postings is 12.7% of the board in 2024-Q1, 1.8% in 2024-Q2 and about 0.07% in 2024-Q4 and 2026-Q1. The count line therefore means something very different in each quarter, which fits the 174 clusters that newly cross it in 2024-Q4.
+- Lines reached on jobbland: share 0.05% by 357 of 357, share 0.1% by 356, 0.2% by 315, 0.5% by 129 (36%), weighted 40 by 357 and weighted 100 by 347. The 100-line excludes only 10 of the 357 clusters, because most quarters have a high weight per posting. Peak share of a cluster: minimum 0.09%, quartiles 0.26%, 0.40% and 0.64%, maximum 3.29%. Postings taken per cluster: minimum 40, median 70, maximum 703.
+- Across the boards the share line is the same at 0.1%: it is reached by 144 of 144, 71 of 71 and 356 of 357 clusters. Whether a higher line is needed is a decision for the supervisor. At 0.5% the share of clusters reaching it is 72% on lesjeudis, 90% on jobs.de and 36% on jobbland, so the same value would select very differently on the three boards.
+
+### ESCO overlap of the selected clusters (script 115, 18 November)
+
+Open item 20, first pass. For each cluster, the ESCO skills found in its postings (script 69b, threshold 0.60), weighted so that skills present on the whole board count little, are compared with the skills of every ESCO occupation (essential skills weight 1, optional 0.5). The score is the cosine similarity (0 to 1); the percentile is the share of the board's clusters with a lower best score. This follows the idea of Giabelli et al. (2021) that "new" is relative to the taxonomy, but it is a similarity of skill profiles and not their method.
+
+Scale of the scores: over all clusters the best score has median 0.13 (lesjeudis), 0.17 (jobs.de) and 0.14 (jobbland), and maximum 0.68, 0.49 and 0.44. The scores are low for every cluster, so the percentile is easier to read than the score.
+
+| board | cluster | best ESCO occupation (score, percentile) | top titles | reading |
+|---|---|---|---|---|
+| lesjeudis | 33 | ICT integration tester (0.08, 1%) | IVVQ engineer (integration, verification, validation, qualification) | lowest match of the board; skills are the defence and quantum block shared with 130 and 68, consistent with the one-employer (Thales) finding |
+| lesjeudis | 137 | race track operator (0.09, 10%) | Ingénieur Système, Qualité électronique | the best match is absurd; generic skills (creativity, simulation), so the low score reflects the skill profile |
+| lesjeudis | 130 | industrial engineer (0.15, 62%) | Electronics Engineer, Electronic Methods Engineer | known occupation; same defence and quantum skill block as 33 |
+| lesjeudis | 68 | embedded system designer (0.21, 85%) | Embedded Software Engineer | known occupation |
+| lesjeudis | 139 | cybersecurity risk manager (0.23, 92%) | Cybersecurity engineer, Network and Security Engineer | known occupation |
+| jobs.de | 69 | electrical engineer (0.12, 10%) | Electronics technician for industrial technology | ordinary occupation; some extracted skills are wrong ("develop pension schemes"), which lowers the score |
+| jobs.de | 65 | construction manager (0.22, 80%) | Project Manager, Senior Engineer Process Engineering | known occupation |
+| jobbland | 283 | operations manager (0.10, 20%) | Commercial manager, IT project manager, Country IT Manager - Sweden | generic management skills, including "write Swedish"; consistent with the place-word artefact |
+| jobbland | 350 | embedded systems security engineer (0.16, 63%) | System Engineer, Security Engineer | known occupation |
+| jobbland | 266 | production engineer (0.20, 81%) | Process Engineer, Material Engineer | known occupation |
+
+Reading:
+- Five clusters (lesjeudis 68 and 139, jobs.de 65, jobbland 350 and 266) have a best match at or above the 60th percentile with an ESCO occupation whose name fits the titles. These are known occupations by this measure.
+- The four clusters with the lowest matches (lesjeudis 33 and 137, jobs.de 69, jobbland 283) have low scores for reasons that are not novelty: a shared employer skill block (33), generic or wrongly extracted skills (137, 69) and generic management skills in a cluster held together by place words (283). The best-matching occupation of 137 (race track operator) shows that the score is unreliable there.
+- Therefore a low ESCO overlap does not identify a new occupation here. It tracks the quality of the skill profile. The check does not change the verdict: no cluster is validated as an emerging occupation.
+- Limits: the skills are extracted at a similarity threshold of 0.60 and contain errors; ESCO is the English classification, matched through skill URIs; the title route (comparing titles with the ESCO occupation labels in the four languages) has not been done.
+
+### Minimum cluster size and min_samples on lesjeudis (Colab grid, 18 November)
+
+HDBSCAN with `cluster_selection_method='eom'` fixed, input A, two seeds, the same embeddings. The baseline is the existing run (minimum cluster size 40, `min_samples` 10). "Named titles in a cluster" counts the 4 lesjeudis titles that match a named occupation (3 export control, 1 semiconductor) that are in a cluster and not in noise.
+
+| min_cluster_size / min_samples | clusters | noise % | median size | clusters under 60 postings | named titles in a cluster | relative validity | ARI between seeds |
+|---|---|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 144 | 30.9 | 72 | 51 | 3 of 4 | | |
+| 10 / 10 | 413 | 29.1 | 23 | 373 | 1 of 4 | 0.276 | 0.959 |
+| 20 / 10 | 259 | 28.8 | 40 | 184 | 2 of 4 | 0.269 | 0.934 |
+| 20 / 20 | 230 | 34.0 | 43 | 158 | 3 of 4 | 0.250 | 0.941 |
+| 40 / 40 | 103 | 36.6 | 79 | 31 | 1 of 4 | 0.273 | 0.958 |
+
+The baseline row was not produced by the grid, so it has no relative validity or seed agreement. ARI = agreement of the cluster labels of two seeds on the postings that are clustered in both (1 = identical).
+
+Reading:
+- A smaller minimum cluster size multiplies the clusters and hardly changes the noise. At `min_samples` 10 the noise is 29.1% (size 10), 28.8% (size 20) and 30.9% (size 40), while the clusters go from 144 to 259 and 413. At size 10, 373 of the 413 clusters have fewer than 60 postings. The supervisor already found the number of clusters too high, so this goes in the wrong direction.
+- `min_samples` is the lever for noise: 20/20 gives 34.0% and 40/40 gives 36.6%, and 40/40 has the fewest clusters (103) with a median size of 79.
+- Seed agreement is high in all four runs (0.93 to 0.96), so none is unstable.
+- The named-title test cannot decide anything: only 4 titles exist on lesjeudis, so 1 of 4, 2 of 4 and 3 of 4 are differences of one or two postings.
+- Nothing here gives a reason to change the main setting (40/10). The smaller sizes would be sensitivity runs only. Larger and denser settings (80/20 and 80/40) have not been run yet, and only lesjeudis has been run.
+
+**Second run of the grid, with 80/20 and 80/40 (lesjeudis, 18 November).** The notebook was run again with the two larger and denser settings added. The first four settings were run a second time as well, and their numbers are not identical to the first run.
+
+| min_cluster_size / min_samples | clusters | noise % | median size | clusters under 60 postings | named titles in a cluster | relative validity | ARI between seeds |
+|---|---|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 144 | 30.9 | 72 | 51 | 3 of 4 | | |
+| 10 / 10 | 413 | 28.9 | 24 | 371 | 2 of 4 | 0.279 | 0.953 |
+| 20 / 10 | 265 | 29.0 | 40 | 197 | 3 of 4 | 0.287 | 0.945 |
+| 20 / 20 | 227 | 33.4 | 44 | 157 | 1 of 4 | 0.252 | 0.963 |
+| 40 / 40 | 108 | 42.3 | 77 | 34 | 1 of 4 | 0.255 | 0.940 |
+| 80 / 20 | 57 | 36.0 | 157 | 0 | 2 of 4 | 0.205 | 0.838 |
+| 80 / 40 | 51 | 39.7 | 187 | 0 | 2 of 4 | 0.182 | 0.927 |
+
+Reading:
+- Larger sizes give the few clusters the supervisor asked for (57 and 51, against 144), but at a cost: noise rises to 36.0% and 39.7%, the relative validity falls from about 0.28 to 0.21 and 0.18, and the agreement between seeds is lowest at 80/20 (0.838). No cluster has fewer than 60 postings, so the small flagged groups cannot form.
+- The same setting gives different results in two runs. 40/40 gave 103 clusters and 36.6% noise in the first run and 108 clusters and 42.3% in the second; 20/10 gave 259 and 265 clusters; 10/10 gave 29.1% and 28.9% noise. The seed is fixed inside a run, so the difference comes from the Colab session (library versions or hardware are the likely cause; not checked). Differences between settings smaller than these run-to-run differences, such as 28.9%, 29.0% and 30.9% noise at 10/10, 20/10 and 40/10, are not differences between settings.
+- The flagged-postings table below uses the labels of this second run.
+
+**Same grid, flagged postings (script 116, second run, 18 November).** The seven named occupations are only examples and match 4 titles on lesjeudis, so the settings are also compared on the Month 3 flagged postings (tag intensity medium or higher): 2,048 flagged postings on lesjeudis. Flagged cluster = at least 10 flagged postings and a flagged share of at least 30%. Postings taken, not weighted. Same labels as the second run of the grid above.
+
+| min_cluster_size / min_samples | clusters | flagged postings in a cluster | flagged clusters | flagged postings in flagged clusters | top five by flagged share (size, share) |
+|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 144 | 1,355 (66%) | 14 | 659 (32%) | 33 (73, 92%); 140 (48, 60%); 68 (141, 55%); 61 (54, 52%); 130 (199, 51%) |
+| 10 / 10 | 413 | 1,373 (67%) | 33 | 662 (32%) | 281 (19, 100%); 397 (23, 96%); 267 (13, 92%); 127 (74, 92%); 359 (19, 89%) |
+| 20 / 10 | 265 | 1,323 (65%) | 28 | 655 (32%) | 253 (23, 96%); 76 (74, 92%); 183 (20, 85%); 219 (29, 83%); 224 (30, 80%) |
+| 20 / 20 | 227 | 1,212 (59%) | 21 | 577 (28%) | 78 (73, 92%); 200 (27, 89%); 106 (21, 86%); 177 (44, 70%); 172 (29, 66%) |
+| 40 / 40 | 108 | 1,096 (54%) | 9 | 400 (20%) | 33 (73, 92%); 64 (142, 55%); 107 (44, 52%); 100 (128, 52%); 62 (54, 50%) |
+| 80 / 20 | 57 | 1,305 (64%) | 5 | 410 (20%) | 30 (144, 56%); 45 (157, 54%); 44 (390, 48%); 47 (96, 34%); 5 (87, 31%) |
+| 80 / 40 | 51 | 1,142 (56%) | 4 | 293 (14%) | 36 (142, 55%); 48 (128, 52%); 33 (80, 48%); 49 (256, 43%); 14 (83, 29%) |
+
+Reading:
+- Smaller minimum sizes do not capture more flagged postings. The share in a cluster is 66% at 40/10, 67% at 10/10 and 65% at 20/10. The number of flagged clusters doubles or more (14 to 33 and 28), but the flagged postings they hold stay at 655 to 662 (about a third of all flagged postings). The extra flagged clusters are small pieces (13 to 30 postings with a flagged share of 80% to 100%) of the same postings, not new groups rescued from noise. Whether those pieces are splits of the large flagged clusters, repeated copies of the same posting or small real occupations has not been read.
+- The most flagged cluster is the same in every setting up to 40/40: 73 or 74 postings and 92% flagged (cluster 33 at 40/10, the Thales cluster). The cluster ids change between runs, so it is identified by its size and flagged share. At 80/20 and 80/40 it is gone: the top clusters then have 142 to 157 postings and a flagged share of 55%, which means the Thales cluster has been merged with other postings and its concentration diluted.
+- Larger and denser clusters lose the flagged groups. At 40/40, 54% of flagged postings are in a cluster and 9 flagged clusters remain, holding 20% of the flagged postings. At 80/20 and 80/40 there are only 5 and 4 flagged clusters, holding 20% and 14%, and no cluster has a flagged share above 56%. The idea that denser clusters separate new occupations more cleanly is not supported on lesjeudis.
+- About a third of the flagged postings are in noise in every setting up to 20/10, and only about a third are in clusters where flagged postings are a large part of the cluster. Most flagged postings sit in ordinary occupational clusters, which fits the tag marking the company text and not a new job.
+- The two runs agree: flagged clusters were 30, 29, 22 and 10 in the first run and 33, 28, 21 and 9 in the second for 10/10, 20/10, 20/20 and 40/40, so the flagged-posting results are less sensitive to the run than the noise share.
+- Decision: no setting beats 40/10 on coverage of the flagged postings. 20/10 would be the sensitivity run if the supervisor wants smaller pieces, and its extra small flagged clusters would have to be read first. If the supervisor wants fewer clusters, 80/20 and 80/40 give 57 and 51 but dilute the flagged groups and raise the noise. Jobs.de and jobbland have not been run.
+
+**What the small flagged clusters at 20/10 are (scripts 117 and 98, 18 November).** The five most flagged clusters at 20/10 were traced to the baseline run (script 117) and ten postings of each were read (script 98; 40 postings in total, random sample, flagged and unflagged, original titles and the start of the description).
+
+| 20/10 cluster | postings, flagged | where the postings sit at 40/10 | what the ten read postings are | reading |
+|---|---|---|---|---|
+| 253 | 23, 96% | all 23 in baseline cluster 137 (230 postings) | nine are CS / Sopra Steria nuclear engineering studies ("Nucléaire", Lyon, Aix, Grenoble: thermohydraulics, CFD, neutronics, Python developer), one is a mortar-munitions engineer (Thales, La Ferté Saint Aubin) | split of an existing cluster; one employer's studies team |
+| 183 | 20, 85% | all 20 in noise | all ten are CS / Sopra Steria project managers with the title ending "Défense & Sécurité" (anti-drone project lead, delivery, software lot manager), in several cities | employer template; not a new occupation |
+| 219 | 29, 83% | all 29 in noise | eight of ten are Sopra Steria IT or product managers with the same title ending "Défense & Sécurité"; one Thales systems manager; one renewable-energy IT manager (Albioma, tagged energy security, low) | employer template, mixed with two unrelated postings |
+| 224 | 30, 80% | 24 in noise, 6 in baseline cluster 133 (48 postings) | eight of ten are Thales radar and signal-processing engineers (Limours site); one Inria quantum/HPC trainer and one signal/radar engineer from a staffing firm, both untagged | a small real occupation (radar systems engineer), dominated by one employer |
+| 76 | 74, 92% | 73 of 73 in baseline cluster 33, one in 84 | not read; same postings as the Thales cluster 33 | same cluster as the baseline, not a new one |
+
+Reading:
+- None of the five is a group of postings that the baseline missed and that looks like a new occupation. Two (183, 219) are one employer's postings with a shared title ending, which is also what the flag picks up (the company text mentions defence, security, critical systems). One is a split of a larger cluster (253), one is a real but small and employer-dominated occupation (224), and one is the baseline cluster again (76).
+- 183 and 219 are in noise at 40/10 only because each has fewer than 40 postings. At 20/10 they become clusters because the employer repeats the same template, and the high flagged share is the template's wording, not the occupation. This is the same pattern as the employer waves found earlier (script 103).
+- Several postings in 253, 183 and 219 appear twice, once in French and once in English ("Chef.fe de projet", "Chief /FE project Fight anti -mealing"; the English versions read like machine translation). The boards store the translation as a second posting, which inflates counts of one employer's postings. This has not been counted.
+- The two groups that 20/10 finds in noise (183, 219) hold 49 postings and the radar group (224) holds 24 more. All 73 are the flagged postings of one or two employers. Smaller minimum sizes therefore do not widen the set of occupations; they separate employer templates.
+- Decision: keep 40/10. A small cluster at a smaller size is only worth keeping if it passes the employer check (script 103) and has more than one employer; none of these five does, except the radar group in part (Thales plus two others, two of the ten).
+- Not done: the other 23 flagged clusters at 20/10 and all 33 at 10/10 have not been read; only the five largest by flagged share. Jobs.de and jobbland have not been run.
+
+**Same grid on jobs.de (Colab, 18 November, one run).** Input A, eom, two seeds per setting. The baseline row comes from the existing run and has no validity or seed agreement in this table.
+
+| min_cluster_size / min_samples | clusters | noise % | median size | clusters under 60 | named titles in a cluster | relative validity | ARI between seeds |
+|---|---|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 71 | 27.6 | 85 | 17 | 3 of 3 | | |
+| 10 / 10 | 251 | 35.0 | 25 | 231 | 0 of 3 | 0.242 | 0.837 |
+| 20 / 10 | 154 | 34.0 | 39 | 114 | 2 of 3 | 0.262 | 0.744 |
+| 20 / 20 | 132 | 35.7 | 40 | 92 | 2 of 3 | 0.312 | 0.855 |
+| 40 / 40 | 42 | 24.3 | 78 | 10 | 3 of 3 | 0.412 | 0.515 |
+| 80 / 20 | 34 | 31.0 | 171 | 0 | 3 of 3 | 0.216 | 0.403 |
+| 80 / 40 | 21 | 23.0 | 226 | 0 | 3 of 3 | 0.110 | 0.782 |
+
+- Smaller sizes raise noise on jobs.de (34% to 36%, against 27.6% at the baseline), unlike lesjeudis where noise barely moved. The clusters become small (median 25 to 40 postings) and the named titles drop out of clusters (0 of 3 at 10/10); there are only three named titles on this board, so this is weak evidence.
+- 40/40 has the highest relative validity (0.412), fewer clusters (42) and lower noise (24.3%) than the baseline, but the two seeds agree poorly (ARI 0.515). 80/20 agrees least (0.403) and 80/40 has the lowest validity (0.110). No setting is better on all three measures.
+- With one run per setting and the run-to-run variation seen on lesjeudis (up to six points of noise at 40/40), differences of a few points are not differences between settings. The seed agreement (ARI) is the more reliable signal here, and it favours the small sizes (0.74 to 0.86) over 40/40 and 80/20.
+- The comparison on flagged postings (script 116) has not been run for jobs.de; the decision to keep 40/10 for this board waits for it.
+
+**Same grid on jobbland (Colab, 18 November, one run, three settings).** Input A, eom, two seeds per setting. Only 20/10, 40/40 and 80/20 were run because each setting takes 5 to 15 minutes on 53,959 postings.
+
+| min_cluster_size / min_samples | clusters | noise % | median size | clusters under 60 | named titles in a cluster | relative validity | ARI between seeds |
+|---|---|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 357 | 34.3 | 70 | 123 | 5 of 19 | | |
+| 20 / 10 | 636 | 33.9 | 43 | 459 | 6 of 19 | 0.268 | 0.905 |
+| 40 / 40 | 275 | 41.8 | 73 | 90 | 4 of 19 | 0.328 | 0.949 |
+| 80 / 20 | 133 | 38.0 | 163 | 0 | 2 of 19 | 0.231 | 0.831 |
+
+- Noise at 20/10 (33.9%) equals the baseline (34.3%), as on lesjeudis. The extra clusters (636 against 357) are small pieces: 459 of them have fewer than 60 postings.
+- 40/40 gives fewer clusters (275) but 41.8% noise, and has the highest validity (0.328) and the best seed agreement (0.949). 80/20 gives 133 clusters (none under 60), but noise is 38.0% and only 2 of the 19 named titles remain in a cluster. The named titles do not move toward clusters at larger sizes.
+- Seed agreement is high at all three settings (0.83 to 0.95), higher than on jobs.de, so the settings are more stable on this board.
+- Reaching a number of clusters near the supervisor's wish (a few dozen) would need sizes above 80, with more noise and without the named titles. Jobbland therefore stays at 40/10 for the same reason as lesjeudis, and the flagged-postings comparisons below.
+
+**Same grid on jobs.de, flagged postings (script 116, 19 November).** 44 flagged postings (tag intensity medium or higher); flagged cluster = at least 10 flagged postings and a flagged share of at least 30%.
+
+| min_cluster_size / min_samples | clusters | flagged postings in a cluster | flagged clusters | flagged postings in flagged clusters |
+|---|---|---|---|---|
+| 40 / 10 (baseline) | 71 | 37 of 44 (84%) | 0 | 0 |
+| 10 / 10 | 251 | 22 (50%) | 0 | 0 |
+| 20 / 10 | 154 | 25 (57%) | 0 | 0 |
+| 20 / 20 | 132 | 25 (57%) | 0 | 0 |
+| 40 / 40 | 42 | 31 (70%) | 0 | 0 |
+| 80 / 20 | 34 | 31 (70%) | 0 | 0 |
+| 80 / 40 | 21 | 31 (70%) | 0 | 0 |
+
+- No setting produces a flagged cluster; the highest flagged share in any cluster is 2% (cluster 27 at 40/10, 876 postings). With 44 flagged postings the board cannot separate settings by this rule.
+- The baseline keeps the most flagged postings in clusters (84%). Smaller sizes lose them to noise (50% to 57%) and larger sizes lose some as well (70%). This is a small count (7 to 22 postings), so it supports keeping 40/10 only weakly.
+
+**Same grid on jobbland, flagged postings (script 116, 19 November).** 1,123 flagged postings (tag intensity medium or higher); flagged cluster = at least 10 flagged postings and a flagged share of at least 30%; postings taken, not weighted.
+
+| min_cluster_size / min_samples | clusters | flagged postings in a cluster | flagged clusters | flagged postings in flagged clusters | top three by flagged share (size, share) |
+|---|---|---|---|---|---|
+| 40 / 10 (baseline) | 357 | 628 (56%) | 1 | 26 (2%) | 266 (82, 32%); 350 (193, 30%); 356 (60, 27%) |
+| 20 / 10 | 636 | 669 (60%) | 3 | 94 (8%) | 402 (29, 34%); 491 (83, 33%); 603 (190, 30%) |
+| 40 / 40 | 275 | 566 (50%) | 1 | 54 (5%) | 273 (149, 36%); 229 (63, 27%); 191 (51, 25%) |
+| 80 / 20 | 133 | 594 (53%) | 1 | 25 (2%) | 95 (81, 31%); 132 (235, 27%); 129 (81, 25%) |
+
+- No setting finds a concentrated group of flagged postings on jobbland. The highest flagged share in any cluster is 36%, against 92% on lesjeudis; flagged postings are spread thinly across many clusters in every setting.
+- 20/10 gives the most flagged clusters (3) and holds 8% of the flagged postings, against 2% at the baseline. The three clusters (402, 491, 603) have flagged shares of 30% to 34%, just over the line, and have been read (below); they are the same postings as baseline clusters 204, 266 and 350.
+- 40/40 and 80/20 hold fewer flagged postings in clusters (50% and 53%, against 56%), consistent with their higher noise.
+- Decision: keep 40/10 on jobbland. The result agrees with lesjeudis: no setting beats the baseline on flagged-posting coverage.
+
+**What the three flagged clusters at 20/10 on jobbland are (scripts 117 and 98, 19 November).** Traced to the baseline, then ten postings of each read (random sample, original titles).
+
+| 20/10 cluster | postings, flagged | where the postings sit at 40/10 | what the ten read postings are | reading |
+|---|---|---|---|---|
+| 402 | 29, 10 flagged | 28 in baseline cluster 204 (182 postings), 1 in noise | systems and electronics engineers (Systemingenjör, Elektronikingenjör, test engineers) at ten different employers: three defence-related (MilDef, Combine Control Systems, Knightec), the rest not (Swegon, HiQ, CBRE, a municipality, FOI, a railway test role) | a piece of baseline cluster 204 (not one of the selected clusters); mixed employers and sectors |
+| 491 | 83, 28 flagged | 80 in baseline cluster 266 (82 postings), 3 in noise | process, materials and safety engineers (pharma process engineer, materials engineer, additive manufacturing for Saab, SHE specialist, process developer) at ten different employers; three of the ten flagged | the baseline cluster 266 again (80 of its 82 postings) |
+| 603 | 190, 60 flagged | 180 in baseline cluster 350 (193 postings), 10 in noise | system, security and functional-safety engineers (security engineer, system engineer, hardware security researcher) at ten different employers; none of the ten flagged | the baseline cluster 350 again (180 of its 193 postings) |
+
+- None of the three is a new group. Two of them (491 and 603) are the selected clusters 266 and 350 at the baseline (95% to 98% of their postings), and 402 is a piece of a larger baseline cluster. The extra flagged clusters at 20/10 on jobbland are therefore the same postings as before, not newly found ones.
+- The postings in all three come from many different employers (ten in ten in each sample), unlike the lesjeudis small clusters, which were one employer's template. The flagged share in 266 and 350 is thus not an employer wave. What the samples show is a mixed generic engineer title (process, materials, system, security, functional safety) in which a minority of postings carry a defence or critical-materials tag (28 of 83 and 60 of 190).
+- Only ten postings per cluster were read; the verdicts for 266 and 350 in the selected-cluster table are unchanged.
+- Decision: keep 40/10 on all three boards.
+
+### Posting titles against ESCO occupation labels (script 118, 19 November)
+
+Every posting title (postings with a title only) was compared with all ESCO occupation labels, preferred and alternative, using the same multilingual-e5-large model as the title embeddings. For each posting the best label and its cosine were kept; for each cluster the median cosine, the share of exact label matches and the percentile of the cluster's median among the board's clusters are reported. Labels used: 74,771, in English, French, German and Swedish. A first run with English and French only (49,082 labels) is described where it differs. Cosines of this model are compressed (board medians 0.90 to 0.92), so clusters are compared with each other, not with a fixed cut-off.
+
+| board | postings with a title | distinct titles | median best cosine | exact label match |
+|---|---|---|---|---|
+| lesjeudis | 18,625 | 12,747 | 0.912 | 8% |
+| jobs.de | 12,243 | 9,233 | 0.918 | 9% |
+| jobbland | 52,570 | 39,965 | 0.899 | 11% |
+
+Selected clusters (four languages):
+
+| board | cluster | titles | median cosine | exact match | percentile among clusters | titles and best ESCO labels |
+|---|---|---|---|---|---|---|
+| lesjeudis | 33 | 73 | 0.892 | 0% | 10 | "IVVQ engineer"; best labels "ingénieure AV", "LGV technician": no ESCO label for the role |
+| lesjeudis | 68 | 141 | 0.915 | 4% | 42 | Embedded software engineer; ESCO "embedded software developer" |
+| lesjeudis | 137 | 230 | 0.929 | 5% | 67 | Ingénieur système; ESCO "ingénieur système" |
+| lesjeudis | 130 | 199 | 0.922 | 9% | 54 | Electronics engineer; ESCO "IT hardware engineer", "electronic engineer" |
+| lesjeudis | 139 | 201 | 0.927 | 9% | 65 | Cybersecurity engineer; ESCO "cybersecurity engineer" |
+| jobs.de | 65 | 321 | 0.912 | 4% | 30 | Project manager (electrical, process engineering); ESCO "construction (project) manager" |
+| jobs.de | 69 | 269 | 0.927 | 7% | 70 | Electronics technician; ESCO "industrial electronics engineering technician" |
+| jobbland | 350 | 185 | 0.926 | 14% | 66 | System engineer, Security engineer; ESCO "system engineer", "cyber security engineer" |
+| jobbland | 266 | 79 | 0.928 | 24% | 68 | Process engineer; ESCO "process engineer" |
+| jobbland | 283 | 262 | 0.863 | 0% | 6 | no common title: "Commercial manager - Fastighets AB Balder", "Project manager IT for our Stockholm office", "Country IT Manager - Sweden ..." |
+
+Reading:
+- Nine of the ten selected clusters have titles that sit on an existing ESCO occupation (median cosine above the board median in seven; percentile 30 to 70). By the title route they are existing occupations, not new ones. This agrees with the verdicts that none of the clusters is a validated new occupation. Jobs.de cluster 65 is slightly below its board median (0.912 against 0.918) because its titles are broad project-manager titles.
+- Cluster 33 (lesjeudis, Thales) is the clearest case of a role name that ESCO does not carry: "IVVQ" (integration, verification, validation, qualification) is employer jargon, and its best labels are unrelated. It is a lack of a label, together with one employer (script 103), not a new occupation.
+- Cluster 283 (jobbland) is among the lowest on its board (percentile 6) and has no recurring title; its titles mix employer names, places and roles. This agrees with the place-word result (script 111): the cluster is defined by title wording, not by a role.
+- **Language effect (first run against second run).** With English and French labels only, the lowest clusters on jobs.de and jobbland were largely German and Swedish titles whose best labels were French ("infirmier spécialiste", "assistant pédagogique en école maternelle"). With the German and Swedish labels added, the board medians rise (jobs.de 0.901 to 0.918, jobbland 0.892 to 0.899; lesjeudis 0.911 to 0.912), and the Swedish care, preschool and summer-job clusters (Undersköterskor, Förskollärare, Timvikarier, Sommarjobb) and the German care and sales clusters leave the lowest-15 lists. The earlier low scores of these clusters were the language gap, not novelty. Percentiles of selected clusters moved with the board medians (jobs.de cluster 65 from 65 to 30).
+- What remains in the lowest-15 lists after the second run is title wording, not occupations. Jobbland: Willys store-employee and team-manager titles (four clusters, one employer's template), "Spontaneous application", "Master thesis", summer temps, marketing titles ("Get a good start to your career", "No experience required"), course codes (cluster 20), DHL Freight and prison-service titles. Jobs.de: wages and working hours in the title ("Forklift driver in 3 shifts (€14.15/h)"), "Training as an industrial clerk", "career changer", "Postman - mini job", branch-manager titles. Lesjeudis: PhD and post-doc positions (134), apprenticeship ("Alternation") developers (72), Java/Angular tech leads and full-stack developers, SAP consultants, "Boss the project it" (an employer's wording, 91), Product Owner (3) and Tech Lead (49, 50). Several of the lesjeudis ones are real roles that ESCO has no clean label for (Product Owner matches "products", Tech Lead Java matches "Technischer Leiter"), so the score marks a gap in ESCO's list, not a new occupation of the period; none was tested against the period (earlier postings) or against more than one employer. Some jobs.de titles are English renderings of German titles ("Plant mechanic SHK", "Commercial employee"), which lowers the score; this was not checked.
+- One group on jobs.de looks like a real new type of job: cluster 10, AI prompt evaluators (for example with Japanese), German-speaking customer support in Athens, trust and safety analysts. It remains the lowest-scoring cluster of the board in both runs (0.856; best label "AI-expert"). It is outsourced language work, not part of the deglobalization channels, and is noted as an example of what the method can pick up.
+- Flagged against other postings (script 119, 19 November; tag intensity medium or higher; four-language run):
+
+| board | group | postings | median cosine | share ≥ 0.92 | exact label match |
+|---|---|---|---|---|---|
+| lesjeudis | flagged | 2,048 | 0.909 | 36% | 5% |
+| lesjeudis | other | 16,577 | 0.913 | 41% | 8% |
+| jobs.de | flagged | 44 | 0.920 | 50% | 2% |
+| jobs.de | other | 12,199 | 0.918 | 48% | 9% |
+| jobbland | flagged | 1,087 | 0.906 | 38% | 10% |
+| jobbland | other | 51,483 | 0.898 | 31% | 11% |
+
+  - The titles of flagged postings are as close to ESCO labels as the other titles (lesjeudis 0.909 against 0.913, jobs.de 0.920 against 0.918, jobbland 0.906 against 0.898, higher). Flagged postings do not have unusual job titles; this fits the earlier reading that the flag marks company text and sector wording in ordinary jobs, not new occupations. The English and French run gave the same picture.
+  - Trade compliance: lowest channel on lesjeudis (0.904, 21% at or above 0.92, 19 postings) and on jobbland (0.885, 13%, 69 postings). On jobs.de the gap disappears once the German labels are added (0.924, 50%, 8 postings). So the gap holds on two boards, with small counts. Channels with fewer than 30 postings are not interpreted. The titles were read (script 120, 19 November; lists in `docs/channel_titles_<board>_trade_compliance.md`):
+    - Lesjeudis (19 postings, 18 distinct titles): about seven are cybersecurity compliance consultants (GRC, "conformité accompagnement homologation", compliance manager cybersécurité), two are French customs-directorate project titles ("DGDDI (DG-SI1) ...", the lowest scores, 0.847 and 0.868), three are export control roles ("Software Engineer - Regulatory and Export Control Specialist", "PMO Import-Export Control", "Export control manager"), and the rest are ordinary titles (SAP Basis, Buyer Program, Digital Domain Architect). The export control titles are matched to "software engineer", "Import-/Exportmanager" and "export manager" (0.883 to 0.941): ESCO has the export manager family but no label for an export control specialist. Only three or four postings are trade-control roles, so the low median reflects the mix of titles, not a new occupation.
+    - Jobbland (69 postings, 67 distinct titles): about 25 are postings of one public employer, the Swedish Customs Service (Tullverket): group managers, customs inspectors, intelligence officers, detectives, IT analysts, with titles that carry the employer name ("... - The Swedish Customs Service", "The Customs Administration seeks ..."). They score 0.85 to 0.89 and 16 of the 69 sit in cluster 283, the cluster whose growth in 2026-Q1 coincides with the place words in titles (script 111). Their best ESCO labels are customs officer, customs inspector and customs compliance manager in various goods, so ESCO covers the occupation; the low scores come from the employer suffix and translated wording. The private-sector trade roles (Export Control Analyst, Global Trade Compliance Leader or Representative, Customs and Export Control Specialist, International Trade Licence Officer, Product Classification Engineer, export managers; about 15 postings, mostly intensity high) score 0.88 to 0.97 around the board median and match ESCO labels such as "assistant export specialist", "senior international trade compliance manager" and "export manager".
+    - Reading: the trade-compliance gap is not a set of new occupations. On lesjeudis it is a mix of cybersecurity compliance titles and a customs directorate; on jobbland it is one authority's wording. The one concrete result is the link between the Customs Service postings and cluster 283, which should be checked in the employer table (script 103) before 283 is described further. Checked in script 121 (below).
+    - Swedish Customs Service postings in cluster 283 by quarter (script 121, 19 November; collected postings, title or first 1,500 characters of the description matching Tullverket, Swedish Customs, Customs Administration or Customs Service):
+
+| quarter | cluster 283 postings | of which Customs Service | board postings with the wording | of which in 283 |
+|---|---|---|---|---|
+| 2025-Q2 | 9 | 2 (22%) | 6 | 33% |
+| 2025-Q3 | 13 | 6 (46%) | 13 | 46% |
+| 2025-Q4 | 16 | 0 | 1 | 0% |
+| 2026-Q1 | 70 | 3 (4%) | 5 | 60% |
+| 2026-Q2 | 68 | 7 (10%) | 8 | 88% |
+| 2026-Q3 | 65 | 7 (11%) | 11 | 64% |
+
+    - The Customs Service postings do not explain the jump of cluster 283. The cluster grows from 16 postings in 2025-Q4 to 70 in 2026-Q1, and only 3 of the 70 are Customs Service postings; over the whole period 26 of its 262 postings (10%) match. Before the jump the cluster was small and partly Customs (8 of 22 postings in 2025-Q2 and Q3), so the Customs postings were its early core, not the source of its growth.
+    - The wording of the Customs titles changes in the same period: in 2025 they read "The Customs Administration seeks ...", in 2026 "The Swedish Customs Service is looking for ..." (the English rendering of the title). In 2026 most of the board's few Customs postings (60% to 88%) are in 283. This fits the place-word result and the title-wording change from 2026-Q1: the cluster collects titles of one wording, not one occupation. The counts are small (1 to 13 board matches per quarter) and the cause of the wording change is not known (see the Skillab questions).
+- Limitations: e5 cosine is a similarity of embeddings, not a match decision; a title with an employer suffix or a long qualifier scores lower; one run per language set.
+
+### Update of 13 November: results, candidates and conclusion
+
+**Where Month 4 stands.** No validated emerging occupation cluster has been found on the three boards. The 6 to 10 clusters chosen by size and flagged share, the selection step (c) in the plan sent to the supervisor, can still be delivered with their series, HHI and a verdict on emergence; none of them shows validated emergence. Two lesjeudis candidates (clusters 68 and 139) were tested against employer mix and coverage and do not hold. What the data do support is a defence-flagged engineering and cybersecurity core on lesjeudis that nvertheless results from postings of three or four employers, a flagged footprint that moves between employers over time, and the seven named occupations as counts below ten postings each. The numbers under "Results so far" and in the first cluster series below come from the first clustering, before title cleaning and title inference, and are superseded by this section. **Added on 14 November:** with a stricter rule for "clearly new" (wholly below the threshold in every earlier quarter, not only the previous one) the five lesjeudis "clearly new" clusters become one (DevOps, French titles), and that one is a posting campaign of one employer (Sopra Steria). Clusters 68 and 139, and the Java and systems administrator clusters, were at or near the threshold in 2024-Q3, dropped in 2025-Q1 with the posting cycles of individual employers (Capgemini, CGI, Thales) and returned in 2025-Q2. We find no new occupation cluster on lesjeudis (input A). **Added on 15 November:** the same rule on jobs.de and jobbland (input A) gives the same answer: the "clearly new" clusters are ordinary occupations or board and coverage effects, none is flagged above 3% (jobs.de) or is an emerging flagged cluster (jobbland); see the section "Update of 14 November".
+
+**Titles.** Title cleaning (script 90) has a second stage: lead-in sentences, contract, hours and date fillers, references and addresses, trailing places and, on boards where capitalised words are under 55% of title words, an employer tail ("for", "to", "at", "till", "för", "hos", "chez" followed by a proper name). The first stage had left place and employer words in many titles, and the first clusters formed around them. The 1,389 title-less jobbland postings (December 2025 to January 2026) got an inferred title from the description with Qwen 2.5 7B (script 99). On a manual check (i.e. human classifier on a sample), 88% of inferred titles named the same occupation as the real one (Wilson 95% interval 80% to 93%). 1,385 postings got a title and 4 stay without one (UNKNOWN). Clusters 171 and 168 of the first run no longer exist.
+
+**Reclustering.** Input A was rerun on the cleaned and inferred titles: jobbland.se 357 clusters (34.3% noise), lesjeudis.com 144 (30.9%), jobs.de 71 (27.6%). Input D gave 358, 139 and 80 clusters (35.2%, 28.9% and 29.5% noise) but is not used for selection, because D v1 is withdrawn.
+
+**Named occupations, checked directly on jobbland (script 101).** The regexes were corrected after the first check produced false matches: solar-cell sellers matched "battery cell technician" (11 of 17 hits), "individual users" matched "dual use", and "Raw Material Manager" matched critical materials. After the correction, jobbland holds 5 trade compliance titles, 7 genuine export control titles (a further hit is a customs course code), 6 battery cell titles, 1 supply chain resilience hit (a doctoral student post, not an occupation) and none for semiconductor process engineer, critical materials specialist and reshoring program manager. A cluster needs 40 postings, so none of these can form one; they are reported as counts by quarter. The earlier check of lesjeudis and jobs.de found 0 to 1 per occupation and was not rerun after the pattern fix.
+
+**Named occupations, second route: seed skills (script 108).** To test whether the seven occupations are better found through skills than through titles, we took, for each occupation, the ESCO skills that describe it (found in `lexicon/skills.csv`) and the matching Lightcast terms, and counted the postings that carry any of them. Four occupations have specific ESCO skills: trade compliance (customs compliance, customs law, import-export regulations and licences), export control (export control principles, export regulations of dual-use goods, embargo regulations), semiconductor process (wafer cleaning and polishing, photolithography, semiconductor testing) and battery cell (battery formation and conditioning, battery chemistry, battery components, battery test equipment). Supply chain resilience has only generic supply chain skills, critical materials only "materials engineering (battery material)" and "implement mineral processes", and reshoring program manager has no ESCO skill. The idea follows the seed-skill indicator of Dawson, Williams and Rizoiu (2021), who start from a few seed skills and follow the skills that co-occur with them.
+
+The seeds are listed in the next table. The Month 3 lexicon column holds the terms of the Month 3 lexicon that correspond to each occupation. The ESCO column holds the skills used in script 108 (`lexicon/skills.csv`), and the Lightcast column the terms of the pruned Lightcast block (`lexicon/lightcast_block_terms.csv`, 135 selected terms; script 91). I searched all 629 terms of that file for export, customs, trade, sanction, dual, tariff, licence, compliance, import, rare, lithium and reshoring: the only match is Certified Customs Specialist.
+
+| Named occupation | Month 3 lexicon terms | ESCO skills used as seeds (script 108) | Lightcast terms in the block | Assessment |
+| --- | --- | --- | --- | --- |
+| Trade compliance officer | trade compliance, export controls, dual-use goods, sanctions compliance, customs compliance, rules of origin | ensure cargo complies with customs regulations; ensure customs compliance; customs law; keep up to date with customs regulations; advise on customs regulations; international import export regulations; manage import export licenses; import-export commercial documentation | Certified Customs Specialist | Strong, but the skills describe customs clearance and freight forwarding as much as trade compliance |
+| Export control specialist | export controls, export licensing, dual-use goods | export control principles; export regulations of dual-use goods; comply with export regulations in different countries; advise clients on export restrictions; embargo regulations | none in the block | Strong and very specific |
+| Semiconductor process engineer | semiconductor sovereignty (a policy term) | clean wafers; polish wafers; load electronic circuits onto wafers; imprint circuit design onto wafers (photolithography); slice crystals into wafers; produce semiconductor crystals; test semiconductors; inspect semiconductor components | Semiconductor Manufacturing Process; Wafer Fabrication; Wafer Testing; Wafer Bonding; Wafer Dicing; Semiconductor Device Fabrication; Semiconductor Fabrication Plant; Semiconductor Package; Lithography; Photolithography; Dry Etching; Plasma Etching; Thin Film Coating; Metallization | Strong for process roles |
+| Battery cell technician | battery materials (ambiguous) | battery formation, conditioning and cell preparation; battery chemistry; battery components; assemble batteries; operate battery test equipment; repair battery components; battery management systems; battery testers | Battery Production Process; Battery Formation; Battery Production Equipment; Battery Recycling Processes; Battery Industry; Battery Inspection; Battery Life Cycle Management; Battery Maintenance; Battery Disassembly; Battery Cycler; Battery Diagnostics; Battery Charge/Discharge; Battery Conditioning (also in the block: Assemble Batteries, Cell Assembly Process, Formation Cycles) | Strong. "Change watch battery" and "install automotive batteries" are left out |
+| Supply chain resilience analyst | supply chain resilience, supply chain security, supply chain diversification, dual sourcing | analyse supply chain strategies; analyse supply chain trends; detect bottlenecks in the supply chain; supply chain principles; supply chain management | none specific: the block holds 70 generic supply chain terms (for example Demand Planning, Reverse Logistics, Material Requirements Planning). The plain term "Supply Chain" is boilerplate on lesjeudis (351 of 352 postings in one cluster) and is not used | Too broad as a seed: it picks up every supply chain role |
+| Critical materials specialist | critical raw materials, CRMA, battery materials | implement mineral processes; materials engineering (battery material) | 11 material terms: Beryllium; Carbon Graphite; Germanium; Gallium Nitride; Indium Antimonide; Indium Gallium Arsenide; Mercury Cadmium Telluride; Silicon Carbide; Epitaxy; Helium Extraction; Helium Liquefaction (not used as seeds in script 108; they mostly mark semiconductor and optics materials) | Weak: no critical-raw-materials skill in ESCO |
+| Reshoring program manager | reshoring, nearshoring, friend-shoring, onshoring, China plus one | none | none | No ESCO or Lightcast seed; only the lexicon terms could serve |
+
+| Occupation | By title regex (jobbland / lesjeudis / jobs.de) | By seed skills or Lightcast terms | Of these, titles that hold the occupation (reading of titles) |
+| --- | --- | --- | --- |
+| Trade compliance officer | 5 / 0 / 0 | 41 / 4 / 10 | about 18 / 0 / 5 |
+| Export control specialist | 8 / 3 / 1 | 5 / 4 / 0 | 0 / 0 / 0 |
+| Semiconductor process engineer | 0 / 1 / 2 | 18 / 2 / 7 | 0 / 0 / 4 (optoelectronics and semiconductor development) |
+| Battery cell technician | 6 / 0 / 0 | 51 / 1 / 2 | about 8 / 0 / 1 |
+| Supply chain resilience analyst | 1 / 0 / 0 | 456 / 517 / 21 (generic skills) | not meaningful |
+| Critical materials specialist | 0 / 0 / 0 | 82 / 14 / 13 | seed unusable |
+| Reshoring program manager | 0 / 0 / 0 | no seed | none |
+
+Skills find more postings than titles do, but most are false matches or topic mentions, not the occupation. Reading the titles of the carriers, only trade compliance has a group of real role-holders (about 18 on jobbland and 5 on jobs.de), and these are mostly customs clearance and freight forwarding, an established occupation; three jobbland titles are trade-governance roles (Global Trade Program and Systems Governance Manager, Trade Compliance Officer, Export Control Manager), all dated September 2025 or later, which is too few to read as a trend. The export control skills produced no title of an export control role. The semiconductor carriers on jobbland include none that is a process role and half share the skill "monitor satellites", which suggests a space or optics employer's template; on jobs.de four of seven are in optoelectronics or semiconductor development. Battery carriers include about eight engineering or production roles on jobbland, seven research posts and several salespeople and electricians. The seeds for supply chain and critical materials give false matches (for example "implement mineral processes" on IT and finance roles) and are not used. A seed marks a topic, not a role, and the extraction has false matches, so these counts are upper bounds. The skill-seeded variant is not pursued as a series; the counts are reported as a second check on the named occupations, which agrees with the title search: the occupations are present only in handfuls.
+
+**Emergence by board.**
+
+- **jobbland.se.** Weighted postings per quarter swing from 727 to 166,360, so quarterly crossings follow coverage. For example, assuming a cluster that is always 0.1% of the board’s postings:
+    - In a quarter that has 727 weighted postings, its postings are 0.1% × 727 = 0.7 postings. That is below the threshold of 100.
+    - In a quarter with 166,360 weighted postings, it counts are 0.1% × 166,360 = 166 postings. That is above 100, so it “crosses”.
+
+The monthly run from 2026-02-01 to 2026-08-31 around AccelerateEU (22 April 2026) lists "clearly new" clusters that are cleaners, preschool staff, concrete workers and doctors, none flagged (under the stricter rule of 15 November only the cleaners and the preschool staff remain; concrete workers and doctors are returns after a dip). Samples of the flagged clusters with a rise (291 quality engineer, 263, 232 production technician, 350 systems engineer) show consultancy staffing patterns that exist from 2024, or 6 postings in total (263). No candidate.
+- **jobs.de.** Three usable quarters. The 28 "new" crossings in 2024-Q4 are the board starting up, and the rise of the electronics cluster from 1.01% to 11.75% compares a partial first quarter with a thin last one. No emergence evidence; the board is used for validation only. *Update of 15 November:* under the stricter rule, 5 clusters are clearly new in 2024-Q4 (accountants, HR clerks, branch managers, warehouse staff, sales assistants), all flagged at 0% to 3%; see the update section.
+- **lesjeudis.com.** Clusters 68 (embedded software, aeronautics and defence) and 139 (cybersecurity) are "clearly new" [^2] in 2025-Q2 (monthly: 2025-05), with 57% and 38% of postings flagged at medium intensity or higher and event changes of +0.63% (+0.20 to +1.21) and +0.96% (+0.42 to +1.79) around InvestAI. The monthly series shows both already above the line in 2024-08, and cluster 139 peaks in 2024-08 (2.29%). Flagged postings per quarter (2024-Q3 to 2025-Q3) are 22, 5, 2, 15, 15 for cluster 68 and 13, 5, 1, 12, 8 for cluster 139. The "new" status comes from comparing with 2025-02 (16 sampled days), the last usable month before a coverage gap (2025-03, 2025-04 and 2025-07 are unusable). In reality, the clusters had been above the threshold before; they didn’t appear for the first time. The largest clear rises (Product Owner 0.59% to 4.52%, data analysts) are not flagged and reflect IT and data roles gaining share on the board. *Update of 14 November:* on the quarterly series, the Java and systems administrator clusters were clearly above the threshold in 2024-Q3, and the interval of clusters 139 and 68 reaches the line there; all four are below it in 2025-Q1 and above it again in 2025-Q2. The stricter rule no longer counts them as new (see below).
+
+[^2]: A cluster is “clearly new” in a month if its whole interval is above the threshold now, and its whole interval was below the threshold in the previous usable month.
+
+**Flag intensity.** The flagged share counted every tag, including `low`, which the annotation guide gives to a role whose duties are outside the sector and where the sector appears only in the company text. However, since we are examining emerging occupations with respect to their role and duties in the context of deglobalization, they should be disregarded. For this reason Script 93 was adjusted to only filter `--min-intensity medium` and `high`. Cluster 117 (head of IT project) falls from 34% to 11% flagged and drops out; clusters 68 (60% to 57%) and 139 (43% to 28%) hold. Script 98 now prints the intensity of each flagged posting.
+
+**Employer concentration (script 103).** The employer field is empty on lesjeudis, so we used a script to take the employer namen from known names in the first 1,500 characters of the description (Thales, Sopra Steria and CS, Safran, Alten and about 35 more; 1 to 19 of 19 to 78 postings per cluster are unmatched). Flagged postings at medium intensity or higher:
+
+| Cluster | Title | Flagged postings | Effective employers | Largest employer share |
+| --- | --- | --- | --- | --- |
+| 99 | Program manager | 27 | 1.1 | Thales 96% |
+| 33 | IVVQ engineer | 67 | 1.2 | Thales 92% |
+| 61 | Software architect | 28 | 1.3 | Thales 88% |
+| 107 | Engineering manager | 43 | 1.3 | Thales 86% |
+| 127 | Systems engineer | 34 | 1.8 | Thales 72% |
+| 56 | Software architect, defence and security | 27 | 2.3 | Sopra Steria 58% |
+| 133 | AI engineer | 19 | 2.3 | Thales 62% |
+| 67 | Software validation engineer | 36 | 2.6 | Thales 54% |
+| 130 | Electronics engineer | 102 | 2.8 | Thales 56% |
+| 68 | Embedded software engineer | 78 | 3.3 | Thales 42% |
+| 139 | Cybersecurity engineer | 48 | 3.9 | Thales 41% |
+
+To discuss the findings on employers, we will use the concept of ``Effective employers''. This is a standard transformation of the Herfindahl–Hirschman Index and is equal to 1 divided by the sum of squared employer shares. For example, if one employer holds 96% of a cluster’s postings and the rest is spread thinly, Σs² is ~0.92, so the effective number is about 1/0.92=1.09. That can be interpreted as “the cluster behaves as if it had one employer”.. Over the whole board, Thales rises from 3.5% of all postings taken in 2025-Q1 to 7.0% in 2025-Q2 and 9.0% in 2025-Q3, and its flagged postings from 95 to 198 and 257, while Sopra Steria and CS flagged postings fall from 129 (2024-Q3) to 33 (2025-Q3):
+
+| Quarter | Thales share of postings taken | Thales flagged postings | Share of all flagged postings |
+| --- | --- | --- | --- |
+| 2024-Q3 | 4.7% | 134 | 30% |
+| 2024-Q4 | 4.0% | 201 | 44% |
+| 2025-Q1 | 3.5% | 95 | 34% |
+| 2025-Q2 | 7.0% | 198 | 49% |
+| 2025-Q3 | 9.0% | 257 | 56% |
+
+The clusters that first cross the line in 2025-05 to 2025-08 (33, 67, 99, 107) are the Thales-dominated ones. Counts are postings taken, not weighted, so shares are compared and not counts. The data cannot say whether Thales posted more or the board covered it better from 2025-Q2.
+
+**Conclusion.** Under the criteria used (clearly new or a clear rise in share, at least 25% flagged at medium intensity or higher, coherent content, not an employer pattern), no cluster is validated as an emerging occupation. Reported instead: (1) the named occupations as counts; (2) a lesjeudis defence-flagged core that is concentrated in a few employers, with five clusters that are employer patterns (33, 61, 99, 107, 127) and the rest of the core (56, 67, 68, 130, 133, 139) too concentrated or too flat to call emerging; (3) declines of defence-flagged IT and systems clusters after InvestAI (137, 126, 136, 116), read with the coverage gap; (4) the negative results for jobbland.se and jobs.de; (5) the intensity filter and the employer check as methods. The thesis calls the flagged clusters "concentrated in a few employers" and does not call them emerging. *Update of 14 November:* the stricter rule and the employer cycles (see the update section) leave the conclusion unchanged for lesjeudis and also remove the DevOps cluster, the only one that passed the stricter rule.
+
+**Options for Month 5, to agree with the supervisor.** Cluster only the flagged postings with a smaller minimum cluster size (about 20), which can separate small occupations but depends on the tagger by construction. A series that caps any single employer's share. Ask Skillab, through the supervisor, whether sources or employer coverage changed in 2025.
+
+**Supervisor guidance not yet applied.** From the earlier exchange on weights, clustering and HHI:
+
+- **Weights.** Normalise the weights to \[0, 1\], possibly with a logarithm, so that very large weights (for example 200 on a high-volume day) do not dominate. The inverse-probability weight is the unbiased estimator of the population share, so it stays the main estimate. Script 93 now has `--weight-mode log` and `--weight-mode cap` to rerun the shares and intervals as a sensitivity check; the verdicts on the candidate clusters are then compared across the three modes.
+- **Number of clusters.** The supervisor found 256, 141 and 79 clusters too many and asked for 3 to 4 clustering algorithms compared by silhouette score. The current runs give 357, 144 and 71 clusters on input A. The algorithm comparison by silhouette was made on 15 November (see the update below): HDBSCAN has the highest silhouette in the UMAP space, the silhouette does not favour fewer or more clusters, so the count stays a consequence of the minimum cluster size. The silhouette is computed on the non-noise points of each method, and HDBSCAN noise has to be reported next to it.
+- **Preserving specific clusters.** The supervisor suggested intervening in the clustering to keep chosen clusters, based on the distances between them. A seeded variant (titles of the seven named occupations and of the flagged clusters as fixed centres, postings assigned within a cosine distance) would also catch occupations with fewer than 40 postings, which HDBSCAN cannot form.
+- **Lightcast weight.** The Lightcast block should have the same weight as the ESCO block; D v1 used 0.5 and 0.3. D is withdrawn and is not used for selection, and D v2 should use equal weights.
+- **HHI and the thesis question.** The supervisor reads the index as a measure of how far specific domains dominate a market, and the aim as quantifying how far larger markets are more or less similar to smaller ones in the composition and concentration of their skill sets. The employer concentration reported above fits this reading; what "larger and smaller markets" refers to (boards, countries or clusters) is to be confirmed.
+
+### Supervisor answers of 14 November, and what each decision means
+
+The supervisor answered the four questions of the email. Option A is adopted: the 6 to 10 clusters are described as concentrated, flagged occupation clusters, and emergence is reported as a finding for each cluster. The notes below explain each decision in plain words, with the example used in the discussion.
+
+**1. Option A or Option B (how the 6 to 10 clusters are chosen).** Option A selects clusters by size and flagged share (step (c) of the plan the supervisor approved) and then reports for each one whether it is emerging. Option B makes emergence the selection rule, so only clusters that pass the emergence test are delivered. Example: lesjeudis cluster 33 (embedded software, Thales at about 42% of its postings) is large and strongly flagged, so it is selected under A, with the finding "present since 2024-08, concentrated in 3 to 4 employers, not emerging". Under B it is dropped, and since no cluster passes both the emergence test and the flag test, B delivers zero clusters. The only cluster with a clear rise on lesjeudis is cluster 3 (Product Owner), which is not flagged, so under B it would be the only cluster "in", although it has nothing to do with deglobalization. A keeps the deliverable and keeps the negative result visible.
+
+**2. Inverse-probability weights as the main estimate.** The collection takes about 100 postings from one page per calendar day, so a posting stands for (day total / postings taken that day) postings. Example: a day with 1,000 postings of which 100 are taken gives each posting weight 10; a day with 200 postings of which 100 are taken gives weight 2. Without weights the quiet day counts as much as the busy day. The weights are the only way the sample is unbiased for the whole board, so they stay the main estimate. They also make the quarterly totals swing (jobbland 727 to 166,360 weighted postings), because a few days carry very large weights. Two sensitivity runs test this: log-scaled weights (log(1+w), so a weight of 1,000 counts about 3 times a weight of 10, not 100 times) and capped weights (cut at the 95th percentile). They trade some bias for lower variance. If a verdict (new, rising, flat) is the same under all three, it does not depend on the weighting; the counts and the 100-postings threshold lose their meaning under log and cap, so only shares and verdicts are compared. The supervisor agreed to re-run and decide from the results.
+
+**3. Silhouette comparison and the seeded variant.** The silhouette of a posting is (distance to the nearest other cluster minus distance to its own cluster) divided by the larger of the two, from -1 to 1. Example: a posting 0.2 from its own cluster centre and 0.6 from the nearest other cluster scores (0.6 - 0.2) / 0.6 = 0.67 (well placed); a posting at 0.4 and 0.45 scores 0.11 (on the boundary). The mean silhouette over the postings of a clustering allows 3 to 4 algorithms (for example HDBSCAN, k-means, agglomerative, HDBSCAN on UMAP) to be compared on the same input, reporting the share of noise next to it, since an algorithm that drops a third of the postings as noise can score high on the rest. The cluster counts (357, 144 and 71) are only a result of one setting and should be fixed by this comparison before the remaining analysis is built on it. The supervisor also notes that titles alone are unlikely to give clusters of emerging occupations, because employers use a general title and put the detail in the description; input D (titles with ESCO and Lightcast skills) addresses this and is compared in the same way. The seeded (constrained) variant is a complementary method: it fixes centres from postings of chosen occupations (for example the titles that contain "export control"), lets a posting join a centre when its cosine distance is under a threshold, and clusters the rest freely. A named occupation then cannot dissolve into a larger cluster, and the question becomes whether the seed grows over time.
+
+**4. "Larger and smaller markets".** The supervisor confirms that markets are the boards or countries: Sweden (jobbland, 53,959 postings), France (lesjeudis, 18,625) and Germany (jobs.de, 12,243). The question is whether the larger board is more or less similar to the smaller ones in the composition (which skills and sectors make up the postings) and the concentration (how much a few of them dominate) of its skill sets. HHI falls as a sample grows, so a large board looks less concentrated for no real reason; the comparison therefore uses equal-size subsamples next to the whole-board value. Composition is compared with a similarity score (Jensen-Shannon, 1 = identical) on the skill and sector labels the boards share. The boards are never merged. This is built in script 104 (docs/boards\_concentration.md): HHI and top-10 share over skills, sectors, clusters, NUTS-2 regions and employers per board, and the same by quarter. The organisation field is empty on all three boards, so employer concentration cannot be computed across whole boards; it is reported only for the clusters checked with script 103.
+
+**Result for question 2 (lesjeudis, monthly, flag intensity medium or higher, log and capped weights; weights rescaled to the same board total).** No verdict changes in a way that matters. The clusters with the largest flagged share are the same under both transformations and under the default weights, and their flagged shares move by at most 2 points (cluster 33: 93% and 94%; 68: 57% and 57%; 137: 49% and 48%; 130: 49% and 48%; 139: 28% and 29%). The clear rise of cluster 3 (Product Owner, unflagged) is the same: 0.82% to 3.65% under log weights, 0.83% to 4.12% under capped weights, clear in both. The “clearly new” lists overlap in five of seven clusters (1, 12, 68, 75, 137). The two that differ are borderline: 139 is clearly new under capped weights only, and 125 (log) and 65 (capped) appear in one transformation only. The count of clearly new clusters per month is the same under both transformations in 2024-11 and 2025-05 (2 and 3). Clusters 68 and 139 are clearly new in 2025-05 under both weightings, but they already crossed the threshold in 2024-08, so this is the effect of the missing March and April 2025 data, not weighting; weighting does not resolve that. The inverse-probability weights stay the main estimate. *Update of 14 November:* the "clearly new" lists in this paragraph use the original rule (previous period only); under the stricter rule, which does not depend on the weights, most of them drop out (see below).
+
+**Result for question 4 (script 104, common window 2024-08-01 to 2025-04-09).** The largest board (Sweden) is not the most different from the smaller ones, and concentration does not fall or rise steadily with board size. Skills are the ESCOX skills extracted from the full text (script 69b), the same method for every board and month; the tracker (API) tags are not used, because they are missing on jobbland from mid-2025.
+
+| Board | Skills: effective number (HHI) | Sectors: effective number (HHI) | Regions: normalised HHI |
+| --- | --- | --- | --- |
+| Sweden (jobbland, largest) | 200 (0.0050) | 62 (0.0162) | 0.052 |
+| France (lesjeudis) | 311 (0.0032) | 45 (0.0222) | 0.199 |
+| Germany (jobs.de, smallest) | 296 (0.0034) | 91 (0.0110) | 0.019 |
+
+Similarity of composition (Jensen-Shannon, 1 = identical):
+
+| Pair | Skills | Sectors |
+| --- | --- | --- |
+| Sweden and Germany | 0.79 | 0.89 |
+| Sweden and France | 0.71 | 0.85 |
+| France and Germany | 0.64 | 0.80 |
+
+Sweden is the most concentrated in skills, France in sectors and regions (Île-de-France), and Germany the most diffuse in sectors and regions. The largest board is the most similar to both others, and the two smaller boards are the least similar to each other. With three boards, size cannot be separated from country, language and platform, so these are descriptions of the boards, not an estimate of an effect of size. The values are stable across quarters within each board (Sweden skills HHI 0.0044 to 0.0057 over eleven quarters), so the differences between boards are structural, not caused by one period. Equal-size subsamples give the same values as the whole boards, so sample size is not behind the differences. Limits: the sector labels come from the tracker and are filled for about 90% of jobbland postings only up to 2025-05, which is why the comparison uses the common window; the cluster HHI is not compared across boards, because the same minimum cluster size gives 357, 144 and 71 clusters; jobs.de 2025-Q2 rests on 349 postings.
+
+**Order of work.** (1) The log and capped weight runs and the board comparison (script 104). (2) The silhouette comparison of the algorithms for inputs A and D v2, and the seeded variant, on Colab. (3) Fix the final clustering setup, then rebuild the series, HHI and the verdict per cluster.
+
+**Status of the order of work on 14 November.** (1) is done. (2) is done for lesjeudis: D v2 and D v3 were compared with A on title coherence and on emergence (below); the algorithm comparison (six board and input combinations) and the seeded variant (jobbland) are reported in the update below. (3) Proposed, to be confirmed with the supervisor: input A is the main input, D v3 and D v2 are documented sensitivity checks. The series, HHI and verdicts are rebuilt on A with the stricter rule for lesjeudis, jobs.de and jobbland (15 November).
+
+### Update of 14 November: inputs, a stricter rule for "clearly new" and employer waves
+
+All numbers in this section are for lesjeudis (18,625 postings, France), except where the three boards are named. Flagged shares in the tables of the emergence reports are at the default intensity (every tag), not at medium or higher, so they are higher than the shares quoted above (for example cluster 139: 43% here, 28% at medium or higher).
+
+#### Input D v2 and D v3 against A: title coherence (script 107)
+
+Coherence of a cluster is the length of the mean of the unit title embeddings of its postings after centring on the board mean (1 = identical titles, 0 = unrelated). The lift is the coherence minus that of random sets of the same size. A cluster is weak when its lift is below the 10th percentile of the lift of A's clusters (0.439), the same bar for every input. Lift in plain words: it measures how much more alike the titles of a cluster are than the titles of a random set of the same size. Coherence is 1 for identical titles and 0 for unrelated ones, so a cluster of unrelated titles has a lift near 0, and a high lift means the titles share a role. A is built from the title embedding alone, so it has an advantage on coherence by construction; the top-token share (the share of titles that hold the cluster's most frequent title word) does not use the embedding and is read next to it.
+
+D v2 weights the title embedding, the ESCO block and the Lightcast block 1 / 0.5 / 0.5 and uses only the coherence filter on skills. D v3 weights them 1 / 0.25 / 0.25 and drops skills that occur in more than 5% of postings (`--max-df 0.05`, a document-frequency cut) before the coherence filter.
+
+| Input | Clusters | Noise | Median lift | Median top-token share | Clusters below the weak cutoff | Postings in them |
+| --- | --- | --- | --- | --- | --- | --- |
+| A | 144 | 30.9% | 0.543 | 87% | 15 (10%) | 1,370 (11%) |
+| D v2 | 142 | 20.6% | 0.261 | 43% | 119 (84%) | 13,169 (89%) |
+| D v3 | 102 | 30.6% | 0.540 | 88% | 14 (14%) | 1,763 (14%) |
+
+On the postings clustered in both inputs, the agreement with A (adjusted Rand index, 1 = same partition) is 0.139 for D v2 (10,462 postings) and 0.533 for D v3 (10,145 postings). D v2 puts most postings into clusters that are held together by a skill or by company text, with unrelated titles inside; on the three boards 76% to 89% of the postings clustered in D v2 sit in weak clusters. D v3 is as coherent as A. It still contains clusters held by a skill bundle, for example cluster 81 (91% of its postings carry "quantum mechanics"; one of its titles is a Thales recruiting event). D v3 was run on lesjeudis only.
+
+#### Emergence on D v3 against A (original rule, quarterly, event InvestAI)
+
+| | A | D v3 |
+| --- | --- | --- |
+| Clusters / eligible | 144 / 58 | 102 / 41 |
+| Clearly new per quarter (2024-Q3 to 2025-Q3) | 0, 1, 0, 4, 0 | 0, 1, 0, 2, 0 |
+| Clearly new clusters | 46 DevOps, 75 Java, 41 systems and network administrator, 139 cybersecurity, 68 embedded software | 65 systems administrator (French titles), 75 Java, 57 cloud architect |
+
+The Java cluster has the same verdict in both. A's DevOps clusters (46 French titles, 57 English titles) become one cluster in D v3 (52) that is already above the line in 2024-Q3, so the verdict disappears; the change around the event is the same (-1.74 points, interval -2.71 to -0.26). The cybersecurity cluster (A 139, 43% flagged; D v3 89, 36%) is not clearly new in D v3 but its change around the event holds: +0.96 points (+0.42 to +1.79) in A and +0.86 (+0.23 to +2.12) in D v3. The embedded software cluster (A 68, 60% flagged; D v3 64, 49%) crosses in 2025-Q2 in both, but is clearly new only in A; its change in D v3 is +0.29 (-0.07 to +0.85) and includes zero. The defence-flagged core is kept in D v3 as smaller clusters (IVVQ: A 33 and D v3 12, 94% flagged in both; validation: A 67 and D v3 50), but A's two largest flagged clusters (137 and 130) have no eligible counterpart. D v3 gave no additional emergence evidence over A, and it needs an extra embedding pass per board; the proposal is to keep A as the main input.
+
+#### A stricter rule for "clearly new"
+
+The rule of script 93 compared a quarter with the previous quarter only. A cluster that was at or above the threshold in 2024-Q3, dropped below it in 2025-Q1 and came back in 2025-Q2 was therefore counted as new. The quarterly series of the five lesjeudis clusters (postings taken, input A) shows this:
+
+| Cluster | 2024-Q3 | 2024-Q4 | 2025-Q1 | 2025-Q2 | 2025-Q3 |
+| --- | --- | --- | --- | --- | --- |
+| 75 Java | 51 | 33 | 6 | 52 | 46 |
+| 41 systems and network administrator | 73 | 42 | 5 | 47 | 37 |
+| 139 cybersecurity | 58 | 48 | 11 | 48 | 36 |
+| 68 embedded software | 36 | 18 | 8 | 40 | 39 |
+| 46 DevOps (French titles) | 9 | 80 | 91 | 12 | 12 |
+
+Under the new rule (default `--new-rule all` in script 93) a cluster is clearly new only if interval C is wholly above the threshold now and wholly below it in every earlier usable quarter. Clusters that dip and return are listed in a separate table, "Returning after a dip". Script 93 also flags a quarter in which several clusters that were clearly above the line earlier drop wholly below it together (at least 3 and at least 30% of them, `--dip-min`, `--dip-share`), since a common cause is then more likely than separate declines. The old rule is still available with `--new-rule previous`. Applied to the series of input A, the five clusters become one: DevOps (46) in 2024-Q4; clusters 41, 68, 75 and 139 are returns after a dip in 2025-Q2. For clusters 75 and 41 the 2024-Q3 interval is wholly above the line; for 139 (233 estimated, interval 94 to 562) and 68 (92 estimated, interval 53 to 115) it only reaches it, and the script lists them as returns because their interval was not wholly below the line in 2024-Q3. The monthly series supports this for both (above the line in 2024-08, see the lesjeudis paragraph above). The patched script was run on the real data on 15 November and gives the same result: one clearly new cluster (2024-Q4), none in the other quarters, and four returns after a dip in 2025-Q2. Its joint-dip flag (at least 3 clusters and at least 30% of the clusters that were clearly above the line earlier) fires in 2025-Q2, not in 2025-Q1: 5 of 14 clusters (10, 44, 46, 116, 136) fall wholly below the line in 2025-Q2, which includes the end of the DevOps campaign (46). The 3 clusters that drop in 2025-Q1 are below the 30% bar, so the flag does not fire there; a lower `--dip-share` (0.2) would. Four clusters fall below the line in 2025-Q3, also without a flag. D v3 was not rerun under the stricter rule.
+
+#### Employer check on the five clusters (script 103)
+
+Employer names are found in the first 1,500 characters of the description (about 35 known names). They are found in 38% of the postings of cluster 75, 27% of 41, 41% of 139, 55% of 68 and 45% of 46, so every share below is a lower bound.
+
+| Cluster | Effective employers | Largest identified employers |
+| --- | --- | --- |
+| 75 Java | 9.5 | Alten 13, Capgemini 10, Sogeti 9, Sopra Steria 7, CGI 6 |
+| 41 systems and network administrator | 8.4 | CGI 10, Sopra Steria 10, defence ministry 7, Alten 6, Scalian 6 |
+| 139 cybersecurity | 5.5 | Sopra Steria 28, Thales 18 |
+| 68 embedded software | 4.8 | Thales 26, Sopra Steria 19, Safran 8, Segula 8, Airbus 7 |
+| 46 DevOps (French titles) | 5.2 | Sopra Steria 35, Capgemini 10, Thales 10, Scalian 8 |
+
+**DevOps (cluster 46).** Sopra Steria has 35 of the 91 postings with an identified employer, all of them in 2024-Q4 (about 14) and 2025-Q1 (about 21), none in the other quarters. Sopra Steria's share of the whole board is steady (7.9%, 8.5%, 10.5%, 9.9%, 4.9% by quarter), so the hump is a campaign of DevOps titles by one employer, not a rise in its volume. Cluster 57 (English DevOps) falls steadily from 14 to 8 identified postings with a changing leading employer; it shows no campaign and no emergence.
+
+**The dip and the return are employer posting cycles.** 2025-Q1 is not a thin quarter: postings taken per sampled day are 73, 62, 61, 73 and 61 in the five quarters. Over the whole board:
+
+| Employer, share of postings taken | 2024-Q3 | 2024-Q4 | 2025-Q1 | 2025-Q2 | 2025-Q3 |
+| --- | --- | --- | --- | --- | --- |
+| Capgemini | 3.4% | 0.6% | 0.9% | 3.3% | 0.2% |
+| CGI | 2.6% | 1.3% | 1.1% | 3.4% | 0.1% |
+| Thales | 4.7% | 4.0% | 3.5% | 7.0% | 9.0% |
+| Scalian | 0.1% | 0.3% | 4.0% | 2.2% | 4.1% |
+| Orange | 0.4% | 2.5% | 3.7% | 2.7% | 2.5% |
+
+Capgemini and CGI, leading employers of the Java and systems administrator clusters, are high in 2024-Q3, low in 2024-Q4 and 2025-Q1, high in 2025-Q2 and almost absent in 2025-Q3, the same shape as the clusters. Thales, the leading identified employer of cluster 68 in 2025-Q2 and 2025-Q3 and of cluster 139 in 2025-Q2, falls to 3.5% in 2025-Q1 and doubles in 2025-Q2. The data cannot say whether these employers posted in waves or whether the board or Skillab covered them in waves (open item 11). The shares of other employers (Scalian from 0.3% to 4.0%, Orange from 0.4% to 3.7%) show how much the employer mix moves from quarter to quarter.
+
+**Consequence.** Interval C redraws whole weeks, so it does not protect a cluster series against an employer that posts in some quarters and not in others. A cluster that rests on two or three employers can cross the threshold, dip and cross again without any change in the market. A possible additional eligibility condition is a minimum number of effective employers in the quarter that counts as a crossing (Month 5).
+
+**Result.** On lesjeudis (input A, original run), no cluster is a validated new occupation under the methodology as specified: the one cluster that passes the stricter rule (DevOps, French titles) is a posting campaign of one employer, and the four others are returns after a dip that follow employer posting cycles. The event-window changes of clusters 68 and 139 (+0.63 and +0.96 points) are measured against a baseline that includes the thin 2025-Q1 cluster counts and are treated as unconfirmed. The claim now covers input A on all three boards for the stricter rule (next section); the employer check (script 103) has been run on lesjeudis only.
+
+#### The stricter rule on jobs.de and jobbland (15 November)
+
+The patched script 93 (new rule, default) was run on input A for jobs.de (quarterly), jobbland (quarterly, whole period) and jobbland (monthly, 2026-02-01 to 2026-08-31, as in the event analysis).
+
+| Board and run | Usable periods | Clearly new (stricter rule) | Returning after a dip | Joint-dip flags |
+| --- | --- | --- | --- | --- |
+| jobs.de, quarterly | 2024-Q3 to 2025-Q1 (2025-Q2 has 7 sampled days) | 5, all in 2024-Q4: 53, 52, 30, 40, 21 | 0 | none |
+| jobbland, quarterly | 11 quarters, 2024-Q1 to 2026-Q3 | 3 (2024-Q3), 74 (2024-Q4), 2 (2025-Q1), 6 (2026-Q1) | 8 (2025-Q4), 37 (2026-Q1) | 2025-Q2 (87 of 109 clusters), 2025-Q3 (97 of 109), 2025-Q4 (47 of 109) |
+| jobbland, monthly | 2026-02 to 2026-08 | 2, both in 2026-03: 121, 143 | 9 (from 2026-05) | none |
+
+**jobs.de.** The five clearly new clusters of 2024-Q4 are accountants (53), HR and purchasing clerks (52), branch managers (30), warehouse staff (40) and sales assistants (21), flagged at 0% to 3%. The weighted postings per sampled day fall from about 200 in 2024-Q4 to about 78 in 2025-Q1 (18,520 postings over 91 days against 5,953 over 76 days), so the count threshold cannot be read across those quarters, and only one cluster is clearly above the line in 2025-Q1. The board is used for validation only.
+
+**jobbland, quarterly.** The count rule follows the board's coverage, as already shown: weighted postings per quarter are 727, 5,389, 16,278, 145,266, 87,115, 10,481, 7,493, 33,777, 166,360, 147,642 and 72,636. The 74 clearly new clusters of 2024-Q4 are the board growing 9-fold in one quarter (it includes cluster 350, 41% flagged, whose peak share is 0.35% and whose change around the event is +0.00 points). The joint-dip flags fire in exactly the three quarters of the low-coverage stretch (2025-Q2 to 2025-Q4), and the 37 returns and 6 new clusters of 2026-Q1 follow the jump from 33,777 to 166,360 weighted postings. The new flag therefore identifies the coverage regime without being told about it. The six clearly new clusters of 2026-Q1 are a nurse cluster (50% one template, not eligible), a department manager cluster, a probation service cluster (47% one template, not eligible), personal assistants, a service manager and a store manager, flagged at 0% to 8%. Cluster 283 (28% flagged, defence 82%) first crosses in 2026-Q1 on the quarterly series, but it is already above the line in 2026-02 on the monthly series, so it is not new.
+
+**jobbland, monthly (the stable stretch around AccelerateEU).** Two clusters are clearly new in 2026-03: 121, whose titles are all one company's home cleaners ("Home cleaner - Hemfrid"), and 143, preschool staff; neither is flagged. The concrete workers (334) and the district physician cluster (194) that the original rule listed as new are returns after a dip. The flagged clusters keep their earlier reading: cluster 350 (46% flagged) has a change of +0.03 points (-0.16 to +0.23), cluster 283 (28%) -0.31 (-0.63 to +0.02); the flagged clusters with a clear rise in share (291 quality engineer, 263 security manager and compliance officer, 78 project manager) are small (24 to 36 postings taken) and were read earlier as consultancy staffing or a handful of postings.
+
+**Result for the three boards.** On input A, under the stricter rule, no cluster is a validated emerging occupation on any board: lesjeudis has one (a one-employer campaign), jobs.de has five ordinary occupations at the start of its series, and jobbland has ordinary occupations and coverage effects (quarterly) or one company's cleaners and preschool staff (monthly). None of the clearly new clusters has a flagged share above 25% except cluster 350 on jobbland, whose appearance is the 2024-Q4 coverage jump.
+
+#### Algorithm comparison by silhouette (script 105, 15 November)
+
+Four algorithms were run on the same 10-dimensional UMAP space of each input and board: HDBSCAN with excess-of-mass selection (the setting used so far), HDBSCAN with leaf selection (finer clusters), k-means and Ward agglomerative clustering, the last two with the same k as HDBSCAN eom. The silhouette is computed on a random sample of 10,000 postings (seed 1), once in the UMAP space (Euclidean) and once in the input space (cosine, the original embedding). HDBSCAN leaves its noise out of the silhouette, so the noise share is shown next to it; the last column scores k-means and Ward on the same postings that HDBSCAN eom kept, so that all methods are judged on the same ground. Input D is run in two versions: D v2 with the script defaults (ESCO and Lightcast weights 0.5 and 0.5) and D v3 (weights 0.25 and 0.25, skills and terms present in more than 5% of the postings dropped).
+
+| Board, input | HDBSCAN eom: clusters (noise), silhouette UMAP / input | HDBSCAN leaf: clusters (noise), silhouette UMAP / input | k-means, same k: UMAP / input | Ward, same k: UMAP / input | k-means and Ward on the eom postings only: UMAP |
+| --- | --- | --- | --- | --- | --- |
+| lesjeudis A | 144 (30.9%), 0.618 / 0.087 | 151 (32.5%), 0.633 / 0.089 | 0.467 / 0.030 | 0.461 / 0.026 | 0.576 and 0.593 |
+| lesjeudis D | 136 (21.1%), 0.735 / 0.170 | 148 (26.5%), 0.743 / 0.158 | 0.615 / 0.118 | 0.609 / 0.115 | 0.720 and 0.716 |
+| jobbland A | 357 (34.3%), 0.618 / 0.071 | 391 (40.3%), 0.639 / 0.100 | 0.438 / -0.014 | 0.433 / -0.022 | 0.577 and 0.587 |
+| jobbland D | 263 (20.2%), 0.707 / 0.122 | 290 (29.1%), 0.708 / 0.123 | 0.608 / 0.089 | 0.603 / 0.090 | 0.704 and 0.703 |
+| jobs.de A | 71 (27.6%), 0.542 / 0.086 | 84 (38.8%), 0.590 / 0.117 | 0.431 / 0.023 | 0.417 / 0.052 | 0.519 and 0.528 |
+| jobs.de D | 102 (25.2%), 0.711 / 0.163 | 109 (28.9%), 0.706 / 0.167 | 0.539 / 0.088 | 0.537 / 0.081 | 0.638 and 0.646 |
+| lesjeudis D v3 | 101 (29.8%), 0.590 / 0.090 | 121 (38.6%), 0.629 / 0.109 | 0.476 / 0.058 | 0.459 / 0.055 | 0.567 and 0.581 |
+| jobbland D v3 | 282 (36.3%), 0.627 / 0.098 | 308 (42.2%), 0.659 / 0.103 | 0.433 / 0.028 | 0.417 / 0.024 | 0.595 and 0.603 |
+| jobs.de D v3 | 65 (32.5%), 0.592 / 0.119 | 75 (40.1%), 0.625 / 0.143 | 0.416 / 0.059 | 0.415 / 0.053 | 0.540 and 0.540 |
+
+k-means silhouette in the UMAP space for k = 25, 50, 100, 200 and 400 (the k scan):
+
+| Board, input | 25 | 50 | 100 | 200 | 400 |
+| --- | --- | --- | --- | --- | --- |
+| lesjeudis A | 0.358 | 0.389 | 0.426 | 0.495 | 0.526 |
+| lesjeudis D | 0.512 | 0.497 | 0.575 | 0.622 | 0.570 |
+| jobbland A | 0.384 | 0.400 | 0.384 | 0.420 | 0.441 |
+| jobbland D | 0.362 | 0.413 | 0.527 | 0.610 | 0.560 |
+| jobs.de A | 0.404 | 0.404 | 0.434 | 0.473 | 0.497 |
+| jobs.de D | 0.440 | 0.469 | 0.536 | 0.618 | 0.615 |
+| lesjeudis D v3 | 0.408 | 0.444 | 0.474 | 0.473 | 0.455 |
+| jobbland D v3 | 0.351 | 0.387 | 0.407 | 0.430 | 0.439 |
+| jobs.de D v3 | 0.425 | 0.438 | 0.422 | 0.459 | 0.465 |
+
+**Reading.**
+
+- In the UMAP space HDBSCAN (eom or leaf) has the highest silhouette on all six combinations. k-means and Ward score 0.10 to 0.18 lower when they have to place every posting. On the postings that HDBSCAN eom kept, the gap shrinks to 0.00 to 0.07 (jobbland D: 0.704 and 0.703 against 0.707, no difference), so most of HDBSCAN's advantage is that it sets the hard-to-place postings aside as noise, which is the reason for reading the noise share next to it.
+- In the input space no method separates the postings well: every value is below 0.17, and k-means and Ward on jobbland A are slightly negative. Ward on the eom postings scores at or above eom in three of the six combinations (lesjeudis A 0.091 against 0.087; jobbland D 0.132 against 0.122; jobs.de A 0.111 against 0.086). HDBSCAN looks for clusters in the UMAP space, so the UMAP silhouette favours it by construction; the input-space values are the fairer comparison, and they do not separate the algorithms.
+- The silhouette does not identify the number of clusters. On input A the k-means curve rises with k on lesjeudis and jobs.de (lesjeudis 0.358 at k=25 to 0.526 at k=400) and is nearly flat on jobbland (0.38 to 0.44); on input D it peaks at k=200 on lesjeudis, jobbland and (marginally) jobs.de. Nothing in the curves favours fewer clusters than the 357, 144 and 71 of HDBSCAN eom, nor more. The cluster count therefore stays a consequence of the minimum cluster size (40) and is not tuned by silhouette.
+- Leaf selection gives 7 to 34 more clusters (jobbland 391 against 357) and 2 to 11 points more noise (jobs.de A 38.8% against 27.6%) for a silhouette that is 0.00 to 0.05 higher in the UMAP space (and about the same on D). The gain is the same kind of gain as dropping postings, so leaf is kept as a sensitivity check and not as the main setting.
+- Input D v2 scores higher than A on every board (UMAP 0.707 to 0.735 against 0.542 to 0.618) and has less noise (20 to 25% against 28 to 34%). D v3 does not: its silhouette (0.590, 0.627 and 0.592) is close to that of A and 0.08 to 0.14 below D v2, and its noise (29.8 to 36.3%) is back at the level of A. The extra tightness of D v2 therefore disappears once the common skills are dropped and the weights lowered, which fits the boilerplate explanation. D v3 also gives fewer clusters than A on every board (101 against 144, 282 against 357, 65 against 71). This is not evidence that D gives better occupation clusters: the title coherence test (above) found that on lesjeudis 89% of the postings of D v2 sit in clusters whose titles are no more alike than random ones, so the skill blocks make the geometry tighter without making the clusters occupations. Silhouette measures how compact the clusters are in the space they were built in, not whether they are occupations.
+
+**Example: why a tighter D is not a better D.** The silhouette asks whether postings sit close together in the space the clustering was built in. In input D that space is the title plus a block of ESCO and Lightcast skills, so two postings can be close because their skills match even when their titles are unrelated. Suppose a D v2 cluster holds these titles (constructed to show the mechanism, not taken from the data): "Chef de projet SAP", "Développeur Java", "Consultant cybersécurité" and "Ingénieur DevOps". All four postings come from the same consultancy and carry the same boilerplate skills (agile, English, project management, teamwork). In D they sit tightly together, so the silhouette is high. As occupations they are four different jobs, and the title lift of this cluster is near 0. D v2 clusters are therefore tighter, because the skill blocks pull postings together, and weaker as occupations. The boilerplate explanation is consistent with the D v3 result (dropping the skills present in more than 5% of postings brings the weak clusters on lesjeudis from 89% to 14%) but was not tested separately.
+
+**Decision.** Input A with HDBSCAN eom stays the main setting, for the reasons the supervisor asked to see: it has the highest UMAP silhouette on A for all three boards, the silhouette in the input space does not favour another algorithm, and the other algorithms have no noise class, so they place every posting (including the boilerplate and the one-off titles) in a cluster. HDBSCAN leaf and D v3 are kept as sensitivity checks. To be confirmed with the supervisor, together with the choice of A as the main input (open item 21).
+
+#### Seeded variant (script 106, jobbland, 15 November)
+
+Method. For each named occupation the seed postings are those whose cleaned title matches the occupation pattern. An occupation with fewer than 5 matching titles is reported but not used as a centre. The centre is the mean of the (normalised) title embeddings of the seed postings; a posting joins when its cosine similarity to the centre reaches a threshold, and the seed postings always belong. The first idea was an absolute threshold (0.85 to 0.90), but the calibration shows it means little: multilingual-e5 gives a median similarity of 0.83 between a centre and any posting of the board, and the 99th percentile is 0.87 to 0.89. Each occupation therefore gets its own threshold, the larger of the lowest leave-one-out similarity of its seeds (each seed against the centre made from the others) and the background 99th percentile. The seeded variant was run on all three boards (15 November); only jobbland has enough matching titles.
+
+Why a relative threshold. The compression of cosine similarities is a known property of the model, not of our data: multilingual-e5 is trained contrastively with a temperature of 0.01, which pushes the similarities of any two texts into a narrow high band (the model card gives roughly 0.7 to 1.0), and short titles with the same prefix start from a high baseline. A threshold such as 0.85 or 0.90 is therefore not comparable between occupations, boards or models, and 0.85 would lie below the background median plus two spreads. The ranking of similarities is informative, the absolute value is not, so the threshold is taken from the background distribution of the board (99th percentile) and from the occupation's own seeds. The same compression is the reason the coherence filter of script 92 centres the embeddings on the board mean.
+
+*Background: why e5 similarities fall in a narrow high band.* Multilingual-e5 is trained contrastively: it learns to produce embeddings of sentences or passages so that texts with similar meanings (positive pairs) lie close together and texts with different meanings (negative pairs) lie further apart. The training process, the geometry of the embedding space and the way cosine similarity is computed can make the scores cluster in a relatively narrow range. E5 uses the InfoNCE loss with a temperature of 0.01, and its developers give this as the reason cosine similarities tend to fall between about 0.7 and 1.0; they recommend using the relative ordering of the scores, not their absolute values. The mechanism runs through the loss. In its simplified form, with positive-pair similarity s_p, negative-pair similarity s_n and temperature τ:
+
+`L = -log( e^(s_p/τ) / ( e^(s_p/τ) + e^(s_n/τ) ) ) = -log(P_positive)`
+
+The loss is the negative log of the probability the model assigns to the positive example: close to 0 when that probability is close to 1, larger when it is low. The temperature enters because it divides the similarities before the softmax. Take a positive pair at cosine 0.85 and a negative pair at 0.75:
+
+| Temperature | Probability of the positive | Loss |
+| --- | --- | --- |
+| 0.1 | 73.1% | 0.3133 |
+| 0.01 | 99.995% | 0.0000454 |
+
+The small temperature magnifies the gap between the two scores (0.10 becomes 10 in the exponent), so a gap of 0.10 is already enough to give the positive example almost all of the probability. The model is not pushed to spread the similarities over the whole range from -1 to 1, and all of them stay high. This is why a median similarity of 0.83 between a centre and any posting of the board is expected, and why the thresholds of the seeded variant are taken from the background distribution of each board.
+
+| Named occupation | Matching titles | Used as centre | Own threshold | Members at the threshold | Members beyond the matching titles (largest) |
+| --- | --- | --- | --- | --- | --- |
+| trade compliance officer | 5 | yes | 0.911 | 26 | Compliance Officer (3), Trade Marketing Representative (3), Compliance Manager (2) |
+| export control specialist | 8 | yes | 0.881 | 517 | Account Manager (65), Sales Manager (27), Business Controller (18) |
+| battery cell technician | 6 | yes | 0.907 | 45 | Electronics Engineer (7), Manufacturing Engineer (2) |
+| supply chain resilience analyst | 1 | no | | | |
+| semiconductor process engineer | 0 | no | | | |
+| critical materials specialist | 0 | no | | | |
+| reshoring program manager | 0 | no | | | |
+
+Number of members by similarity threshold (all postings of jobbland, 53,959):
+
+| Named occupation | Seed titles | >= 0.90 | >= 0.92 | >= 0.94 | >= 0.96 |
+| --- | --- | --- | --- | --- | --- |
+| trade compliance officer | 5 | 34 | 16 | 5 | 5 |
+| export control specialist | 8 | 60 | 13 | 10 | 8 |
+| battery cell technician | 6 | 147 | 11 | 7 | 6 |
+
+**Reading.**
+
+- Four of the seven occupations have fewer than 5 matching titles on jobbland (one title for supply chain resilience analyst, none for the other three) and cannot be seeded. This agrees with the title search and the skill-count check above: the named occupations are present only in handfuls.
+- Past the seeds, the extra members are mostly false positives. For trade compliance the 21 extra postings are general compliance officers, with "Trade Marketing Representative" caught on the word "trade". For export control, 509 of the 517 members are account managers, sales managers and business controllers: the seed titles are few (8), one of them is a code-like title that is no closer to the others than the background (0.860), and the centre drifts to the general sales and controller titles. The 0.881 threshold is too low for this occupation; at 0.92 there are 13 members and at 0.94 there are 10, which is the seeds plus two. For battery cell technician the extra members are electronics and manufacturing engineers and battery-system engineers: related, but not the same role. A seed of 5 to 8 titles is too small for a threshold to separate neighbouring roles.
+- The monthly share of the board does not grow for any of the three. Trade compliance officer: 0.52% in 2024-01 (one posting), 0.00 to 0.34% afterwards, 0.04% in 2026-08. Battery cell technician: 0.00 to 0.29% with 0 to 3 postings per month and no direction. Export control: 4.25% in 2024-01 falling to 0.4 to 2.0% (0.87% in 2026-08); since most of its members are false positives the series is not read as an occupation. The last month (2026-09) has few sampled days and is unreliable.
+- Against HDBSCAN: 10 of the 26 trade compliance members, 159 of 517 export control members and 22 of 45 battery members are noise. The trade compliance members that are clustered fall in cluster 263 (15 postings, security manager and compliance officer, read earlier as consultancy staffing); the battery members are spread (cluster 356 with 9, then 3, 3 and 2).
+
+Lesjeudis and jobs.de. No occupation reaches 5 matching titles on either board, so there is no centre and nothing to extend; the counts are the result.
+
+| Named occupation | jobbland | lesjeudis | jobs.de |
+| --- | --- | --- | --- |
+| trade compliance officer | 5 | 0 | 0 |
+| export control specialist | 8 | 3 | 1 |
+| supply chain resilience analyst | 1 | 0 | 0 |
+| semiconductor process engineer | 0 | 1 | 2 |
+| battery cell technician | 6 | 0 | 0 |
+| critical materials specialist | 0 | 0 | 0 |
+| reshoring program manager | 0 | 0 | 0 |
+
+Matching titles of each named occupation after the pattern correction (the cleaned titles of each board; jobbland with the inferred titles). Only jobbland has three occupations with 5 or more titles. On lesjeudis and jobs.de the named occupations do not appear as job titles at all, which agrees with the skill-based counts above (the skills mark a topic, not a role).
+
+**Result.** The seeded variant confirms HDBSCAN and the title search: none of the named occupations that can be seeded grows on jobbland, and the one with a long series (export control) is dominated by neighbouring titles. The method catches occupations with fewer than 40 postings, which HDBSCAN cannot form, but on these data it finds that the postings are too few and too close to their neighbours to be an occupation cluster. A seed of titles from a source that lists the occupation (an ESCO or O*NET label with synonyms) would be a firmer centre than 5 to 8 matching titles; this is not tried.
+
+#### Seeding with the flagged clusters (script 106, 15 November)
+
+The supervisor's suggestion was to preserve chosen clusters by fixing them. Here the five flagged clusters of lesjeudis (33, 68, 137, 130, 139) and of jobbland (350, 291, 263, 266, 283) were used as seeds: the centre of each is the mean title embedding of its HDBSCAN members, and a posting joins when its similarity to the centre reaches the board's background 99th percentile for that centre (the floor from the seeds, the 10th percentile of their leave-one-out similarities, is lower in all ten cases, so the background decides). Members of the cluster always belong. The question is whether postings left in noise or in neighbouring clusters belong to the same occupation, and whether the extended cluster shows a rise that the HDBSCAN cluster does not.
+
+| Board, cluster | HDBSCAN members | Members after seeding | Of these in noise | What the extra postings are |
+| --- | --- | --- | --- | --- |
+| lesjeudis 33 (IVVQ) | 73 | 81 | 5 | more IVVQ and IVV titles: the same occupation |
+| lesjeudis 68 (embedded software) | 141 | 186 | 14 | embedded C and C++ developers: the same occupation, plus 10 "Software Development Engineer" |
+| lesjeudis 139 (cybersecurity) | 201 | 271 | 28 | cybersecurity architects, consultants, managers: the same occupation |
+| lesjeudis 137 (systems engineer) | 230 | 344 | 42 | IT systems, network and cloud engineers: a neighbouring occupation |
+| lesjeudis 130 (electronics, mechanical design) | 199 | 388 | 5 | 96 data engineers, 31 software engineers: false positives |
+| jobbland 350 (systems, security engineer) | 193 | 587 | 85 | data, software, automation and DevOps engineers: mostly false positives |
+| jobbland 291 (quality engineer) | 108 | 319 | 78 | inspection and maintenance technicians, supplier quality engineers and quality managers: partly the same |
+| jobbland 263 (compliance and IT manager) | 81 | 543 | 79 | account, project and sales managers: false positives |
+| jobbland 266 (process engineer) | 82 | 201 | 77 | production, plumbing and automation engineers: neighbouring |
+| jobbland 283 (project and IT manager, Swedish agencies) | 262 | 636 | 200 | postings whose title names "Swedish" or "Sweden" (Swedish-speaking customer service, a Swedish sales team): a cluster held by a word, not an occupation |
+
+**Reading.**
+
+- Seeding recovers real members where the cluster is tight and named by one expression (lesjeudis 33, 68, 139: +8, +45 and +70 postings, of which 5, 14 and 28 were in noise). Where the cluster is a broad family of engineers or managers (lesjeudis 130, jobbland 350, 263), the centre drifts to the general title and the extension is mostly false positives; the memberships of 543 and 587 are not read as occupations.
+- No extended cluster shows a sustained rise in the monthly share, except jobbland 283. The share of lesjeudis 33 stays between 0.08% and 0.94% and of 68 between 0.12% and 2.67% with no direction; 139 falls from 2.84% in 2024-08 to 0.38% in 2024-12 and returns to 1.2 to 1.9% from 2025-05; 137 holds 3.3 to 4.7% from 2024-11 to 2025-02 and falls to about 0.2 to 1.8% from March, the same wave that the employer check found; 130 stays between 1.0% and 3.0%. On jobbland 350 falls from 2 to 3% in early 2024 (few sampled days) to 0.3 to 1.3% in 2026, so the "clearly new" status of 350 in 2024-Q4 is not a rise; 291 and 266 stay flat (0.2 to 2.5% and 0.1 to 1.3%) and 263 stays near 1% with two peaks (2.87% in 2025-12 on 49 postings, 3.91% in 2025-06 on 5 postings).
+- Jobbland 283 rises from 0.05 to 0.9% (2024-12 to 2025-08) to 1.4 to 2.7% from 2025-09 to 2026-08 (4.00% in 2025-11 on 17 postings, 2.71% in 2026-02 on 63). This is the only rise, and it is not read as an emerging occupation: the cluster is held together by the words Swedish and Sweden and by place names in the titles ("our Stockholm office", "in Lund", "Västerås, Mälardalen"), and it grows in the same months in which the location text of the source changed to the bare country name (see the per-quarter HHI section). A plausible reading, not tested, is that part of the location information now sits in the title, so that the cluster partly measures the source change. The test is to count, by quarter, the titles of the board that contain a place name or "Swedish" (open item 27).
+
+**Result.** Seeding with the flagged clusters does not change the verdict. The occupations that can be extended (IVVQ, embedded software, cybersecurity on lesjeudis) keep a flat or falling share; the clusters that look like growth on jobbland (350 in 2024-Q4, 283 from 2025-09) are a coverage regime and a source change, not occupations. The method is useful as a check on cluster boundaries, not as a way to find emerging occupations.
+
+#### Weight sensitivity on jobs.de and jobbland (15 November)
+
+The sensitivity run of question 2 (log and capped weights) was made on lesjeudis only; on 15 November it was repeated for jobs.de and jobbland on input A, quarterly, with the stricter rule and the default flag intensity. The transformed weights are rescaled to the same board total. Number of clusters "clearly new" per quarter under the inverse-probability weights (ht), log weights and capped weights (95th percentile):
+
+| Quarter | jobs.de: ht / log / cap | jobbland: ht / log / cap |
+| --- | --- | --- |
+| 2024-Q2 | | 0 / 1 / 0 |
+| 2024-Q3 | 0 / 0 / 0 | 3 / 5 / 3 |
+| 2024-Q4 | 5 / 7 / 7 | 74 / 33 / 75 |
+| 2025-Q1 | 0 / 0 / 0 | 2 / 1 / 2 |
+| 2025-Q2 to 2025-Q4 | 0 / 0 / 0 (Q2 not usable) | 0 / 0 / 0 in each |
+| 2026-Q1 | | 6 / 2 / 5 |
+| 2026-Q2 and 2026-Q3 | | 0 / 0 / 0 |
+
+Clusters clearly below the line now and clearly above it earlier (the joint-dip signal), jobbland: 2025-Q2 87 / 69 / 85, 2025-Q3 97 / 73 / 97, 2026-Q1 21 / 26 / 22; jobs.de 2025-Q1: 5 / 5 / 4. Clusters "returning after a dip" on jobbland in 2026-Q1: 37 / 26 / 45.
+
+**Reading.** The verdict does not depend on the weighting. On jobs.de the clearly new clusters appear only in 2024-Q4 (the first quarter after the start of the series), none in 2025-Q1, and the same clusters lead the eligible list under all three weightings (27, 12, 58, 11, 41, 65 and 53 in the top eight each time; the eighth is 70 under the inverse-probability weights and 69 under log and capped weights). On jobbland the pattern is the same under all three: a mass of clusters becomes "clearly new" in 2024-Q4 (the coverage jump), most clusters fall wholly below the line in 2025-Q2 and 2025-Q3 and return in 2026-Q1, and no cluster stays clearly new after 2026-Q1. What the weighting does change is the size of the 2024-Q4 count (74 under the inverse-probability weights, 33 under log weights, 75 under capped weights), because the log transformation compresses the very large weights of that quarter; the count is a coverage effect in all three, so the difference does not change the conclusion.
+
+**Which clusters.** The lists of clusters that are clearly new in any quarter were compared cluster by cluster (full reports, input A).
+
+- jobs.de: the five clusters of the inverse-probability run (53, 52, 30, 40 and 21) are all in the log and cap lists, which add two: cluster 25 (Produktionsmitarbeiter, Maschinenführer, Kranführer) and cluster 35 (Pflegefachkraft). Both are ordinary occupations, 0% flagged, clearly new in 2024-Q4 only and clearly above the line in 1 of 2 later periods, so they sit on the edge of the rule. No jobs.de cluster in any list has a flagged share above 25%.
+- jobbland, capped against inverse-probability weights: 81 of 85 clusters are the same (cap adds 21, 83, 205 and 256; it drops 54, 111, 116 and 218). Capping does not change the picture.
+- jobbland, log against inverse-probability weights: only 35 of the 85 clusters are shared, and log adds 7 (83, 159, 193, 206, 291, 303 and 348). Log weights give the early, low-volume quarters more weighted postings relative to 2024-Q4 (2024-Q3: 40,143 under log against 16,278 under the inverse-probability weights; 2024-Q4: 129,353 against 145,266), so more clusters are already above the line before 2024-Q4 and fewer are counted as becoming new in it (33 against 74). Of the seven, cluster 291 (quality engineer, 14% flagged, small) is the only one with a flagged share above 10%; 159 is the CE drivers cluster and 303 tire and plumbing fitters, both unflagged.
+- The one strongly flagged cluster on jobbland that is clearly new under the other two weightings is 350 (system and security engineers, 41% flagged, clearly new in 2024-Q4 and above the line in 3 of 8 later periods under cap). It is not clearly new under log. Its appearance in 2024-Q4 is the coverage jump, and its status depends on the weighting, so it is not read as emergence.
+
+Conclusion for the weighting question: the verdict "no validated emerging occupation" does not depend on the weighting on either board. The log transformation changes which clusters are labelled clearly new in 2024-Q3 and 2024-Q4 on jobbland, because the series starts in a quarter with very low volume, which shows how much of that label is the coverage regime and not the occupations.
+
+#### Per-quarter HHI: what the files show (15 November)
+
+Script 93 writes `data/cluster/hhi_<board>_<input>.csv` with the normalised HHI per cluster and quarter, the number of placed postings, the unplaced share and a reliability flag (at least 50 placed postings). The files read here are the log and cap runs (jobs.de and jobbland, input A); the results are the same under both weightings, so the weighting does not matter for what follows. The files of the inverse-probability runs and of lesjeudis were not read.
+
+- **Per-quarter HHI of single clusters is mostly unreadable.** On jobbland only 272 of 3,927 cluster-quarters are reliable and only 52 have 50 or more placed postings. The flagged clusters have 1 to 24 placed postings in a quarter (cluster 350: 24 in 2024-Q4, 17 in 2026-Q1 and 17 in 2026-Q2; 291: 5, 16 and 9 in 2026-Q1, Q2 and Q3), so their HHI jumps between 0.05 and 1.0 from quarter to quarter without meaning. For the flagged clusters only the whole-period HHI is used (350: 0.14 to 0.15; 283: 0.05; 291: 0.06 to 0.07). There is therefore no readable change in regional concentration around AccelerateEU for a flagged cluster. The one exception is cluster 283 (project managers, 29% flagged), reliable in 2026-Q2 (64 placed) and 2026-Q3 (61): HHI 0.05 to 0.09, diffuse, with 0.03 to 0.04 in 2026-Q1 on 41 placed postings.
+- **jobbland: the share of unplaced postings collapses in the middle of the series.** The weighted share of postings without a NUTS-2 region is 7 to 14% from 2024-Q2 to 2025-Q2, then 91% in 2025-Q3, 79% in 2025-Q4 and 43% in 2026-Q1, and 3 to 4% from 2026-Q2 (log weights; cap weights 94%, 85% and 42%). The board-wide quarterly HHI in 2025-Q3 to 2026-Q1 rests on 386, 1,499 and 4,357 placed postings, against 7,570 in 2024-Q4, and is not comparable with the other quarters. This answers the question the mapping section left open (whether the dropped share changes over time): it does, strongly, and in the same period as the coverage dips of the series. Script 109 (location by quarter, run on all 53,959 postings) gives the cause, and it is neither a gap in our mapping nor missing ids: every posting is in the nuts2 file. Up to 2025-Q2 the location text names a place ("Stockholm", a municipality) and script 96 places 87 to 93% of the postings from it (learned place names, counties). From 2025-Q3 the location text is only the country: in 2025-Q3 2,416 of the 2,900 postings taken (and 3,701 of 5,405 in 2025-Q4) have the location "Sweden", and place names and counties disappear (method county 0 and learned 4 to 42 postings a quarter). The postings' own nuts2 field is the only route left, and it fills up gradually: 381 postings in 2025-Q3, 1,482 in 2025-Q4, 4,312 in 2026-Q1 and 7,259 (96%) in 2026-Q2. The unplaced share therefore follows how many postings carry the field in the quarter. The change is in the source data (the location schema of the postings changed between 2025-Q2 and 2026-Q2), not in our scripts; it is of the same kind as the change in the sector field.
+- **jobs.de: the regional mix concentrates in 2025-Q1 in every cluster.** The board-wide normalised HHI is 0.013 in 2024-Q3, 0.020 in 2024-Q4 and 0.037 in 2025-Q1 (log; the cap run gives the same). Of the 19 clusters with at least 30 placed postings in both 2024-Q4 and 2025-Q1, HHI rises in all 19 (median 0.029 to 0.076; cluster 12 from 0.037 to 0.073 with 187 and 183 placed postings, cluster 27 from 0.014 to 0.043). A small sample inflates HHI by about 1/n (0.03 for 30 postings, 0.005 for 183), which cannot explain a doubling in clusters whose number of placed postings did not change. A rise that appears in every cluster is a property of the board in that quarter (which regions or employers were collected), not of any occupation, which fits the earlier composition checks of script 97. From 2024-Q3 to 2024-Q4 the picture is mixed (15 of 24 clusters up). The cause was not checked; it belongs to the questions for Skillab (open item 11).
+- **Consequence for the deliverable.** The regional HHI is reported per cluster for the whole period with the unplaced share next to it. Per-quarter HHI is not used for any cluster with fewer than 50 placed postings in the quarter. The jobbland HHI of 2025-Q3 to 2026-Q1 and the jobs.de HHI of 2025-Q1 are not read as regional change. The whole-period HHI of a jobbland cluster mixes two ways of placing postings (place names up to 2025-Q2, the own field from 2026-Q2) and quarters with 40 to 94% unplaced; it is read with the unplaced share and, for a firm statement, on the windows 2024-Q2 to 2025-Q2 and 2026-Q2 to 2026-Q3.
+
+#### Related work: how others define a new occupation
+
+Giabelli et al. (2021) present NEO, which takes the occupation mentions in 2,119,025 UK job ads of 2018 and finds those that are missing from ESCO, then proposes the ESCO concept under which each fits best (embeddings trained on the ads, a taxonomy-based similarity and a comparison of skills with RCA). Ten experts rated 49 candidate mentions and judged 43 of them (88%) to be new occupations. Their notion of new is relative to a taxonomy at one point in time, not to a threshold crossed over time, and the paper distinguishes a new occupation ("scrum master") from a new label of an existing one ("Android developer"). Our Occupation Emergence Rate is the second kind of definition. The ESCO-based check (do the skills of a cluster match an existing ESCO occupation?) is a candidate for Month 5, using `occupationSkillRelations_en.csv`. Reference: Giabelli, A., Malandri, L., Mercorio, F., Mezzanzanica, M., Seveso, A. (2021). NEO: A System for Identifying New Emerging Occupation from Job Ads. Proceedings of the AAAI Conference on Artificial Intelligence 35, 16035–16036. Only this two-page demo was read; the formal definitions are in Giabelli et al. (2020b), not yet read.

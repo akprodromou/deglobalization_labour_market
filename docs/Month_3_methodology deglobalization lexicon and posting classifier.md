@@ -15,6 +15,13 @@ The brief asks for four deliverables:
 
 The method follows the brief's methodological reference, Kavargyris et al. (2025), Algorithms 18(9), 554: an LLM tags the postings, a human-annotated sample validates it, and several models are compared on that sample.
 
+Outlining the semantic
+landscape of job postings, topic modeling empowers recruiters to identify
+salient topics, distinguish emerging skill sets, and align organizational needs
+with the candidates’ skills. By discovering themes hidden within job
+advertisements, this analytical framework facilitates the identification of
+industry trends, competitive standards, and emerging skill requirements.
+
 ## Status and decisions, 28 October 2026
 
 The tagger is Claude Haiku 4.5 with prompt v8, chosen because it matches the agreed definitions and scores the same as its predecessors within noise. All results below are round-1 development results; the round-2 test is being annotated.
@@ -99,6 +106,12 @@ The corpus holds 53,959 postings after exact duplicates are removed; 2,792 (5.2%
 No change is distinguishable from zero except critical materials around AccelerateEU, which moves from 0.08% to 0.00% of postings. That is a handful of postings tagged by the least validated channel, and one interval in 60 excluding zero is what chance would give, so it is not evidence of an effect. The window before the Critical Raw Materials Act is thin (1,447 postings taken, about 2,100 in the population), which is why those intervals are wide. The result is that this tagger and this sample show no measurable shift in any channel around either event; the intervals on defense (about half a percentage point on a 2% share) would show a change of roughly a quarter or more of the share, and smaller changes cannot be ruled out. December 2025 stands out for defense (6.4%, interval 4.9 to 8.2), outside both event windows, and its postings should be checked for a single employer or campaign before the monthly series is described.
 
 **Skill Surge Index** (script 65; 29 October)
+
+ESCO identifies skills in different areas such as knowledge, skills,
+abilities, and competences, which enables efficient communication and
+alignment of skills profiles within the European market of work. This
+approach facilitates targeted workforce development initiatives, competencybased education programs, and skills matching services, thus promoting
+mobility and employment across sectors and regions geographical 
 
 The index is the weighted share of postings in a quarter that contain a skill, divided by the same share in a baseline period. The brief's 2019 baseline does not exist in this corpus, which starts in 2024, so two baselines are reported. The pre-shock baseline, January to April 2024 (before the Critical Raw Materials Act), holds 1,018 postings taken, of which 72 contain a lexicon term. The robustness baseline, September to December 2024, holds 10,359 postings taken and 520 with a term, but falls after the first shock.
 

@@ -1,0 +1,72 @@
+cluster,postings,with_skills,best_score,best_occupation,best_isco,percentile
+58,455,436,0.2413,bookkeeper,3313,0.873
+47,50,48,0.1119,casino gaming manager,4212,0.056
+65,321,315,0.2212,construction manager,1323,0.803
+45,62,61,0.1810,door to door seller,5243,0.563
+63,102,97,0.1618,technical sales representative,2433,0.423
+13,61,58,0.1264,employee volunteering programme coordinator,1212,0.155
+41,297,271,0.2666,warehouse operators for clothing,4321,0.944
+19,119,109,0.2520,manufacturing manager,1321,0.887
+50,98,89,0.1651,secretary,4120,0.451
+62,67,62,0.1585,advertising sales agent,3339,0.366
+18,121,111,0.1157,mine surveyor,2165,0.085
+12,656,621,0.1813,advanced nurse practitioner,2221,0.577
+27,876,735,0.1693,drafter,3118,0.479
+20,207,202,0.2310,marketing manager,1221,0.831
+15,94,84,0.2152,game keeper,5419,0.761
+34,69,66,0.1407,receptionist,4226,0.239
+70,203,195,0.1694,mechatronics engineering technician,3115,0.493
+49,102,92,0.1169,cocktail bartender,5132,0.113
+54,87,74,0.1347,administrative assistant,3343,0.211
+66,48,47,0.1895,"heating, ventilation, air conditioning (and refrigeration) drafter",3118,0.620
+59,88,81,0.2313,packaging production manager,2141,0.845
+67,150,147,0.1595,plastic furniture machine operator,8142,0.408
+69,269,258,0.1166,electrical engineer,2151,0.099
+68,112,108,0.1428,mechatronics engineering technician,3115,0.282
+11,299,274,0.1999,social pedagogue,2635,0.676
+31,133,104,0.1347,occupational driving instructor,2320,0.197
+61,101,96,0.1738,personal stylist,5142,0.521
+7,42,40,0.0935,bicycle shop manager,1420,0.000
+8,102,78,0.4927,art handler,3433,0.986
+3,86,83,0.2575,art handler,3433,0.901
+0,48,48,0.1897,art handler,3433,0.634
+2,49,49,0.2602,art handler,3433,0.915
+9,62,57,0.2377,art handler,3433,0.859
+28,83,79,0.1424,occupational therapy assistant,2269,0.254
+56,202,193,0.2045,digital forensics expert,2529,0.704
+64,67,59,0.2044,welder,7212,0.690
+52,188,148,0.1006,mayor,1111,0.028
+33,56,44,0.1594,occupational therapist,2269,0.394
+60,116,90,0.1427,post office counter clerk,4211,0.268
+44,85,75,0.1021,private chef,3434,0.042
+48,62,60,0.1642,quality engineer,2149,0.437
+55,65,62,0.2951,software analyst,2512,0.972
+40,153,123,0.2112,warehouse operators for clothing,4321,0.732
+37,62,60,0.1489,human resources manager,1212,0.338
+6,60,51,0.1286,industrial cook,5120,0.169
+51,41,41,0.2736,human resources manager,1212,0.958
+35,113,90,0.2168,advanced nurse practitioner,2221,0.775
+10,79,79,0.1437,speechwriter,2641,0.296
+25,106,93,0.1799,packaging production manager,2141,0.549
+21,124,111,0.1759,street food vendor,5212,0.535
+22,48,40,0.1674,specialised seller,5223,0.465
+57,56,52,0.1192,financial markets back office administrator,4312,0.127
+38,42,38,0.1568,real estate leasing manager,3334,0.352
+16,119,92,0.2134,investment adviser,2412,0.746
+26,116,72,0.1913,locker room attendant,9629,0.662
+30,115,105,0.1147,network marketer,2431,0.070
+32,46,39,0.1442,food service worker,5246,0.310
+53,198,175,0.2643,bookkeeper,3313,0.930
+29,71,63,0.1460,casino gaming manager,4212,0.324
+39,69,47,0.0936,quick service restaurant team leader,5246,0.014
+23,49,42,0.1344,travel agent,4221,0.183
+5,40,33,0.1855,personal shopper,5223,0.592
+4,74,65,0.2268,art handler,3433,0.817
+46,72,67,0.1884,administrative assistant,3343,0.606
+43,85,72,0.1901,social pedagogue,2635,0.648
+24,59,54,0.2090,door to door seller,5243,0.718
+36,95,60,0.2187,specialised doctor,2212,0.789
+17,52,41,0.1592,sign language interpreter,2643,0.380
+42,69,57,0.1706,social pedagogue,2635,0.507
+14,42,42,0.1403,industrial maintenance supervisor,3115,0.225
+1,43,43,0.1221,leather goods CAD patternmaker,7532,0.141

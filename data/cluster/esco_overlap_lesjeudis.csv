@@ -1,0 +1,145 @@
+cluster,postings,with_skills,best_score,best_occupation,best_isco,percentile
+74,58,55,0.1406,mobile application developer,2514,0.556
+16,76,76,0.1407,ICT help desk agent,3512,0.562
+71,98,98,0.2191,precast moulder,8114,0.875
+69,129,129,0.1726,embedded system designer,2511,0.708
+33,73,73,0.0757,ICT integration tester,2519,0.007
+75,188,188,0.1256,embedded system designer,2511,0.465
+108,119,119,0.1118,project manager,1219,0.271
+26,132,130,0.0966,broadcast technician,3521,0.125
+12,138,133,0.1130,telephone switchboard operator,4223,0.312
+64,53,53,0.2811,textile colourist,2163,0.965
+11,40,33,0.0914,bridge operator,4323,0.062
+23,123,117,0.0870,ICT security administrator,2529,0.042
+57,102,102,0.1702,ICT change and configuration manager,2519,0.701
+119,420,417,0.0900,ICT business analyst,2511,0.056
+90,87,87,0.1542,data analyst,2511,0.653
+106,110,110,0.1119,cyber incident responder,2529,0.292
+127,94,93,0.1042,marine engineer,2144,0.181
+47,117,117,0.1354,precast moulder,8114,0.528
+124,141,139,0.1646,data analyst,2511,0.681
+111,58,58,0.1258,operations manager,1321,0.472
+55,231,225,0.1802,user experience analyst,2511,0.736
+122,78,78,0.0960,corporate investment banker,2412,0.111
+110,122,121,0.1849,project support officer,3343,0.778
+84,141,132,0.1317,user interface developer,2512,0.507
+77,124,124,0.1457,embedded system designer,2511,0.590
+67,77,77,0.1534,ICT test analyst,2519,0.639
+54,56,56,0.1098,enterprise architect,2511,0.250
+133,48,44,0.1041,enterprise architect,2511,0.174
+41,204,204,0.1480,ICT change and configuration manager,2519,0.611
+61,54,54,0.1163,embedded system designer,2511,0.347
+114,112,112,0.1837,chief ICT security officer,2529,0.764
+63,106,106,0.1408,ICT change and configuration manager,2519,0.569
+2,117,117,0.1165,lean manager,2421,0.354
+125,128,127,0.1255,operations manager,1321,0.458
+86,67,64,0.1273,forest worker,9215,0.479
+105,43,42,0.2610,employer branding manager,2431,0.938
+142,148,147,0.2366,ICT test analyst,2519,0.924
+130,199,199,0.1506,industrial engineer,2141,0.625
+44,89,89,0.1062,bank treasurer,1211,0.215
+115,53,51,0.1050,building information modelling consultant,2421,0.201
+8,87,87,0.1739,project support officer,3343,0.722
+59,77,77,0.1816,ICT system developer,2511,0.750
+96,286,284,0.2112,digital marketing manager,1221,0.847
+81,61,61,0.1118,embedded system designer,2511,0.285
+7,89,89,0.1390,system configurator,2522,0.549
+121,48,47,0.2820,intellectual property consultant,3339,0.972
+52,80,80,0.1861,cloud DevOps engineer,2512,0.785
+39,88,87,0.1287,embedded system designer,2511,0.486
+139,201,200,0.2278,cybersecurity risk manager,2529,0.917
+50,275,274,0.1046,software analyst,2512,0.194
+51,61,61,0.1730,chief data officer,1330,0.715
+25,73,73,0.1216,waste broker,3324,0.410
+18,92,92,0.1464,building information modelling consultant,2421,0.597
+43,102,102,0.1318,user interface designer,2513,0.514
+134,85,82,0.1250,cosmologist,2111,0.451
+22,114,114,0.2021,recruitment consultant,2423,0.826
+107,97,97,0.0888,cyber incident responder,2529,0.049
+112,59,59,0.2264,data analyst,2511,0.903
+45,77,77,0.2078,database administrator,2521,0.840
+109,50,50,0.0784,masseur/masseuse,5142,0.014
+62,102,101,0.1212,enterprise architect,2511,0.403
+138,79,79,0.1043,ICT network administrator,2522,0.188
+120,48,47,0.0964,digital games designer,2166,0.118
+17,117,116,0.2209,data analyst,2511,0.889
+56,60,59,0.1782,security consultant,5414,0.729
+118,48,48,0.1113,system configurator,2522,0.264
+104,83,83,0.1166,corporate social responsibility manager,1219,0.361
+70,71,71,0.1243,operations manager,1321,0.438
+0,44,44,0.1120,ICT change and configuration manager,2519,0.299
+82,72,71,0.1123,industrial mobile devices software developer,2514,0.306
+38,62,62,0.2203,precast moulder,8114,0.882
+35,41,41,0.1079,textile colourist,2163,0.222
+36,80,80,0.1108,embedded system designer,2511,0.257
+68,141,140,0.2116,embedded system designer,2511,0.854
+99,58,58,0.0923,cyber incident responder,2529,0.076
+49,77,77,0.1138,embedded system designer,2511,0.319
+85,51,51,0.1053,ICT application developer,2514,0.208
+113,69,68,0.1611,big data archive librarian,3433,0.674
+10,187,181,0.1198,telephone switchboard operator,4223,0.396
+32,51,51,0.0841,human resources manager,1212,0.035
+31,107,107,0.1973,data analyst,2511,0.812
+14,73,73,0.2506,purchasing manager,1324,0.931
+88,119,119,0.1091,chief ICT security officer,2529,0.236
+65,82,82,0.1307,embedded system designer,2511,0.500
+28,64,64,0.2007,data analyst,2511,0.819
+60,68,68,0.2798,cloud architect,2512,0.958
+46,204,204,0.1471,cloud DevOps engineer,2512,0.604
+129,61,61,0.1916,cybersecurity risk manager,2529,0.792
+5,42,42,0.1087,ICT security administrator,2529,0.229
+100,44,44,0.0923,animal facility manager,1120,0.069
+3,280,279,0.0927,chief product officer,1223,0.083
+21,45,45,0.1290,project manager,1219,0.493
+143,74,74,0.2119,ICT test analyst,2519,0.861
+123,68,67,0.0982,building information modelling consultant,2421,0.132
+66,76,76,0.1155,embedded system designer,2511,0.326
+20,53,53,0.0707,technical communicator,2641,0.000
+76,78,78,0.1329,web developer,2513,0.521
+87,61,61,0.1024,machinery assembly coordinator,4322,0.167
+97,45,44,0.1161,specialised veterinarian,2250,0.340
+94,46,46,0.1434,precast moulder,8114,0.583
+103,40,40,0.0931,zoo section leader,5164,0.090
+101,46,45,0.3149,audit supervisor,2411,0.979
+34,64,64,0.1184,ICT business analyst,2511,0.382
+9,49,48,0.1019,forestry machinery technician,7233,0.153
+13,82,80,0.1539,waiter/waitress,5131,0.646
+15,122,119,0.2243,telephone switchboard operator,4223,0.896
+128,52,52,0.1825,cybersecurity risk manager,2529,0.757
+117,65,65,0.1604,ICT project manager,1330,0.660
+29,54,54,0.1959,data analyst,2511,0.799
+73,57,57,0.1228,embedded system designer,2511,0.424
+1,48,44,0.3387,mattress making machine operator,8159,0.986
+6,87,87,0.2736,precast moulder,8114,0.951
+95,49,49,0.1656,data analyst,2511,0.688
+92,40,40,0.1519,data analyst,2511,0.632
+48,40,40,0.1483,data analyst,2511,0.618
+83,40,40,0.1220,web designer,2166,0.417
+89,52,49,0.1016,defence administration officer,1219,0.146
+136,140,139,0.0992,operations manager,1321,0.139
+137,230,227,0.0938,race track operator,4212,0.097
+58,62,62,0.1243,ICT change and configuration manager,2519,0.444
+27,50,49,0.2612,chief data officer,1330,0.944
+19,44,43,0.0834,motor vehicle aftersales manager,1221,0.028
+93,72,72,0.6795,textile colourist,2163,0.993
+53,45,45,0.1383,ICT change and configuration manager,2519,0.542
+42,47,47,0.1155,mobile application developer,2514,0.333
+102,52,52,0.1420,computer vision engineer,2511,0.576
+4,76,74,0.1197,ICT help desk agent,3512,0.389
+40,69,69,0.1839,mobile application developer,2514,0.771
+141,70,70,0.1965,embedded system designer,2511,0.806
+78,40,40,0.1169,corporate social responsibility manager,1219,0.368
+98,41,41,0.1118,purchasing manager,1324,0.278
+30,48,48,0.1815,data analyst,2511,0.743
+24,84,83,0.2264,data analyst,2511,0.910
+132,98,98,0.1093,ICT network administrator,2522,0.243
+116,236,235,0.1609,project manager,1219,0.667
+80,47,47,0.1356,web designer,2166,0.535
+135,65,61,0.1180,office clerk,4110,0.375
+126,70,70,0.2056,ethical hacker,2529,0.833
+131,70,70,0.1021,telephone switchboard operator,4223,0.160
+37,55,55,0.0815,real estate investor,3334,0.021
+79,48,48,0.1663,ICT application developer,2514,0.694
+140,48,48,0.0959,infantry soldier,0310,0.104
+72,49,49,0.2181,precast moulder,8114,0.868
+91,41,41,0.1229,ICT project manager,1330,0.431

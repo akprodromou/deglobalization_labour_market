@@ -1,0 +1,5 @@
+min_cluster_size/min_samples,clusters,noise %,median size,clusters under 60,named titles in a cluster,relative validity,ARI between seeds
+40/10 (baseline),357,34.3,70,123,5 of 19,,
+20/10,636,33.9,43,459,6 of 19,0.268,0.905
+40/40,275,41.8,73,90,4 of 19,0.328,0.949
+80/20,133,38.0,163,0,2 of 19,0.231,0.831

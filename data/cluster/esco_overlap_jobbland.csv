@@ -1,0 +1,358 @@
+cluster,postings,with_skills,best_score,best_occupation,best_isco,percentile
+274,55,55,0.2275,logistics engineer,2149,0.891
+350,193,192,0.1570,embedded systems security engineer,2529,0.630
+35,73,73,0.1124,resource manager,1324,0.283
+202,180,180,0.1961,manufacturing manager,1321,0.801
+27,180,177,0.1079,pharmaceutical quality specialist,2262,0.238
+345,130,130,0.1353,ICT business analyst,2511,0.479
+339,83,83,0.1279,software analyst,2512,0.417
+342,109,109,0.1217,project manager,1219,0.345
+219,130,129,0.1012,manufacturing manager,1321,0.182
+24,104,91,0.0674,industrial engineer,2141,0.008
+178,99,98,0.0848,occupational therapy assistant,2269,0.067
+234,50,49,0.1421,operations manager,1321,0.532
+28,46,46,0.1574,bank treasurer,1211,0.636
+216,135,134,0.0957,advanced nurse practitioner,2221,0.137
+4,64,63,0.1247,pill maker operator,8131,0.370
+351,331,331,0.2052,cyber incident responder,2529,0.829
+115,347,347,0.0674,recruitment consultant,2423,0.006
+346,65,65,0.1063,venture capitalist,2412,0.230
+285,120,120,0.2264,embedded system designer,2511,0.888
+218,105,104,0.1559,door to door seller,5243,0.619
+208,115,106,0.0904,mine ventilation engineer,2144,0.101
+312,75,73,0.2214,embedded system designer,2511,0.868
+276,179,179,0.1051,data protection officer,2619,0.221
+112,63,63,0.1533,project manager,1219,0.605
+335,50,50,0.1736,electrical engineer,2151,0.720
+311,88,88,0.2229,industrial mobile devices software developer,2514,0.877
+226,44,44,0.1213,ICT account manager,2434,0.339
+261,194,194,0.2255,human resources manager,1212,0.885
+258,57,57,0.1224,software analyst,2512,0.356
+260,101,100,0.1427,service manager,1349,0.535
+189,49,48,0.0740,manufacturing manager,1321,0.025
+348,97,97,0.2428,bank treasurer,1211,0.922
+10,44,44,0.0978,care home worker,3412,0.154
+304,122,120,0.2097,project manager,1219,0.840
+185,117,114,0.0785,social counsellor,2635,0.039
+332,50,50,0.1544,ICT project manager,1330,0.613
+268,341,338,0.0948,parliamentary assistant,2422,0.132
+197,703,694,0.1606,anaesthetic technician,3259,0.655
+273,105,105,0.3196,purchaser,3323,0.980
+84,73,73,0.1289,venue director,3332,0.426
+37,45,45,0.1919,purchasing manager,1324,0.787
+296,226,226,0.1603,ICT business analyst,2511,0.653
+61,42,42,0.1374,project manager,1219,0.490
+72,94,94,0.0891,manufacturing manager,1321,0.095
+290,210,209,0.1868,user interface designer,2513,0.770
+270,45,45,0.1726,logistics analyst,2421,0.711
+278,85,85,0.2490,user interface designer,2513,0.930
+263,81,81,0.2504,director of compliance and information security,1213,0.933
+287,81,81,0.1511,embedded system designer,2511,0.585
+317,279,268,0.1641,technical sales representative,2433,0.675
+26,85,85,0.2166,human resources manager,1212,0.860
+284,348,345,0.1412,service manager,1349,0.518
+109,125,125,0.1417,smart home engineer,2151,0.524
+343,232,231,0.1758,installation engineer,2149,0.728
+254,57,57,0.1261,ICT account manager,2434,0.381
+333,165,163,0.2280,financial auditor,2411,0.894
+58,78,78,0.1275,real estate leasing manager,3334,0.401
+338,154,152,0.1901,bank treasurer,1211,0.782
+51,46,46,0.1343,user interface designer,2513,0.473
+232,70,69,0.2684,manufacturing manager,1321,0.947
+321,339,329,0.1166,tramways technician,7421,0.305
+355,58,58,0.1460,renewable energy engineer,2149,0.566
+124,382,380,0.0853,advanced nurse practitioner,2221,0.073
+139,55,55,0.2201,leather goods packing operator,8183,0.866
+227,63,63,0.1486,ICT business analyst,2511,0.574
+326,135,135,0.1119,reprographics technician,7322,0.277
+38,42,42,0.2848,ICT vendor relationship manager,1330,0.964
+257,73,73,0.2135,product quality inspector,7543,0.852
+265,121,121,0.1542,ICT account manager,2434,0.611
+241,144,144,0.0714,monk/nun,3413,0.020
+337,100,100,0.2183,cloud DevOps engineer,2512,0.863
+190,152,148,0.0836,nurse responsible for general care,2221,0.059
+303,180,174,0.1418,tyre vulcaniser,8141,0.527
+52,121,121,0.2753,manufacturing manager,1321,0.952
+327,85,84,0.1235,ICT business analysis manager,2511,0.367
+40,90,90,0.1207,sport facility manager,1431,0.331
+34,435,413,0.1315,dental practitioner,2261,0.454
+291,108,108,0.2512,product quality controller,7543,0.936
+57,264,264,0.2237,babysitter,5311,0.880
+160,108,100,0.1049,warehouse worker,9333,0.218
+301,145,145,0.1821,product manager,1223,0.737
+233,46,44,0.1014,service manager,1349,0.185
+105,133,131,0.2413,hospitality establishment receptionist,4224,0.913
+293,207,207,0.2225,ICT test analyst,2519,0.874
+137,358,343,0.1306,funeral attendant,5163,0.445
+77,67,64,0.0928,office clerk,4110,0.120
+56,60,59,0.0870,leather goods artisanal worker,7318,0.076
+354,46,46,0.1454,electrical engineer,2151,0.560
+149,67,65,0.1842,secondary school teaching assistant,5312,0.754
+352,170,170,0.1861,industrial engineer,2141,0.765
+221,41,41,0.1120,catcher,9212,0.280
+172,277,254,0.1504,chef,3434,0.577
+30,214,211,0.1618,industrial mobile devices software developer,2514,0.664
+356,60,60,0.1661,electronics drafter,3118,0.692
+275,45,45,0.1301,service manager,1349,0.437
+159,356,342,0.1011,warehouse worker,9333,0.179
+256,78,77,0.2891,lawyer,2611,0.969
+336,67,67,0.2366,financial manager,1211,0.905
+279,72,72,0.1524,graphic designer,2166,0.599
+13,83,79,0.3450,tyre fitter,7231,0.989
+118,343,342,0.1227,legal guardian,3412,0.359
+203,105,104,0.1696,embedded system designer,2511,0.703
+306,85,83,0.1844,welder,7212,0.756
+50,63,57,0.0834,post office counter clerk,4211,0.056
+325,74,73,0.1130,ICT network administrator,2522,0.286
+283,262,262,0.1034,operations manager,1321,0.204
+330,88,87,0.1566,financial manager,1211,0.627
+259,101,100,0.1690,telephone switchboard operator,4223,0.700
+88,377,363,0.3326,domestic housekeeper,5152,0.983
+122,65,65,0.0781,advanced nurse practitioner,2221,0.034
+255,87,86,0.1222,service manager,1349,0.350
+353,43,43,0.1266,drafter,3118,0.387
+164,75,72,0.2863,warehouse operators for clothing,4321,0.966
+196,148,147,0.1506,clinical psychologist,2634,0.583
+123,287,283,0.0827,receptionist,4226,0.050
+286,47,46,0.2157,embedded system designer,2511,0.854
+148,65,46,0.1690,chef,3434,0.697
+64,52,52,0.1850,computer scientist,2511,0.762
+173,49,49,0.1759,tramways technician,7421,0.731
+150,120,119,0.2295,babysitter,5311,0.896
+294,223,221,0.1372,onshore wind farm technician,3131,0.487
+99,461,428,0.1683,commercial sales representative,3322,0.695
+1,66,66,0.1089,nurse assistant,5321,0.252
+302,302,298,0.2715,digital marketing manager,1221,0.950
+344,124,124,0.2078,enterprise architect,2511,0.832
+106,50,47,0.1439,ski instructor,3422,0.546
+201,43,43,0.1139,nurse responsible for general care,2221,0.294
+249,64,64,0.1824,commercial director,1221,0.739
+17,144,142,0.1618,door to door seller,5243,0.661
+188,102,102,0.1575,nurse responsible for general care,2221,0.639
+324,69,69,0.2008,ICT change and configuration manager,2519,0.812
+71,127,127,0.1723,bioinformatics scientist,2131,0.709
+70,113,112,0.2014,biophysicist,2131,0.815
+314,87,87,0.1952,knowledge engineer,2529,0.798
+166,389,387,0.2415,adult literacy teacher,2352,0.916
+161,89,89,0.1282,further education teacher,2359,0.423
+3,89,89,0.1052,pharmacist,2262,0.224
+281,51,51,0.2344,embedded system designer,2511,0.899
+36,70,70,0.3525,purchaser,3323,0.992
+170,51,50,0.1410,occupational therapy assistant,2269,0.515
+252,91,91,0.1421,ICT account manager,2434,0.529
+76,67,66,0.0898,membership administrator,4110,0.098
+81,49,47,0.0738,nurse responsible for general care,2221,0.022
+341,68,67,0.3335,welding engineer,2144,0.986
+349,58,58,0.2434,payroll clerk,4313,0.924
+47,82,81,0.2413,embedded system designer,2511,0.910
+78,87,87,0.1228,project manager,1219,0.361
+67,80,80,0.1728,geneticist,2131,0.714
+101,152,152,0.0748,child care worker,5311,0.028
+236,56,56,0.1276,community health worker,3253,0.403
+213,65,64,0.0701,occupational therapy assistant,2269,0.017
+68,81,81,0.1278,computer vision engineer,2511,0.406
+39,82,78,0.1113,court enforcement officer,3411,0.263
+231,41,41,0.1032,warehouse operators for clothing,4321,0.202
+309,70,70,0.1656,digital games designer,2166,0.683
+184,141,134,0.0995,human resources manager,1212,0.162
+119,119,119,0.0944,human resources manager,1212,0.126
+187,51,51,0.1986,railway sales agent,4221,0.804
+297,44,41,0.1845,door to door seller,5243,0.759
+142,109,109,0.2250,warehouse operators for clothing,4321,0.882
+182,55,55,0.1550,roofer,7121,0.616
+224,184,179,0.1518,computer numerical control machine operator,7223,0.594
+65,40,40,0.1506,biochemistry technician,3141,0.580
+180,236,212,0.1376,specialised doctor,2212,0.493
+195,107,105,0.1304,psychotherapist,2634,0.440
+215,135,135,0.0783,advanced nurse practitioner,2221,0.036
+220,58,57,0.1614,human resources officer,2423,0.658
+63,126,126,0.1133,operations manager,1321,0.289
+94,130,124,0.1082,snow-clearing worker,8342,0.244
+154,199,199,0.1454,occupational therapy assistant,2269,0.555
+193,157,155,0.1910,specialised doctor,2212,0.784
+43,44,44,0.1133,occupational therapy assistant,2269,0.291
+299,209,199,0.0843,ski instructor,3422,0.062
+292,41,41,0.1081,ICT test analyst,2519,0.241
+243,60,60,0.1037,bookmaker,4212,0.207
+91,46,28,0.1565,attraction operator,9629,0.625
+246,41,41,0.1350,operations manager,1321,0.476
+79,49,48,0.1028,road operations manager,1324,0.193
+204,182,174,0.1105,innovation engineer,2149,0.261
+253,76,76,0.1878,drafter,3118,0.773
+310,62,62,0.1575,embedded system designer,2511,0.641
+329,61,61,0.1140,project manager,1219,0.297
+92,64,33,0.2556,carriage driver,9332,0.941
+266,82,82,0.1996,production engineer,2141,0.810
+308,51,40,0.1103,door to door seller,5243,0.258
+60,96,95,0.2115,data analyst,2511,0.843
+96,61,61,0.1017,tobacco shop manager,1420,0.188
+19,84,83,0.1887,domestic housekeeper,5152,0.776
+42,98,96,0.1640,security guard supervisor,5414,0.672
+127,92,88,0.1658,hotel butler,5151,0.689
+59,60,60,0.0814,membership manager,2431,0.048
+85,54,52,0.1717,orthoptist,2267,0.706
+305,61,58,0.1454,embedded system designer,2511,0.557
+251,56,56,0.1310,operations manager,1321,0.451
+250,98,97,0.1272,service manager,1349,0.398
+295,61,60,0.1395,recruitment consultant,2423,0.510
+107,99,99,0.2016,specialised veterinarian,2250,0.818
+269,114,114,0.1746,environmental programme coordinator,2133,0.723
+128,99,98,0.2361,night auditor,4224,0.902
+334,140,135,0.1298,precast moulder,8114,0.434
+267,137,136,0.1560,service manager,1349,0.622
+22,60,58,0.0928,electrician,7411,0.118
+100,100,99,0.1116,home care aide,5322,0.269
+102,85,85,0.1417,career guidance advisor,2423,0.521
+54,44,43,0.0843,aftersales service manager,1221,0.064
+104,46,46,0.0881,shop assistant,5223,0.081
+272,50,50,0.4362,warehouse operators for clothing,4321,0.997
+136,390,379,0.1222,funeral attendant,5163,0.353
+130,83,77,0.1837,club host/club hostess,5169,0.748
+307,95,91,0.2820,garden labourer,9214,0.961
+222,64,64,0.1217,machine operator supervisor,3122,0.342
+33,81,75,0.2770,hair stylist,5141,0.955
+129,72,71,0.1217,dating service consultant,5169,0.347
+12,69,53,0.2027,quick service restaurant crew member,9411,0.824
+318,57,53,0.1386,race track operator,4212,0.504
+5,70,70,0.0999,nurse responsible for general care,2221,0.165
+25,47,47,0.1316,boxing instructor,3422,0.459
+11,61,56,0.1468,quick service restaurant crew member,9411,0.569
+53,79,72,0.1042,hotel concierge,4229,0.213
+121,95,95,0.3107,domestic housekeeper,5152,0.972
+143,71,71,0.1309,babysitter,5311,0.448
+14,60,57,0.1211,tanning consultant,5142,0.336
+323,43,43,0.1184,high rigger,7215,0.314
+340,115,108,0.1292,fireplace installer,7115,0.429
+146,49,45,0.1474,airport baggage handler,9333,0.571
+264,97,96,0.1337,talent agent,3339,0.468
+228,133,133,0.1268,secretary,4120,0.389
+138,41,41,0.0849,surface engineer,2141,0.070
+176,71,70,0.1517,avionics technician,7421,0.591
+15,104,99,0.1448,dental practitioner,2261,0.549
+29,126,125,0.0906,rental service representative in agricultural machinery and equipment,5249,0.106
+288,109,109,0.0829,solar energy technician,7411,0.053
+198,42,42,0.0645,nurse responsible for general care,2221,0.003
+45,45,44,0.1183,picture editor,2642,0.311
+315,53,53,0.2042,data analyst,2511,0.826
+16,71,71,0.1278,recruitment consultant,2423,0.409
+87,42,39,0.0963,storyboard artist,2651,0.140
+174,123,118,0.1282,post office counter clerk,4211,0.420
+230,59,59,0.1028,ICT product manager,1330,0.196
+186,107,107,0.1336,fire prevention and protection engineer,2149,0.465
+200,45,45,0.1187,child care worker,5311,0.319
+298,61,60,0.1093,after-sales service technician,2433,0.255
+245,50,50,0.1382,operations manager,1321,0.499
+347,63,63,0.1947,bank treasurer,1211,0.796
+162,108,104,0.1897,language school teacher,2353,0.779
+69,51,50,0.1640,excavator operator,8342,0.669
+156,145,145,0.2090,further education teacher,2359,0.835
+103,54,53,0.0905,post office counter clerk,4211,0.104
+145,56,55,0.1053,warehouse worker,9333,0.227
+83,76,55,0.0999,assessor of prior learning,2359,0.168
+8,58,57,0.1005,occupational therapy assistant,2269,0.171
+2,71,71,0.1119,nurse responsible for general care,2221,0.275
+80,53,53,0.0968,mine ventilation engineer,2144,0.148
+75,50,49,0.1316,medical physics expert,2269,0.457
+179,53,49,0.1339,specialised doctor,2212,0.471
+171,111,102,0.1866,quick service restaurant crew member,9411,0.768
+62,41,41,0.1269,client relations manager,2431,0.392
+152,81,77,0.1250,advanced nurse practitioner,2221,0.373
+126,63,50,0.1278,chef,3434,0.412
+322,71,71,0.0906,"heating, ventilation, air conditioning engineer",2144,0.109
+168,46,46,0.1517,assistant clinical psychologist,3259,0.588
+183,158,156,0.1364,project manager,1219,0.482
+289,40,40,0.1077,shop assistant,5223,0.235
+113,41,39,0.1259,sign language teacher,2353,0.378
+116,51,51,0.1202,funeral attendant,5163,0.328
+41,55,45,0.3958,cocktail bartender,5132,0.994
+49,53,49,0.1532,quick service restaurant crew member,9411,0.602
+90,98,62,0.1987,carriage driver,9332,0.807
+316,73,71,0.1382,talent agent,3339,0.501
+95,50,50,0.1046,educational psychologist,2634,0.216
+133,67,64,0.2623,warehouse operators for clothing,4321,0.944
+163,65,65,0.2219,language school teacher,2353,0.871
+165,89,87,0.3190,warehouse operators for clothing,4321,0.978
+319,68,63,0.1381,service manager,1349,0.496
+140,132,120,0.0875,quick service restaurant crew member,9411,0.078
+242,61,61,0.1074,personal shopper,5223,0.232
+55,68,68,0.0886,operations manager,1321,0.090
+217,49,49,0.0967,roughneck,8113,0.146
+108,75,75,0.1186,social pedagogue,2635,0.317
+248,60,60,0.0882,shepherd,6121,0.087
+331,63,63,0.2785,bank treasurer,1211,0.958
+82,101,74,0.2402,pizzaiolo,9411,0.908
+207,60,60,0.1082,service manager,1349,0.249
+313,46,46,0.1198,vehicle technician,7231,0.325
+300,49,47,0.1117,welder,7212,0.272
+0,64,64,0.1148,advanced nurse practitioner,2221,0.303
+6,46,46,0.1591,door to door seller,5243,0.647
+135,64,63,0.1938,music instructor,2310,0.793
+32,115,98,0.3187,masseur/masseuse,5142,0.975
+167,127,126,0.1757,adult literacy teacher,2352,0.725
+153,43,43,0.1430,occupational therapy assistant,2269,0.538
+225,65,64,0.1645,manufacturing manager,1321,0.678
+46,41,41,0.1387,special educational needs teacher,2352,0.507
+320,46,46,0.1228,biogas technician,3133,0.364
+117,208,208,0.1656,further education teacher,2359,0.686
+141,103,102,0.2095,further education teacher,2359,0.838
+18,43,42,0.0914,land-based machinery operator,8341,0.115
+111,65,65,0.1142,university literature lecturer,2310,0.300
+247,58,57,0.0978,sport administrator,1349,0.151
+328,40,40,0.1008,energy manager,1349,0.176
+132,247,182,0.1581,waiter/waitress,5131,0.644
+89,43,38,0.2122,kitchen assistant,9412,0.849
+93,40,34,0.1651,domestic cleaner,9111,0.681
+97,40,38,0.1037,weight loss consultant,5142,0.210
+114,123,122,0.1006,chief operating officer,1120,0.174
+9,43,42,0.1808,pizzaiolo,9411,0.734
+31,51,51,0.1023,nurse assistant,5321,0.190
+157,41,41,0.1439,chief executive officer,1120,0.543
+169,52,45,0.1437,casino cashier,4212,0.541
+7,60,59,0.1278,funeral attendant,5163,0.415
+223,59,57,0.0688,manufacturing manager,1321,0.011
+144,53,53,0.1571,assistant clinical psychologist,3259,0.633
+214,48,48,0.1520,healthcare assistant,5321,0.597
+73,73,73,0.0911,operations manager,1321,0.112
+205,112,112,0.0813,activism officer,2432,0.045
+147,55,55,0.0987,reprographics technician,7322,0.157
+158,52,52,0.1842,dance teacher,2355,0.751
+181,40,40,0.1082,traditional chinese medicine therapist,2230,0.246
+86,57,57,0.0550,specialised doctor,2212,0.000
+151,58,57,0.0881,physiotherapist,2264,0.084
+20,58,58,0.2525,assessor of prior learning,2359,0.938
+48,200,179,0.0952,occupational therapy assistant,2269,0.134
+280,40,40,0.1536,insurance broker,3321,0.608
+98,43,43,0.1457,educational psychologist,2634,0.563
+134,59,46,0.1367,telephone switchboard operator,4223,0.485
+206,48,47,0.1450,chief data officer,1330,0.552
+155,59,59,0.1836,early years special educational needs teacher,2352,0.745
+210,60,52,0.1835,welding engineer,2144,0.742
+44,43,43,0.1198,product development engineering drafter,3118,0.322
+194,62,61,0.1596,nurse responsible for general care,2221,0.650
+110,51,50,0.1734,adult literacy teacher,2352,0.717
+192,239,225,0.2021,adult literacy teacher,2352,0.821
+211,81,79,0.2476,bank treasurer,1211,0.927
+229,41,41,0.0700,human resources officer,2423,0.014
+21,42,30,0.1408,extra,3435,0.513
+66,82,82,0.1293,biomedical scientist,2269,0.431
+74,72,69,0.2117,biologist,2131,0.846
+177,42,42,0.1316,nurse responsible for general care,2221,0.462
+191,45,44,0.1630,babysitter,5311,0.667
+244,54,54,0.0933,live chat operator,4222,0.123
+238,62,62,0.0888,aftersales service manager,1221,0.092
+120,41,41,0.0946,department manager,1219,0.129
+125,55,43,0.0988,human resources officer,2423,0.160
+235,45,45,0.0965,live chat operator,4222,0.143
+277,53,53,0.0770,correctional services manager,1349,0.031
+262,60,60,0.0806,nuclear engineer,2149,0.042
+239,44,44,0.1252,membership administrator,4110,0.375
+237,69,69,0.1181,online sales channel manager,1221,0.308
+271,45,45,0.1271,manufacturing manager,1321,0.395
+212,71,70,0.1306,post office counter clerk,4211,0.443
+199,44,43,0.1925,digital printer,7322,0.790
+209,90,81,0.1116,roadside vehicle technician,7231,0.266
+175,68,59,0.2157,hop farmer,6112,0.857
+131,123,98,0.2420,domestic cleaner,9111,0.919
+240,104,104,0.1028,personal shopper,5223,0.199
+23,42,41,0.1263,assessor of prior learning,2359,0.384
+282,55,55,0.1208,talent acquisition manager,1212,0.333

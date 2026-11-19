@@ -28,11 +28,21 @@ We will also create a two-dimensional visualisation of the occupation clusters t
 **Assumptions**
 
 The following assumptions have been used:
+- A cluster is one candidate occupation, made of postings with similar titles.
 - The baselines for comparison used are defined as the periods preceeding specific events. The reason is that the analysis of Month 2 showed that no board had an adequate number of postings prior to 2024, to be used for analysis. Our work focuses on two events for two respective boards: AccelerateEU (22 April 2026) for jobbland.se and InvestAI (11 February 2025) for lesjeudis.com. Ads of the individual boards are examined separately and not merged.
 - To define emergence of an occupation, we examine the number of weighted postings per quarter, which is the unit of time used. When exceeded, 
  that needs to be exceeded, for it to be considered as such. defined as the 
  - A cluster enters the analysis once it exists, which needs at least 40 collected postings. The 40 is the minimum cluster size in HDBSCAN. It is a count of points over the whole period, set to avoid clusters too small to read, and is not related to the labour market.
  - For a cluster to be considered present in a quarter, we establish the rule of it exceeding 0.1% of the postings in that quarter. 
+- Emergence rate is a count of clusters per quarter and board. In each quarter we ask how many clusters are above the line now but were below it in the previous quarter.
+For example:
+  In 2024-Q3, 10 clusters are above the line.
+  In 2024-Q4, 14 clusters are above the line. Of those 14, 10 were already above it and 4 were below it in Q3.
+  The Occupation Emergence Rate for 2024-Q4 is 4.
+- We use 0.1% of the board’s weighted postings in a quarter as the line for emergence. This value is a working choice, not derived from the literature. 
+It corresponds to roughly 100 postings on a board of 100,000 weighted postings per quarter, and a share rather than a fixed count is used because the number 
+of postings per quarter changes strongly between quarters and boards.
+- We mark appearance of a cluster as a share of total of present in the quarter postings, since it draws parallels to a share in the job market.
 
 The process involves the following steps:
 1. We form clusters of job ads, which in this context represent one occupation, i.e. the postings need to have similar titles or skills extracted from their descriptions. For a cluster to be considered in the analysis, it needs to have at least 0.1% of the board’s total weighted postings in that quarter. This value is used to establish some form of significance of our foindings, as it corresponds to roughly 100 postings on a board of 100,000 weighted postings per quarter. We used a share rather than a fixed count, because the number of postings per quarter changes significantly between quarters and boards, ranging e.g. from 727 in Q1 2024 to over 100,000 in 2025 quarters. We also apply qualitative checks on the postings of the clusters, so that e.g. they are not dominated by a single employer.
