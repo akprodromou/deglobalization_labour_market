@@ -95,9 +95,9 @@ Reading:
 The pipeline runs per board (jobbland.se 53,959 postings, lesjeudis.com 18,625, jobs.de 12,243). Embedding, UMAP and HDBSCAN run on Colab (T4); shares, NUTS-2 mapping and HHI run on the Mac.
 
 1. **Title cleaning** (script 90). Strips employer names, locations, gender markers such as (m/w/d) and trailing reference codes (for example IRC207099 or 2024-112135), and removes frequent trailing segments found by counting suffixes (25 or more occurrences). Segments starting with a digit are never dropped. Changed titles: jobs.de 11,814; lesjeudis 14,535 (78.0%); jobbland 24,625 (46.8%).
-2. **Embedding.** Each cleaned title gets the prefix "query: " and goes through multilingual-e5-large (1024 dimensions, L2-normalised). A posting without a title uses the first 150 characters of its description.
+2. **Embedding.** Each cleaned title gets the prefix "query: " and goes through multilingual-e5-large (1024 dimensions, L2-normalised). The titles are not all English: on lesjeudis at least 21.7% (4,050 of 18,625) contain a French marker word or letter (script 123; a lower bound, since English-looking French titles are missed), which is why a multilingual model is used. Only jobbland has postings without a title (1,389 of 53,959, from 2025-12-09 to January 2026). The first 150 characters of a description are mostly employer boilerplate, so they are not used: these postings get a title inferred from the description with Qwen 2.5 7B (script 99; 88% of inferred titles named the same occupation as the real one on a manual check), and the baseline clustering is run on the cleaned and inferred titles. Only the 4 postings the model answered UNKNOWN still embed their first 150 characters.
 3. **Input A** is the title embedding alone.
-4. **Input D** concatenates three blocks, each L2-normalised and weighted, then renormalised: the title embedding (weight 1), an ESCO skills block (tf-idf over ESCO skills extracted from the full text, reduced to 100 dimensions with TruncatedSVD, weight 0.5) and a pruned Lightcast block (tf-idf, 20 dimensions, weight 0.3). Postings with no skills get zeros in those blocks, so they are clustered on the title only. The weights are untested defaults; v1 used 1.0 and 0.5.
+4. **Input D** concatenates three blocks, each L2-normalised and weighted, then renormalised: the title embedding (weight 1), an ESCO skills block (tf-idf over ESCO skills extracted from the full text, reduced to 100 dimensions with TruncatedSVD, weight 0.5) and a pruned Lightcast block (tf-idf, 20 dimensions, weight 0.3). Postings with no skills get zeros in those blocks, so they are clustered on the title only. The weights are untested defaults; v1 used 1.0 and 0.5. Before the weighting, the items pass the Laplacian Score filter (threshold 0.8), and in D v3 very common ESCO skills are removed first (see Results so far and the appendix). D v2 uses weights 0.5 and 0.5, D v3 0.25 and 0.25.
 5. **Clustering.** UMAP to 10 dimensions (cosine, min\_dist 0, n\_neighbors 30), then HDBSCAN (min\_cluster\_size 40, min\_samples 10, eom). Three seeds. A k-means run with the same k is the ablation.
 6. **Skills source.** ESCO skills come from script 69b: sentence-embedding matching (all-MiniLM-L6-v2, similarity at least 0.6) over windows of up to 3,000 characters, so duties that appear late in a posting are covered. Lightcast terms come from script 91 and lexicon/lightcast\_block\_terms.csv (629 rows, 135 selected, 16 pruned).
 
@@ -107,11 +107,11 @@ The pipeline runs per board (jobbland.se 53,959 postings, lesjeudis.com 18,625, 
 
 **D v1 withdrawn.** An earlier reading that D beats A on internal metrics (relative validity, stability, k-means agreement) was wrong. Those metrics rewarded clusters formed around a single skill, which are artefacts. After reading the cluster reports, D v1 was withdrawn. One cause is false ESCO matches: sentence-embedding similarity above 0.6 can link generic template sentences to unrelated skills, which is how a skill such as "feed concrete mixer" appeared on IT consultant postings (hypothesis; a diagnostic cell was supplied and its output is pending). Another is the Lightcast term "Supply Chain", which is boilerplate on lesjeudis: 351 of 352 postings in one cluster.
 
-**Coherence filter (v3).** Before building the skill blocks, each skill is kept only if the postings carrying it have similar title embeddings. The embeddings are first centred on the board mean, because e5 scores cluster in a narrow high band (the model card says this is expected, from the 0.01 InfoNCE temperature) and without centring every skill looked equally coherent. Coherence is the norm of the mean of unit vectors, compared with five random sets of the same size; the skill is kept when the lift is at least 0.15. This is my own heuristic, not a published method. It was tested on mock and synthetic data only, and the 0.15 threshold and the 0.5/0.3 weights are untested on real data. A published, citable alternative is document-frequency pruning (max\_df) or taking skills from the description only.
+**Skill filter for input D (Laplacian Score, 20 November).** The first filter was a coherence heuristic of our own (threshold 0.15); it has no published basis and was replaced. Input D now keeps an ESCO skill or Lightcast term only if the postings that carry it are neighbours on a graph of the title embeddings, measured with the Laplacian Score (He, Cai and Niyogi, 2005). The paper ranks features and gives no cut-off, so the threshold was chosen as the paper does, by comparing the clustering for several thresholds on lesjeudis (appendix): a threshold of 1.0 keeps 99% of the items because an item unrelated to the graph scores about 1, and 0.8 gave the lowest noise and the highest UMAP silhouette for D v2. The value 0.8 is used for all boards. The score measures locality, not correctness: the false match "feed concrete mixer" scores 0.301 and is kept. D v3 therefore also removes very common ESCO skills first, with a cut computed from the board's own distribution of shares (upper Tukey fence of the log share; 4.9% on lesjeudis, 1.5% on jobs.de, 1.6% on jobbland; ESCO skills only). The filter applies only to the skill blocks of input D, not to the main input A. The results of the earlier coherence filter (D v2 and D v3 in the sections of 14 and 15 November) are superseded by the appendix section on input D.
 
 **Named occupations.** The seven named occupations are nearly absent from the A and D outputs. The regex matches for "battery" are unverified. We report which are found without forcing any of them into a cluster.
 
-**Status.** Inputs A for all three boards and D v1 are done. The `--coherence-only` reports are the next step (see open items), then D reruns with tag v2.
+**Status.** Inputs A, D v2 and D v3 (Laplacian Score, threshold 0.8) are done for all three boards; see the appendix section on input D.
 
 **First cluster series on input A (script 93, 12 November).**
 
@@ -252,7 +252,7 @@ TF-IDF has no time dimension, so it cannot say which terms are growing. It also 
 18. Run script 103 with `--board-wide` for jobs.de and, with `--employer-from text`, for jobbland, to see whether employer cycles also drive their series.
 19. Add a minimum-effective-employers condition to the eligibility of a crossing (Month 5) and decide with the supervisor.
 20. First pass done (script 115, 18 November) for the selected clusters; see the section above. Title route done (script 118, four languages, and script 119 for flagged postings, 19 November); open: an overlap check for all flagged clusters and a check of the trade-compliance titles.
-21. Confirm with the supervisor that input A is the main input, with D v3 and D v2 as documented sensitivity checks; run D v3 on the other boards only if the supervisor wants it (about an hour on Colab each).
+21. Confirm with the supervisor that input A is the main input, with D v3 and D v2 as documented sensitivity checks; run D v3 on the other boards only if the supervisor wants it (about an hour on Colab each). Update, 20 November: D v2 and D v3 were rebuilt with the Laplacian Score and run on all three boards (appendix); they remain sensitivity checks.
 22. Read Giabelli et al. (2020b) for the formal definitions behind NEO.
 
 **New items from 15 November**
@@ -658,6 +658,88 @@ Reading:
     - The wording of the Customs titles changes in the same period: in 2025 they read "The Customs Administration seeks ...", in 2026 "The Swedish Customs Service is looking for ..." (the English rendering of the title). In 2026 most of the board's few Customs postings (60% to 88%) are in 283. This fits the place-word result and the title-wording change from 2026-Q1: the cluster collects titles of one wording, not one occupation. The counts are small (1 to 13 board matches per quarter) and the cause of the wording change is not known (see the Skillab questions).
 - Limitations: e5 cosine is a similarity of embeddings, not a match decision; a title with an employer suffix or a long qualifier scores lower; one run per language set.
 
+### Input D with the Laplacian Score (scripts 92, 105, 122 and 125; 19 and 20 November)
+
+The first versions of D v2 and D v3 used a filter of our own (coherence of the titles of the postings that carry a skill, threshold 0.15). It has no published basis and was replaced. The two inputs are now defined as follows.
+
+**Input Dv2** (ESCOX weight 0.5, Lightcast weight 0.5). From all ESCO skills and Lightcast terms we keep those with a low Laplacian Score (He, Cai and Niyogi, 2005). The remaining items are weighted with TF-IDF and reduced with TruncatedSVD (100 dimensions for ESCO, 20 for Lightcast). There is no cut on common items.
+
+**Input Dv3** (ESCOX weight 0.25, Lightcast weight 0.25). Two steps before the weighting:
+
+1. For each board we count the share of its postings in which each ESCO skill appears. A skill whose share is above the upper Tukey fence of the board's own distribution (Q3 + 1.5 IQR of the log share, over skills that appear in at least 5 postings; Tukey, 1977) is too common to tell roles apart and is removed from every posting's list. The cut is 4.9% on lesjeudis, 1.5% on jobs.de and 1.6% on jobbland. It is applied to ESCO skills only: no Lightcast term is that common (the largest share is 4.8%, "Supply Chain" on lesjeudis), and each board has only 12 to 32 distinct Lightcast terms.
+2. From the items that remain, we keep those with a low Laplacian Score. A posting that loses all its items gets zeros in the skill blocks and is clustered on its title alone.
+
+**Laplacian Score.** The graph links each posting to its 5 nearest postings by title embedding (cosine; an edge exists if either posting is among the other's neighbours). The weight of an edge is exp(-d²/t), where d² is the squared distance of the unit title vectors and t is the mean squared distance over the edges between postings with different titles (the paper leaves t open). The score of an item (equation 1 of the paper) is low when the postings that carry it are neighbours on the graph and about 1 when the item is unrelated to the graph. Items with fewer than 20 (ESCO) or 10 (Lightcast) postings are dropped. The paper ranks features and gives no cut-off, so the threshold was chosen as the paper does, by comparing the clustering for several numbers of kept features (below).
+
+**Why the frequent skills are removed.** Kavargyris et al. (2025) keep the 70 most frequent skills as inputs to a supervised classifier (they cover about 86% of all skill mentions), to avoid sparse, noisy or rarely seen features. Our aim is unsupervised: we look for groups of postings that may form new roles, and a skill that appears in many unrelated postings does not help to tell them apart, so we remove frequent items instead.
+
+#### How common are the skills (script 125)
+
+| Board | Tukey cut | ESCO skills removed | Share of all ESCO mentions | Postings left with no ESCO skill | Knee rule (not used): cut, skills removed, postings left with none |
+|---|---|---|---|---|---|
+| lesjeudis | 4.9% | 26 | 22% | 0.9% | 1.1%, 170, 7.1% |
+| jobs.de | 1.5% | 31 | 26% | 6.9% | 0.7%, 88, 13.3% |
+| jobbland | 1.6% | 56 | 37% | 7.7% | 0.7%, 143, 13.0% |
+
+The knee of the rank-frequency curve (the point where it bends from the head to the tail) was computed as an alternative. It removes 41% to 57% of all skill mentions and leaves 7% to 13% of the postings without a skill, so it was not used. At the Tukey cut the most common items removed are generic or false matches ("assume responsibility", "meet commitments", "cooperate with colleagues", language skills, "sell bicycles", "gender studies", "feed concrete mixer"), but also some topical skills (on lesjeudis "cyber security" 12.0%, "DevOps" 8.7%, "Python" 6.9%).
+
+#### Threshold of the Laplacian Score (lesjeudis)
+
+The scores of the ESCO skills have a median of 0.88 (minimum 0.26, maximum 1.00). A threshold of 1.0 therefore keeps 99% of the items and does not filter. Items kept and postings with at least one kept skill, in the local reports (the Colab runs below gave slightly different counts, for example 204 instead of 194 items at 0.8 in D v2; the likely cause, not checked, is that ties between identical titles are broken differently on the GPU):
+
+| Score below | D v2: items kept | D v2: postings with a kept skill | D v3: items kept | D v3: postings with a kept skill |
+|---|---|---|---|---|
+| 0.7 | 80 (8%) | 43% | 74 (8%) | 26% |
+| 0.8 | 194 (20%) | 77% | 181 (19%) | 67% |
+| 0.9 | 602 (61%) | 98% | 576 (60%) | 96% |
+| 1.0 | 983 (99%) | 99% | 957 (99%) | 97% |
+
+Eight runs on lesjeudis (3 seeds each; silhouette from script 105 with seed 1):
+
+| Run | Clusters | Noise | Relative validity | Seed ARI | Silhouette UMAP / input | ESCO items kept | Postings with ESCO skill | Lightcast terms kept |
+|---|---|---|---|---|---|---|---|---|
+| v2, below 0.7 | 128 | 25.2% | 0.344 | 0.913 | 0.683 / 0.154 | 86 | 8,463 | 2 |
+| **v2, below 0.8** | **121** | **13.0%** | **0.514** | **0.987** | **0.785 / 0.135** | **204** | **14,697** | **4** |
+| v2, below 0.9 | 96 | 21.2% | 0.408 | 0.986 | 0.680 / 0.112 | 614 | 18,209 | 5 |
+| v2, below 1.0 | 103 | 22.1% | 0.365 | 0.961 | 0.679 / 0.121 | 984 | 18,356 | 6 |
+| v3, below 0.7 | 133 | 28.4% | 0.275 | 0.940 | 0.634 / 0.074 | 79 | 4,830 | 2 |
+| v3, below 0.8 | 109 | 37.9% | 0.238 | 0.927 | 0.648 / 0.091 | 190 | 12,526 | 4 |
+| v3, below 0.9 | 95 | 31.3% | 0.277 | 0.949 | 0.624 / 0.091 | 588 | 17,810 | 5 |
+| v3, below 1.0 | 114 | 36.4% | 0.304 | 0.906 | 0.640 / 0.102 | 958 | 18,134 | 6 |
+
+For D v2, a threshold of 0.8 has the lowest noise, the highest silhouette in the UMAP space and the highest relative validity; its silhouette in the input space (0.135) is lower than that of the earlier coherence filter (0.170). For D v3 the thresholds hardly differ. The same value, 0.8, is used for both inputs and for all boards. The noise share of D v2 is not monotonic in the threshold (25%, 13%, 21%, 22%), which shows that HDBSCAN reacts sharply to small changes in the input, so the difference between 0.8 and its neighbours should not be over-interpreted. The 204 of 990 items kept at 0.8 are about the same share as the best result in the paper (fewer than 200 of 1,024 features); this is a coincidence of scale, not evidence.
+
+#### The three inputs on all boards (threshold 0.8)
+
+Silhouette for A is from the algorithm comparison of 15 November (script 105, the same sample and seed). Noise is the share of all postings. C_NPMI (script 122) is computed on the title words of the clusters with at least 20 titles; its values are compared within a board only.
+
+| Board | Input | Clusters | Noise | Silhouette UMAP / input | Median C_NPMI | Weighted C_NPMI | Topic diversity |
+|---|---|---|---|---|---|---|---|
+| lesjeudis | A | 144 | 30.9% | 0.618 / 0.087 | -0.385 | -0.339 | 0.602 |
+| | Dv2 | 121 | 13.0% | 0.785 / 0.135 | -0.534 | -0.442 | 0.597 |
+| | Dv3 | 109 | 37.9% | 0.648 / 0.091 | -0.387 | -0.313 | 0.636 |
+| jobs.de | A | 71 | 27.6% | 0.542 / 0.086 | -0.314 | -0.186 | 0.749 |
+| | Dv2 | 92 | 24.5% | 0.712 / 0.169 | -0.416 | -0.348 | 0.682 |
+| | Dv3 | 73 | 35.5% | 0.582 / 0.116 | -0.223 | -0.166 | 0.756 |
+| jobbland | A | 357 | 34.3% | 0.618 / 0.071 | -0.396 | -0.294 | 0.708 |
+| | Dv2 | 332 | 26.1% | 0.709 / 0.135 | -0.401 | -0.358 | 0.648 |
+| | Dv3 | 340 | 35.4% | 0.628 / 0.064 | -0.369 | -0.292 | 0.709 |
+
+Seed ARI on jobs.de and jobbland is 0.93 to 0.96 (relative validity 0.25 to 0.36).
+
+- **Dv2** has a higher silhouette than A on every board, in the UMAP space (by 0.09 to 0.17) and in the input space, and sets fewer postings aside as noise; its title coherence (C_NPMI) is lower on every board. Its weakest clusters on C_NPMI look mixed, and several top words are employer or place names (for example jysk, adidas, wabtec, anicura, epiroc, preem, axfood); whether Dv2 groups postings by employer was not checked (script 103 would show it).
+- **Dv3** stays close to A: similar silhouette (0.582 against 0.542 on jobs.de, 0.628 against 0.618 on jobbland, with a lower input silhouette on jobbland), equal or better C_NPMI, and more noise than A on every board (only 1.1 points more on jobbland).
+- **Coverage.** After the filter, the postings that carry at least one ESCO skill are 14,697 of 18,625 (79%) in Dv2 on lesjeudis, 7,205 of 12,243 (59%) on jobs.de and 24,068 of 53,959 (45%) on jobbland; in Dv3 they are 67%, 35% and 35%. For most postings on jobs.de and jobbland, D therefore rests mainly on the title. The Lightcast block keeps 4 terms on lesjeudis, none on jobs.de and one on jobbland (whether the terms failed the score or the minimum of 10 postings was not checked), so it adds almost nothing outside lesjeudis.
+
+**Limits.**
+
+- The Laplacian Score measures whether the postings carrying an item are neighbours on the title graph, not whether the item is correct. The false match "feed concrete mixer" scores 0.301 (one of the lowest scores) over 1,038 postings and is kept in Dv2; in Dv3 it is removed by the frequency cut (5.6% of the postings, above the 4.9% cut). Why it is concentrated in one group of titles was not checked.
+- The threshold 0.8 was chosen on lesjeudis only; no grid was run on the other two boards.
+- Silhouette and C_NPMI are internal measures. A higher silhouette does not mean that the clusters are better occupations, and C_NPMI is computed on the titles only, so it favours A, which is built from the titles alone. No cluster of any input was validated as a new occupation (see the Conclusion).
+- Each input was run once at each setting; differences of a few hundredths in C_NPMI should not be read as differences.
+
+References: He, Cai and Niyogi (2005), Laplacian Score for Feature Selection, NIPS 18; Kavargyris et al. (2025), Algorithms 18(9), 554; Tukey (1977), Exploratory Data Analysis.
+
 ### Update of 13 November: results, candidates and conclusion
 
 **Where Month 4 stands.** No validated emerging occupation cluster has been found on the three boards. The 6 to 10 clusters chosen by size and flagged share, the selection step (c) in the plan sent to the supervisor, can still be delivered with their series, HHI and a verdict on emergence; none of them shows validated emergence. Two lesjeudis candidates (clusters 68 and 139) were tested against employer mix and coverage and do not hold. What the data do support is a defence-flagged engineering and cybersecurity core on lesjeudis that nvertheless results from postings of three or four employers, a flagged footprint that moves between employers over time, and the seven named occupations as counts below ten postings each. The numbers under "Results so far" and in the first cluster series below come from the first clustering, before title cleaning and title inference, and are superseded by this section. **Added on 14 November:** with a stricter rule for "clearly new" (wholly below the threshold in every earlier quarter, not only the previous one) the five lesjeudis "clearly new" clusters become one (DevOps, French titles), and that one is a posting campaign of one employer (Sopra Steria). Clusters 68 and 139, and the Java and systems administrator clusters, were at or near the threshold in 2024-Q3, dropped in 2025-Q1 with the posting cycles of individual employers (Capgemini, CGI, Thales) and returned in 2025-Q2. We find no new occupation cluster on lesjeudis (input A). **Added on 15 November:** the same rule on jobs.de and jobbland (input A) gives the same answer: the "clearly new" clusters are ordinary occupations or board and coverage effects, none is flagged above 3% (jobs.de) or is an emerging flagged cluster (jobbland); see the section "Update of 14 November".
@@ -794,13 +876,15 @@ Coherence of a cluster is the length of the mean of the unit title embeddings of
 
 D v2 weights the title embedding, the ESCO block and the Lightcast block 1 / 0.5 / 0.5 and uses only the coherence filter on skills. D v3 weights them 1 / 0.25 / 0.25 and drops skills that occur in more than 5% of postings (`--max-df 0.05`, a document-frequency cut) before the coherence filter.
 
+*Superseded on 20 November: these two versions used our own coherence filter. D v2 and D v3 were rebuilt with the Laplacian Score (appendix section on input D); this section is kept as a descriptive check of the earlier versions.*
+
 | Input | Clusters | Noise | Median lift | Median top-token share | Clusters below the weak cutoff | Postings in them |
 | --- | --- | --- | --- | --- | --- | --- |
 | A | 144 | 30.9% | 0.543 | 87% | 15 (10%) | 1,370 (11%) |
 | D v2 | 142 | 20.6% | 0.261 | 43% | 119 (84%) | 13,169 (89%) |
 | D v3 | 102 | 30.6% | 0.540 | 88% | 14 (14%) | 1,763 (14%) |
 
-On the postings clustered in both inputs, the agreement with A (adjusted Rand index, 1 = same partition) is 0.139 for D v2 (10,462 postings) and 0.533 for D v3 (10,145 postings). D v2 puts most postings into clusters that are held together by a skill or by company text, with unrelated titles inside; on the three boards 76% to 89% of the postings clustered in D v2 sit in weak clusters. D v3 is as coherent as A. It still contains clusters held by a skill bundle, for example cluster 81 (91% of its postings carry "quantum mechanics"; one of its titles is a Thales recruiting event). D v3 was run on lesjeudis only.
+On the postings clustered in both inputs, the agreement with A (adjusted Rand index, 1 = same partition) is 0.139 for D v2 (10,462 postings) and 0.533 for D v3 (10,145 postings). D v2 puts most postings into clusters that are held together by a skill or by company text, with unrelated titles inside; on the three boards 76% to 89% of the postings clustered in D v2 sit in weak clusters. D v3 is as coherent as A. It still contains clusters held by a skill bundle, for example cluster 81 (91% of its postings carry "quantum mechanics"; one of its titles is a Thales recruiting event). Script 107 was run on lesjeudis only.
 
 #### Emergence on D v3 against A (original rule, quarterly, event InvestAI)
 

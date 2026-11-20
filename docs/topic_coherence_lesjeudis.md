@@ -4,9 +4,9 @@ Reference corpus: 18,625 titles with a title (boolean document co-occurrence, on
 
 | input | clusters | noise (postings with a title) | median C_NPMI | mean C_NPMI weighted by postings | topic diversity |
 |---|---|---|---|---|---|
-| A | 144 | 30.9% | -0.389 | -0.342 | 0.600 |
-| Dv2 | 142 | 20.6% | -0.485 | -0.447 | 0.567 |
-| Dv3 | 102 | 30.6% | -0.376 | -0.273 | 0.625 |
+| A | 144 | 30.9% | -0.385 | -0.339 | 0.602 |
+| Dv2ls08 | 121 | 13.0% | -0.534 | -0.442 | 0.597 |
+| Dv3ls08 | 109 | 37.9% | -0.387 | -0.313 | 0.636 |
 
 ### A: the 10 clusters with the lowest C_NPMI
 
@@ -23,32 +23,32 @@ Reference corpus: 18,625 titles with a title (boolean document co-occurrence, on
 | 103 | 40 | -0.639 | directory active expert alert progiciel openshift filenet netapp nsx certificate |
 | 123 | 68 | -0.633 | consultant quant relation advantage associate strategy generalist consulting hcm workday |
 
-### Dv2: the 10 clusters with the lowest C_NPMI
+### Dv2ls08: the 10 clusters with the lowest C_NPMI
 
 | cluster | titles | C_NPMI | top words |
 |---|---|---|---|
-| 87 | 41 | -1.000 | safe golang prévoaynce usinage opensearch developeur dry embarqué embedded prototyping |
-| 94 | 78 | -0.890 | react informatica visual net back autosar cegid windchill automatisme ios |
-| 51 | 72 | -0.857 | incident change release salesforce pre merchandise itm insulaires youth literacy |
-| 91 | 60 | -0.822 | holidays vendarian vue postgresql kotlin core monétique end experienced convergence |
-| 109 | 58 | -0.797 | hairdresser coiffeur versatile serveur adjuster manicurist makeup masseur kinesitherapeute déjeuner |
-| 10 | 191 | -0.786 | helpdesk installation driver automated technicien laval technician conducteur sirh human |
-| 25 | 48 | -0.785 | auditor sec pcaob cybersecurity hsm espagnol ingéme citrix bases cybersécurité |
-| 34 | 136 | -0.772 | agile webmaster luxe testeur master aws web nodejs html css |
-| 62 | 62 | -0.770 | proximité local technicien technician informatique sas bilingual hotliner environmental operating |
-| 70 | 141 | -0.765 | discipline student cifre optical quantum program system fusion displays pyrotechnic |
+| 72 | 77 | -0.934 | buyer acheteur itps gemizing sdm sourcing datacenter accounts methods purchase |
+| 73 | 151 | -0.933 | tester aggp core fonctionnel opérationnel net nuxeo prodige visual debeug |
+| 27 | 94 | -0.888 | htb éléctronique quality qualité hta remote electronic documents tier principal |
+| 61 | 60 | -0.883 | servicenow fico risk concepteur datscientist aps mgmt postman cucumber mérignaccdii |
+| 37 | 52 | -0.863 | incident salesforce release technique directory active merchandise itm insulaires inspecteur |
+| 57 | 97 | -0.854 | technologies quantalys nouvelles palma wealth lawyer publishing campaign artificial react |
+| 60 | 79 | -0.840 | designer pricing akur altium électronique creative médical ground equity product |
+| 17 | 60 | -0.823 | yocto embedded servicenow engeniur kvm electricity cpq ssi cable itsm |
+| 65 | 54 | -0.814 | counsel buyer legal lawyer slot quality continuity contracts resilience installation |
+| 58 | 66 | -0.810 | growth startup human wlan api edition cdi lan coordination team |
 
-### Dv3: the 10 clusters with the lowest C_NPMI
+### Dv3ls08: the 10 clusters with the lowest C_NPMI
 
 | cluster | titles | C_NPMI | top words |
 |---|---|---|---|
-| 30 | 69 | -0.918 | coiffeur server serveur livreur plongeur diver chauffeur approvisionneur breakfast ajusteur |
-| 31 | 58 | -0.780 | pmo fraude budget mco agile monétique moa fms généraliste budgétaire |
-| 11 | 75 | -0.713 | devops devsecops aws segment énergies icare devopsdevsecops kubernes typescipt secops |
-| 55 | 54 | -0.691 | expert active directory alert progiciel referent ambassador filenet ssi zabbix |
-| 97 | 69 | -0.644 | consultant edi relation client seo vsi chain csv infolog moa |
-| 46 | 40 | -0.640 | affaires commercial business alternating ingénieur trilingue dmu engineered allemand patent |
-| 9 | 40 | -0.629 | workstation workplace workstations intune modern television macos cio chrome intuune |
-| 20 | 69 | -0.604 | buyer acheteur group achats pii buyers bpo experth market industriels |
-| 54 | 109 | -0.593 | industry industrie nuclear nucléaire thermohydraulic provence aeronautical aix embedded scientific |
-| 34 | 97 | -0.589 | coordinator coordinateur deputy director logistics leader head team agent section |
+| 4 | 72 | -0.756 | coiffeur polyvalent server serveur diver plongeur breakfast masseur kinesitherapeute confirmé |
+| 101 | 58 | -0.726 | consultant edi councils vent oracle cegid hcm relation immobilier talend |
+| 44 | 117 | -0.718 | manager asset business sas park btob quant problem school career |
+| 14 | 49 | -0.706 | pmo budget moa fms généraliste import committee budgétaire generalist integrated |
+| 12 | 89 | -0.688 | buyer acheteur supplier group seo sea approvisionneur publicité procurement pii |
+| 13 | 75 | -0.677 | devops devsecops aws segment kubernes typescipt énergies industrial finops secops |
+| 25 | 133 | -0.628 | technician computer operating writer operations cto specialist technical maintenance electrician |
+| 6 | 113 | -0.596 | industrie industry nuclear nucléaire aix provence thermohydraulic aeronautical pau embedded |
+| 60 | 73 | -0.592 | cloud virtualisation experimente engineer platform success supervision provider openstack shaper |
+| 27 | 49 | -0.585 | helpdesk technicien help vitrolles desk teleconseiller techniciencne automatism agv joué |

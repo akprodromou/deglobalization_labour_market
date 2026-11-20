@@ -7,8 +7,11 @@ Two inputs are clustered and compared:
      + the pruned Lightcast phrase block (script 91, only terms with selected=1 in lexicon/lightcast_block_terms.csv).
      Skills and Lightcast terms are tf-idf weighted and reduced with TruncatedSVD; every block is L2-normalised, so
      the title keeps weight 1, ESCO skills --w-skills (0.5) and Lightcast terms --w-lc (0.3).
-     v2: before weighting, every skill/term passes a COHERENCE FILTER (see coherence_filter): v1 clustered on
-     extractor false positives and generic skills ("sell bicycles" on postmen, "assume responsibility").
+     v2/v3: before weighting, every skill/term passes a filter. v1 (no filter) clustered on extractor false positives
+     and generic skills ("sell bicycles" on postmen, "assume responsibility"). The filter is now the LAPLACIAN SCORE
+     (He, Cai and Niyogi 2005; --filter ls): an item is kept when the postings that carry it are neighbours on a
+     k-nearest-neighbour graph of the title embeddings. The own coherence filter of the first runs is still available
+     (--filter coherence). v3 also drops very common ESCO skills first (--max-df tukey, see script 125).
 Method for both: UMAP (10 dimensions, cosine, min_dist 0) -> HDBSCAN (McInnes et al.), all postings of the board,
 the Month 3 tags are NOT used here (they are joined afterwards by script 93).
 Ablation and checks:
@@ -131,8 +134,110 @@ def coherence_report(name, stats, keep, labels):
     return "\n".join(md) + "\n"
 
 
+def knn_graph(e, k=5, chunk=2048):
+    """Nearest-neighbour graph of the postings for the Laplacian Score (He, Cai and Niyogi 2005).
+    An edge joins i and j if i is among the k nearest neighbours of j or j among those of i (title embedding, cosine).
+    Weights S_ij = exp(-||x_i - x_j||^2 / t); ||x_i - x_j||^2 = 2 - 2 cos for unit vectors; t = mean squared distance
+    over the edges between postings whose titles differ (the paper leaves t as 'a suitable constant')."""
+    import scipy.sparse as sp
+    n = len(e)
+    idx = np.zeros((n, k), dtype=np.int64)
+    d2 = np.zeros((n, k), dtype=np.float64)
+    try:
+        import torch
+        dev = "cuda" if torch.cuda.is_available() else "cpu"
+        E = torch.from_numpy(np.ascontiguousarray(e, dtype=np.float32)).to(dev)
+        for s in range(0, n, chunk):
+            sim = E[s:s + chunk] @ E.T
+            rows = torch.arange(sim.shape[0], device=dev)
+            sim[rows, rows + s] = -3.0  # no self edge
+            v, i = sim.topk(k, dim=1)
+            idx[s:s + chunk] = i.cpu().numpy()
+            d2[s:s + chunk] = (2.0 - 2.0 * v.double()).clamp(min=0).cpu().numpy()
+    except ImportError:
+        from sklearn.neighbors import NearestNeighbors
+        nn = NearestNeighbors(n_neighbors=k + 1, metric="cosine", algorithm="brute", n_jobs=-1).fit(e)
+        dist, ia = nn.kneighbors(e)
+        mask = ia != np.arange(n)[:, None]
+        mask[mask.all(axis=1), -1] = False  # self not among the neighbours (duplicate titles): drop the farthest
+        idx = ia[mask].reshape(n, k)
+        d2 = 2.0 * dist[mask].reshape(n, k)
+    pos = d2[d2 > 1e-6]  # many postings have an identical title (distance 0): they must not pull t towards 0
+    t = float(pos.mean()) if pos.size else 1.0
+    w = np.exp(-d2 / t)
+    S = sp.csr_matrix((w.ravel(), (np.repeat(np.arange(n), k), idx.ravel())), shape=(n, n))
+    S = S.maximum(S.T).tocsr()  # 'i in kNN(j) or j in kNN(i)'; the weight depends only on the distance, so it is symmetric
+    d = np.asarray(S.sum(axis=1)).ravel()
+    return {"S": S, "d": d, "t": t, "k": k}
+
+
+def laplacian_scores(graph, docs, items):
+    """Laplacian Score of every item (equation 1 of the paper). The feature of an item is 1 in the postings that carry
+    it and 0 elsewhere. L = f~' L f~ / f~' D f~ with f~ = f - (f'D1 / 1'D1) 1; a LOW score means the item respects the
+    graph (its postings are neighbours). For a 0/1 feature: f'Df = f'd and f'Sf is a sum over the edges."""
+    import scipy.sparse as sp
+    S, d = graph["S"], graph["d"]
+    col = {t: j for j, t in enumerate(items)}
+    r, c = [], []
+    for i, x in enumerate(docs):
+        for t in set(x):
+            j = col.get(t)
+            if j is not None:
+                r.append(i)
+                c.append(j)
+    F = sp.csr_matrix((np.ones(len(r)), (r, c)), shape=(len(docs), len(items)))
+    fd = np.asarray(F.T @ d).ravel()
+    fSf = np.asarray(F.multiply(S @ F).sum(axis=0)).ravel()
+    dtot = float(d.sum())
+    num = fd - fSf
+    den = fd - fd ** 2 / dtot
+    return np.where(den > 1e-12, num / np.where(den > 1e-12, den, 1.0), np.nan)
+
+
+def laplacian_filter(docs, graph, min_n, ls_max):
+    """Keep an item (ESCO skill or Lightcast term) if it has at least min_n postings and a Laplacian Score below ls_max."""
+    cnt = Counter(t for x in docs for t in set(x))
+    items = [t for t, c in cnt.items() if c >= min_n]
+    if not items:
+        return set(), {}
+    L = laplacian_scores(graph, docs, items)
+    stats = {t: (cnt[t], float(L[j])) for j, t in enumerate(items) if not np.isnan(L[j])}
+    keep = {t for t, (n, s) in stats.items() if s < ls_max}
+    return keep, stats
+
+
+def laplacian_report(name, stats, keep, labels, docs, ls_max):
+    sc = np.array([v[1] for v in stats.values()]) if stats else np.array([0.0])
+    md = [f"### {name}: {len(stats):,} items scored, {len(keep):,} kept (score below {ls_max}), {len(stats) - len(keep):,} dropped", "",
+          f"Score: minimum {sc.min():.3f}, median {np.median(sc):.3f}, maximum {sc.max():.3f}.", "",
+          "| score below | items kept | share of items | postings with at least one kept item |", "|---|---|---|---|"]
+    for th in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+        kt = {t for t, v in stats.items() if v[1] < th}
+        cov = sum(1 for x in docs if any(t in kt for t in x)) / max(1, len(docs))
+        md.append(f"| {th} | {len(kt):,} | {len(kt) / max(1, len(stats)):.0%} | {cov:.1%} |")
+    md += ["", "| item | postings | Laplacian Score | decision |", "|---|---|---|---|"]
+    for t, (n, s) in sorted(stats.items(), key=lambda kv: -kv[1][0])[:40]:
+        md.append(f"| {labels.get(t, t)[:50]} | {n:,} | {s:.3f} | {'kept' if t in keep else 'DROPPED'} |")
+    return "\n".join(md) + "\n"
+
+
+def tukey_cut(docs, min_count):
+    """Upper Tukey fence (Q3 + 1.5 IQR) of the log10 share of postings carrying an item, over items with at least
+    min_count postings (the items that can enter the tf-idf). Same rule as script 125."""
+    cnt = Counter(t for x in docs for t in set(x))
+    sh = np.array([c / max(1, len(docs)) for c in cnt.values() if c >= min_count])
+    if len(sh) < 5:
+        return None
+    ls = np.log10(sh)
+    q1, q3 = np.percentile(ls, [25, 75])
+    return float(10 ** (q3 + 1.5 * (q3 - q1)))
+
+
 def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min_lift, esco_label, docs_dir,
-                 board, dim_sk=100, dim_lc=20, only_report=False):
+                 board, dim_sk=100, dim_lc=20, only_report=False, max_df=None, filt="ls", ls_max=1.0, ls_k=5, tag=""):
+    """filt: 'ls' Laplacian Score (default), 'coherence' the own coherence filter of the first D v2 / D v3 runs, 'none'.
+    max_df: None, a share (both blocks), or 'tukey' (ESCO skills only: the cut is computed from the board's own
+    distribution of shares, see script 125)."""
     from sklearn.decomposition import TruncatedSVD
     from sklearn.feature_extraction.text import TfidfVectorizer
     sk = {r["id"]: r["skills"] for r in load_jsonl(skills_file)}
@@ -142,31 +247,65 @@ def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min
             if str(r.get("selected", "")).strip() == "1":
                 keep.add(r["term"])
     lc = {r["id"]: [t for t in r["terms"] if t in keep] for r in load_jsonl(lc_file)}
-    blocks, info, rep_md = [], {}, [f"# Skill coherence filter: {board}", "",
-                                    f"An item is kept when its lift is at least {min_lift}. Lift = how much more alike the titles of the postings "
-                                    "carrying the item are than the titles of a random set of the same size.", ""]
+    if filt == "ls":
+        graph = knn_graph(e, ls_k)
+        print(f"  Laplacian Score graph: k={ls_k}, t={graph['t']:.4f}, {graph['S'].nnz // 2:,} edges")
+        rep_md = [f"# Laplacian Score filter: {board}", "",
+                  f"An item is kept when its Laplacian Score (He, Cai and Niyogi 2005) is below {ls_max}. Graph: {ls_k} nearest neighbours "
+                  f"by title embedding (cosine), heat-kernel constant t = {graph['t']:.4f} (mean squared distance over the edges between different titles). A low score means that the postings carrying the item "
+                  "are neighbours on the graph.", ""]
+    else:
+        graph = None
+        rep_md = [f"# Skill coherence filter: {board}", "",
+                  f"An item is kept when its lift is at least {min_lift}. Lift = how much more alike the titles of the postings "
+                  "carrying the item are than the titles of a random set of the same size.", ""]
+    blocks, info = [], {}
     for name, d, dim, mindf, w, min_n in (("esco", sk, dim_sk, 5, w_skills, 20), ("lightcast", lc, dim_lc, 3, w_lc, 10)):
         docs = [d.get(i, []) for i in ids]
         info[f"{name}_postings_with_any_raw"] = int(sum(1 for x in docs if x))
+        lab = esco_label if name == "esco" else {}
+        cut = None
+        if max_df == "tukey":
+            if name == "esco":
+                cut = tukey_cut(docs, mindf)
+        elif max_df is not None:
+            cut = float(max_df)
+        if cut is not None:
+            # document-frequency cut (D v3): items present in more than `cut` of the board's postings are boilerplate or generic
+            cnt = Counter(t for x in docs for t in set(x))
+            common = {t for t, c in cnt.items() if c / max(1, len(docs)) > cut}
+            docs = [[t for t in x if t not in common] for x in docs]
+            info[f"{name}_max_df_cut"] = round(cut, 6)
+            info[f"{name}_items_dropped_max_df"] = len(common)
+            rep_md.append(f"### {name}: {len(common)} items dropped because they occur in more than {cut:.2%} of the postings\n")
+            rep_md.append("\n".join(f"- {lab.get(t, t)[:60]} ({cnt[t] / max(1, len(docs)):.1%})" for t in sorted(common, key=lambda t: -cnt[t])[:25]) + "\n")
         if only_report:
-            _, stats = coherence_filter(docs, e, min_n, 0.0)
-            lifts = np.array([v[2] for v in stats.values()])
-            rep_md.append(f"### {name}: {len(stats):,} items with at least {min_n} postings\n")
-            rep_md.append("| lift threshold | items kept | share of items | postings with at least one kept item |")
-            rep_md.append("|---|---|---|---|")
-            for th in (0.05, 0.1, 0.15, 0.2, 0.3, 0.4):
-                kt = {t for t, v in stats.items() if v[2] >= th}
-                cov = sum(1 for x in docs if any(t in kt for t in x)) / max(1, len(docs))
-                rep_md.append(f"| {th} | {len(kt):,} | {len(kt) / max(1, len(stats)):.0%} | {cov:.1%} |")
-            rep_md.append("")
-            rep_md.append(coherence_report(name, stats, {t for t, v in stats.items() if v[2] >= 0.15}, esco_label if name == "esco" else {}))
+            if filt == "ls":
+                kp, stats = laplacian_filter(docs, graph, min_n, ls_max)
+                rep_md.append(laplacian_report(name, stats, kp, lab, docs, ls_max))
+            else:
+                _, stats = coherence_filter(docs, e, min_n, 0.0)
+                rep_md.append(f"### {name}: {len(stats):,} items with at least {min_n} postings\n")
+                rep_md.append("| lift threshold | items kept | share of items | postings with at least one kept item |")
+                rep_md.append("|---|---|---|---|")
+                for th in (0.05, 0.1, 0.15, 0.2, 0.3, 0.4):
+                    kt = {t for t, v in stats.items() if v[2] >= th}
+                    cov = sum(1 for x in docs if any(t in kt for t in x)) / max(1, len(docs))
+                    rep_md.append(f"| {th} | {len(kt):,} | {len(kt) / max(1, len(stats)):.0%} | {cov:.1%} |")
+                rep_md.append("")
             continue
-        if min_lift is not None:
-            keep, stats = coherence_filter(docs, e, min_n, min_lift)
-            rep_md.append(coherence_report(name, stats, keep, esco_label if name == "esco" else {}))
-            docs = [[t for t in x if t in keep] for x in docs]
-            info[f"{name}_items_kept"] = len(keep)
-            info[f"{name}_items_dropped"] = len(stats) - len(keep)
+        if filt == "ls":
+            kp, stats = laplacian_filter(docs, graph, min_n, ls_max)
+            rep_md.append(laplacian_report(name, stats, kp, lab, docs, ls_max))
+            docs = [[t for t in x if t in kp] for x in docs]
+            info[f"{name}_items_kept"] = len(kp)
+            info[f"{name}_items_dropped"] = len(stats) - len(kp)
+        elif filt == "coherence":
+            kp, stats = coherence_filter(docs, e, min_n, min_lift)
+            rep_md.append(coherence_report(name, stats, kp, lab))
+            docs = [[t for t in x if t in kp] for x in docs]
+            info[f"{name}_items_kept"] = len(kp)
+            info[f"{name}_items_dropped"] = len(stats) - len(kp)
         info[f"{name}_postings_with_any"] = int(sum(1 for x in docs if x))
         vec = TfidfVectorizer(analyzer=lambda x: x, min_df=mindf, sublinear_tf=True)
         try:
@@ -182,9 +321,10 @@ def skill_blocks(ids, e, skills_file, lc_file, lc_terms_csv, w_skills, w_lc, min
         z = np.where(nz > 1e-9, z / np.maximum(nz, 1e-9), 0.0) * w
         blocks.append(z.astype("float32"))
         info[f"{name}_features"] = int(x.shape[1])
-    if only_report or min_lift is not None:
+    if only_report or filt != "none":
         Path(docs_dir).mkdir(parents=True, exist_ok=True)
-        Path(f"{docs_dir}/skill_coherence_{board}.md").write_text("\n".join(rep_md), encoding="utf-8")
+        fname = f"skill_laplacian_{board}{'_' + tag if tag else ''}.md" if filt == "ls" else f"skill_coherence_{board}.md"
+        Path(f"{docs_dir}/{fname}").write_text("\n".join(rep_md), encoding="utf-8")
     return (None, info) if only_report else (blocks, info)
 
 
@@ -301,14 +441,25 @@ def main():
     ap.add_argument("--seeds", type=int, nargs="+", default=[1, 2, 3])
     ap.add_argument("--w-skills", type=float, default=0.5)
     ap.add_argument("--w-lc", type=float, default=0.3)
-    ap.add_argument("--min-lift", type=float, default=0.15, help="coherence filter for skills / Lightcast terms (see coherence_filter)")
-    ap.add_argument("--no-coherence", action="store_true", help="old behaviour: every skill kept (input D v1)")
-    ap.add_argument("--coherence-only", action="store_true", help="no clustering: write docs/skill_coherence_<board>.md with kept-counts per threshold")
+    ap.add_argument("--filter", choices=["ls", "coherence", "none"], default="ls",
+                    help="which items of the skill blocks are kept: ls = Laplacian Score (default), coherence = the own filter of the first D v2/D v3 runs, none = every item (D v1)")
+    ap.add_argument("--ls-k", type=int, default=5, help="Laplacian Score: nearest neighbours in the graph (the paper uses 5)")
+    ap.add_argument("--ls-max", type=float, default=1.0, help="Laplacian Score: keep items with a score below this value (a feature unrelated to the graph scores about 1)")
+    ap.add_argument("--ls-only", action="store_true", help="no clustering: write docs/skill_laplacian_<board>.md with kept-counts per threshold")
+    ap.add_argument("--min-lift", type=float, default=0.15, help="coherence filter only (--filter coherence)")
+    ap.add_argument("--no-coherence", action="store_true", help="same as --filter none (input D v1)")
+    ap.add_argument("--coherence-only", action="store_true", help="no clustering: write docs/skill_coherence_<board>.md with kept-counts per threshold (--filter coherence)")
+    ap.add_argument("--max-df", default=None, help="D v3: drop items present in more than this share of the board's postings, e.g. 0.05 (ESCO and Lightcast), "
+                    "or the word tukey: the cut is the upper Tukey fence of the board's own distribution of shares, ESCO skills only (script 125)")
     ap.add_argument("--tag", default="", help="suffix for the output files, e.g. v2, so A and D v1 are not overwritten")
     ap.add_argument("--show", type=int, default=60)
     ap.add_argument("--limit", type=int, default=0, help="test on the first N postings")
     ap.add_argument("--mock", action="store_true", help="no GPU model: character n-gram embedding (pipeline test only)")
     args = ap.parse_args()
+    if args.max_df is not None and args.max_df != "tukey":
+        args.max_df = float(args.max_df)
+    if args.no_coherence:
+        args.filter = "none"
 
     corpus_name = {"jobbland": "jobbland", "lesjeudis": "lesjeudis", "jobsde": "jobsde"}[args.board]
     titles = args.titles or f"data/tagged/titles_{args.board}.jsonl"
@@ -333,10 +484,11 @@ def main():
     cache = None if args.limit else f"{args.out}/emb_{args.board}.npy"
     e = embed_titles([text_a(r) for r in recs], args.model, cache, args.mock)
 
-    if args.coherence_only:
+    if args.coherence_only or args.ls_only:
         skill_blocks(ids, e, skills, lcf, args.lc_terms, args.w_skills, args.w_lc, args.min_lift, esco_label, args.docs,
-                     args.board, only_report=True)
-        print(f"wrote {args.docs}/skill_coherence_{args.board}.md")
+                     args.board, only_report=True, max_df=args.max_df, filt="coherence" if args.coherence_only else "ls",
+                     ls_max=args.ls_max, ls_k=args.ls_k, tag=args.tag)
+        print("report written to", args.docs)
         return
     for name in args.input:
         if name == "A":
@@ -345,7 +497,8 @@ def main():
             if not Path(skills).exists():
                 sys.exit(f"missing {skills}")
             blocks, extra = skill_blocks(ids, e, skills, lcf, args.lc_terms, args.w_skills, args.w_lc,
-                                         None if args.no_coherence else args.min_lift, esco_label, args.docs, args.board)
+                                         args.min_lift, esco_label, args.docs, args.board,
+                                         max_df=args.max_df, filt=args.filter, ls_max=args.ls_max, ls_k=args.ls_k, tag=args.tag)
             x = np.hstack([e] + blocks)
             x = x / np.linalg.norm(x, axis=1, keepdims=True)
         lab, prob, m = cluster_input(name, x, args, recs)
