@@ -100,30 +100,43 @@ Two different UMAP transformations were applied to the 1,024-dimension title emb
 #### Comparison of input representations
 
 Using HDBSCAN as the clustering algorithm (on the aforementioned 10-dimensional UMAP of the embeddings), we examined two input representations:
+
 1. Input A uses only the cleaned job title, embedded with multilingual-e5-large (1,024 dimensions, L2-normalised). 
 2. Input D joins two additional numerical embedding vectors to the title embedding via concatenation: 
-  (a) an embedding (100 dimensions) of ESCO skills extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6 
-  (b) an embedding (20 dimensions) of 135 Lightcast terms. 
-Input D is further disntinguished in two versions: 
-2.1. Dv2 uses weights of 0.5 for both ESCOX and Lightcast;
-2.2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of inputs that included skill embeddings showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result to joining those postings in the same clusters. This was performed with the following steps:
 
-1. For each board, we count the share of its postings in which each ESCO skill appears (script 92 and 125). @tbl-esco-skills shows an example of ESCO skills for the lesjeudis board (18,625 postings). The share provided is the number of postings with the skill divided by all postings of the board, including postings without any skill; while the skill names are shortened for clarity (e.g. "innovation processes The techniques, mod…" is given below as "innovation processes").
+    a. an embedding (100 dimensions) of ESCO skills extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6 
+    b. an embedding (20 dimensions) of 135 Lightcast terms. 
 
-| ESCO skill | Postings | Share |
-|:---|---:|---:|
-| innovation processes | 2,412 | 13.0% |
-| cyber security | 2,239 | 12.0% |
-| DevOps | 1,621 | 8.7% |
-| quantum mechanics | 914 | 4.91% |
-| provide user documentation | 899 | 4.83% |
+    Input D is further distinguished in two versions: 
 
-: Selected ESCO skills and their posting shares {#tbl-esco-skills}
+    1. Dv2 uses weights of 0.5 for both ESCOX and Lightcast;
+    2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of inputs that included skill embeddings showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result to joining those postings in the same clusters. This was performed with the following steps:
 
+        1. For each board, we count the share of its postings in which each ESCO skill appears (script 92 and 125). @tbl-esco-skills shows an example of ESCO skills for the lesjeudis board (18,625 postings). The share provided is the number of postings with the skill divided by all postings of the board, including postings without any skill; while the skill names are shortened for clarity (e.g. "innovation processes The techniques, mod…" is given below as "innovation processes").
 
-2. To identifying skills which skills have unusually high occurence, and therefore have limited discriminatory value for distinguishing job roles, we used the Tukey fence. However, plotting the distrivution on skills occurence, it was found to be right skewed: most skills appeared in relatively few postings, while a small number appeared in a very large proportion of postings. So to calculate the high-occurence skills, we used the upper Tukey fence of the logarithm of these shares, which is equal to Q3 + 1.5 × IQR [@tukey1977exploratory]. A skill above the fence is too common to distinguish roles apart and is therefore removed from every posting's list of skills. The fence was estimated at 4.9% for the lesjeudis board, 1.5% for jobs.de and 1.6% for jobbland. The result was that it removed 26, 31 and 56 skills, respectively.
+            | ESCO skill | Postings | Share |
+            |:---|---:|---:|
+            | innovation processes | 2,412 | 13.0% |
+            | cyber security | 2,239 | 12.0% |
+            | DevOps | 1,621 | 8.7% |
+            | quantum mechanics | 914 | 4.91% |
+            | provide user documentation | 899 | 4.83% |
 
-Iterestingly enough, no Lightcast term is that common (the largest share is 4.8%, for "Supply Chain" on the lesjeudis board) and each board has only 12 to 32 distinct Lightcast terms, so the Tukey fence was applied to ESCO skills only. 
+            : Selected ESCO skills and their posting shares {#tbl-esco-skills}
+
+        2. To identify which skills have unusually high occurrence, and therefore have limited discriminatory value for distinguishing job roles, we used the Tukey fence. However, plotting the distribution of skill occurrence, it was found to be right-skewed: most skills appeared in relatively few postings, while a small number appeared in a very large proportion of postings. So to calculate the high-occurrence skills, we used the upper Tukey fence of the logarithm of these shares, which is equal to Q3 + 1.5 × IQR [@tukey1977exploratory]. For this approached, the rule we followed is that a skill above the fence is considered too common to distinguish roles apart and is therefore removed from every posting's list of skills. 
+        The fence was estimated at 4.9% for the lesjeudis board, 1.5% for jobs.de and 1.6% for jobbland. The result was that it removed 26, 31 and 56 skills, respectively.
+
+        ```{python}
+        #| label: fig-tukey
+        #| echo: false
+        #| fig-cap: "Share of postings per ESCO skill on lesjeudis. The dashed line is the upper Tukey fence (4.9%); the 26 skills above it are removed in Dv3."
+        import sys
+        sys.path.append("deliverables")
+        from tukey_fence import make_tukey_fence_plot
+        fig = make_tukey_fence_plot()
+        ```
+        It should be noted that no Lightcast term was found to exceed the upper Tuckey threshold (the largest share is 4.8%, for "Supply Chain" on the lesjeudis board) and each board has only 12 to 32 distinct Lightcast terms, so the Tukey fence was applied to ESCO skills only.
 
 3. The goal of the next step is to keep skills that are associated with particular types of jobs, and remove skills that appear in very different types of jobs. For this reason, we will use use the similarity between job titles as an indication of how closely related two postings are in the context of a k-nearest-neighbour graph. The k-nearest-neighbour graph creates a network of job postings, where each posting is connected to its five most similar postings, based on their title embeddings. The parameter \(k\) determines how many neighbours each posting considers. For our purpose, a smaller neighbourhood (lower k) makes sense because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link exists if either posting is among the other's neighbours. 
 
