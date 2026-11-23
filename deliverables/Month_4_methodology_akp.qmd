@@ -127,9 +127,19 @@ Iterestingly enough, no Lightcast term is that common (the largest share is 4.8%
 
 3. The goal of the next step is to keep skills that are associated with particular types of jobs, and remove skills that appear in very different types of jobs. For this reason, we will use use the similarity between job titles as an indication of how closely related two postings are in the context of a k-nearest-neighbour graph. The k-nearest-neighbour graph creates a network of job postings, where each posting is connected to its five most similar postings, based on their title embeddings. The parameter \(k\) determines how many neighbours each posting considers. For our purpose, a smaller neighbourhood (lower k) makes sense because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link exists if either posting is among the other's neighbours. 
 
-3. To evaluate whether a skill tends to appear in similar job postings, we decided to use the Laplacian Score[@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores a feature by how well its values agree with a neighbourhood graph of the samples. We chose it because we have no occupation labels (hence an unsupervised method is needed), and because it examines for each skill whether the postings that are tagged with it are close to each other in title space.
+3. To evaluate whether a skill tends to appear in similar job postings, we decided to use the Laplacian Score[@NIPS2005_b5b03f06]. 
+This is an unsupervised feature-selection method that scores a feature by how well its values agree with a neighbourhood graph of the samples. We chose it because we have no occupation labels (hence an unsupervised method is needed), and because it examines for each skill whether the postings that are tagged with it are close to each other in title space.
 
 As part of this technique, for every skill and term, we score how well the set of postings that include it follow this graph. The score is low if the postings that carry the item are neighbours and about 1 if the item is unrelated to the graph. However, it is important to note that the Laplacian Score cannot remove false matches that are consistent. For example, we found that it kept “feed concrete mixer” (score 0.301), despite it being linked to irrelevant job titles between them. The explanation might be that this skill is about supplying a machine with the right materials. A sentence in a job advert, such as “supply the client with...”, “provide the necessary...” or “ensure delivery of...”, can be similar enough in meaning to cross the 0.6 threshold of the ESCOX algorithm.
+
+| Skill | Job titles in which it appears | Outcome |
+|---|---|---|
+| Python | Data Scientist, ML Engineer, Data Analyst | Keep |
+| Salesforce | CRM Specialist, Salesforce Consultant, CRM Administrator | Keep |
+| Communication | Software Engineer, Sales Manager, HR Specialist, Project Manager | Remove |
+| Financial modelling | Financial Analyst, Investment Analyst, Valuation Analyst | Keep |
+
+: Skill evaluation summary {#tbl-skills}
 
 Many such skills were nevertheless found to be removed using the Tukey fence.
 
