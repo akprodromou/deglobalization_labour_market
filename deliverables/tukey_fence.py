@@ -37,7 +37,7 @@ def make_tukey_fence_plot():
                label=f"Upper Tukey fence ({fence_pct:.1f}%)")
     ax.axvspan(fence_pct, shares.max() * 1.02, color=palette[1], alpha=0.18,
                label=f"Removed skills ({n_removed})")
-    ax.set_title(f"Share of postings per ESCO skill, lesjeudis ({len(shares):,} skills in at least {MIN_COUNT} postings)", fontsize=8)
+    ax.set_title(f"Share of postings per ESCO skill (lesjeudis board)", fontsize=8)
     ax.set_xlabel("Share of postings, %", fontsize=8)
     ax.set_ylabel("Number of ESCO skills", fontsize=8)
     ax.tick_params(labelsize=7)
@@ -46,7 +46,7 @@ def make_tukey_fence_plot():
     ax.grid(alpha=0.5)
     ax.legend(frameon=False, fontsize=8)
     fig.tight_layout()
-    print(f"skills: {len(shares)}, median share {np.median(shares):.3f}%, fence {fence_pct:.3f}%, removed {n_removed}")
+    # print(f"skills: {len(shares)}, median share {np.median(shares):.3f}%, fence {fence_pct:.3f}%, removed {n_removed}")
     return fig
 
 
