@@ -107,7 +107,7 @@ def main():
         c = Counter(titles[i] for i in carrying[t] if titles[i])
         top_title, top_n = (c.most_common(1)[0] if c else ("", 0))
         rows.append({"id": t, "label": label.get(t, t.rsplit("/", 1)[-1]), "postings": n, "share": n / n_post, "score": s,
-                     "kept": t in keep, "title": top_title, "title_share": top_n / max(1, n)})
+                     "kept": t in keep, "title": top_title, "title_share": top_n / max(1, n), "distinct": len(c)})
     rows.sort(key=lambda r: r["score"])
 
     Path(a.out).mkdir(parents=True, exist_ok=True)
@@ -150,10 +150,10 @@ def main():
     suffix = "_tukey" if a.tukey else ""
     with open(f"{a.out}/ls_scores_{a.board}{suffix}.csv", "w", encoding="utf-8", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["skill_id", "label", "postings", "share", "laplacian_score", "kept", "most_common_title", "title_share"])
+        w.writerow(["skill_id", "label", "postings", "share", "laplacian_score", "kept", "most_common_title", "title_share", "distinct_titles"])
         for r in rows:
             w.writerow([r["id"], r["label"], r["postings"], f"{r['share']:.5f}", f"{r['score']:.4f}", int(r["kept"]),
-                        r["title"], f"{r['title_share']:.3f}"])
+                        r["title"], f"{r['title_share']:.3f}", r["distinct"]])
 
     def table(sel, start):
         out = ["| # | skill | postings | score | most common title (share of these postings) | decision |",
@@ -173,6 +173,18 @@ def main():
     md += table(rows[:n], 1)
     md += ["", f"## The {n} highest scores (postings of the skill are scattered: generic skills)", ""]
     md += table(rows[-n:], len(rows) - n + 1)
+    # skills by number of postings: how many are below the threshold, how concentrated on one title, how many distinct titles
+    md += ["", f"## Skills by number of postings (minimum for scoring: {a.min_n})", "",
+           "| postings per skill | skills | below threshold | median score | median share of the most common title | median distinct titles per posting |",
+           "|---|---|---|---|---|---|"]
+    for lo, hi in ((5, 9), (10, 19), (20, 49), (50, 199), (200, None)):
+        sel = [r for r in rows if r["postings"] >= lo and (hi is None or r["postings"] <= hi)]
+        if not sel:
+            continue
+        md.append(f"| {lo} to {hi} " if hi else f"| {lo} or more ")
+        md[-1] += (f"| {len(sel):,} | {sum(r['kept'] for r in sel) / len(sel):.0%} | {np.median([r['score'] for r in sel]):.3f} | "
+                   f"{np.median([r['title_share'] for r in sel]):.0%} | {np.median([r['distinct'] / r['postings'] for r in sel]):.2f} |")
+    print("\n".join(md[-9:]))
     Path(f"{a.docs}/ls_table_{a.board}{suffix}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print(f"wrote {a.docs}/ls_table_{a.board}{suffix}.md and {a.out}/ls_scores_{a.board}{suffix}.csv")
 

@@ -12,10 +12,14 @@ format:
     toc: true
     toc-location: body
     embed-resources: true
+    format-links: false
     fontsize: 1rem
     include-in-header:
       text: |
-        <style> table { font-size: 0.85em; } </style>
+        <style>
+          table { font-size: 0.85em; }
+          .quarto-title-meta { grid-template-columns: 1fr !important; }
+        </style>
   pdf:
     pdf-engine: lualatex
     documentclass: scrartcl
@@ -137,7 +141,7 @@ Input D is further distinguished in two versions:
 
 : Selected ESCO skills and their posting shares {#tbl-esco-skills}
 
-**Step 2.** To identify which skills have unusually high occurrence, and therefore have limited discriminatory value for distinguishing job roles, we need to examine their distribution. One approach is to (a) calculate the share of postings in which each item appears (b) rank the items (skills or terms) by that share and (c) remove the outliers, which in this case are the most common terms.
+**Step 2.** To identify which skills have a very high occurrence, and therefore have limited discriminatory value for distinguishing job roles, we need to examine their distribution. One approach is to (a) calculate the share of postings in which each item appears (b) rank the items (skills or terms) by that share and (c) remove the outliers, which in this case are the most common terms.
 
 Plotting the distribution of skill occurrence, it was found to be right-skewed: most skills (inliers) appeared in relatively few postings, while only a small number (outliers) appeared in many of them. To account for this skewness, we applied a logarithmic transformation to the shares and then used the Tukey boxplot rule [@tukey1977exploratory] to identify the boundary between inliers and outliers. According to this, a skill is considered unusually frequent if its log share exceeds the upper fence, calculated as Q3 + 1.5 × IQR, where Q3 and IQR are calculated from the distribution of log-transformed shares.
 
@@ -155,15 +159,15 @@ fig = make_tukey_fence_plot()
 
 It should be noted that the Lightcast terms were not found to exceed the upper Tuckey threshold (the largest share is 4.8%, for "Supply Chain" on the lesjeudis board), so the Tukey fence was applied to ESCO skills only.
 
-**Step 3.** We next wanted to keep the most useful skills, in the sense of determining which ones are associated with particular types of jobs, but removing skills that appear in very different types of jobs. Similarly to Step 2, this approach also aims to remove generic skills, but this time by examining their variance rather than their frequency alone. For example, the skill "communication" might appear across many different job types, whereas "Machine learning" might appear frequently within data analysis jobs but rarely elsewhere. It is therefore more useful for distinguishing those jobs.
+**Step 3.** We next wanted to keep the most useful skills, in the sense of them being associated with similar types of jobs, and at the same time remove skills that appear in very different types of jobs. Similarly to Step 2, this approach aims to remove generic skills, but this time by examining their variance rather than their frequency alone. For example, the skill "Communication" might appear across many, irrelevant job types, whereas "Machine learning" might appear frequently within data analysis jobs but rarely elsewhere, and would therefore be considered more useful for distinguishing those jobs.
 
-For this purpose, we use the similarity between job titles as an indication of how closely related two postings are, represented through a k-nearest-neighbour (k-NN) graph. The graph forms a network of job postings in which each posting is connected to its (k) most similar postings, based on their title embeddings. We set (k=5), meaning that each posting considers its five most similar neighbours. We consider that in this case a smaller neighbourhood (lower k) makes sense because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link is considered to exist if either posting is among the other's neighbours.
+For this purpose, we use the similarity between job titles as an indication of how closely related two postings are, represented in a k-nearest-neighbour (k-NN) graph. The graph forms a network of job postings in which each posting is connected to its k most similar postings, based on their title embeddings. We set k = 5, meaning that each posting is linked to its five most similar postings. We chose a small neighbourhood because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link exists if either posting is among the other's neighbours.
 
-To evaluate whether a skill tends to appear in similar job postings, we decided to use the Laplacian Score [@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores each feature by how well its values agree with a neighbourhood graph of the samples. In our case the samples are the job postings, and each skill is a feature, which is assigned 1 for the postings tagged with the skill and 0 for all others. We chose the method because we have no occupation labels, so an unsupervised method is needed, and because it checks, for each skill, whether the postings tagged with it are close to each other in the title embedding space, i.e. whether they are neighbours in the graph, and therefore semantically related.
+To evaluate whether a skill tends to appear in similar job postings, we use the Laplacian Score [@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores each feature by how well its values agree with a neighbourhood graph of the samples. In our case the samples are the job postings, and each skill is a feature, i.e. a variable that is equal to 1 for the postings tagged with the skill and 0 for all others. We chose the method because we have no labels on the job postings - so an unsupervised method is needed - and because it measures directly, for each skill, whether the postings tagged with it are neighbours in the title embedding space.
 
-As part of this technique, for every skill and term, we score how well the set of postings that include it follow this graph. The score is low if the postings that carry the item are neighbours and close to 1 if the item is unrelated to the graph. The calculation involves the following steps:
+For every item (ESCO skill or Lightcast term) with enough postings (at least 20 for ESCO skills and 10 for Lightcast terms), we score how close the postings that carry it are in this graph. A low score means that the postings of the item are neighbours of each other; a score of about 1 means that they are no closer to each other than what would be expected by chance. The calculation involves the following steps:
 
-(a) For each skill, we create a vector of n size, where n is the number of postings in the graph. The vector components are assigned 1 when a posting contains the skill and 0 when it does not.
+\(a) For each item, we create a vector with one entry per posting of the graph (n entries): 1 if the posting carries the item and 0 if it does not. This vector is the feature $f$.
 
 \(b) For each link connecting the postings in the graph, we calculate its weight, which is equal to:
 

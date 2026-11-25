@@ -31,7 +31,7 @@ def make_tukey_fence_plot():
     n_removed = int((shares > fence_pct).sum())
 
     # 3. Figure
-    fig, ax = plt.subplots(figsize=(3, 2), dpi=200)
+    fig, ax = plt.subplots(figsize=(5, 4), dpi=150)
     ax.hist(shares, bins=45, color=palette[0], edgecolor="white", alpha=0.9)
     ax.axvline(fence_pct, color=palette[1], linestyle="--", linewidth=1.8,
                label=f"Upper Tukey fence ({fence_pct:.1f}%)")
