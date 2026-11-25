@@ -3,16 +3,25 @@ title: "Month 4 methodology: emerging occupation clusters"
 author: "Antonis Prodromou"
 date: today
 bibliography: references.bib
+number-sections: true
+number-depth: 3
 
 format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-location: body
+    embed-resources: true
+    fontsize: 1rem
+    include-in-header:
+      text: |
+        <style> table { font-size: 0.85em; } </style>
   pdf:
     pdf-engine: lualatex
     documentclass: scrartcl
     classoption:
       - sfdefaults=false
     toc: false
-    number-sections: true
-    number-depth: 3
     colorlinks: true
     geometry:
       - margin=25mm
@@ -21,12 +30,15 @@ format:
         \AtBeginEnvironment{tabular}{\small}
         \AtBeginEnvironment{longtable}{\small}
         \setkomafont{captionlabel}{\bfseries}
+
+editor:
+  render-on-save: true
 ---
 
 
 # Month 4 methodology: emerging occupation clusters
 
-This part of the project aims to detectig emerging occupations via clustering, using the dataset defined in the previous parts, and more specifically:
+This part of the project aims to detect emerging occupations via clustering, using the dataset defined in the previous parts, and more specifically:
 
 (a) We use the titles of the postings retrieved from the Skillab API and we create embeddings for each, using multilingual-e5, which is a family of open-source text embedding models designed for cross-lingual semantic search, information retrieval, and text representation. These models are built on the XLM-RoBERTa architecture, while the model sized used has 560M parameters and a 1024-dimensional embedding space.
 (b) Create clusters using HDBSCAN, a machine learning clustering algorithm that handles clusters of different shapes and densities. We also create a two-dimensional visualisation of the occupation clusters to check whether the clustering results are reasonable, using Uniform Manifold Approximation and Projection (UMAP). As the embeddings have 1024 dimensions, we use UMAP to represent them in fewer dimensions while attempting to preserve their local neighbourhood structure, and plot the postings on a scatter plot. We will also use K-means as a comparison, to assess whether HDBSCAN is producing useful clusters compared with a more traditional clustering algorithm.
@@ -119,7 +131,7 @@ Input D is further distinguished in two versions:
 |:---|---:|---:|
 | innovation processes | 2,412 | 13.0% |
 | cyber security | 2,239 | 12.0% |
-| DevOps | 1,621 | 8.7% |
+| DevOps | 1,621 | 8.70% |
 | quantum mechanics | 914 | 4.91% |
 | provide user documentation | 899 | 4.83% |
 
@@ -147,9 +159,79 @@ It should be noted that the Lightcast terms were not found to exceed the upper T
 
 For this purpose, we use the similarity between job titles as an indication of how closely related two postings are, represented through a k-nearest-neighbour (k-NN) graph. The graph forms a network of job postings in which each posting is connected to its (k) most similar postings, based on their title embeddings. We set (k=5), meaning that each posting considers its five most similar neighbours. We consider that in this case a smaller neighbourhood (lower k) makes sense because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link is considered to exist if either posting is among the other's neighbours.
 
-To evaluate whether a skill tends to appear in similar job postings, we decided to use the Laplacian Score [@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores each feature by how well its values agree with a neighbourhood graph of the samples. In our case the samples are the job postings, and each skill is a feature: a variable that is 1 for the postings tagged with the skill and 0 for all others. We chose the method because we have no occupation labels, so an unsupervised method is needed, and because it checks, for each skill, whether the postings tagged with it are close to each other in the title embedding space, i.e. whether they are neighbours in the graph.
+To evaluate whether a skill tends to appear in similar job postings, we decided to use the Laplacian Score [@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores each feature by how well its values agree with a neighbourhood graph of the samples. In our case the samples are the job postings, and each skill is a feature, which is assigned 1 for the postings tagged with the skill and 0 for all others. We chose the method because we have no occupation labels, so an unsupervised method is needed, and because it checks, for each skill, whether the postings tagged with it are close to each other in the title embedding space, i.e. whether they are neighbours in the graph, and therefore semantically related.
 
-As part of this technique, for every skill and term, we score how well the set of postings that include it follow this graph. The score is low if the postings that carry the item are neighbours and about 1 if the item is unrelated to the graph. In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
+As part of this technique, for every skill and term, we score how well the set of postings that include it follow this graph. The score is low if the postings that carry the item are neighbours and close to 1 if the item is unrelated to the graph. The calculation involves the following steps:
+
+(a) For each skill, we create a vector of n size, where n is the number of postings in the graph. The vector components are assigned 1 when a posting contains the skill and 0 when it does not.
+
+\(b) For each link connecting the postings in the graph, we calculate its weight, which is equal to:
+
+$$
+w_{ij} = \exp\left(-\frac{d_{ij}^{2}}{t}\right)
+$$
+
+where:
+
+- $d_{ij}$ is the distance between the title embeddings of postings $i$ and $j$.
+
+Since the embeddings are unit-length vectors, cosine distance can be calculated as:
+
+$$
+d_{ij} = 1 - \cos(\theta_{ij})
+$$
+
+where $\cos(\theta_{ij})$ is the cosine similarity between the two job-title embeddings, with similar titles having a close distance.
+
+- $t$ is the kernel bandwidth, which controls how quickly the link weight decreases as the distance between titles increases, and is defined as:
+
+$$
+t = \text{mean squared distance over links between different titles}
+$$
+
+\(c) We calculate the weighted mean of each skill and center the skill vector by extracting it from the original 0 and 1 values:
+
+$$
+z_i=x_i-\bar{x}_w
+$$
+
+This results in postings carrying the skill being positive and postings not carrying it negative.
+
+\(d) We finally calculate the Laplacian score, equal to:
+
+$$
+S = \frac{N}{D}
+$$
+
+where:
+
+- The numerator is the weighted differences in skill values across graph links:
+
+$$
+N = \sum_{(i,j)\in E} w_{ij}(x_i-x_j)^2
+$$
+
+where:
+
+- $E$ is the set of graph links.
+- $w_{ij}$ is the weight of the link between postings $i$ and $j$.
+- $x_i$ and $x_j$ are the binary skill indicators (0 or 1) for postings $i$ and $j$, respectively.
+
+- The denominator is the overall weighted variation in skill values across all postings:
+
+$$
+D = \sum_i d_i(x_i-\bar{x}_w)^2
+$$
+
+where:
+
+- $d_i$ is the weighted degree of posting $i$, calculated as the sum of the weights of its connected links.
+- $x_i$ is the binary skill indicator for posting $i$.
+- $\bar{x}_w$ is the weighted mean of the skill indicators across all postings.
+
+A lower score indicates that postings containing the skill tend to be connected to other postings containing the same skill. A higher score indicates that the skill is more dispersed across the title-based graph.
+
+In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
 
 **Table: Example of job postings (samples) and skills (features)**
 
@@ -164,11 +246,28 @@ As part of this technique, for every skill and term, we score how well the set o
 
 : Binary representation of skills across job postings {#tbl-sample-features}
 
- However, it is important to note that the Laplacian Score cannot remove false matches that are consistent. For example, we found that it kept “feed concrete mixer” (score 0.301), despite it being linked to irrelevant job titles between them. The explanation might be that this skill is about supplying a machine with the right materials. A sentence in a job advert, such as “supply the client with...”, “provide the necessary...” or “ensure delivery of...”, can be similar enough in meaning to cross the 0.6 threshold of the ESCOX algorithm.
+However, it is important to note that the Laplacian Score cannot remove false matches that are consistent. For example, we found that it kept “feed concrete mixer” (score 0.301), despite it being linked to irrelevant job titles between them. The explanation might be that this skill is about supplying a machine with the right materials. A sentence in a job advert, such as “supply the client with...”, “provide the necessary...” or “ensure delivery of...”, can be similar enough in meaning to cross the 0.6 threshold of the ESCOX algorithm.
 
-**Step 4.** The orignal Laplacian Score paper ranks the features rather than applying a cut-off, so in order to follow it, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis (silhouette, noise, seed stability). The threshold 1.0 keeps 99% of the items, because an item unrelated to the graph scores about 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 204 (Dv2) and 190 (Dv3) of the ESCO skills on lesjeudis, 130 and 114 on jobs.de, and 205 and 198 on jobbland. Regarding Lightcast, it kept 4 terms on lesjeudis, none on jobs.de and one on jobbland.
+**Step 4.** The orignal Laplacian Score paper ranks the features rather than applying a cut-off, so in order to follow it, we compared the clustering 
+for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis (silhouette, noise, seed stability). The threshold 1.0 keeps 99% of the items, because an item 
+unrelated to the graph scores about 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore 
+decided to be used for both versions and all boards. This keeps 204 (Dv2) and 190 (Dv3) of the ESCO skills on lesjeudis, 130 and 114 on jobs.de, and 205 
+and 198 on jobbland. Regarding Lightcast, it kept 4 terms on lesjeudis, none on jobs.de and one on jobbland.
 
-**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast. Each block was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all its items gets zeros in the skill embeddings, so it is clustered on its title alone.
+The tables in @sec-appendix-ls show, for jobbland, the 15 skills with the lowest and the 15 with the highest score. The lowest scores belong mostly to 
+skills with few postings whose postings carry similar titles, for example mystery shopping or babysitting. The highest scores (1.000 to 1.001) belong 
+to skills whose postings are spread over unrelated titles, including specific healthcare skills such as medical laboratory technology. The score measures 
+whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings 
+happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a 
+correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, 
+and not as a check of the skill tagging itself. The frequency cut and the score also act on different skills: "give interviews to media" (1,379 postings) 
+is kept by the score but removed by the Tukey cut in Dv3.
+
+Inspecting the sentences that return two of the low-scoring skills shows that such skills can come from generic wording (for example "improvements that can develop their processes" returning "improve chemical processes") or from the hiring-process text of advertisements (the word "interviews" returning "give interviews to media"), which is why a low score does not mean that the skill was assigned correctly.
+
+**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast. Each 
+block was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all 
+its items gets zeros in the skill embeddings, so it is clustered on its title alone.
 
 ##### Results
 
@@ -294,7 +393,7 @@ Consequently, the results did not provide a clear basis for selecting a particul
 
 ### Selection of HDBSCAN Hyperparameters
 
-Following the selection of HDBSCAN EOM, a second stage examined the sensitivity of the clustering results to the choice of two hyperparameters: `min_cluster_size` and `min_samples`.
+Following the selection of HDBSCAN EOM, a second stage examined the sensitivity of the clustering results in the choice of two hyperparameters: `min_cluster_size` and `min_samples`.
 
 The `min_cluster_size` parameter specifies the minimum number of observations required for a group to be considered a cluster. The `min_samples` parameter controls the density requirement for observations to be assigned to a cluster rather than classified as noise. Increasing `min_samples` generally makes the clustering more conservative, as a higher local density is required for observations to be considered part of a cluster.
 
@@ -378,3 +477,56 @@ This configuration was retained because it provided a reasonable balance between
 
 
 
+## Laplacian Score of the ESCO skills on jobbland {#sec-appendix-ls}
+
+This appendix lists the 15 ESCO skills with the lowest and the 15 with the highest Laplacian Score on jobbland for input D v2 (all ESCO skills with at least 20 postings, no frequency cut). Of the 53,959 postings of the board, 1,852 skills were scored and 205 (11%) have a score below the threshold of 0.8 and are kept. The scores range from 0.238 to 1.001, with a median of 0.924. The graph connects each posting to its five nearest postings in the title embedding space (kernel constant t = 0.1377). A low score means that the postings carrying the skill are neighbours in this graph; a score of about 1 means that they are no closer to each other than expected by chance, and values such as 1.001 do not differ from 1 in practice. The column "most common title" gives the most frequent cleaned title among the postings that carry the skill and the share of those postings with that title (titles are cut at 45 characters).
+
+| # | Skill | Postings | Score | Most common title | Decision |
+|---|---|---|---|---|---|
+| 1 | perform mystery shopping | 27 | 0.238 | mystery shopper to visit (30%) | kept |
+| 2 | improve chemical processes | 37 | 0.238 | junior audit consultants (38%) | kept |
+| 3 | show impartiality in an assessment situation | 72 | 0.271 | summer staff (68%) | kept |
+| 4 | practice dance moves | 26 | 0.332 | child leader for knatteskutt 1-4 years ht24 (8%) | kept |
+| 5 | support social service users' positiveness | 236 | 0.347 | nurse (10%) | kept |
+| 6 | babysitting | 426 | 0.383 | babysitter (2%) | kept |
+| 7 | baby care | 101 | 0.423 | babysitter nanny bromma 1-2 times a year - 20 (3%) | kept |
+| 8 | audit techniques | 60 | 0.434 | junior audit consultants (23%) | kept |
+| 9 | make folding styles | 69 | 0.441 | home cleaner - hemfrid (20%) | kept |
+| 10 | design indicators for food waste reduction | 189 | 0.464 | store employee, cashier/checkout, willys söde (1%) | kept |
+| 11 | handle petty cash | 37 | 0.466 | sales advisor 5h - summer substitute (5%) | kept |
+| 12 | give interviews to media | 1,379 | 0.481 | nurse (1%) | kept |
+| 13 | sales strategies | 207 | 0.493 | store employee, team fresh, willys malmö empo (1%) | kept |
+| 14 | identify parts requested by customers | 28 | 0.500 | junior audit consultants until august (21%) | kept |
+| 15 | measure customer feedback | 24 | 0.504 | inspection technician (46%) | kept |
+
+: The 15 lowest Laplacian Scores among the ESCO skills on jobbland (D v2; k = 5, at least 20 postings per skill). {#tbl-ls-lowest}
+
+**Comments**
+
+To see why wrongly assigned skills can have a low score, we ran the extractor on the sentences of six random postings that carry each of two skills, one sentence at a time (script 127; the same threshold of 0.6 as in the skill extraction). For "give interviews to media", the sentence that returns the skill is, in all six postings, a sentence on job interviews in the employer's hiring process ("Interviews and selection may take place on an ongoing basis ...", "Conducting selection, interviews and reference taking"), so the skill is triggered by the word "interviews" in text found in advertisements for any occupation; this is consistent with the skill appearing in 1,379 postings (2.6% of the board) with 1,230 different titles. For "improve chemical processes", four of the six postings are copies of the same audit-consultant advertisement, and the sentence that returns the skill is "... providing suggestions on improvements that can develop their processes"; a fifth posting (a data analyst) returns it on "automates and enhances processes ...". Only the sixth, a principal engineer for pressure vessels and chemical process systems, is a correct match. The same audit sentence also returns "identify parts requested by customers", another skill in @tbl-ls-lowest. The postings that share such a sentence have similar titles, so the skill scores low and is kept. The Laplacian Score therefore cannot remove false matches that repeat across similar postings. The examples show how such matches arise, not how frequent they are.
+
+| # | Skill | Postings | Score | Most common title | Decision |
+|---|---|---|---|---|---|
+| 1838 | provide support in financial calculation | 25 | 1.000 | project manager control and monitoring (4%) | dropped |
+| 1839 | conduct physical examination in emergency | 20 | 1.000 | nurse (10%) | dropped |
+| 1840 | economics | 30 | 1.000 | oracle scm konsult (3%) | dropped |
+| 1841 | accompany people | 22 | 1.001 | personal assistants (5%) | dropped |
+| 1842 | data security principles | 30 | 1.001 | data platform engineer (3%) | dropped |
+| 1843 | manage fitness goals | 29 | 1.001 | production engineer (3%) | dropped |
+| 1844 | develop therapeutic relationships | 26 | 1.001 | permanent employment and temporary work (4%) | dropped |
+| 1845 | coordinate events | 26 | 1.001 | technical training coordinator (4%) | dropped |
+| 1846 | manage operations in healthcare institutions | 40 | 1.001 | nurse for the emergency department (2%) | dropped |
+| 1847 | medical laboratory technology | 24 | 1.001 | norwegian-speaking customer service employee (4%) | dropped |
+| 1848 | think holistically | 43 | 1.001 | st doctor (5%) | dropped |
+| 1849 | stay up-to-date with current events | 36 | 1.001 | store salesperson (8%) | dropped |
+| 1850 | discern written communication | 36 | 1.001 | working student (financial institution bankin (3%) | dropped |
+| 1851 | identify legal requirements | 56 | 1.001 | sjuksköterska (4%) | dropped |
+| 1852 | organise participation in local or international events | 73 | 1.001 | sigtuna municipality is a place with a large  (7%) | dropped |
+
+: The 15 highest Laplacian Scores among the ESCO skills on jobbland (D v2; k = 5, at least 20 postings per skill). The rank is among the 1,852 scored skills. {#tbl-ls-highest}
+
+**Lowest scores.** Thirteen of the 15 skills have fewer than 250 postings, and nine have fewer than 100. Some of them fit the titles that carry them: "perform mystery shopping" is carried mostly by "mystery shopper" titles, and "babysitting" and "baby care" by babysitter and nanny titles. The "babysitting" row also shows that the title share understates how local a skill is: its most common title covers only 2% of its 426 postings, but the other postings carry related titles that are neighbours in the embedding. Other rows show that the score measures concentration and not correctness. In our reading, "improve chemical processes" (score 0.238) and "identify parts requested by customers" are hard to relate to "junior audit consultants", the title that carries them most often, yet they score low because their postings concentrate on a group of similar titles. A strong concentration on one title, such as "summer staff" for "show impartiality in an assessment situation" (68%), can also come from many near-identical advertisements. We did not check this for these skills.
+
+**Highest scores.** All 15 skills have between 20 and 73 postings and a score of 1.000 to 1.001, and the most common title covers only 2% to 10% of their postings. Several of them are specific skills, for example "conduct physical examination in emergency", "manage operations in healthcare institutions" and "medical laboratory technology", but their postings are spread over very different titles (nurse, doctor, customer service), so they are dropped. "Scattered" describes these skills better than "generic". Many more skills score about 1.00, so the order of these 15 rows depends on the third decimal and has no meaning of its own.
+
+**Input D v3.** After the Tukey cut (fence at 1.611% of the postings, which removes 56 skills), 1,796 skills are scored and 198 are kept. The 15 highest scores belong to the same skills. The 15 lowest scores differ in one row: "give interviews to media" (1,379 postings, 2.6% of all postings, score 0.481) is removed by the cut, and "store goods" (170 postings, score 0.515, most common title "summer staff" with 29%) enters at rank 15. This skill shows that the frequency cut and the Laplacian Score act on different skills: the score alone keeps a frequent skill whose postings are concentrated, and the cut removes it.
