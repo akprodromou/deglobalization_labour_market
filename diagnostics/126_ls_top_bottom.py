@@ -85,7 +85,7 @@ def main():
 
     cut = None
     if a.tukey:
-        cut = cp.tukey_cut(docs, 5)
+        cut = cp.tukey_cut(docs, min(5, a.min_n))   # fence base follows --min-n (1 = all items, as script 92 --min-items 1)
         cnt0 = Counter(t for x in docs for t in set(x))
         common = {t for t, c in cnt0.items() if c / n_post > cut}
         docs = [[t for t in x if t not in common] for x in docs]
@@ -166,25 +166,28 @@ def main():
     n = a.top
     sc = np.array([r["score"] for r in rows])
     md = [f"# Laplacian Score of the ESCO skills: {a.board}" + (" (after the Tukey cut)" if a.tukey else ""), "",
-          f"{n_post:,} postings; {len(rows):,} skills with at least {a.min_n} postings were scored; "
+          f"{n_post:,} postings; {len(rows):,} skills were scored"
+          + (f" (minimum {a.min_n} postings per skill); " if a.min_n > 1 else " (no minimum number of postings); ") +
           f"{len(keep):,} have a score below {a.threshold} and are kept. Score: minimum {sc.min():.3f}, median {np.median(sc):.3f}, "
           f"maximum {sc.max():.3f}. Graph: k = {a.k}, title embeddings, t = {g['t']:.4f}.", "",
           f"## The {n} lowest scores (postings of the skill are neighbours: specific skills)", ""]
     md += table(rows[:n], 1)
     md += ["", f"## The {n} highest scores (postings of the skill are scattered: generic skills)", ""]
     md += table(rows[-n:], len(rows) - n + 1)
+    md += ["", f"## The {n} most frequent skills (rank by number of postings; no threshold involved)", ""]
+    md += table(sorted(rows, key=lambda r: -r["postings"])[:n], 1)
     # skills by number of postings: how many are below the threshold, how concentrated on one title, how many distinct titles
     md += ["", f"## Skills by number of postings (minimum for scoring: {a.min_n})", "",
            "| postings per skill | skills | below threshold | median score | median share of the most common title | median distinct titles per posting |",
            "|---|---|---|---|---|---|"]
-    for lo, hi in ((5, 9), (10, 19), (20, 49), (50, 199), (200, None)):
+    for lo, hi in ((1, 2), (3, 4), (5, 9), (10, 19), (20, 49), (50, 199), (200, None)):
         sel = [r for r in rows if r["postings"] >= lo and (hi is None or r["postings"] <= hi)]
         if not sel:
             continue
         md.append(f"| {lo} to {hi} " if hi else f"| {lo} or more ")
         md[-1] += (f"| {len(sel):,} | {sum(r['kept'] for r in sel) / len(sel):.0%} | {np.median([r['score'] for r in sel]):.3f} | "
                    f"{np.median([r['title_share'] for r in sel]):.0%} | {np.median([r['distinct'] / r['postings'] for r in sel]):.2f} |")
-    print("\n".join(md[-9:]))
+    print("\n".join(md[-11:]))
     Path(f"{a.docs}/ls_table_{a.board}{suffix}.md").write_text("\n".join(md) + "\n", encoding="utf-8")
     print(f"wrote {a.docs}/ls_table_{a.board}{suffix}.md and {a.out}/ls_scores_{a.board}{suffix}.csv")
 
