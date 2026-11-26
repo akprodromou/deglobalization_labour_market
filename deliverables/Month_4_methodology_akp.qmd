@@ -102,7 +102,7 @@ The clustering methodology was developed in two stages:
 
 The initial title representations were generated using the pretrained multilingual-e5-large model (`intfloat/multilingual-e5-large`). The model produces a 1,024-dimensional vector for each input text; this dimensionality is the model's output size, and it was used in its pretrained form.
 
-The first stage of the process was to clean the job titles using a python script (script 90). This process removed employer names, location information, gender markers (such as `(m/w/d)`) and any job reference codes. The resulting cleaned titles (`title_clean`) were stored for each board in `data/tagged/titles_<board>.jsonl`. Each cleaned title was then used as the embedding input (`text_a`) (script 92). Where a posting had no title, a title was inferred from the description, using the Qwen 2.5 7B model (script 99). To check the accuracy of this process, a human annotator (i.e. the author) checked a sample of generated titles against the true titles, and it was found that 88% of them were accurate, which was deemed satisfactory. 
+The first stage of the process was to clean the job titles using a python script (script 90). This process removed employer names, location information, gender markers (such as `(m/w/d)`) and any job reference codes. The resulting cleaned titles (`title_clean`) were stored for each board in `data/tagged/titles_<board>.jsonl`. Each cleaned title was then used as the embedding input (`text_a`) (script 92). Where a posting had no title, a title was inferred from the description, using the Qwen 2.5 7B model (script 99). To check the accuracy of this process, we examined (a human annotator) a sample of generated titles against the true titles, and it was found that 88% of them were accurate, which was deemed satisfactory. 
 
 Finally, the prefix `query: ` was added to each input, as required by the model's input convention.
 
@@ -110,28 +110,30 @@ Finally, the prefix `query: ` was added to each input, as required by the model'
 
 The text was then encoded using SentenceTransformers, which is a Python framework built on PyTorch and Transformers for generating embeddings and computing similarity scores across text. The resulting embeddings were normalised using L2 normalization (setting `normalize_embeddings=True`), which scales a vector so its Euclidean norm (length) equals 1 while preserving its direction. This is because multilingual-e5 is trained so that similar texts point in the same direction, while the magnitude (length) of each vector is not used in the comparison. Therefore, by normalising each vector to length 1, differences in length are removed and the dot product of two titles is equal to the cosine of the angle between two vectors ("cosine similarity"). The embeddings were generated using Google Colab, on a T4 GPU. The resulting vectors were saved as NumPy arrays (`emb_<board>.npy`), with one row per posting.
 
-Two different UMAP transformations were applied to the 1,024-dimension title embeddings, to test two different approaches:
+Two different UMAP transformations were applied to the 1,024-dimension title embeddings, at different stages:
 
 (a) In the clustering pipeline (script 92), UMAP reduced the embeddings to 10 dimensions, using cosine distance, `n_neighbors = 30` and `min_dist = 0`. The reduction to ten dimensions took place in order to make clustering on the basis of density more effective than applying the clustering algorithms that followed directly to the original 1,024-dimensional embeddings; setting `min_dist = 0` allows UMAP to place similar observations more closely together, which can make it easier for HDBSCAN to identify dense areas.
 (b) At a later stage, for visualisation only, a separate two-dimensional UMAP was applied to the original 1,024-dimensional title embeddings. The grey points are a random sample of the board's postings, and the coloured points are the postings of the clusters selected for illustration. Their cluster labels come from the clustering in the ten-dimensional UMAP space (script 92) and are only copied onto the map. As a reference, the postings whose cleaned title matches the pattern of one of the seven occupations listed indicatively in the brief are displayed, but these occupations are not used to select or form clusters. In other words, this map is a different, indicative projection of the original embeddings for visualization purposes, and therefore the distance between two clusters on the map is not evidence of how close they are in the ten-dimensional clustering space.
 
-#### Comparison of input representations
+#### Comparison of input representations {#sec-input-representations}
 
 Using HDBSCAN as the clustering algorithm (on the aforementioned 10-dimensional UMAP of the embeddings), we examined two input representations:
 
-1. Input A uses only the cleaned job titles, embedded with multilingual-e5-large (1,024 dimensions, L2-normalised).
+1. Input A uses only the cleaned job titles, embedded with the multilingual-e5-large model (1,024 dimensions, L2-normalised).
 2. Input D joins two additional numerical embedding vectors to the title embedding via concatenation:
-   a. An embedding (100 dimensions) of ESCO skills extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6.
+   a. An embedding (100 dimensions) of the 6,539 ESCO skills extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6.
    b. An embedding (20 dimensions, see Step 5) of 135 Lightcast terms.
 
-Input D is further distinguished in two versions:
+   The different embedding dimensionality was chosen because of the difference in input size (6,539 vs 135 terms). 
+
+Input D is further examined in two versions:
 
 1. Dv2 uses weights of 0.50 for both ESCOX and Lightcast.
-2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of the concatenated embeddings (that included skills) showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result in joining those postings in the same clusters. To remove common skills, we followed the following steps:
+2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of the concatenated embeddings, that included all the skills, showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result in joining those postings in the same clusters. To remove common skills, we followed the following steps:
 
 ##### Removing generic skills (Dv3)
 
-**Step 1.** For each board, we count the share of its postings in which each ESCO skill appears (script 92 and 125). @tbl-esco-skills shows an example of ESCO skills for the lesjeudis board (18,625 postings). The share provided is the number of postings with the skill divided by all postings of the board, (including postings without any skill) while the skill names in the table below are shortened for clarity (e.g. "innovation processes The techniques, mod…" is given below as "innovation processes").
+**Step 1.** For each board, we count the share of its postings in which each ESCO skill appears (script 92 and 125). @tbl-esco-skills shows an example of ESCO skills for the lesjeudis board (18,625 postings). The share provided is the number of postings with the skill divided by all postings of the board (including postings without any skill) while the skill names in the table below have been shortened for clarity (e.g. "innovation processes The techniques, mod…" is given below as "innovation processes").
 
 | ESCO skill | Postings | Share |
 |:---|---:|---:|
@@ -143,9 +145,9 @@ Input D is further distinguished in two versions:
 
 : Selected ESCO skills and their posting shares {#tbl-esco-skills}
 
-**Step 2.** To identify which skills have a very high occurrence, and therefore have limited discriminatory value for distinguishing job roles, we need to examine their distribution. One approach is to (a) calculate the share of postings in which each item appears (b) rank the items (skills or terms) by that share and (c) remove the outliers, which in this case are the most common terms.
+**Step 2.** To identify which skills have a very high occurrence, and therefore have limited discriminatory value for distinguishing job roles, we need to examine their distribution. The approach we chose was to (a) calculate the share of postings in which each item appears (b) rank the items (skills or terms) by that share and (c) remove the outliers, which in this case are the most common terms.
 
-Plotting the distribution of skill occurrence, it was found to be right-skewed: most skills (inliers) appeared in relatively few postings, while only a small number (outliers) appeared in many of them. To account for this skewness, we applied a logarithmic transformation to the shares and then used the Tukey boxplot rule [@tukey1977exploratory] to identify the boundary between inliers and outliers. According to this, we considered a skill as unusually frequent if its log share exceeds the upper fence, calculated as Q3 + 1.5 × IQR, where Q3 and IQR are calculated from the distribution of log-transformed shares.
+Plotting the distribution of skill occurrence, it was found to be right-skewed (@fig-tukey): most skills (inliers) appeared in relatively few postings, while only a small number (outliers) appeared in many of them. To account for this skewness, we applied a logarithmic transformation to the shares and then used the Tukey boxplot rule [@tukey1977exploratory] to identify the boundary between inliers and outliers. According to this, we considered a skill as unusually frequent if its log share exceeds the upper fence, calculated as Q3 + 1.5 × IQR, where Q3 and IQR are calculated from the distribution of log-transformed shares.
 
 The fence is computed over all skills of the board, and was estimated at 2.99% for the lesjeudis board, 1.98% for jobs.de and 1.85% for jobbland. The result was that it removed 46, 23 and 51 skills, respectively.
 
@@ -159,17 +161,56 @@ from tukey_fence import make_tukey_fence_plot
 fig = make_tukey_fence_plot()
 ```
 
-It should be noted that the Tukey fence was applied to ESCO skills only, because the Lightcast block contains few terms (20 occur in the lesjeudis postings, 12 in jobs.de and 32 in jobbland).
+It should be noted that the Tukey fence was applied to ESCO skills only, because the Lightcast block contains only a few terms (20 occur in the lesjeudis postings, 12 in jobs.de and 32 in jobbland).
 
-**Step 3.** We next wanted to keep the most useful skills, in the sense of them being associated with similar types of jobs, and at the same time remove skills that appear in very different types of jobs. Similarly to Step 2, this approach aims to remove generic skills, but this time by examining their variance rather than their frequency alone. For example, the skill "Communication" might appear across many, irrelevant job types, whereas "Machine learning" might appear frequently within data analysis jobs but rarely elsewhere, and would therefore be considered more useful for distinguishing those jobs.
+**Step 3.** We next wanted to keep the most useful skills, in the sense of them being associated with similar types of jobs, and at the same time remove skills that appear in very different types of jobs and are therefore less helpful in the clustering of job titles. In other words, similarly to Step 2, this approach aims to remove generic skills, but this time by examining their variance rather than their frequency alone. For example, the skill "Communication" might appear across many, irrelevant job types, whereas "Machine learning" might appear frequently within data analysis jobs but rarely elsewhere, and would therefore be considered more useful for distinguishing those jobs.
 
 For this purpose, we use the similarity between job titles as an indication of how closely related two postings are, represented in a k-nearest-neighbour (k-NN) graph. The graph forms a network of job postings in which each posting is connected to its k most similar postings, based on their title embeddings. We set k = 5, meaning that each posting is linked to its five most similar postings. We chose a small neighbourhood because we want to assess how closely a skill is associated with the most similar job titles, rather than with a broader set of jobs. A link exists if either posting is among the other's neighbours.
 
 To evaluate whether a skill tends to appear in similar job postings, we use the Laplacian Score [@NIPS2005_b5b03f06]. This is an unsupervised feature-selection method that scores each feature by how well its values agree with a neighbourhood graph of the samples. In our case the samples are the job postings, and each skill is a feature, i.e. a variable that is equal to 1 for the postings tagged with the skill and 0 for all others. We chose the method because we have no labels on the job postings - so an unsupervised method is needed - and because it measures directly, for each skill, whether the postings tagged with it are neighbours in the title embedding space.
 
-For every item (ESCO skill or Lightcast term), we score how close the postings that carry it are in this graph. A low score means that the postings of the item are neighbours of each other; a score of about 1 means that they are no closer to each other than what would be expected by chance. The calculation involves the following steps:
+The skills and terms that correspond to each posting were identified before the clustering, separately for each board. ESCO skills were extracted using an extractor [@kavargyris2025] that splits the full text (title and description) into short fragments and compares each fragment with the ESCO skill descriptions (script 69b); a skill is assigned to the posting when the similarity reaches 0.6.
 
-\(a) For each item, we create a vector with one entry per posting of the graph (n entries): 1 if the posting carries the item and 0 if it does not. This vector is the feature $f$.
+Lightcast terms were assigned through a process of exact phrase matching of the terms selected from the Lightcast list on the same text (script 91): the text was lower-cased, hyphens and slashes were read as spaces, whole words were matched, and an optional plural ending (-s or -es) was allowed. Each term was matched independently, so e.g. a text in a posting that reads "supply chain management" will match both the "supply chain" and "supply chain management" skill. 
+
+The final result is, for each board, two files, containing a list of skills and a list of terms for each posting respectively, from which the vectors in step (a) are built, e.g.:
+
+::: {.columns}
+::: {.column width="29%"}
+**Lightcast terms**
+
+```json
+{
+  "id": "1680874",
+  "day": "2024-01-30",
+  "terms": [
+    "Supply Chain"
+  ]
+}
+```
+:::
+
+::: {.column width="71%"}
+**ESCO skills**
+
+```json
+{
+  "id": "1680874",
+  "day": "2024-01-30",
+  "skills": [
+    "http://data.europa.eu/esco/skill/1a3660c2-…-529afc305428",
+    "http://data.europa.eu/esco/skill/68269b0a-…-a0b0230fe60c",
+    "http://data.europa.eu/esco/skill/70159320-…-99e0adf3f77e"
+  ]
+}
+```
+:::
+:::
+
+
+For every item (ESCO skill or Lightcast term), we use the Laplacian score to assess how close the postings that carry it are in the k-NN graph. A low score means that the postings of the item are neighbours of each other; a score of about 1 means that they are no closer to each other than a random allocation. The calculation involves the following steps:
+
+\(a) For each item (skill or term), we create a vector with one entry per posting of the graph (n entries for n postings), which takes the value 1 if the posting carries the item and 0 if it doesn't. This vector is the feature $f$.
 
 \(b) For each link connecting the postings in the graph, we calculate its weight, which is equal to:
 
@@ -192,8 +233,11 @@ where $\cos(\theta_{ij})$ is the cosine similarity between the two job-title emb
 - $t$ is the kernel bandwidth, which controls how quickly the link weight decreases as the distance between titles increases, and is defined as:
 
 $$
-t = \text{mean squared distance over links between different titles}
+t = \frac{1}{|\mathcal{E}{\mathrm{diff}}|}
+\sum{(i,j)\in\mathcal{E}{\mathrm{diff}}} d{ij}^{2}
 $$
+
+where $\mathcal{E}_{\mathrm{diff}}$ denotes the set of graph edges connecting postings with different titles.
 
 \(c) We calculate the weighted mean of each skill and center the skill vector by extracting it from the original 0 and 1 values:
 
@@ -235,9 +279,9 @@ where:
 - $x_i$ is the binary skill indicator for posting $i$.
 - $\bar{x}_w$ is the weighted mean of the skill indicators across all postings.
 
-A lower score indicates that postings containing the skill tend to be connected to other postings containing the same skill. A higher score indicates that the skill is more dispersed across the title-based graph.
+A lower score indicates that postings containing the skill tend to be connected to other postings containing the same skill. A higher score indicates that the skill is more spread out across the title-based graph.
 
-In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
+In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer job titles are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
 
 | Sample (job posting) | Python | Data analysis | Communication |
 |:---|---:|---:|---:|
@@ -250,17 +294,16 @@ In the below example, assuming that in the k-NN graph (a) Data Scientist, Data A
 
 : Binary representation of skills across job postings {#tbl-sample-features}
 
-**Step 4.** The original Laplacian Score paper ranks the features rather than applying a cut-off, so in order to follow it, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis (silhouette, noise, seed stability). The threshold 1.0 keeps about half of the items (38% to 49%), because an item unrelated to the graph scores about 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, none on jobs.de and one on jobbland.
+**Step 4.**In the original Laplacian Score paper, the algorithm calculates a score for every feature and sorts the features from the lowest score (best) to the highest; it is then left to the user to keep the top m features. Therefore, in order to determine the threshold for deciding which features to keep, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis, using as criteria the silhouette score, the noise and seed stability. The latter was deemed necessary because UMAP and HDBSCAN have a random element in their operation, so a single run can produce a result that depends on the seed of that run and might not be reproduced in a new run. It was measured using the Adjusted Rand Index [@Hubert1985], which compares two clusterings of the same postings and is corrected for chance agreement (1 means identical clusters, 0 means chance level), calculated on the postings assigned to a cluster in each run. 
 
-The tables in @sec-appendix-ls show, for jobbland, the 15 skills with the lowest score and the 15 most frequent skills. The lowest scores belong mostly to skills with few postings whose postings carry similar titles, for example mystery shopping. Of the 15 most frequent skills, only one ("sales activities") is kept in Dv2: these skills are spread over many titles and their scores lie between 0.76 and 0.93. The score measures 
-whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, and not as a check of the skill tagging itself. The frequency cut and the score also act on different skills: "give interviews to media" (1,379 postings) 
-is kept by the score but removed by the Tukey cut in Dv3.
+The results showed that a Laplacian score threshold of 1.0 kept about half of the ESCO skills (49% to 50%), because the score of an item unrelated to the graph is about 1, so about half of the items fall below it. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, none on jobs.de and one on jobbland.
+
+The tables in @sec-appendix-ls show the 15 skills with the lowest score and the 15 most frequent skills for the jobland board. The lowest scores belong mostly to skills with few postings whose postings carry similar titles, for example mystery shopping. Of the 15 most frequent skills, only one ("sales activities") is kept in Dv2: these skills are spread over many titles and their scores lie between 0.76 and 0.93. The score measures 
+whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, and not as a check of the skill tagging itself. The frequency cut and the Laplacian score also act on different skills; for example, "give interviews to media" (1,379 postings) is kept by the Laplacian score but removed by the Tukey frequency cut in Dv3.
 
 Inspecting the sentences that return two of the low-scoring skills shows that such skills can come from generic wording (for example "improvements that can develop their processes" returning "improve chemical processes") or from the hiring-process text of advertisements (the word "interviews" returning "give interviews to media"), which is why a low score does not mean that the skill was assigned correctly.
 
-**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast. Each 
-block was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all 
-its items gets zeros in the skill embeddings, so it is clustered on its title alone. The Lightcast block has one dimension fewer than the number of terms kept, up to 20, and is left out when fewer than three terms remain; on jobs.de and jobbland the input is therefore the title embedding plus the ESCO skills.
+**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast (see also @sec-input-representations). Each block was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all its items gets zeros in the skill embeddings, so it is clustered on its title alone. The Lightcast block has one dimension fewer than the number of terms kept, up to 20, and is left out when fewer than three terms remain; on jobs.de and jobbland the input is therefore the title embedding plus the ESCO skills.
 
 ##### Results
 
