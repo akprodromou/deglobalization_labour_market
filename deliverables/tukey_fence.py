@@ -30,23 +30,32 @@ def make_tukey_fence_plot():
     fence_pct = 10 ** (q3 + 1.5 * (q3 - q1))
     n_removed = int((shares > fence_pct).sum())
 
-    # 3. Figure
-    fig, ax = plt.subplots(figsize=(5, 4), dpi=150)
+# 3. Figure
+    fig, ax = plt.subplots(figsize=(4.5, 3.5), dpi=150)
     ax.hist(shares, bins=45, color=palette[0], edgecolor="white", alpha=0.9)
     ax.axvline(fence_pct, color=palette[1], linestyle="--", linewidth=1.8,
                label=f"Upper Tukey fence ({fence_pct:.2f}%)")
     ax.axvspan(fence_pct, shares.max() * 1.02, color=palette[1], alpha=0.18,
                label=f"Removed skills ({n_removed})")
-    ax.set_title(f"Share of postings per ESCO skill (lesjeudis board)", fontsize=8)
-    ax.set_xlabel("Share of postings, %", fontsize=8)
+
+    ax.set_title("Share of postings per ESCO skill (lesjeudis board)", fontsize=9, pad=10)
+    ax.set_xlabel("Share of postings (%)", fontsize=8)
     ax.set_ylabel("Number of ESCO skills", fontsize=8)
     ax.tick_params(labelsize=7)
+
     ax.set_xlim(left=0)
     ax.set_ylim(bottom=0)
-    ax.grid(alpha=0.5)
-    ax.legend(frameon=False, fontsize=8)
+    ax.grid(alpha=0.4, linestyle=":")
+
+    # Placed in upper center-right open space, clear of both the tall left bars and the shaded tail
+    ax.legend(
+    loc="upper right",
+    bbox_to_anchor=(0.95, 1.0),
+    frameon=False,
+    fontsize=7
+    )
+
     fig.tight_layout()
-    # print(f"skills: {len(shares)}, median share {np.median(shares):.3f}%, fence {fence_pct:.3f}%, removed {n_removed}")
     return fig
 
 

@@ -125,7 +125,7 @@ Using HDBSCAN as the clustering algorithm (on the aforementioned 10-dimensional 
 Input D is further distinguished in two versions:
 
 1. Dv2 uses weights of 0.50 for both ESCOX and Lightcast.
-2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of the concatenated embeddings (that included skills) showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result to joining those postings in the same clusters. To remove common skills, we followed the following steps:
+2. Dv3 uses weights 0.25 and 0.25 and, in addition, removes very common skills before the concatenation. The reason is that our initial runs of the concatenated embeddings (that included skills) showed that clusters were formed around single skills which were often generic (such as "assume responsibility", "meet commitments", "communicate with customers" or language skills). These generic skills reveal little about the actual role, but still result in joining those postings in the same clusters. To remove common skills, we followed the following steps:
 
 ##### Removing generic skills (Dv3)
 
@@ -150,7 +150,7 @@ The fence is computed over all skills of the board, and was estimated at 2.99% f
 ```{python}
 #| label: fig-tukey
 #| echo: false
-#| fig-cap: "Share of postings per ESCO skill on lesjeudis. The dashed line is the upper Tukey fence (2.99%); the 46 skills above it are removed in Dv3."
+#| fig-cap: "Share of postings per ESCO skill on lesjeudis. The dashed line is the upper Tukey fence (2.99%); the 46 skills above it are removed in version Dv3."
 import sys
 sys.path.append("deliverables")
 from tukey_fence import make_tukey_fence_plot
@@ -237,8 +237,6 @@ A lower score indicates that postings containing the skill tend to be connected 
 
 In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
 
-**Table: Example of job postings (samples) and skills (features)**
-
 | Sample (job posting) | Python | Data analysis | Communication |
 |:---|---:|---:|---:|
 | Data Scientist | 1 | 1 | 1 |
@@ -250,19 +248,10 @@ In the below example, assuming that in the k-NN graph (a) Data Scientist, Data A
 
 : Binary representation of skills across job postings {#tbl-sample-features}
 
-However, it is important to note that the Laplacian Score cannot remove false matches that are consistent. For example, we found that it kept “feed concrete mixer” (score 0.301), despite it being linked to irrelevant job titles between them. The explanation might be that this skill is about supplying a machine with the right materials. A sentence in a job advert, such as “supply the client with...”, “provide the necessary...” or “ensure delivery of...”, can be similar enough in meaning to cross the 0.6 threshold of the ESCOX algorithm.
-
-**Step 4.** The orignal Laplacian Score paper ranks the features rather than applying a cut-off, so in order to follow it, we compared the clustering 
-for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis (silhouette, noise, seed stability). The threshold 1.0 keeps about half of the items (38% to 49%), because an item 
-unrelated to the graph scores about 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore 
-decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 
-and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, none on jobs.de and one on jobbland.
+**Step 4.** The original Laplacian Score paper ranks the features rather than applying a cut-off, so in order to follow it, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis (silhouette, noise, seed stability). The threshold 1.0 keeps about half of the items (38% to 49%), because an item unrelated to the graph scores about 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, none on jobs.de and one on jobbland.
 
 The tables in @sec-appendix-ls show, for jobbland, the 15 skills with the lowest score and the 15 most frequent skills. The lowest scores belong mostly to skills with few postings whose postings carry similar titles, for example mystery shopping. Of the 15 most frequent skills, only one ("sales activities") is kept in Dv2: these skills are spread over many titles and their scores lie between 0.76 and 0.93. The score measures 
-whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings 
-happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a 
-correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, 
-and not as a check of the skill tagging itself. The frequency cut and the score also act on different skills: "give interviews to media" (1,379 postings) 
+whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, and not as a check of the skill tagging itself. The frequency cut and the score also act on different skills: "give interviews to media" (1,379 postings) 
 is kept by the score but removed by the Tukey cut in Dv3.
 
 Inspecting the sentences that return two of the low-scoring skills shows that such skills can come from generic wording (for example "improvements that can develop their processes" returning "improve chemical processes") or from the hiring-process text of advertisements (the word "interviews" returning "give interviews to media"), which is why a low score does not mean that the skill was assigned correctly.
@@ -273,7 +262,7 @@ its items gets zeros in the skill embeddings, so it is clustered on its title al
 
 ##### Results
 
-We compared the three input cariations on lesjeudis.com with two criteria from the literature on text clustering with embeddings. The first is the silhouette [@rousseeuw1987silhouettes], computed in the space in which each input was clustered (the 10-dimensional UMAP space) and in the original embedding space. In simple terms, the silhouette measures how compact the clusters are in the space they take up.
+We compared the three input variations on lesjeudis.com with two criteria from the literature on text clustering with embeddings. The first is the silhouette [@rousseeuw1987silhouettes], computed in the space in which each input was clustered (the 10-dimensional UMAP space) and in the original embedding space. In simple terms, the silhouette measures how compact the clusters are in the space they take up.
 
 The second is topic coherence (C~NPMI~), a standard semantic measure used for clusters of text [@roder2015exploring; @grootendorst2022bertopic]. For each cluster we took the ten words with the highest class-based tf-idf score in its titles [@grootendorst2022bertopic] and computed the mean normalised pointwise mutual information [@bouma2009normalized] over all pairs of these words. Each title of the board counts as one document. C~NPMI~ is −1 when two words never occur in the same title and +1 when they always do. 
 
@@ -287,19 +276,19 @@ According to the silhouette score, input D v2 is the preferred choice (0.787 aga
 
 It is therefore expected that topic coherence (C~NPMI~), which looks only at the words of the titles, gives the opposite result: D v2 has the lowest values (median C~NPMI~ −0.527 against −0.389 for A), which means that the titles inside its clusters share fewer words than those of A. The reason is that skills can be unreliable because of how they are extracted. The esco-skill-extractor turns each piece of a posting into a vector with a small sentence model (all-MiniLM-L6-v2) and compares it with the vector of every ESCO skill description. A skill counts as found when the similarity reaches 0.6. In the first version of input D (D v1), which had no filter on the skills, this produced false matches such as the skill "feed concrete mixer" on IT consultants' postings. This can be due to (a) generic wording, because a common sentence of a job advert such as "supply the client with..." or "ensure delivery of..." can be similar in meaning in the context of a skill description or (b) employer templates, because one sentence repeated in a group of postings, such as a company description, gives the same skill to all of them. The Laplacian Score filter in D v2 and D v3 was introduced to remove skills whose postings have unrelated titles.
 
-Input D v3 is similar to A on both criteria (silhouette 0.617 against 0.618; median C~NPMI~ −0.355 against −0.389; weighted mean −0.312 against −0.342) but xxxx. We therefore keep input A as the main input and D v3 as a sensitivity check.
-
 C~NPMI~ is negative for all three inputs. This can be explained by the fact that titles are very short documents, and the top words of a cluster are mostly alternative words for the same role (for example "buyer" and "purchasing") or rare tokens which rarely occur in the same title. In the lesjeudis board, about one fifth of the titles (at least 21.7%) contain French, so some of the top words are French equivalents of English ones (for example "buyer" and "acheteur"). The values are therefore compared with each other and not interpreted in absolute terms. The silhouette and C~NPMI~ are computed on the same clusters, so the numbers of clusters and noise are the same in both (for example 129 clusters for D v2). 
+
+Input D v3 is similar to A on silhouette and topic coherence (silhouette 0.617 against 0.618; median C~NPMI~ −0.355 against −0.389; weighted mean −0.312 against −0.342) but requires additional computation steps and choices of variables (ESCOX skill extractor, Laplacian score threshold, k-nearest-neighbours, Tukey boxplot to identify outliers). We therefore decided to use input A for the generation of the clustering embeddings.
 
 #### Clustering algorithms tested
 
-Using the embeddings of Case A (i.e. ectracted only from the title) as input, we next compared the results of four clustering algorithms on the postings: 
+Using the embeddings of Case A (i.e. extracted only from the title) as input, we next compared the results of four clustering algorithms on the postings: 
 1. HDBSCAN with excess-of-mass (EOM) cluster selection
 2. HDBSCAN with leaf cluster selection
 3. k-means
 4. Ward agglomerative clustering.
 
-All methods were applied to the same 10-dimensional UMAP representations of the input embeddings, so that the results can be compared on the same dimensional space. The number of clusters was set to XXX for all algorithms, because xxxx. This provided a comparison between the methods the a similar level of cluster granularity. For the k-means algorithm in specific, we also examined five alternative values of k (25, 50, 100, 200 and 400) to investigate how the number of clusters affected the resulting silhouette scores.
+All methods were applied to the same 10-dimensional UMAP representations of the input embeddings, so that the results can be compared on the same dimensional space. HDBSCAN determines the number of clusters itself, whereas k-means and Ward require it in advance. For these two algorithms, the number of clusters was therefore set to the number found by HDBSCAN EOM for the same board and input (for example 144 for LesJeudis A). This provided a comparison between the methods at a similar level of cluster granularity. For the k-means algorithm in specific, we also examined five alternative values of k (25, 50, 100, 200 and 400) to investigate how the number of clusters affected the resulting silhouette scores.
 
 The comparison was conducted on the three job-posting platforms that had already been chosen due to their data completeness over time (LesJeudis, Jobbland and Jobs.de).
 
@@ -520,6 +509,15 @@ The share of skills that are kept rises with the number of postings, from 2% for
 
 : The 15 lowest Laplacian Scores of the ESCO skills on jobbland (identical for D v2 and D v3). Postings: number of postings that carry the skill. {#tbl-ls-lowest}
 
+#### Comments
+
+The score cannot remove a wrong skill that is repeated across similar postings, because such a skill looks like a specific one. We checked two skills in detail (script 127), where each sentence was given as input to the extractor separately. The results were:
+
+- Skill "give interviews to media" (found in 1,379 postings, with 1,230 distinct titles in total, Laplacian score 0.482). In all sampled postings the match comes from the word "interviews" in a sentence about the hiring process.
+- Skill "improve chemical processes" (found in 37 postings, Laplacian score 0.238). In this case, there are four postings from one firm (EY) that have a (boilerplate) sentence about "providing suggestions on improvements that can develop their processes". In another example, a data analyst ad describes "automates and enhances processes", which also leads to the specific skill assignment. Of the postings examined, only one was found to be a true match.
+
+We conclude that both skills come from generic wording that the extractor (threshold 0.6) maps to a specific ESCO skill. A low Laplacian Score in this case therefore is not evidence that the skill was extracted correctly.
+
 ### Most frequent skills
 
 The highest scores cannot be ranked meaningfully: more than half of the scored skills have a score of 1.000, and the differences in the third decimal are noise. We therefore show the 15 most frequent skills instead (@tbl-ls-frequent-v2 and @tbl-ls-frequent-v3).
@@ -566,11 +564,3 @@ In D v2 (@tbl-ls-frequent-v2) only one of the 15 most frequent skills, "sales ac
 
 : The 15 most frequent ESCO skills on jobbland after the Tukey frequency cut, D v3. 6,488 skills are scored and 443 are kept. {#tbl-ls-frequent-v3}
 
-### Examples of false matches
-
-The score cannot remove a wrong skill that is repeated across similar postings, because such a skill looks like a specific one. We checked two skills at the level of sentences (script 127: for each skill, random postings that carry it, each sentence run through the extractor separately).
-
-- "give interviews to media" (1,379 postings, 1,230 distinct titles, score 0.482, kept). In 6 of 6 sampled postings the match comes from the word "interviews" in a sentence about the hiring process.
-- "improve chemical processes" (37 postings, score 0.238, kept). Four postings from one audit firm share a single sentence about "providing suggestions on improvements that can develop their processes"; a data analyst posting matches on "automates and enhances processes". Of the postings examined, only the one for a principal engineer is a true match.
-
-Both skills come from generic wording that the extractor (threshold 0.6) maps to a specific ESCO skill. A low Laplacian Score therefore indicates that a skill is concentrated among similar titles. It is not evidence that the skill was extracted correctly.
