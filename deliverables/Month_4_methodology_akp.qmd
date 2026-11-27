@@ -121,8 +121,8 @@ Using HDBSCAN as the clustering algorithm (on the aforementioned 10-dimensional 
 
 1. Input A uses only the cleaned job titles, embedded with the multilingual-e5-large model (1,024 dimensions, L2-normalised).
 2. Input D joins two additional numerical embedding vectors to the title embedding via concatenation:
-   a. An embedding (100 dimensions) of the 6,539 ESCO skills extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6.
-   b. An embedding (20 dimensions, see Step 5) of 135 Lightcast terms.
+   a. An embedding (100 dimensions) of the ESCO skills (6,539 skills on jobbland, 4,023 on lesjeudis and 3,635 on jobs.de) extracted with the ESCOX extraction tool [@kavargyris2025], using a similarity threshold of 0.6.
+   b. An embedding (initially 20 dimensions, see Step 5) of 135 Lightcast terms.
 
    The different embedding dimensionality was chosen because of the difference in input size (6,539 vs 135 terms). 
 
@@ -171,7 +171,7 @@ To evaluate whether a skill tends to appear in similar job postings, we use the 
 
 The skills and terms that correspond to each posting were identified before the clustering, separately for each board. ESCO skills were extracted using an extractor [@kavargyris2025] that splits the full text (title and description) into short fragments and compares each fragment with the ESCO skill descriptions (script 69b); a skill is assigned to the posting when the similarity reaches 0.6.
 
-Lightcast terms were assigned through a process of exact phrase matching of the terms selected from the Lightcast list on the same text (script 91): the text was lower-cased, hyphens and slashes were read as spaces, whole words were matched, and an optional plural ending (-s or -es) was allowed. Each term was matched independently, so e.g. a text in a posting that reads "supply chain management" will match both the "supply chain" and "supply chain management" skill. 
+The Lightcast terms were assigned through a process of exact phrase matching of the terms selected from the Lightcast list on the same text (script 91): the text was lower-cased, hyphens and slashes were read as spaces, whole words were matched, and an optional plural ending (-s or -es) was allowed. Each term was matched independently, so e.g. a text in a posting that reads "supply chain management" will match both the "supply chain" and "supply chain management" skill. 
 
 The final result is, for each board, two files, containing a list of skills and a list of terms for each posting respectively, from which the vectors in step (a) are built, e.g.:
 
@@ -207,8 +207,7 @@ The final result is, for each board, two files, containing a list of skills and 
 :::
 :::
 
-
-For every item (ESCO skill or Lightcast term), we use the Laplacian score to assess how close the postings that carry it are in the k-NN graph. A low score means that the postings of the item are neighbours of each other; a score of about 1 means that they are no closer to each other than a random allocation. The calculation involves the following steps:
+For every item (ESCO skill or Lightcast term), we use the Laplacian score to assess how close the postings that carry it are in the k-NN graph. A low score means that the postings of the skill are neighbours of each other; a score of about 1 means that they are only randomly positioned in the graph. More specifically, the score is below 1 only when the postings that carry the skill have more links among themselves than expected by chance, and above 1 when they have fewer. A skill that occurs in a single posting has no links to other carriers and therefore scores just above 1; the same applies to most rare skills. The calculation involves the following steps:
 
 \(a) For each item (skill or term), we create a vector with one entry per posting of the graph (n entries for n postings), which takes the value 1 if the posting carries the item and 0 if it doesn't. This vector is the feature $f$.
 
@@ -279,7 +278,7 @@ where:
 - $x_i$ is the binary skill indicator for posting $i$.
 - $\bar{x}_w$ is the weighted mean of the skill indicators across all postings.
 
-A lower score indicates that postings containing the skill tend to be connected to other postings containing the same skill. A higher score indicates that the skill is more spread out across the title-based graph.
+A lower score indicates that postings containing the skill tend to be connected to other postings containing the same skill. A higher score indicates that the skill is more spread out across the graph.
 
 In the below example, assuming that in the k-NN graph (a) Data Scientist, Data Analyst and ML Engineer job titles are closely connected and (b) HR Manager, Recruiter and HR Assistant are also closely connected, the "communication" skill appears in two technology-related postings, as well as two HR-related postings; as its occurrence is spread across different types of jobs, it is less closely aligned with the graph structure and we would expect it to receive a higher Laplacian Score than e.g. "Python", which appears only in  technology-related postings.
 
@@ -294,52 +293,26 @@ In the below example, assuming that in the k-NN graph (a) Data Scientist, Data A
 
 : Binary representation of skills across job postings {#tbl-sample-features}
 
-**Step 4.**In the original Laplacian Score paper, the algorithm calculates a score for every feature and sorts the features from the lowest score (best) to the highest; it is then left to the user to keep the top m features. Therefore, in order to determine the threshold for deciding which features to keep, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis, using as criteria the silhouette score, the noise and seed stability. The latter was deemed necessary because UMAP and HDBSCAN have a random element in their operation, so a single run can produce a result that depends on the seed of that run and might not be reproduced in a new run. It was measured using the Adjusted Rand Index [@Hubert1985], which compares two clusterings of the same postings and is corrected for chance agreement (1 means identical clusters, 0 means chance level), calculated on the postings assigned to a cluster in each run. 
+**Step 4.**In the original Laplacian Score paper, the algorithm calculates a score for every feature and sorts the features from the lowest score (best) to the highest; it is then left to the user to keep the top m features. Therefore, in order to determine the threshold m for deciding which features to keep, we compared the clustering for thresholds 0.7, 0.8, 0.9 and 1.0 on lesjeudis, using as criteria the silhouette score and the noise. 
 
-The results showed that a Laplacian score threshold of 1.0 kept about half of the ESCO skills (49% to 50%), because the score of an item unrelated to the graph is about 1, so about half of the items fall below it. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, none on jobs.de and one on jobbland.
+The results showed that a Laplacian score threshold of 1.0 kept about half of the ESCO skills (49% to 50%): these are the skills whose postings have more links among themselves than expected by chance, whereas the other half, mostly rare skills whose postings are not linked to each other, score just above 1. The threshold 0.8 gave the lowest noise and the highest silhouette in the UMAP space for Dv2, and it was therefore decided to be used for both versions and all boards. This keeps 518 (Dv2) and 500 (Dv3) of the ESCO skills on lesjeudis, 382 and 369 on jobs.de, and 449 and 443 on jobbland. Regarding Lightcast, it kept 6 terms on lesjeudis, 0 on jobs.de and 1 on jobbland.
 
-The tables in @sec-appendix-ls show the 15 skills with the lowest score and the 15 most frequent skills for the jobland board. The lowest scores belong mostly to skills with few postings whose postings carry similar titles, for example mystery shopping. Of the 15 most frequent skills, only one ("sales activities") is kept in Dv2: these skills are spread over many titles and their scores lie between 0.76 and 0.93. The score measures 
-whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings happen to share similar titles also scores low (for example "improve chemical processes", whose most common title is "junior audit consultants"), and a correct skill used across many different roles is dropped. We therefore use the score as a filter for skills that are concentrated among similar titles, and not as a check of the skill tagging itself. The frequency cut and the Laplacian score also act on different skills; for example, "give interviews to media" (1,379 postings) is kept by the Laplacian score but removed by the Tukey frequency cut in Dv3.
+The tables in @sec-appendix-ls show the 15 skills with the lowest score and the 15 most frequent skills for the jobland board. The lowest scores belong mostly to skills with few postings whose postings carry similar titles, for example mystery shopping. Of the 15 most frequent skills, only one ("sales activities") is kept in Dv2: these skills are spread over many titles and their scores lie between 0.76 and 0.93. 
 
-Inspecting the sentences that return two of the low-scoring skills shows that such skills can come from generic wording (for example "improvements that can develop their processes" returning "improve chemical processes") or from the hiring-process text of advertisements (the word "interviews" returning "give interviews to media"), which is why a low score does not mean that the skill was assigned correctly.
+It is important to note that the score measures whether the postings of a skill are concentrated among similar titles, not whether the skill was assigned correctly. A wrongly assigned skill whose postings happen to share similar titles also scores low (for example "improve chemical processes", whose most common job ad assignment is "junior audit consultants", see @sec-appendix-ls for more details). We therefore use the score as a filter for skills that are concentrated among similar titles, and not as a check of the skill tagging process itself. The frequency cut and the Laplacian score also act on different skills; for example, "give interviews to media" (1,379 postings) is kept by the Laplacian score but removed by the Tukey frequency cut in Dv3 as it is too common (its occurence is above the defined threshold). Such skills can come from generic wording (for example "improvements that can develop their processes" returning "improve chemical processes") or from the hiring-process text of advertisements (the word "interviews" returning "give interviews to media"), which is why a low score does not mean that the skill was assigned correctly.
 
-**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast (see also @sec-input-representations). Each block was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all its items gets zeros in the skill embeddings, so it is clustered on its title alone. The Lightcast block has one dimension fewer than the number of terms kept, up to 20, and is left out when fewer than three terms remain; on jobs.de and jobbland the input is therefore the title embedding plus the ESCO skills.
+**Step 5.** The remaining skills / terms were finally weighted with TF-IDF and reduced with TruncatedSVD, to 100 dimensions for ESCO and 20 for Lightcast (see also @sec-input-representations). Each block (ESCO and Lightcast) was normalised to unit length, multiplied by its weight, concatenated with the title embedding (weight 1) and normalised again. A posting that loses all its items gets zeros in the skill embeddings, so it is clustered on its title alone. On jobs.de and jobbland, where the Lightcast terms were reduced to 1 and 0 respectively through the Laplacian scorre filter, only the original title embedding plus the ESCO skills was used.
 
 ##### Results
 
-We compared the three input variations on lesjeudis.com with two criteria from the literature on text clustering with embeddings. The first is the silhouette [@rousseeuw1987silhouettes], computed in the space in which each input was clustered (the 10-dimensional UMAP space) and in the original embedding space. In simple terms, the silhouette measures how compact the clusters are in the space they take up.
+We compared the three input variations on lesjeudis.com with two criteria from the literature on text clustering with embeddings. The first is the silhouette [@rousseeuw1987silhouettes], calculated in the 10-dimensional UMAP space, which is the space in which each input was clustered. In simple terms, the silhouette measures how compact the clusters are in the space they take up. The pipeline followed was:
 
-The second is topic coherence (C~NPMI~), a standard semantic measure used for clusters of text [@roder2015exploring; @grootendorst2022bertopic]. For each cluster we took the ten words with the highest class-based tf-idf score in its titles [@grootendorst2022bertopic] and computed the mean normalised pointwise mutual information [@bouma2009normalized] over all pairs of these words. Each title of the board counts as one document. C~NPMI~ is −1 when two words never occur in the same title and +1 when they always do. 
+1. Each job posting starts as a 1,024-dimension title embedding.
+2. We use UMAP to reduce it to 10 dimensions. Each posting is now a point with 10 coordinates, while setting `min_dist = 0` leads to similar points being closer together.
+3. We then apply HDBSCAN to those 10-dimensional points, looking for dense groups, while the loose points are labelled as noise.
+4. The silhouette then examines, for each clustered job posting, whether it is closer to its own cluster than to the nearest other cluster, using distances between those 10-dimensional points.
 
-| Input | Clusters | Noise | Silhouette, UMAP space / input space | Median C~NPMI~ | Mean C~NPMI~, weighted by postings |
-| --- | --- | --- | --- | --- | --- |
-| A | 144 | 30.9% | 0.618 / 0.087 | −0.389 | −0.342 |
-| D v2 | 129 | 11.9% | 0.787 / 0.142 | −0.527 | −0.455 |
-| D v3 | 117 | 33.3% | 0.617 / 0.094 | −0.355 | −0.312 |
-
-According to the silhouette score, input D v2 is the preferred choice (0.787 against 0.618 for A, in the UMAP space), and it also has the least noise. In input D, however, the clustering space includes the ESCO skills and Lightcast terms, so postings can be closer in the embedding space not because their titles are similar but because of their skills. 
-
-It is therefore expected that topic coherence (C~NPMI~), which looks only at the words of the titles, gives the opposite result: D v2 has the lowest values (median C~NPMI~ −0.527 against −0.389 for A), which means that the titles inside its clusters share fewer words than those of A. The reason is that skills can be unreliable because of how they are extracted. The esco-skill-extractor turns each piece of a posting into a vector with a small sentence model (all-MiniLM-L6-v2) and compares it with the vector of every ESCO skill description. A skill counts as found when the similarity reaches 0.6. In the first version of input D (D v1), which had no filter on the skills, this produced false matches such as the skill "feed concrete mixer" on IT consultants' postings. This can be due to (a) generic wording, because a common sentence of a job advert such as "supply the client with..." or "ensure delivery of..." can be similar in meaning in the context of a skill description or (b) employer templates, because one sentence repeated in a group of postings, such as a company description, gives the same skill to all of them. The Laplacian Score filter in D v2 and D v3 was introduced to remove skills whose postings have unrelated titles.
-
-C~NPMI~ is negative for all three inputs. This can be explained by the fact that titles are very short documents, and the top words of a cluster are mostly alternative words for the same role (for example "buyer" and "purchasing") or rare tokens which rarely occur in the same title. In the lesjeudis board, about one fifth of the titles (at least 21.7%) contain French, so some of the top words are French equivalents of English ones (for example "buyer" and "acheteur"). The values are therefore compared with each other and not interpreted in absolute terms. The silhouette and C~NPMI~ are computed on the same clusters, so the numbers of clusters and noise are the same in both (for example 129 clusters for D v2). 
-
-Input D v3 is similar to A on silhouette and topic coherence (silhouette 0.617 against 0.618; median C~NPMI~ −0.355 against −0.389; weighted mean −0.312 against −0.342) but requires additional computation steps and choices of variables (ESCOX skill extractor, Laplacian score threshold, k-nearest-neighbours, Tukey boxplot to identify outliers). We therefore decided to use input A for the generation of the clustering embeddings.
-
-#### Clustering algorithms tested
-
-Using the embeddings of Case A (i.e. extracted only from the title) as input, we next compared the results of four clustering algorithms on the postings: 
-1. HDBSCAN with excess-of-mass (EOM) cluster selection
-2. HDBSCAN with leaf cluster selection
-3. k-means
-4. Ward agglomerative clustering.
-
-All methods were applied to the same 10-dimensional UMAP representations of the input embeddings, so that the results can be compared on the same dimensional space. HDBSCAN determines the number of clusters itself, whereas k-means and Ward require it in advance. For these two algorithms, the number of clusters was therefore set to the number found by HDBSCAN EOM for the same board and input (for example 144 for LesJeudis A). This provided a comparison between the methods at a similar level of cluster granularity. For the k-means algorithm in specific, we also examined five alternative values of k (25, 50, 100, 200 and 400) to investigate how the number of clusters affected the resulting silhouette scores.
-
-The comparison was conducted on the three job-posting platforms that had already been chosen due to their data completeness over time (LesJeudis, Jobbland and Jobs.de).
-
-##### Evaluation criteria
-
-Clustering quality was assessed using the silhouette coefficient, calculated on a random sample of 10,000 postings (random seed 1). The silhouette coefficient measures how well an observation fits within its assigned cluster relative to the nearest alternative cluster. It ranges from -1 to +1, with higher values indicating better-defined cluster assignments.
+The silhouette coefficient measures how well an observation fits within its assigned cluster relative to the nearest alternative cluster. It ranges from -1 to +1, with higher values indicating better-defined cluster assignments.
 
 For an individual observation, the silhouette coefficient is calculated as:
 
@@ -349,81 +322,91 @@ $$
 
 where $a(i)$ represents the average distance between observation $i$ and the other observations in its assigned cluster, and $b(i)$ represents the lowest average distance between observation $i$ and the observations in another cluster (i.e. the nearest alternative cluster).
 
-Silhouette scores were calculated in two spaces: the 10-dimensional UMAP space, using Euclidean distance, and the original embedding space, using cosine distance. This provided two complementary assessments: the separation of clusters in the space used for clustering and the separation of the same cluster assignments in the original embedding space.
+Silhouette scores were calculated in the 10-dimensional UMAP space, using Euclidean distance. In other words, the silhouette score favors compact, well-separated groups which, based on the above, the UMAP clustering has already contributed to.
+
+The second criterion is topic coherence (C~NPMI~), which is a standard semantic measure used for clusters of text [@roder2015exploring; @grootendorst2022bertopic]. We use it in addition to the silhouette because the silhouette only measures how compact the clusters are in the space in which they were formed, which is partly the result of the clustering itself and, for input D, also reflects the skills added to the title embedding. Topic coherence, on the other hand, is calculated only from the words of the titles in each cluster (so it does not depend on that space), and checks whether the titles of a cluster share a common vocabulary, as would be expected from postings of the same occupation. For each cluster we took the ten words with the highest class-based tf-idf score in its titles [@grootendorst2022bertopic] and calculated the mean normalised pointwise mutual information [@bouma2009normalized] over all pairs of these words. Each title of the board counts as one document. The values of the clusters of an input are summarised by their median; for example, C~NPMI~ is −1 when two words never occur in the same title and +1 when they always do. 
+
+| Input | Clusters | Noise | Silhouette | Median C~NPMI~ |
+| --- | --- | --- | --- | --- |
+| A | 144 | 30.9% | 0.618 | −0.389 |
+| D v2 | 129 | 11.9% | 0.787 | −0.527 |
+| D v3 | 117 | 33.3% | 0.617 | −0.355 |
+
+According to the silhouette score, input D v2 is the preferred choice (0.787 against 0.618 for A, in the UMAP space), and it also has the least noise. In input D, however, the clustering space includes the ESCO skills and Lightcast terms, so postings can be closer in the embedding space not because their titles are similar but because of their skills. 
+
+It is therefore expected that topic coherence (C~NPMI~), which looks only at the words of the titles, gives the opposite result: D v2 has the lowest values (median C~NPMI~ −0.527 against −0.389 for A), which means that the titles inside its clusters share fewer words than those of A. The reason is that skills can be unreliable because of how they are extracted. The esco-skill-extractor turns each piece of a posting into a vector with a small sentence model (all-MiniLM-L6-v2) and compares it with the vector of every ESCO skill description. A skill counts as found when the similarity reaches 0.6. In the first version of input D (D v1), which had no filter on the skills, this produced false matches such as the skill "feed concrete mixer" on IT consultants' postings. This can be due to (a) generic wording, because a common sentence of a job advert such as "supply the client with..." or "ensure delivery of..." can be similar in meaning in the context of a skill description or (b) employer templates, because one sentence repeated in a group of postings, such as a company description, gives the same skill to all of them. As already explained, the Laplacian Score filter was introduced exactly for this purpose, i.e. to remove skills whose postings have unrelated titles.
+
+C~NPMI~ is negative for all three inputs. This can be explained by the fact that titles are very short pieces of text, and the top words of a cluster are mostly alternative words for the same role (for example "buyer" and "purchasing") or rare tokens which rarely occur in the same title. In the lesjeudis board, about one fifth of the titles (at least 21.7%) contain French, so some of the top words are French equivalents of English ones (for example "buyer" and "acheteur"). The values are therefore compared with each other and not interpreted in absolute terms. The silhouette and C~NPMI~ are calculated on the same clusters, so the numbers of clusters and noise are the same in both (for example 129 clusters for D v2). 
+
+Input D v3 is similar to A on silhouette and topic coherence (silhouette 0.617 against 0.618; median C~NPMI~ −0.355 against −0.389) but requires additional computation steps and choices of variables (ESCOX skill extractor, Laplacian score threshold, k-nearest-neighbours, Tukey boxplot to identify outliers). We therefore decided to use input A for the generation of the clustering embeddings.
+
+#### Clustering algorithms tested
+
+Using the embeddings of Case A (i.e. extracted only from the title) as input, we next compared the results of four clustering algorithms on the postings: 
+1. HDBSCAN with excess-of-mass (EOM) cluster selection
+2. HDBSCAN with leaf cluster selection
+3. k-means
+4. Ward agglomerative clustering.
+
+All methods were applied to the same 10-dimensional UMAP representations of the input embeddings, so that the results can be compared on the same dimensional space. HDBSCAN determines the number of clusters itself, whereas k-means and Ward require it in advance. For those two algorithms, the number of clusters was therefore set to the number found by HDBSCAN EOM for the same board (for example 144 for LesJeudis). This provided a comparison between the methods at a similar level of cluster granularity. For the k-means algorithm in specific, we also examined five alternative values of k (25, 50, 100, 200 and 400) to investigate how the number of clusters affected the resulting silhouette scores.
+
+The comparison was conducted on the three job-posting platforms that had already been chosen due to their data completeness over time (LesJeudis, Jobbland and Jobs.de).
+
+##### Evaluation criteria
+
+Clustering quality was assessed using the silhouette coefficient (similarly to the input comparison conducted earlier), calculated on a random sample of 10,000 postings. 
 
 Since HDBSCAN can leave observations unassigned, the proportion of postings classified as noise was reported alongside its silhouette scores. This was important because the silhouette is calculated only for observations assigned to clusters, meaning that an algorithm could obtain a relatively high score by excluding difficult-to-cluster postings. To address this issue further, k-means and Ward were also evaluated on the subset of postings assigned to clusters by HDBSCAN EOM, allowing their silhouette scores to be compared on the same observations.
 
 #### HDBSCAN EOM and leaf selection
 
-Table 1 reports the number of clusters, noise proportion and silhouette scores obtained using HDBSCAN EOM and leaf selection across the three datasets and input representations.
+Table 1 reports the number of clusters, noise proportion and silhouette scores obtained using HDBSCAN EOM and leaf selection across the three datasets.
 
-**Table 1. HDBSCAN EOM and leaf comparison across datasets and input representations**
+**Table 1. HDBSCAN EOM and leaf comparison across datasets (input A)**
 
-| Dataset | Input | EOM clusters | EOM noise (%) | EOM silhouette (UMAP) | EOM silhouette (input) | Leaf clusters | Leaf noise (%) |
-|:--|:--|--:|--:|--:|--:|--:|--:|
-| LesJeudis | A | 144 | 30.9 | 0.618 | 0.087 | 151 | 32.5 |
-| LesJeudis | D | 129 | 11.9 | 0.787 | 0.142 | 151 | 22.4 |
-| Jobbland | A | 357 | 34.3 | 0.618 | 0.071 | 391 | 40.3 |
-| Jobbland | D | 331 | 25.2 | 0.719 | 0.135 | 363 | 32.9 |
-| Jobs.de | A | 71 | 27.6 | 0.542 | 0.086 | 84 | 38.8 |
-| Jobs.de | D | 91 | 25.8 | 0.714 | 0.167 | 100 | 33.3 |
-| LesJeudis | D v3 | 117 | 33.3 | 0.617 | 0.094 | 123 | 38.8 |
-| Jobbland | D v3 | 332 | 35.1 | 0.626 | 0.072 | 374 | 41.6 |
-| Jobs.de | D v3 | 75 | 35.3 | 0.597 | 0.108 | 82 | 39.4 |
+| Dataset | EOM clusters | EOM noise (%) | EOM silhouette (UMAP) | Leaf clusters | Leaf noise (%) |
+|:--|--:|--:|--:|--:|--:|
+| LesJeudis | 144 | 30.9 | 0.618 | 151 | 32.5 |
+| Jobbland | 357 | 34.3 | 0.618 | 391 | 40.3 |
+| Jobs.de | 71 | 27.6 | 0.542 | 84 | 38.8 |
 
-*Note: Silhouette scores are calculated in the UMAP and original embedding spaces, respectively. Noise percentages refer to the proportion of postings not assigned to a cluster.*
+*Note: Silhouette scores are calculated in the 10-dimensional UMAP space. Noise percentages refer to the proportion of postings not assigned to a cluster.*
 
-The comparison indicated that HDBSCAN generally achieved higher silhouette scores in the UMAP space than k-means and Ward when the latter were required to assign every posting to a cluster. However, the difference became substantially smaller when k-means and Ward were evaluated only on the postings retained by HDBSCAN EOM. This suggested that a substantial part of HDBSCAN's advantage resulted from its ability to identify and exclude observations that did not fit sufficiently well into dense clusters.
+The comparison indicated that HDBSCAN generally achieved higher silhouette scores in the UMAP space than k-means and Ward when the latter were required to assign every posting to a cluster. However, the difference became substantially smaller when k-means and Ward were evaluated only on the postings retained by HDBSCAN EOM. This suggested that a substantial part of HDBSCAN's advantage resulted from its ability to identify and exclude observations that did not fit sufficiently well into dense clusters (i.e. noise).
 
-In the original embedding space, silhouette scores were considerably lower across all methods, with all values below 0.17. The results did not establish a consistent advantage for any algorithm. This distinction was important because HDBSCAN identified clusters in the UMAP space, meaning that silhouette scores calculated in that same space were not an independent basis for establishing the occupational quality of the resulting clusters.
-
-The comparison also showed that HDBSCAN leaf selection generally produced more clusters and a higher proportion of noise than EOM, while providing only modest improvements in UMAP silhouette scores. Across the six principal dataset and input combinations, leaf selection produced between 7 and 34 additional clusters. Its silhouette improvements in UMAP space were generally limited (0.013 to 0.048 in five of the six combinations, and a decrease from 0.787 to 0.743 for LesJeudis D), while the proportion of noise increased in several cases. It was therefore retained as an alternative specification for sensitivity analysis rather than selected as the main approach.
+The comparison also showed that HDBSCAN leaf selection produced more clusters and a higher proportion of noise than EOM on all three boards, while providing only modest improvements in UMAP silhouette scores. Leaf selection produced between 7 and 34 additional clusters and between 1.6 and 11.2 percentage points more noise, while the silhouette in UMAP space rose by only 0.015 to 0.048. It was therefore retained as an alternative specification for sensitivity analysis rather than selected as the main approach.
 
 #### Comparison of HDBSCAN EOM with k-means and Ward agglomerative clustering
 
 Table 2 presents the silhouette scores for k-means and Ward clustering, using the same number of clusters as HDBSCAN EOM. The final two columns report the scores obtained when these methods were evaluated only on the subset of postings assigned to clusters by HDBSCAN EOM.
 
-**Table 2. Silhouette comparison of k-means and Ward clustering**
+**Table 2. Silhouette comparison of k-means and Ward clustering (input A)**
 
-| Dataset | Input | k-means (UMAP) | k-means (input) | Ward (UMAP) | Ward (input) | k-means (EOM subset) | Ward (EOM subset) |
-|:--|:--|--:|--:|--:|--:|--:|--:|
-| LesJeudis | A | 0.467 | 0.030 | 0.461 | 0.026 | 0.576 | 0.593 |
-| LesJeudis | D | 0.659 | 0.127 | 0.651 | 0.126 | 0.719 | 0.714 |
-| Jobbland | A | 0.438 | -0.014 | 0.433 | -0.022 | 0.577 | 0.587 |
-| Jobbland | D | 0.582 | 0.072 | 0.589 | 0.074 | 0.695 | 0.711 |
-| Jobs.de | A | 0.431 | 0.023 | 0.417 | 0.052 | 0.519 | 0.528 |
-| Jobs.de | D | 0.571 | 0.116 | 0.573 | 0.113 | 0.657 | 0.676 |
-| LesJeudis | D v3 | 0.457 | 0.047 | 0.445 | 0.042 | 0.591 | 0.584 |
-| Jobbland | D v3 | 0.449 | -0.001 | 0.433 | -0.009 | 0.600 | 0.606 |
-| Jobs.de | D v3 | 0.431 | 0.042 | 0.420 | 0.043 | 0.529 | 0.530 |
+| Dataset | k-means (UMAP) | Ward (UMAP) | k-means (EOM subset) | Ward (EOM subset) |
+|:--|--:|--:|--:|--:|
+| LesJeudis | 0.467 | 0.461 | 0.576 | 0.593 |
+| Jobbland | 0.438 | 0.433 | 0.577 | 0.587 |
+| Jobs.de | 0.431 | 0.417 | 0.519 | 0.528 |
 
-*Note: The first four silhouette columns report scores in UMAP and original embedding spaces. The final two columns report scores in UMAP space, calculated on the subset of postings assigned to clusters by HDBSCAN EOM.*
+*Note: All silhouette scores are calculated in the 10-dimensional UMAP space. The first two columns report scores for all postings, and the final two columns report scores calculated on the subset of postings assigned to clusters by HDBSCAN EOM.*
 
-The results show that k-means and Ward generally obtained lower UMAP silhouette scores than HDBSCAN EOM when all postings were required to be assigned to a cluster. However, when evaluated on the same postings retained by HDBSCAN, the differences became considerably smaller. For example, on Jobbland D, the UMAP silhouette scores were 0.719 for HDBSCAN EOM, 0.695 for k-means and 0.711 for Ward. This demonstrates that HDBSCAN's ability to leave difficult-to-cluster observations unassigned is an important factor behind its higher silhouette scores.
-
-In the original embedding space, the scores were generally low, with k-means and Ward even producing slightly negative values for Jobbland A. Ward also obtained scores equal to or higher than HDBSCAN EOM on the EOM-retained postings in three of the six principal dataset and input combinations. Consequently, the original embedding-space results did not provide sufficient evidence to establish a clear advantage for HDBSCAN over the alternative algorithms.
+The results show that k-means and Ward obtained lower UMAP silhouette scores than HDBSCAN EOM on all three boards when all postings were required to be assigned to a cluster. However, when evaluated on the same postings retained by HDBSCAN, the differences became considerably smaller. For example, on Jobbland, the UMAP silhouette score was 0.618 for HDBSCAN EOM, against 0.438 for k-means and 0.433 for Ward on all postings, and 0.577 and 0.587, respectively, on the postings retained by HDBSCAN. This demonstrates that HDBSCAN's ability to leave difficult-to-cluster observations unassigned is an important factor behind its higher silhouette scores.
 
 #### Sensitivity of k-means to the number of clusters
 
 A separate k-means experiment examined the effect of different values of k on the resulting silhouette scores. The five values tested were 25, 50, 100, 200 and 400.
 
-**Table 3. k-means silhouette scores for alternative numbers of clusters**
+**Table 3. k-means silhouette scores for alternative numbers of clusters (input A)**
 
-| Dataset | Input | k = 25 | k = 50 | k = 100 | k = 200 | k = 400 |
-|:--|:--|--:|--:|--:|--:|--:|
-| LesJeudis | A | 0.358 | 0.389 | 0.426 | 0.495 | 0.526 |
-| LesJeudis | D | 0.468 | 0.586 | 0.657 | 0.621 | 0.571 |
-| Jobbland | A | 0.384 | 0.400 | 0.384 | 0.420 | 0.441 |
-| Jobbland | D | 0.410 | 0.456 | 0.516 | 0.574 | 0.586 |
-| Jobs.de | A | 0.404 | 0.404 | 0.434 | 0.473 | 0.497 |
-| Jobs.de | D | 0.431 | 0.539 | 0.605 | 0.621 | 0.582 |
-| LesJeudis | D v3 | 0.388 | 0.407 | 0.457 | 0.465 | 0.477 |
-| Jobbland | D v3 | 0.391 | 0.404 | 0.399 | 0.440 | 0.453 |
-| Jobs.de | D v3 | 0.406 | 0.415 | 0.449 | 0.460 | 0.470 |
+| Dataset | k = 25 | k = 50 | k = 100 | k = 200 | k = 400 |
+|:--|--:|--:|--:|--:|--:|
+| LesJeudis | 0.358 | 0.389 | 0.426 | 0.495 | 0.526 |
+| Jobbland | 0.384 | 0.400 | 0.384 | 0.420 | 0.441 |
+| Jobs.de | 0.404 | 0.404 | 0.434 | 0.473 | 0.497 |
 
 *Note: All silhouette scores are calculated in the 10-dimensional UMAP space.*
 
-The k-means experiment did not identify a consistent optimal number of clusters across datasets and input representations. Silhouette scores generally increased with k in some configurations, while others exhibited peaks or relatively flat patterns. For input A, the scores increased with k for LesJeudis and Jobs.de, while Jobbland exhibited a comparatively flatter pattern. For input D, the scores peaked at k = 100 for LesJeudis (0.657) and at k = 200 for Jobs.de (0.621), while for Jobbland they increased up to k = 400 (0.586), with only a small gain over k = 200 (0.574). For input D v3, the scores were lower and increased slowly with k on all three datasets (for example from 0.388 at k = 25 to 0.477 at k = 400 for LesJeudis).
+The k-means experiment did not identify an optimal number of clusters within the range tested. The silhouette scores increased with k for LesJeudis (from 0.358 at k = 25 to 0.526 at k = 400) and for Jobs.de (from 0.404 to 0.497), while Jobbland exhibited a comparatively flatter pattern (0.384 at k = 25, 0.384 at k = 100 and 0.441 at k = 400).
 
 Consequently, the results did not provide a clear basis for selecting a particular number of clusters independently of the clustering algorithm. The number of clusters produced by HDBSCAN was therefore determined by its density-based clustering parameters rather than by attempting to optimise the silhouette through a predetermined value of k.
 
@@ -435,17 +418,16 @@ The `min_cluster_size` parameter specifies the minimum number of observations re
 
 The experiments were conducted using the LesJeudis dataset and input A, with the same input embeddings and `cluster_selection_method='eom'` held constant. The initial grid comprised five parameter combinations: (10, 10), (20, 10), (20, 20), (40, 10) and (40, 40), where the first value denotes `min_cluster_size` and the second denotes `min_samples`. The grid was subsequently extended to include (80, 20) and (80, 40), in order to investigate whether larger minimum cluster sizes could produce fewer, more substantial clusters.
 
-Each configuration was evaluated using two random seeds. The resulting solutions were compared using several criteria:
+The resulting solutions were compared using several criteria:
 
 - **Number of clusters:** to assess the overall granularity of the clustering and whether the resulting number of groups was manageable for subsequent analysis.
 - **Percentage of noise observations:** the proportion of postings that HDBSCAN did not assign to any cluster, indicating how restrictive the density requirements were.
 - **Median cluster size:** to assess the typical size of the resulting clusters.
 - **Number of small clusters:** the number of clusters containing fewer than 60 postings, providing an indication of how many relatively small groups were produced.
 - **Relative validity:** HDBSCAN's internal density-based validity measure, used as an additional indicator of clustering quality.
-- **Agreement between random seeds:** measured using the Adjusted Rand Index (ARI), calculated on postings assigned to clusters in both runs. An ARI of 1 indicates identical cluster assignments, while lower values indicate greater differences.
 - **Named-occupation coverage:** an exploratory check of whether four manually identified occupation titles in the LesJeudis dataset (three related to export control and one to semiconductor occupations) were assigned to clusters rather than classified as noise.
 
-The objective was not simply to maximise the number of clusters or minimise the proportion of noise. Rather, the aim was to identify a reasonable balance between cluster granularity, cluster size, the retention of observations, internal clustering quality and reproducibility. Particular attention was paid to avoiding an excessive number of small clusters, given the requirements of the subsequent occupational analysis.
+The objective was not simply to maximise the number of clusters or minimise the proportion of noise. Rather, the aim was to identify a reasonable balance between cluster granularity, cluster size, the retention of observations and internal clustering quality. Particular attention was paid to avoiding an excessive number of small clusters, given the requirements of the subsequent occupational analysis.
 
 #### Hyperparameter sensitivity results
 
@@ -467,29 +449,27 @@ Table 4 reports the results of the extended hyperparameter grid, using the secon
 
 The results indicated that reducing `min_cluster_size` substantially increased the number of clusters without producing a corresponding improvement in the proportion of observations retained. For example, with `min_samples=10`, reducing `min_cluster_size` from 40 to 20 and 10 increased the number of clusters from 144 to 265 and 413, respectively, while the noise proportion remained broadly similar (approximately 29–31%). The resulting solutions also contained a considerable number of small clusters: 371 of the 413 clusters in the (10, 10) configuration contained fewer than 60 postings.
 
-Conversely, increasing both parameters produced fewer and larger clusters, but this came at a cost. The extended grid showed that the (80, 20) and (80, 40) configurations produced 57 and 51 clusters, respectively, compared with 144 for the baseline configuration (40, 10). However, these solutions also classified a larger proportion of postings as noise (36.0% and 39.7%, respectively) and obtained lower relative validity scores (0.205 and 0.182, compared with approximately 0.28 for the smaller configurations). Furthermore, the (80, 20) configuration exhibited lower agreement between seeds (ARI = 0.838).
+Conversely, increasing both parameters produced fewer and larger clusters, but this came at a cost. The extended grid showed that the (80, 20) and (80, 40) configurations produced 57 and 51 clusters, respectively, compared with 144 for the baseline configuration (40, 10). However, these solutions also classified a larger proportion of postings as noise (36.0% and 39.7%, respectively) and obtained lower relative validity scores (0.205 and 0.182, compared with approximately 0.28 for the smaller configurations).
 
-#### Internal validity, stability and named-occupation coverage
+#### Internal validity and named-occupation coverage
 
-Table 5 presents the additional evaluation measures recorded during the second experimental run, including relative validity, agreement between random seeds and the named-occupation coverage check.
+Table 5 presents the additional evaluation measures recorded during the second experimental run, including relative validity and the named-occupation coverage check.
 
-**Table 5. Relative validity, agreement between seeds and named-occupation coverage**
+**Table 5. Relative validity and named-occupation coverage**
 
-| Configuration (`min_cluster_size` / `min_samples`) | Relative validity | ARI between seeds | Named titles in clusters |
-|:--|--:|--:|--:|
-| 10 / 10 | 0.279 | 0.953 | 2/4 |
-| 20 / 10 | 0.287 | 0.945 | 3/4 |
-| 20 / 20 | 0.252 | 0.963 | 1/4 |
-| 40 / 10 | Not reported | Not reported | Not reported |
-| 40 / 40 | 0.255 | 0.940 | 1/4 |
-| 80 / 20 | 0.205 | 0.838 | 2/4 |
-| 80 / 40 | 0.182 | 0.927 | 2/4 |
+| Configuration (`min_cluster_size` / `min_samples`) | Relative validity | Named titles in clusters |
+|:--|--:|--:|
+| 10 / 10 | 0.279 | 2/4 |
+| 20 / 10 | 0.287 | 3/4 |
+| 20 / 20 | 0.252 | 1/4 |
+| 40 / 10 | Not reported | Not reported |
+| 40 / 40 | 0.255 | 1/4 |
+| 80 / 20 | 0.205 | 2/4 |
+| 80 / 40 | 0.182 | 2/4 |
 
-*Note: The 40/10 baseline metrics were not reported in the second-run results for relative validity, ARI and named-occupation coverage.*
+*Note: The 40/10 baseline metrics were not reported in the second-run results for relative validity and named-occupation coverage.*
 
 The relative validity scores were generally higher for the smaller configurations, particularly (20, 10), which obtained a score of 0.287. The larger configurations (80, 20) and (80, 40) produced lower scores of 0.205 and 0.182, respectively. This provided additional evidence that the reduction in cluster count achieved through larger minimum cluster sizes came at the expense of internal density-based validity.
-
-Agreement between seeds was relatively high for most configurations, with ARI values between 0.927 and 0.963, with the exception of (80, 20), which obtained an ARI of 0.838. This indicated that the larger configuration was less reproducible across seeds, although the other configurations also exhibited some variation.
 
 The named-occupation coverage check did not provide sufficiently strong evidence to distinguish between parameter combinations. Only four relevant titles were available in the LesJeudis dataset, making the results sensitive to the classification of individual postings. This measure was therefore treated as descriptive rather than as a formal validation criterion.
 
